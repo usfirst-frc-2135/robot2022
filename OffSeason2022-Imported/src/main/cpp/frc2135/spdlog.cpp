@@ -17,8 +17,7 @@ namespace frc2135
 
     void initialize_spdlog()
     {
-        wpi::SmallString<64> operating_directory;
-        frc::filesystem::GetOperatingDirectory(operating_directory);
+        std::string operating_directory = frc::filesystem::GetOperatingDirectory();
 
         try
         {

@@ -9,7 +9,6 @@
 // it from being updated in the future.
 
 #include <frc/smartdashboard/SmartDashboard.h>
-#include <networktables/NetworkTable.h>
 #include <networktables/NetworkTableInstance.h>
 #include <spdlog/spdlog.h>
 

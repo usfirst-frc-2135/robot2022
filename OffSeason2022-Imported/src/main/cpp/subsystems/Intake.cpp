@@ -36,7 +36,7 @@ Intake::Intake()
     m_talonValidIN6 = frc2135::TalonUtils::TalonCheck(m_motorIN6, "IN", "IN6");
 
     // Check if solenoids are functional or blacklisted
-    if (m_position.IsBlackListed())
+    if (m_position.IsDisabled())
         spdlog::error("IN Intake Deployer Solenoid is BLACKLISTED");
     else
         spdlog::info("IN Intake Deployer Solenoid is FUNCTIONAL");

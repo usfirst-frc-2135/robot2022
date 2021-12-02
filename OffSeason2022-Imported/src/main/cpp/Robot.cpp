@@ -83,12 +83,11 @@ void Robot::RobotPeriodic()
  */
 void Robot::DisabledInit()
 {
-    auto &ds = frc::DriverStation::GetInstance();
     spdlog::info(
         "DisabledInit: Match {}{}, {} Alliance",
-        MatchTypeToString(ds.GetMatchType()),
-        ds.GetMatchNumber(),
-        AllianceToString(ds.GetAlliance()));
+        MatchTypeToString(frc::DriverStation::GetMatchType()),
+        frc::DriverStation::GetMatchNumber(),
+        AllianceToString(frc::DriverStation::GetAlliance()));
     RobotContainer *robotContainer = RobotContainer::GetInstance();
     robotContainer->m_drivetrain.SetBrakeMode(false);
 
@@ -126,12 +125,11 @@ void Robot::DisabledPeriodic()
  */
 void Robot::AutonomousInit()
 {
-    auto &ds = frc::DriverStation::GetInstance();
     spdlog::info(
         "AutonomousInit: Match {}{}, {} Alliance",
-        MatchTypeToString(ds.GetMatchType()),
-        ds.GetMatchNumber(),
-        AllianceToString(ds.GetAlliance()));
+        MatchTypeToString(frc::DriverStation::GetMatchType()),
+        frc::DriverStation::GetMatchNumber(),
+        AllianceToString(frc::DriverStation::GetAlliance()));
 
     m_autonomousCommand = m_container->GetAutonomousCommand();
 
@@ -145,12 +143,11 @@ void Robot::AutonomousPeriodic() {}
 
 void Robot::TeleopInit()
 {
-    auto &ds = frc::DriverStation::GetInstance();
     spdlog::info(
         "TeleopInit: Match {}{}, {} Alliance",
-        MatchTypeToString(ds.GetMatchType()),
-        ds.GetMatchNumber(),
-        AllianceToString(ds.GetAlliance()));
+        MatchTypeToString(frc::DriverStation::GetMatchType()),
+        frc::DriverStation::GetMatchNumber(),
+        AllianceToString(frc::DriverStation::GetAlliance()));
 
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to

@@ -168,7 +168,7 @@ RobotContainer *RobotContainer::GetInstance()
 }
 
 //  axes: kLeftX = 0, kLeftY = 1, kLeftTrigger = 2, kRightTrigger = 3, kRightX = 4, kRightY = 5
-//  btns: kA = 1, kB = 2, kX = 3, kY = 4, kBumperLeft = 5, kBumperRight = 6
+//  btns: kA = 1, kB = 2, kX = 3, kY = 4, kLeftBumper = 5, kRightBumper = 6
 //  btns: kBack = 7, kStart = 8, kStickLeft = 9, kStickRight = 10
 
 void RobotContainer::ConfigureButtonBindings()
@@ -179,8 +179,8 @@ void RobotContainer::ConfigureButtonBindings()
 
     // Driver Controller Assignments
     frc2::JoystickButton m_quickturn{ &m_driverController, (int)frc::XboxController::Button::kA };
-    frc2::JoystickButton m_intakingDr{ &m_driverController, (int)frc::XboxController::Button::kBumperLeft };
-    frc2::JoystickButton m_shootingDr{ &m_driverController, (int)frc::XboxController::Button::kBumperRight };
+    frc2::JoystickButton m_intakingDr{ &m_driverController, (int)frc::XboxController::Button::kLeftBumper };
+    frc2::JoystickButton m_shootingDr{ &m_driverController, (int)frc::XboxController::Button::kRightBumper };
     frc2::JoystickButton m_shooterAimOnDr{ &m_driverController, (int)frc::XboxController::Button::kStart };
     frc2::JoystickButton m_shooterAimOffDr{ &m_driverController, (int)frc::XboxController::Button::kBack };
 
@@ -225,9 +225,9 @@ void RobotContainer::ConfigureButtonBindings()
     frc2::JoystickButton m_exhaustingOp{ &m_operatorController, (int)frc::XboxController::Button::kB };
     frc2::JoystickButton m_scoringOffOp{ &m_operatorController, (int)frc::XboxController::Button::kX };
     frc2::JoystickButton m_inDeployOp{ &m_operatorController, (int)frc::XboxController::Button::kY };
-    frc2::JoystickButton m_intakingOp{ &m_operatorController, (int)frc::XboxController::Button::kBumperLeft };
+    frc2::JoystickButton m_intakingOp{ &m_operatorController, (int)frc::XboxController::Button::kLeftBumper };
     frc2::JoystickButton m_scoringPrimeOp{ &m_operatorController,
-                                           (int)frc::XboxController::Button::kBumperRight };
+                                           (int)frc::XboxController::Button::kRightBumper };
     frc2::JoystickButton m_shooterAimOnOp{ &m_operatorController, (int)frc::XboxController::Button::kStart };
     frc2::JoystickButton m_shooterAimOffOp{ &m_operatorController, (int)frc::XboxController::Button::kBack };
 

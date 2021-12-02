@@ -105,7 +105,8 @@ private:
                                                          DriveConstants::kv,
                                                          DriveConstants::ka,
                                                          DriveConstants::KvAngular,
-                                                         DriveConstants::KaAngular),
+                                                         DriveConstants::KaAngular,
+                                                         DriveConstants::kTrackWidthMeters),
                                                      DriveConstants::kTrackWidthMeters,
                                                      frc::DCMotor::Falcon500(2),
                                                      DriveConstants::kGearRatio,
@@ -198,7 +199,7 @@ private:
 
     // Initialization methods
     void ConfigFileLoad(void);
-    void TalonMasterInitialize(WPI_BaseMotorController &motor);
+    void TalonMasterInitialize(WPI_BaseMotorController &motor, bool inverted);
     void TalonFollowerInitialize(WPI_BaseMotorController &motor, int master);
 
     // Periodic update methods

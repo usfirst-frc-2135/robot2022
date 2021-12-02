@@ -36,7 +36,7 @@ Climber::Climber()
     m_talonValidCL14 = frc2135::TalonUtils::TalonCheck(m_motorCL14, "CL", "CL14");
 
     // Check if solenoids are functional or blacklisted
-    if (m_brake.IsBlackListed())
+    if (m_brake.IsDisabled())
         spdlog::error("CL Climber Solenoid is BLACKLISTED");
     else
         spdlog::info("CL Climber Solenoid is FUNCTIONAL");

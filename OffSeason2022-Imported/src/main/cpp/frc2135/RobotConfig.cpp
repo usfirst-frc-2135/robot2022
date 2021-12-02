@@ -76,8 +76,7 @@ namespace frc2135
     void RobotConfig::GetConfigFileName(std::string &fileName)
     {
         // Initialize with the absolute path to the home directory
-        wpi::SmallString<64> deployDirectory;
-        frc::filesystem::GetDeployDirectory(deployDirectory);
+        std::string deployDirectory = frc::filesystem::GetDeployDirectory();
         deployDirectory.append("/");
 
         // Default the host name of the roboRIO
@@ -90,7 +89,7 @@ namespace frc2135
         // Add the robot number to the file name
         fileName.append(nameBuf, 8, 4);
         fileName.append("_configuration.txt");
-        fileName.insert(0, deployDirectory.str());
+        fileName.insert(0, deployDirectory.c_str());
     }
 
     ////////////////////////////////////////////////////////////////////////////////
