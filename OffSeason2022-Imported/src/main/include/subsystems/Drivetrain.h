@@ -86,8 +86,7 @@ private:
 
     // Simulated quadrature encoders, since TalonFX is not supported
     frc::Encoder m_leftEncoder{ DriveConstants::kLeftEncoderPorts[0], DriveConstants::kLeftEncoderPorts[1] };
-    frc::Encoder m_rightEncoder{ DriveConstants::kRightEncoderPorts[0],
-                                 DriveConstants::kRightEncoderPorts[1] };
+    frc::Encoder m_rightEncoder{ DriveConstants::kRightEncoderPorts[0], DriveConstants::kRightEncoderPorts[1] };
     frc::sim::EncoderSim m_leftEncoderSim{ m_leftEncoder };
     frc::sim::EncoderSim m_rightEncoderSim{ m_rightEncoder };
 
@@ -101,16 +100,16 @@ private:
     const int kCANTimeout = 10; // CAN timeout in msec to wait for response
 
     // TODO: adjust kV and kA angular from robot characterization
-    frc::sim::DifferentialDrivetrainSim m_driverSim{ frc::LinearSystemId::IdentifyDrivetrainSystem(
-                                                         DriveConstants::kv,
-                                                         DriveConstants::ka,
-                                                         DriveConstants::KvAngular,
-                                                         DriveConstants::KaAngular,
-                                                         DriveConstants::kTrackWidthMeters),
-                                                     DriveConstants::kTrackWidthMeters,
-                                                     frc::DCMotor::Falcon500(2),
-                                                     DriveConstants::kGearRatio,
-                                                     DriveConstants::kWheelDiaMeters / 2 };
+    frc::sim::DifferentialDrivetrainSim m_driveSim{ frc::LinearSystemId::IdentifyDrivetrainSystem(
+                                                        DriveConstants::kv,
+                                                        DriveConstants::ka,
+                                                        DriveConstants::KvAngular,
+                                                        DriveConstants::KaAngular,
+                                                        DriveConstants::kTrackWidthMeters),
+                                                    DriveConstants::kTrackWidthMeters,
+                                                    frc::DCMotor::Falcon500(2),
+                                                    DriveConstants::kGearRatio,
+                                                    DriveConstants::kWheelDiaMeters / 2 };
     // Declare module variables
     bool m_talonValidL1; // Health indicator for drive Talon Left 1
     bool m_talonValidL2; // Health indicator for drive Talon Left 2
@@ -136,6 +135,7 @@ private:
     meter_t m_distanceRight;
     frc::DifferentialDriveWheelSpeeds m_wheelSpeeds;
     frc::DifferentialDriveOdometry m_odometry{ m_gyro.GetRotation2d() };
+    frc::Field2d m_field;
 
     double m_currentl1 = 0.0; // Motor L1 output current from Falcon
     double m_currentL2 = 0.0; // Motor L2 output current from Falcon
@@ -143,12 +143,12 @@ private:
     double m_currentR4 = 0.0; // Motor R4 output current from Falcon
 
     // limelight drive
-    double m_turnpidKp = 0.1;
-    double m_turnpidKi = 0.0;
-    double m_turnpidKd = 0.0;
-    double m_throttlepidKp = 0.1;
-    double m_throttlepidKi = 0.0;
-    double m_throttlepidKd = 0.0;
+    double m_turnPidKp = 0.1;
+    double m_turnPidKi = 0.0;
+    double m_turnPidKd = 0.0;
+    double m_throttlePidKp = 0.1;
+    double m_throttlePidKi = 0.0;
+    double m_throttlePidKd = 0.0;
     double m_maxTurn;
     double m_maxThrottle;
     double m_targetAngle;
@@ -158,8 +158,8 @@ private:
     double m_throttleShape;
     double m_vertOffset1;
     double m_vertOffset2;
-    double m_dist1;
-    double m_dist2;
+    double m_distance1;
+    double m_distance2;
     double m_slope;
     double m_distOffset;
     double m_limelightDistance;
@@ -176,20 +176,16 @@ private:
     StatorCurrentLimitConfiguration m_statorCurrentLimits = { true, 80.0, 80.0, 0.001 };
 
     // DriveWithLimelight pid controller objects
-    frc2::PIDController m_turnController{ 0.0, 0.0, 0.0 };
-    frc2::PIDController m_throttleController{ 0.0, 0.0, 0.0 };
+    frc2::PIDController m_turnPid{ 0.0, 0.0, 0.0 };
+    frc2::PIDController m_throttlePid{ 0.0, 0.0, 0.0 };
 
     // Ramsete follower objects
-    frc::SimpleMotorFeedforward<meter> m_feedforward{ DriveConstants::ks,
-                                                      DriveConstants::kv,
-                                                      DriveConstants::ka };
-    frc::DifferentialDriveKinematics m_kinematics{ DriveConstants::kTrackWidthMeters };
-    frc::Field2d m_field;
-
-    frc2::PIDController m_leftController{ 0.0, 0.0, 0.0 };
-    frc2::PIDController m_rightController{ 0.0, 0.0, 0.0 };
-    frc::RamseteController m_ramseteController;
     frc::Trajectory m_trajectory;
+    frc::RamseteController m_ramseteController;
+    frc::SimpleMotorFeedforward<meter> m_feedforward{ DriveConstants::ks, DriveConstants::kv, DriveConstants::ka };
+    frc::DifferentialDriveKinematics m_kinematics{ DriveConstants::kTrackWidthMeters };
+    frc2::PIDController m_leftPid{ 0.0, 0.0, 0.0 };
+    frc2::PIDController m_rightPid{ 0.0, 0.0, 0.0 };
     frc::Timer m_trajTimer;
 
     // Path following variables

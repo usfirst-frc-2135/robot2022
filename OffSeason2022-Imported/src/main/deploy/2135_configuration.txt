@@ -15,12 +15,12 @@
   DT_ClosedLoopRampRate = 0.0
   DT_StoppedTolerance = 0.05
 # Limelight settings
-  DTL_TurnPIDKp = 0.035
-  DTL_TurnPIDKi = 0.0
-  DTL_TurnPIDKd = 0.0
-  DTL_ThrottlePIDKp = 0.02
-  DTL_ThrottlePIDKi = 0.0
-  DTL_ThrottlePIDKd = 0.0
+  DTL_TurnPidKp = 0.035
+  DTL_TurnPidKi = 0.0
+  DTL_TurnPidKd = 0.0
+  DTL_ThrottlePidKp = 0.02
+  DTL_ThrottlePidKi = 0.0
+  DTL_ThrottlePidKd = 0.0
   DTL_MaxTurn = 0.4
   DTL_MaxThrottle = 0.2
   DTL_ThrottleShape = 10.0
@@ -28,16 +28,16 @@
   DTL_TargetDistance = 12.0
   DTL_AngleThreshold = 3.0
   DTL_DistThreshold = 6.0
-  DTL_Dist1 = 12
-  DTL_Dist2 = 36
+  DTL_Distance1 = 12
+  DTL_Distance2 = 36
   # DTL_VertOffset1 is typically positive
   DTL_VertOffset1 = 5.18
   # DTL_VertOffset2 is typically negative
   DTL_VertOffset2 = -8.34
 # Path following settings
-  DTR_RamsetePIDKp = 2.0
-  DTR_RamsetePIDKi = 0.0
-  DTR_RamsetePIDKd = 0.0
+  DTR_RamsetePidKp = 2.0
+  DTR_RamsetePidKi = 0.0
+  DTR_RamsetePidKd = 0.0
   DTR_RamseteB = 2.0
   DTR_RamseteZeta = 0.7
 # Intake settings
