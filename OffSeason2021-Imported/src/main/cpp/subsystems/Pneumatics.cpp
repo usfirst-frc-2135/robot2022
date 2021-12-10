@@ -76,7 +76,7 @@ void Pneumatics::FaultDump(void)
         spdlog::warn("CompressorNotConnectedFault");
     if (m_pcm.GetCompressorShortedFault())
         spdlog::warn("CompressorShortedFault");
-    if (m_pcm.GetSolenoidVoltageFault ())
+    if (m_pcm.GetSolenoidVoltageFault())
         spdlog::warn("SolenoidVoltageFault");
 
     m_pcm.ClearAllStickyFaults();

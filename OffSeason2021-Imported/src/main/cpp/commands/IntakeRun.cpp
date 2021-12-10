@@ -15,9 +15,7 @@
 
 #include "commands/IntakeRun.h"
 
-IntakeRun::IntakeRun(int intakeDirection, Intake *m_intake) :
-    m_intakeDirection(intakeDirection),
-    m_intake(m_intake)
+IntakeRun::IntakeRun(int intakeDirection, Intake *m_intake) : m_intakeDirection(intakeDirection), m_intake(m_intake)
 {
     // Use AddRequirements() here to declare subsystem dependencies
     // eg. AddRequirements(m_Subsystem);

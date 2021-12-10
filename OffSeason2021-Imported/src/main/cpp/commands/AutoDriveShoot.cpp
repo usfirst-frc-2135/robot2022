@@ -44,8 +44,7 @@ AutoDriveShoot::AutoDriveShoot(
         IntakeDeploy(true),
         AutoDriveWait(drivetrain),
         AutoDrivePath(m_pathname.c_str(), drivetrain),
-        frc2::ParallelCommandGroup{ AutoDriveStop(drivetrain),
-                                    ScoringAction(intake, fConv, vConv, shooter) });
+        frc2::ParallelCommandGroup{ AutoDriveStop(drivetrain), ScoringAction(intake, fConv, vConv, shooter) });
 }
 
 bool AutoDriveShoot::RunsWhenDisabled() const

@@ -49,12 +49,7 @@ namespace frc2135
             fwVersion = talon.GetFirmwareVersion();
             if ((error = talon.GetLastError()) != OKAY)
             {
-                spdlog::error(
-                    "{} Motor {} ID {} GetFirmwareVersion error - {}",
-                    subsystem,
-                    name,
-                    deviceID,
-                    error);
+                spdlog::error("{} Motor {} ID {} GetFirmwareVersion error - {}", subsystem, name, deviceID, error);
                 return error;
             }
             if (fwVersion >= m_reqVersion)
@@ -82,12 +77,7 @@ namespace frc2135
             // Initialize Talon to all factory defaults
             if ((error = talon.ConfigFactoryDefault(kCANTimeout)) != OKAY)
             {
-                spdlog::error(
-                    "{} Motor {} ID {} ConfigFactoryDefault error - {}",
-                    subsystem,
-                    name,
-                    deviceID,
-                    error);
+                spdlog::error("{} Motor {} ID {} ConfigFactoryDefault error - {}", subsystem, name, deviceID, error);
             }
             else
             {
@@ -238,12 +228,7 @@ namespace frc2135
             // Initialize Pigeon IMU to all factory defaults
             if ((error = pigeonPtr.ConfigFactoryDefault(kCANTimeout)) != OKAY)
             {
-                spdlog::error(
-                    "{} {} ID {} ConfigFactoryDefault error - {}",
-                    subsystem,
-                    name,
-                    deviceID,
-                    error);
+                spdlog::error("{} {} ID {} ConfigFactoryDefault error - {}", subsystem, name, deviceID, error);
                 pigeonValid = false;
             }
 

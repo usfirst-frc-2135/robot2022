@@ -10,8 +10,8 @@
 
 #pragma once
 #include <frc/Encoder.h>
-#include <frc/filter/LinearFilter.h>
 #include <frc/Solenoid.h>
+#include <frc/filter/LinearFilter.h>
 #include <frc/simulation/EncoderSim.h>
 #include <frc/simulation/FlywheelSim.h>
 #include <frc/system/plant/LinearSystemId.h>

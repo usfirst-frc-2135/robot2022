@@ -34,16 +34,10 @@ namespace frc2135
     public:
         static RobotConfig *GetInstance();
         bool LoadConfig();
-        bool GetValueAsString(
-            const std::string &name,
-            std::string &valueString,
-            std::string defaultValue = "");
+        bool GetValueAsString(const std::string &name, std::string &valueString, std::string defaultValue = "");
         bool GetValueAsInt(const std::string &name, int &valueInt, int defaultInt = DUMMY_DEFAULT_INT);
         bool GetValueAsBool(const std::string &name, bool &valueBool, bool defaultBool = false);
-        bool GetValueAsFloat(
-            const std::string &name,
-            float &valueFloat,
-            float defaultFloat = DUMMY_DEFAULT_FLOAT);
+        bool GetValueAsFloat(const std::string &name, float &valueFloat, float defaultFloat = DUMMY_DEFAULT_FLOAT);
         bool GetValueAsDouble(
             const std::string &name,
             double &valueDouble,

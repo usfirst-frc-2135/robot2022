@@ -26,8 +26,7 @@
  *
  * @author ExampleAuthor
  */
-class AutoDriveLimelightShoot :
-    public frc2::CommandHelper<frc2::SequentialCommandGroup, AutoDriveLimelightShoot>
+class AutoDriveLimelightShoot : public frc2::CommandHelper<frc2::SequentialCommandGroup, AutoDriveLimelightShoot>
 {
 public:
     explicit AutoDriveLimelightShoot(

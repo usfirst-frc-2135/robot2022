@@ -16,9 +16,7 @@
 
 #include "commands/ShooterRun.h"
 
-ShooterRun::ShooterRun(int shooterState, Shooter *m_shooter) :
-    m_shooterState(shooterState),
-    m_shooter(m_shooter)
+ShooterRun::ShooterRun(int shooterState, Shooter *m_shooter) : m_shooterState(shooterState), m_shooter(m_shooter)
 {
     // Use AddRequirements() here to declare subsystem dependencies
     // eg. AddRequirements(m_Subsystem);

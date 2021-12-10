@@ -45,30 +45,18 @@ RobotContainer::RobotContainer() :
     frc::SmartDashboard::PutData(
         "Vertical Conveyor Run: VCONDIR_EXPEL",
         new VerticalConveyorRun(-1, &m_verticalConveyor));
-    frc::SmartDashboard::PutData(
-        "Floor Conveyor Run: FCONDIR_STOP",
-        new FloorConveyorRun(0, &m_floorConveyor));
-    frc::SmartDashboard::PutData(
-        "Floor Conveyor Run: FCONDIR_ACQUIRE",
-        new FloorConveyorRun(1, &m_floorConveyor));
-    frc::SmartDashboard::PutData(
-        "Floor Conveyor Run: FCONDIR_EXPEL",
-        new FloorConveyorRun(-1, &m_floorConveyor));
-    frc::SmartDashboard::PutData(
-        "Auto Drive Path: driveForward",
-        new AutoDrivePath("driveForward", &m_drivetrain));
-    frc::SmartDashboard::PutData(
-        "Auto Drive Path: driveBackward",
-        new AutoDrivePath("driveBackward", &m_drivetrain));
+    frc::SmartDashboard::PutData("Floor Conveyor Run: FCONDIR_STOP", new FloorConveyorRun(0, &m_floorConveyor));
+    frc::SmartDashboard::PutData("Floor Conveyor Run: FCONDIR_ACQUIRE", new FloorConveyorRun(1, &m_floorConveyor));
+    frc::SmartDashboard::PutData("Floor Conveyor Run: FCONDIR_EXPEL", new FloorConveyorRun(-1, &m_floorConveyor));
+    frc::SmartDashboard::PutData("Auto Drive Path: driveForward", new AutoDrivePath("driveForward", &m_drivetrain));
+    frc::SmartDashboard::PutData("Auto Drive Path: driveBackward", new AutoDrivePath("driveBackward", &m_drivetrain));
     frc::SmartDashboard::PutData(
         "Auto Drive Path: testTurnRight90deg",
         new AutoDrivePath("testTurnRight90deg", &m_drivetrain));
     frc::SmartDashboard::PutData(
         "Auto Drive Path: testTurnLeft90deg",
         new AutoDrivePath("testTurnLeft90deg", &m_drivetrain));
-    frc::SmartDashboard::PutData(
-        "Auto Drive Path: simCurvePath",
-        new AutoDrivePath("simCurvePath", &m_drivetrain));
+    frc::SmartDashboard::PutData("Auto Drive Path: simCurvePath", new AutoDrivePath("simCurvePath", &m_drivetrain));
     frc::SmartDashboard::PutData("Intake Run: INTAKE_STOP", new IntakeRun(0, &m_intake));
     frc::SmartDashboard::PutData("Intake Run: INTAKE_ACQUIRE", new IntakeRun(1, &m_intake));
     frc::SmartDashboard::PutData("Intake Run: INTAKE_EXPEL", new IntakeRun(-1, &m_intake));
@@ -80,12 +68,7 @@ RobotContainer::RobotContainer() :
         new AutoShootTrenchLeft(&m_drivetrain, &m_intake, &m_floorConveyor, &m_verticalConveyor, &m_shooter));
     frc::SmartDashboard::PutData(
         "Auto Shoot Trench Right",
-        new AutoShootTrenchRight(
-            &m_drivetrain,
-            &m_intake,
-            &m_floorConveyor,
-            &m_verticalConveyor,
-            &m_shooter));
+        new AutoShootTrenchRight(&m_drivetrain, &m_intake, &m_floorConveyor, &m_verticalConveyor, &m_shooter));
     frc::SmartDashboard::PutData(
         "Auto Drive Shoot",
         new AutoDriveShoot(&m_drivetrain, &m_intake, &m_floorConveyor, &m_verticalConveyor, &m_shooter));
@@ -97,9 +80,7 @@ RobotContainer::RobotContainer() :
     frc::SmartDashboard::PutData(
         "Intaking Action",
         new IntakingAction(&m_intake, &m_floorConveyor, &m_verticalConveyor));
-    frc::SmartDashboard::PutData(
-        "Intaking Stop",
-        new IntakingStop(&m_intake, &m_floorConveyor, &m_verticalConveyor));
+    frc::SmartDashboard::PutData("Intaking Stop", new IntakingStop(&m_intake, &m_floorConveyor, &m_verticalConveyor));
     frc::SmartDashboard::PutData(
         "Exhausting Action",
         new ExhaustingAction(&m_intake, &m_floorConveyor, &m_verticalConveyor));
@@ -132,12 +113,7 @@ RobotContainer::RobotContainer() :
         new AutoShootTrenchLeft(&m_drivetrain, &m_intake, &m_floorConveyor, &m_verticalConveyor, &m_shooter));
     m_chooser.AddOption(
         "Auto Shoot Trench Right",
-        new AutoShootTrenchRight(
-            &m_drivetrain,
-            &m_intake,
-            &m_floorConveyor,
-            &m_verticalConveyor,
-            &m_shooter));
+        new AutoShootTrenchRight(&m_drivetrain, &m_intake, &m_floorConveyor, &m_verticalConveyor, &m_shooter));
     m_chooser.AddOption(
         "Auto Drive Shoot",
         new AutoDriveShoot(&m_drivetrain, &m_intake, &m_floorConveyor, &m_verticalConveyor, &m_shooter));
@@ -191,12 +167,8 @@ void RobotContainer::ConfigureButtonBindings()
     m_intakingDr.WhenPressed(IntakingAction(&m_intake, &m_floorConveyor, &m_verticalConveyor), true);
     m_intakingDr.WhenReleased(IntakingStop(&m_intake, &m_floorConveyor, &m_verticalConveyor), true);
 
-    m_shootingDr.WhenPressed(
-        ScoringAction(&m_intake, &m_floorConveyor, &m_verticalConveyor, &m_shooter),
-        true);
-    m_shootingDr.WhenReleased(
-        ScoringStop(&m_intake, &m_floorConveyor, &m_verticalConveyor, &m_shooter),
-        true);
+    m_shootingDr.WhenPressed(ScoringAction(&m_intake, &m_floorConveyor, &m_verticalConveyor, &m_shooter), true);
+    m_shootingDr.WhenReleased(ScoringStop(&m_intake, &m_floorConveyor, &m_verticalConveyor, &m_shooter), true);
 
     // Triggers EXAMPLE ONLY: FIXME WITH CORRECT COMMANDS!
     frc2135::AxisButton m_leftTriggerDr(&m_driverController, (int)frc::XboxController::Axis::kLeftTrigger);
@@ -205,16 +177,9 @@ void RobotContainer::ConfigureButtonBindings()
 
     // Driver Trigger for Limelight Mode
     frc2135::AxisButton m_rightTriggerDr(&m_driverController, (int)frc::XboxController::Axis::kRightTrigger);
-    m_rightTriggerDr.WhileHeld(DriveLimelightShoot(
-        &m_drivetrain,
-        &m_intake,
-        &m_floorConveyor,
-        &m_verticalConveyor,
-        &m_shooter,
-        &m_vision));
-    m_rightTriggerDr.WhenReleased(
-        ScoringStop(&m_intake, &m_floorConveyor, &m_verticalConveyor, &m_shooter),
-        true);
+    m_rightTriggerDr.WhileHeld(
+        DriveLimelightShoot(&m_drivetrain, &m_intake, &m_floorConveyor, &m_verticalConveyor, &m_shooter, &m_vision));
+    m_rightTriggerDr.WhenReleased(ScoringStop(&m_intake, &m_floorConveyor, &m_verticalConveyor, &m_shooter), true);
 
     // Start/back
     m_shooterAimOnDr.WhenPressed(ShooterAim(true), true);
@@ -226,8 +191,7 @@ void RobotContainer::ConfigureButtonBindings()
     frc2::JoystickButton m_scoringOffOp{ &m_operatorController, (int)frc::XboxController::Button::kX };
     frc2::JoystickButton m_inDeployOp{ &m_operatorController, (int)frc::XboxController::Button::kY };
     frc2::JoystickButton m_intakingOp{ &m_operatorController, (int)frc::XboxController::Button::kLeftBumper };
-    frc2::JoystickButton m_scoringPrimeOp{ &m_operatorController,
-                                           (int)frc::XboxController::Button::kRightBumper };
+    frc2::JoystickButton m_scoringPrimeOp{ &m_operatorController, (int)frc::XboxController::Button::kRightBumper };
     frc2::JoystickButton m_shooterAimOnOp{ &m_operatorController, (int)frc::XboxController::Button::kStart };
     frc2::JoystickButton m_shooterAimOffOp{ &m_operatorController, (int)frc::XboxController::Button::kBack };
 
@@ -242,9 +206,7 @@ void RobotContainer::ConfigureButtonBindings()
     m_intakingOp.WhenReleased(IntakingStop(&m_intake, &m_floorConveyor, &m_verticalConveyor), true);
 
     m_scoringPrimeOp.WhenPressed(ScoringPrime(&m_shooter), true);
-    m_scoringOffOp.WhenPressed(
-        ScoringStop(&m_intake, &m_floorConveyor, &m_verticalConveyor, &m_shooter),
-        true);
+    m_scoringOffOp.WhenPressed(ScoringStop(&m_intake, &m_floorConveyor, &m_verticalConveyor, &m_shooter), true);
 
     // Start/back
     m_shooterAimOnOp.WhenPressed(ShooterAim(true), true);
