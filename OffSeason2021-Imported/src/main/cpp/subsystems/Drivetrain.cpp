@@ -237,8 +237,6 @@ void Drivetrain::TalonMasterInitialize(WPI_BaseMotorController &motor, bool inve
     //  Setup motor direction, neutral mode, voltage compensation, and encoder
     motor.SetInverted(inverted);
     motor.SetNeutralMode(NeutralMode::Coast);
-    motor.ConfigVoltageCompSaturation(12.0, kCANTimeout);
-    // motor.EnableVoltageCompensation(true);
 
     motor.Set(ControlMode::PercentOutput, 0.0);
     motor.ConfigSelectedFeedbackSensor(FeedbackDevice::IntegratedSensor, kPidIndex, kCANTimeout);
@@ -254,8 +252,6 @@ void Drivetrain::TalonFollowerInitialize(WPI_BaseMotorController &motor, int mas
     motor.Set(ControlMode::Follower, master);
     motor.SetInverted(InvertType::FollowMaster);
     motor.SetNeutralMode(NeutralMode::Coast);
-    motor.ConfigVoltageCompSaturation(12.0, kCANTimeout);
-    //motor.EnableVoltageCompensation(true);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -388,6 +384,7 @@ frc::DifferentialDriveWheelSpeeds Drivetrain::GetWheelSpeedsMPS()
         leftVelocity = m_leftEncoder.GetRate() * 1_mps;
         rightVelocity = m_rightEncoder.GetRate() * 1_mps;
     }
+
     return { leftVelocity, rightVelocity };
 }
 
@@ -480,6 +477,7 @@ void Drivetrain::PlotTrajectory(frc::Trajectory trajectory)
 
     for (size_t i = 0; i < states.size(); i++)
         poses.push_back(states[i].pose);
+        
     m_field.GetObject("trajectory")->SetPoses(poses);
 }
 
