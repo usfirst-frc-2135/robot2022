@@ -206,7 +206,6 @@ private:
     void ResetEncoders(void);
     meter_t GetDistanceMetersLeft(void);
     meter_t GetDistanceMetersRight(void);
-    meter_t GetAverageEncoderDistance(void);
     frc::DifferentialDriveWheelSpeeds GetWheelSpeedsMPS(void);
 
     void ResetGyro(void);

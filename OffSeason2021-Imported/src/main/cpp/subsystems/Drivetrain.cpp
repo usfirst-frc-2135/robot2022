@@ -362,11 +362,6 @@ meter_t Drivetrain::GetDistanceMetersRight()
     return 0_m;
 }
 
-meter_t Drivetrain::GetAverageEncoderDistance()
-{
-    return (GetDistanceMetersLeft() + GetDistanceMetersRight()) / 2.0;
-}
-
 frc::DifferentialDriveWheelSpeeds Drivetrain::GetWheelSpeedsMPS()
 {
     meters_per_second_t leftVelocity = 0_mps;
@@ -477,7 +472,7 @@ void Drivetrain::PlotTrajectory(frc::Trajectory trajectory)
 
     for (size_t i = 0; i < states.size(); i++)
         poses.push_back(states[i].pose);
-        
+
     m_field.GetObject("trajectory")->SetPoses(poses);
 }
 

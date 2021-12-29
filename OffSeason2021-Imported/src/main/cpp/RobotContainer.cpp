@@ -54,12 +54,22 @@ RobotContainer::RobotContainer() :
     frc::SmartDashboard::PutData("Limelight Drive", new DriveLimelight(false, &m_drivetrain, &m_vision));
 
     // Group commands
-    frc::SmartDashboard::PutData("Intaking Action", new IntakingAction(&m_intake, &m_floorConveyor, &m_verticalConveyor));
+    frc::SmartDashboard::PutData(
+        "Intaking Action",
+        new IntakingAction(&m_intake, &m_floorConveyor, &m_verticalConveyor));
     frc::SmartDashboard::PutData("Intaking Stop", new IntakingStop(&m_intake, &m_floorConveyor, &m_verticalConveyor));
-    frc::SmartDashboard::PutData("Exhausting Action", new ExhaustingAction(&m_intake, &m_floorConveyor, &m_verticalConveyor));
-    frc::SmartDashboard::PutData("Exhausting Stop", new ExhaustingStop(&m_intake, &m_floorConveyor, &m_verticalConveyor));
-    frc::SmartDashboard::PutData("Scoring Action", new ScoringAction(&m_intake, &m_floorConveyor, &m_verticalConveyor, &m_shooter));
-    frc::SmartDashboard::PutData("Scoring Stop", new ScoringStop(&m_intake, &m_floorConveyor, &m_verticalConveyor, &m_shooter));
+    frc::SmartDashboard::PutData(
+        "Exhausting Action",
+        new ExhaustingAction(&m_intake, &m_floorConveyor, &m_verticalConveyor));
+    frc::SmartDashboard::PutData(
+        "Exhausting Stop",
+        new ExhaustingStop(&m_intake, &m_floorConveyor, &m_verticalConveyor));
+    frc::SmartDashboard::PutData(
+        "Scoring Action",
+        new ScoringAction(&m_intake, &m_floorConveyor, &m_verticalConveyor, &m_shooter));
+    frc::SmartDashboard::PutData(
+        "Scoring Stop",
+        new ScoringStop(&m_intake, &m_floorConveyor, &m_verticalConveyor, &m_shooter));
 
     // Autonomous chooser routines
     frc::SmartDashboard::PutData("Auto Drive Stop", new AutoDriveStop(&m_drivetrain));
@@ -82,7 +92,7 @@ RobotContainer::RobotContainer() :
             &m_shooter,
             &m_vision));
 
-    // Test autonomous routines    
+    // Test autonomous routines
     frc::SmartDashboard::PutData("Auto Path Sequence", new AutoPathSequence(&m_drivetrain));
     frc::SmartDashboard::PutData(
         "Auto Drive Path: testTurnRight90deg",
