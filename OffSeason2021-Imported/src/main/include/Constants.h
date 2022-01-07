@@ -13,7 +13,6 @@
 #include <units/velocity.h>
 #include <wpi/numbers>
 
-using namespace units;
 using namespace units::acceleration;
 using namespace units::length;
 using namespace units::velocity;
