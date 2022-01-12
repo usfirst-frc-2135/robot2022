@@ -32,8 +32,8 @@ public:
     explicit AutoDriveLimelightShoot(
         Drivetrain *m_drivetrain,
         Intake *m_intake,
-        FloorConveyor *m_floorConveyor,
-        VerticalConveyor *m_verticalConveyor,
+        FloorConveyor *m_floorConv,
+        VerticalConveyor *m_vertConv,
         Shooter *m_shooter,
         Vision *m_vision);
 
