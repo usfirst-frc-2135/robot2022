@@ -93,8 +93,8 @@ void Robot::DisabledInit()
 
     robotContainer->m_drivetrain.Initialize();
     robotContainer->m_intake.Initialize();
-    robotContainer->m_floorConveyor.Initialize();
-    robotContainer->m_verticalConveyor.Initialize();
+    robotContainer->m_floorConv.Initialize();
+    robotContainer->m_vertConv.Initialize();
     robotContainer->m_shooter.Initialize();
     robotContainer->m_climber.Initialize();
     robotContainer->m_pneumatics.Initialize();
@@ -162,8 +162,8 @@ void Robot::TeleopInit()
     RobotContainer *robotContainer = RobotContainer::GetInstance();
     robotContainer->m_drivetrain.Initialize();
     robotContainer->m_intake.Initialize();
-    robotContainer->m_floorConveyor.Initialize();
-    robotContainer->m_verticalConveyor.Initialize();
+    robotContainer->m_floorConv.Initialize();
+    robotContainer->m_vertConv.Initialize();
     robotContainer->m_shooter.Initialize();
     robotContainer->m_climber.Initialize();
     robotContainer->m_pneumatics.Initialize();
@@ -192,8 +192,8 @@ void Robot::RobotFaultDump(void)
     RobotContainer *robotContainer = RobotContainer::GetInstance();
     robotContainer->m_drivetrain.FaultDump();
     robotContainer->m_intake.FaultDump();
-    robotContainer->m_floorConveyor.FaultDump();
-    robotContainer->m_verticalConveyor.FaultDump();
+    robotContainer->m_floorConv.FaultDump();
+    robotContainer->m_vertConv.FaultDump();
     robotContainer->m_shooter.FaultDump();
     robotContainer->m_climber.FaultDump();
     robotContainer->m_pneumatics.FaultDump();
