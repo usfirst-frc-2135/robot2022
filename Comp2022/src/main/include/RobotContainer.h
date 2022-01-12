@@ -68,8 +68,8 @@ public:
     // The robot's subsystems
     Drivetrain m_drivetrain;
     Intake m_intake;
-    FloorConveyor m_floorConveyor;
-    VerticalConveyor m_verticalConveyor;
+    FloorConveyor m_floorConv;
+    VerticalConveyor m_vertConv;
     Shooter m_shooter;
     Climber m_climber;
     Pneumatics m_pneumatics;
