@@ -71,11 +71,14 @@ model {
                     cppCompiler.args << '-std=c++17'
                 }
                 cppCompiler.define 'SPDLOG_COMPILED_LIB'
+                cppCompiler.define 'SPDLOG_FMT_EXTERNAL'
             }
 
             binaries.withType(SharedLibraryBinarySpec) {
                 buildable = false
             }
+
+            wpi.cpp.deps.wpilib(it)
         }
         frcUserProgram(NativeExecutableSpec) {
             targetPlatform wpi.platforms.roborio
@@ -93,7 +96,12 @@ model {
                 }
         	    lib library: 'spdlog', linkage: 'static'
             }
-            
+
+            binaries.all {
+                cppCompiler.define 'SPDLOG_COMPILED_LIB'
+                cppCompiler.define 'SPDLOG_FMT_EXTERNAL'
+            }
+
             // Set deploy task to deploy this component
             deployArtifact.component = it
 
@@ -124,6 +132,11 @@ model {
             wpi.cpp.vendor.cpp(it)
             wpi.cpp.deps.wpilib(it)
             wpi.cpp.deps.googleTest(it)
+
+            binaries.all {
+                cppCompiler.define 'SPDLOG_COMPILED_LIB'
+                cppCompiler.define 'SPDLOG_FMT_EXTERNAL'
+            }
         }
     }
 }

@@ -12,6 +12,7 @@
 #include <string.h> // strncmp
 #ifdef _WIN32       // gethostname
     #include <winsock.h>
+    #pragma comment(lib, "Ws2_32.lib")
 #else
     #include <unistd.h>
 #endif
