@@ -132,6 +132,11 @@ model {
             wpi.cpp.vendor.cpp(it)
             wpi.cpp.deps.wpilib(it)
             wpi.cpp.deps.googleTest(it)
+
+            binaries.all {
+                cppCompiler.define 'SPDLOG_COMPILED_LIB'
+                cppCompiler.define 'SPDLOG_FMT_EXTERNAL'
+            }
         }
     }
 }
