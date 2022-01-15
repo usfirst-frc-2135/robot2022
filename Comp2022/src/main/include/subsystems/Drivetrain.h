@@ -92,6 +92,8 @@ private:
     // Gyro - same on robot and in simulation
     frc::ADXRS450_Gyro m_gyro;
     frc::sim::ADXRS450_GyroSim m_gyroSim{ m_gyro };
+    WPI_PigeonIMU m_gyro2{ 1 };
+    // BasePigeonSimCollection{ &m_gyro2, false };
 
     //    Declare constants
     const int m_driveDebug = 0; // Debug flag to disable extra logging calls
@@ -114,6 +116,7 @@ private:
     bool m_talonValidL2; // Health indicator for drive Talon Left 2
     bool m_talonValidR3; // Health indicator for drive Talon Right 3
     bool m_talonValidR4; // Health indicator for drive Talon Right 4
+    bool m_pigeonValid;  // Health indicator for Pigeon IMU
 
     // Joysticks
     double m_driveXScaling;  // Scaling applied to Joystick
@@ -134,6 +137,7 @@ private:
     meter_t m_distanceRight;
     frc::DifferentialDriveWheelSpeeds m_wheelSpeeds;
     frc::DifferentialDriveOdometry m_odometry{ m_gyro.GetRotation2d() };
+    frc::DifferentialDriveOdometry m_odometry2{ m_gyro2.GetRotation2d() };
     frc::Field2d m_field;
 
     double m_currentl1 = 0.0; // Motor L1 output current from Falcon
