@@ -13,7 +13,6 @@
 #include "Constants.h"
 #include "Vision.h"
 
-#include <frc/ADXRS450_Gyro.h>
 #include <frc/Encoder.h>
 #include <frc/XboxController.h>
 #include <frc/controller/PIDController.h>
@@ -21,7 +20,6 @@
 #include <frc/controller/SimpleMotorFeedforward.h>
 #include <frc/kinematics/DifferentialDriveKinematics.h>
 #include <frc/kinematics/DifferentialDriveOdometry.h>
-#include <frc/simulation/ADXRS450_GyroSim.h>
 #include <frc/simulation/DifferentialDrivetrainSim.h>
 #include <frc/simulation/EncoderSim.h>
 #include <frc/smartdashboard/Field2d.h>
@@ -90,10 +88,7 @@ private:
     frc::sim::EncoderSim m_rightEncoderSim{ m_rightEncoder };
 
     // Gyro - same on robot and in simulation
-    frc::ADXRS450_Gyro m_gyro;
-    frc::sim::ADXRS450_GyroSim m_gyroSim{ m_gyro };
-    WPI_PigeonIMU m_gyro2{ 1 };
-    // BasePigeonSimCollection{ &m_gyro2, false };
+    WPI_PigeonIMU m_gyro{ 1 };
 
     //    Declare constants
     const int m_driveDebug = 0; // Debug flag to disable extra logging calls
@@ -137,7 +132,6 @@ private:
     meter_t m_distanceRight;
     frc::DifferentialDriveWheelSpeeds m_wheelSpeeds;
     frc::DifferentialDriveOdometry m_odometry{ m_gyro.GetRotation2d() };
-    frc::DifferentialDriveOdometry m_odometry2{ m_gyro2.GetRotation2d() };
     frc::Field2d m_field;
 
     double m_currentl1 = 0.0; // Motor L1 output current from Falcon
