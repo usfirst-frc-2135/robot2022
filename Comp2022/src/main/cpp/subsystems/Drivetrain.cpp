@@ -119,7 +119,7 @@ void Drivetrain::SimulationPeriodic()
     // This method will be called once per scheduler run when in simulation
     m_driveSim.SetInputs(
         m_motorL1.Get() * frc::RobotController::GetInputVoltage() * 1_V,
-        -m_motorR3.Get() * frc::RobotController::GetInputVoltage() * 1_V);
+        m_motorR3.Get() * frc::RobotController::GetInputVoltage() * 1_V);
 
     m_driveSim.Update(20_ms);
 
