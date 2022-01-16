@@ -13,7 +13,6 @@
 #include "Constants.h"
 #include "Vision.h"
 
-#include <frc/ADXRS450_Gyro.h>
 #include <frc/Encoder.h>
 #include <frc/XboxController.h>
 #include <frc/controller/PIDController.h>
@@ -21,7 +20,6 @@
 #include <frc/controller/SimpleMotorFeedforward.h>
 #include <frc/kinematics/DifferentialDriveKinematics.h>
 #include <frc/kinematics/DifferentialDriveOdometry.h>
-#include <frc/simulation/ADXRS450_GyroSim.h>
 #include <frc/simulation/DifferentialDrivetrainSim.h>
 #include <frc/simulation/EncoderSim.h>
 #include <frc/smartdashboard/Field2d.h>
@@ -82,8 +80,7 @@ private:
     frc::sim::EncoderSim m_rightEncoderSim{ m_rightEncoder };
 
     // Gyro - same on robot and in simulation
-    frc::ADXRS450_Gyro m_gyro;
-    frc::sim::ADXRS450_GyroSim m_gyroSim{ m_gyro };
+    WPI_PigeonIMU m_gyro{ 1 };
 
     //    Declare constants
     const int m_driveDebug = 0; // Debug flag to disable extra logging calls
@@ -106,6 +103,7 @@ private:
     bool m_talonValidL2; // Health indicator for drive Talon Left 2
     bool m_talonValidR3; // Health indicator for drive Talon Right 3
     bool m_talonValidR4; // Health indicator for drive Talon Right 4
+    bool m_pigeonValid;  // Health indicator for Pigeon IMU
 
     // Joysticks
     double m_driveXScaling;  // Scaling applied to Joystick
