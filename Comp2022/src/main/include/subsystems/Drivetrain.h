@@ -239,7 +239,7 @@ public:
     void MoveWithLimelightEnd();
 
     // Autonomous - Ramsete follower command
-    void RamseteFollowerInit(string pathName);
+    void RamseteFollowerInit(string pathName, bool resetOdometry);
     void RamseteFollowerExecute(void);
     bool RamseteFollowerIsFinished(void);
     void RamseteFollowerEnd(void);

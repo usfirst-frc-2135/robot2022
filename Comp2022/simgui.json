@@ -63,11 +63,16 @@
       "/SmartDashboard/Vertical Conv Run: VCONDIR_STOP": "Command"
     },
     "windows": {
+      "/SmartDashboard/Auto Path Sequence": {
+        "window": {
+          "visible": true
+        }
+      },
       "/SmartDashboard/Field": {
-        "Robot": {
-          "image": "/Users/Naina/software/2021/Robot2021/PathPoint.png"
+        "image": "/Users/Naina/github/robot2022/Comp2022/2022-field.png",
+        "trajectory": {
+          "image": "/Users/Naina/github/software/2021/OffSeason2021/PathPoint.png"
         },
-        "image": "/Users/Naina/robot2022/Competition2022/2022Field.png",
         "window": {
           "visible": true
         }
