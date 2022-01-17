@@ -1,0 +1,82 @@
+{
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/LiveWindow/Climber": "Subsystem",
+      "/LiveWindow/Drivetrain": "Subsystem",
+      "/LiveWindow/Drivetrain/Diff Drive": "DifferentialDrive",
+      "/LiveWindow/Floor Conveyor": "Subsystem",
+      "/LiveWindow/Intake": "Subsystem",
+      "/LiveWindow/LED": "Subsystem",
+      "/LiveWindow/Pneumatics": "Subsystem",
+      "/LiveWindow/Power": "Subsystem",
+      "/LiveWindow/Shooter": "Subsystem",
+      "/LiveWindow/Ungrouped/ADXRS450_Gyro[0]": "Gyro",
+      "/LiveWindow/Ungrouped/DigitalInput[1]": "Digital Input",
+      "/LiveWindow/Ungrouped/DigitalInput[2]": "Digital Input",
+      "/LiveWindow/Ungrouped/DigitalInput[3]": "Digital Input",
+      "/LiveWindow/Ungrouped/DigitalInput[4]": "Digital Input",
+      "/LiveWindow/Ungrouped/DigitalInput[5]": "Digital Input",
+      "/LiveWindow/Ungrouped/DigitalInput[6]": "Digital Input",
+      "/LiveWindow/Ungrouped/DigitalInput[7]": "Digital Input",
+      "/LiveWindow/Ungrouped/DigitalInput[8]": "Digital Input",
+      "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
+      "/LiveWindow/Vertical Conveyor": "Subsystem",
+      "/LiveWindow/Vision": "Subsystem",
+      "/SmartDashboard/Auto Drive LL Shoot": "Command",
+      "/SmartDashboard/Auto Drive Path: driveBackward": "Command",
+      "/SmartDashboard/Auto Drive Path: driveForward": "Command",
+      "/SmartDashboard/Auto Drive Path: simCurvePath": "Command",
+      "/SmartDashboard/Auto Drive Path: testTurnLeft90deg": "Command",
+      "/SmartDashboard/Auto Drive Path: testTurnRight90deg": "Command",
+      "/SmartDashboard/Auto Drive Shoot": "Command",
+      "/SmartDashboard/Auto Drive Stop": "Command",
+      "/SmartDashboard/Auto Mode": "String Chooser",
+      "/SmartDashboard/Auto Path Sequence": "Command",
+      "/SmartDashboard/Auto Shoot Trench Left": "Command",
+      "/SmartDashboard/Auto Shoot Trench Right": "Command",
+      "/SmartDashboard/Calibrate Gyro": "Command",
+      "/SmartDashboard/Exhausting Action": "Command",
+      "/SmartDashboard/Exhausting Stop": "Command",
+      "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/Floor Conveyor Run: FCONDIR_ACQUIRE": "Command",
+      "/SmartDashboard/Floor Conveyor Run: FCONDIR_EXPEL": "Command",
+      "/SmartDashboard/Floor Conveyor Run: FCONDIR_STOP": "Command",
+      "/SmartDashboard/Intake Deploy: INTAKE_EXTEND": "Command",
+      "/SmartDashboard/Intake Deploy: INTAKE_STOW": "Command",
+      "/SmartDashboard/Intake Run: INTAKE_ACQUIRE": "Command",
+      "/SmartDashboard/Intake Run: INTAKE_EXPEL": "Command",
+      "/SmartDashboard/Intake Run: INTAKE_STOP": "Command",
+      "/SmartDashboard/Intaking Action": "Command",
+      "/SmartDashboard/Intaking Stop": "Command",
+      "/SmartDashboard/LED Set": "Command",
+      "/SmartDashboard/LED_Color": "String Chooser",
+      "/SmartDashboard/Limelight Drive": "Command",
+      "/SmartDashboard/Scoring Action": "Command",
+      "/SmartDashboard/Scoring Stop": "Command",
+      "/SmartDashboard/Shooter Aim: LIGHT_OFF": "Command",
+      "/SmartDashboard/Shooter Aim: LIGHT_ON": "Command",
+      "/SmartDashboard/Shooter Run: SHDIR_SHOOT": "Command",
+      "/SmartDashboard/Shooter Run: SHDIR_STOP": "Command",
+      "/SmartDashboard/Vertical Conv Run: VCONDIR_ACQUIRE": "Command",
+      "/SmartDashboard/Vertical Conv Run: VCONDIR_EXPEL": "Command",
+      "/SmartDashboard/Vertical Conv Run: VCONDIR_STOP": "Command"
+    },
+    "windows": {
+      "/SmartDashboard/Auto Path Sequence": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/Field": {
+        "image": "/Users/Naina/github/robot2022/Comp2022/2022-field.png",
+        "trajectory": {
+          "image": "/Users/Naina/github/software/2021/OffSeason2021/PathPoint.png"
+        },
+        "window": {
+          "visible": true
+        }
+      }
+    }
+  }
+}

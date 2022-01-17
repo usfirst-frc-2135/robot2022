@@ -49,8 +49,8 @@ RobotContainer::RobotContainer() :
     frc::SmartDashboard::PutData("Shooter Run: SHDIR_SHOOT", new ShooterRun(1, &m_shooter));
     frc::SmartDashboard::PutData("LED Set", new LEDSet(LED::LEDCOLOR_DASH, &m_led));
 
-    frc::SmartDashboard::PutData("Auto Drive Path: driveForward", new AutoDrivePath("driveForward", &m_drivetrain));
-    frc::SmartDashboard::PutData("Auto Drive Path: driveBackward", new AutoDrivePath("driveBackward", &m_drivetrain));
+    frc::SmartDashboard::PutData("Auto Drive Path: driveForward", new AutoDrivePath("driveForward", true, &m_drivetrain));
+    frc::SmartDashboard::PutData("Auto Drive Path: driveBackward", new AutoDrivePath("driveBackward", true, &m_drivetrain));
     frc::SmartDashboard::PutData("Limelight Drive", new DriveLimelight(false, &m_drivetrain, &m_vision));
 
     // Group commands
@@ -96,11 +96,11 @@ RobotContainer::RobotContainer() :
     frc::SmartDashboard::PutData("Auto Path Sequence", new AutoPathSequence(&m_drivetrain));
     frc::SmartDashboard::PutData(
         "Auto Drive Path: testTurnRight90deg",
-        new AutoDrivePath("testTurnRight90deg", &m_drivetrain));
+        new AutoDrivePath("testTurnRight90deg", true, &m_drivetrain));
     frc::SmartDashboard::PutData(
         "Auto Drive Path: testTurnLeft90deg",
-        new AutoDrivePath("testTurnLeft90deg", &m_drivetrain));
-    frc::SmartDashboard::PutData("Auto Drive Path: simCurvePath", new AutoDrivePath("simCurvePath", &m_drivetrain));
+        new AutoDrivePath("testTurnLeft90deg", true, &m_drivetrain));
+    frc::SmartDashboard::PutData("Auto Drive Path: simCurvePath", new AutoDrivePath("simCurvePath", true, &m_drivetrain));
 
     ConfigureButtonBindings();
 
