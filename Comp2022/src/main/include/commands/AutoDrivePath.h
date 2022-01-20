@@ -29,7 +29,7 @@ using namespace std;
 class AutoDrivePath : public frc2::CommandHelper<frc2::CommandBase, AutoDrivePath>
 {
 public:
-    explicit AutoDrivePath(const char *pathName, Drivetrain *m_drivetrain);
+    explicit AutoDrivePath(const char *pathName, bool resetOdometry, Drivetrain *m_drivetrain);
 
     void Initialize() override;
     void Execute() override;
@@ -39,5 +39,6 @@ public:
 
 private:
     const char *m_pathName;
+    bool m_resetOdometry;
     Drivetrain *m_drivetrain;
 };

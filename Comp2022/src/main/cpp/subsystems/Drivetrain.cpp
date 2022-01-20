@@ -48,27 +48,6 @@ Drivetrain::Drivetrain()
     m_talonValidR3 = frc2135::TalonUtils::TalonCheck(m_motorR3, "DT", "R3");
     m_talonValidR4 = frc2135::TalonUtils::TalonCheck(m_motorR4, "DT", "R4");
 
-    // TODO:  Move these into TalonMasterInitalize and TalonFollowerInitialize
-    if (m_talonValidL1)
-        m_motorL1.ConfigSupplyCurrentLimit(m_supplyCurrentLimits);
-    if (m_talonValidL2)
-        m_motorL2.ConfigSupplyCurrentLimit(m_supplyCurrentLimits);
-    if (m_talonValidR3)
-        m_motorR3.ConfigSupplyCurrentLimit(m_supplyCurrentLimits);
-    if (m_talonValidR4)
-        m_motorR4.ConfigSupplyCurrentLimit(m_supplyCurrentLimits);
-
-#ifdef __FRC_ROBORIO__
-    if (m_talonValidL1)
-        m_motorL1.ConfigStatorCurrentLimit(m_statorCurrentLimits);
-    if (m_talonValidL2)
-        m_motorL2.ConfigStatorCurrentLimit(m_statorCurrentLimits);
-    if (m_talonValidR3)
-        m_motorR3.ConfigStatorCurrentLimit(m_statorCurrentLimits);
-    if (m_talonValidR4)
-        m_motorR4.ConfigStatorCurrentLimit(m_statorCurrentLimits);
-#endif
-
     //  Load config file values
     ConfigFileLoad();
 
@@ -149,7 +128,7 @@ void Drivetrain::Initialize(void)
     MoveStop();
 
     // Initialize the odometry
-    ResetOdometry({ { 0_m, 0_m }, m_gyro.GetRotation2d() });
+    ResetOdometry({ { 0_m, 0_m }, 0_deg });
     m_driveSim.SetPose(m_odometry.GetPose());
     m_field.SetRobotPose(m_odometry.GetPose());
 }
@@ -232,7 +211,7 @@ void Drivetrain::ConfigFileLoad(void)
     frc::SmartDashboard::PutNumber("DTR_ramseteZeta", m_ramseteZeta);
 }
 
-void Drivetrain::TalonMasterInitialize(WPI_BaseMotorController &motor, bool inverted)
+void Drivetrain::TalonMasterInitialize(WPI_TalonFX &motor, bool inverted)
 {
     //  Setup motor direction, neutral mode, voltage compensation, and encoder
     motor.SetInverted(inverted);
@@ -245,13 +224,19 @@ void Drivetrain::TalonMasterInitialize(WPI_BaseMotorController &motor, bool inve
 
     motor.ConfigOpenloopRamp(m_openLoopRampRate, kCANTimeout);
     motor.ConfigClosedloopRamp(m_closedLoopRampRate, kCANTimeout);
+
+    motor.ConfigSupplyCurrentLimit(m_supplyCurrentLimits);
+    motor.ConfigStatorCurrentLimit(m_statorCurrentLimits);
 }
 
-void Drivetrain::TalonFollowerInitialize(WPI_BaseMotorController &motor, int master)
+void Drivetrain::TalonFollowerInitialize(WPI_TalonFX &motor, int master)
 {
     motor.Set(ControlMode::Follower, master);
     motor.SetInverted(InvertType::FollowMaster);
     motor.SetNeutralMode(NeutralMode::Coast);
+
+    motor.ConfigSupplyCurrentLimit(m_supplyCurrentLimits);
+    motor.ConfigStatorCurrentLimit(m_statorCurrentLimits);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -448,7 +433,7 @@ void Drivetrain::TankDriveVolts(volt_t left, volt_t right)
     if (m_talonValidL1)
         m_motorL1.SetVoltage(left);
     if (m_talonValidR3)
-        m_motorR3.SetVoltage(-right);
+        m_motorR3.SetVoltage(right);
 }
 
 //
@@ -647,7 +632,7 @@ void Drivetrain::MoveWithLimelightEnd()
 //
 //  Autonomous command - Ramsete follower
 //
-void Drivetrain::RamseteFollowerInit(string pathName)
+void Drivetrain::RamseteFollowerInit(string pathName, bool resetOdometry)
 {
     m_tolerance = frc::SmartDashboard::GetNumber("DT_Tolerance", 0.05);
 
@@ -698,25 +683,10 @@ void Drivetrain::RamseteFollowerInit(string pathName)
             curState.pose.Rotation().Degrees());
     }
 
-#if 0 // REMOVE - only for onboard trajectory generation
-    //  Our trajectory maxSpeed/maxAccel will come from PathWeaver
-    // Set up config for trajectory
-    frc::TrajectoryConfig config(kMaxSpeed, kMaxAcceleration);
-
-    // Add kinematics to ensure max speed is actually obeyed
-    config.SetKinematics(m_kinematics);
-
-    // Apply the voltage constraint
-    config.AddConstraint(autoVoltageConstraint);
-
-    // Create a voltage constraint to ensure we don't accelerate too fast
-    frc::DifferentialDriveVoltageConstraint autoVoltageConstraint(m_feedforward, m_kinematics, 10_V);
-#endif
-
     // This initializes the odometry (where we are)
     SetBrakeMode(false);
-    ResetOdometry(m_trajectory.InitialPose());
-    m_driveSim.SetPose(m_odometry.GetPose());
+    if (resetOdometry)
+        ResetOdometry(m_trajectory.InitialPose());
     m_field.SetRobotPose(m_odometry.GetPose());
 }
 
