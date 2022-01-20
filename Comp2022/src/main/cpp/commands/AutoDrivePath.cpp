@@ -12,8 +12,9 @@
 
 #include <spdlog/spdlog.h>
 
-AutoDrivePath::AutoDrivePath(const char *pathName, Drivetrain *m_drivetrain) :
+AutoDrivePath::AutoDrivePath(const char *pathName, bool resetOdometry, Drivetrain *m_drivetrain) :
     m_pathName(pathName),
+    m_resetOdometry(resetOdometry),
     m_drivetrain(m_drivetrain)
 {
     // Use AddRequirements() here to declare subsystem dependencies
@@ -26,7 +27,7 @@ AutoDrivePath::AutoDrivePath(const char *pathName, Drivetrain *m_drivetrain) :
 void AutoDrivePath::Initialize()
 {
     spdlog::info("AutoDrivePath - Init: pathName: {}", m_pathName);
-    m_drivetrain->RamseteFollowerInit(m_pathName);
+    m_drivetrain->RamseteFollowerInit(m_pathName, m_resetOdometry);
 }
 
 // Called repeatedly when this Command is scheduled to run

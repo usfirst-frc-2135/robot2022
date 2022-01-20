@@ -128,7 +128,7 @@ void Drivetrain::Initialize(void)
     MoveStop();
 
     // Initialize the odometry
-    ResetOdometry({ { 0_m, 0_m }, m_gyro.GetRotation2d() });
+    ResetOdometry({ { 0_m, 0_m }, 0_deg });
     m_driveSim.SetPose(m_odometry.GetPose());
     m_field.SetRobotPose(m_odometry.GetPose());
 }
@@ -433,7 +433,7 @@ void Drivetrain::TankDriveVolts(volt_t left, volt_t right)
     if (m_talonValidL1)
         m_motorL1.SetVoltage(left);
     if (m_talonValidR3)
-        m_motorR3.SetVoltage(-right);
+        m_motorR3.SetVoltage(right);
 }
 
 //
@@ -632,7 +632,7 @@ void Drivetrain::MoveWithLimelightEnd()
 //
 //  Autonomous command - Ramsete follower
 //
-void Drivetrain::RamseteFollowerInit(string pathName)
+void Drivetrain::RamseteFollowerInit(string pathName, bool resetOdometry)
 {
     m_tolerance = frc::SmartDashboard::GetNumber("DT_Tolerance", 0.05);
 
@@ -683,25 +683,10 @@ void Drivetrain::RamseteFollowerInit(string pathName)
             curState.pose.Rotation().Degrees());
     }
 
-#if 0 // REMOVE - only for onboard trajectory generation
-    //  Our trajectory maxSpeed/maxAccel will come from PathWeaver
-    // Set up config for trajectory
-    frc::TrajectoryConfig config(kMaxSpeed, kMaxAcceleration);
-
-    // Add kinematics to ensure max speed is actually obeyed
-    config.SetKinematics(m_kinematics);
-
-    // Apply the voltage constraint
-    config.AddConstraint(autoVoltageConstraint);
-
-    // Create a voltage constraint to ensure we don't accelerate too fast
-    frc::DifferentialDriveVoltageConstraint autoVoltageConstraint(m_feedforward, m_kinematics, 10_V);
-#endif
-
     // This initializes the odometry (where we are)
     SetBrakeMode(false);
-    ResetOdometry(m_trajectory.InitialPose());
-    m_driveSim.SetPose(m_odometry.GetPose());
+    if (resetOdometry)
+        ResetOdometry(m_trajectory.InitialPose());
     m_field.SetRobotPose(m_odometry.GetPose());
 }
 
