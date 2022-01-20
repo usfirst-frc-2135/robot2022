@@ -36,9 +36,16 @@ namespace DriveConstants
     static constexpr int kRightEncoderPorts[]{ 3, 4 };
 
     // Odometry constants
-    static constexpr int kEncoderCPR = 2048;           // CPR is 2048 for new TalonFX
+    static constexpr int kEncoderCPR = 2048; // CPR is 2048 for new TalonFX
+// Gear Ratio Checker
+#if 1
+    static constexpr double kGearRatio = 12.75;        // grogu- motor rotations to output shaft
     static constexpr meter_t kWheelDiaMeters = 6.0_in; // Units library does the conversion
-    static constexpr double kGearRatio = 12.75;
+#else
+    static constexpr double kGearRatio = 8.45;         // comp2022- motor rotations to output shaft
+    static constexpr meter_t kWheelDiaMeters = 4.0_in; // Units library does the conversion
+#endif
+    //static constexpr double kGearRatio = 12.75;
     static constexpr meter_t kEncoderMetersPerCount =
         (kWheelDiaMeters * wpi::numbers::pi) / static_cast<double>(kEncoderCPR) / kGearRatio;
     static constexpr meter_t kTrackWidthMeters = 0.6477_m; // Measured track width
