@@ -48,27 +48,6 @@ Drivetrain::Drivetrain()
     m_talonValidR3 = frc2135::TalonUtils::TalonCheck(m_motorR3, "DT", "R3");
     m_talonValidR4 = frc2135::TalonUtils::TalonCheck(m_motorR4, "DT", "R4");
 
-    // TODO:  Move these into TalonMasterInitalize and TalonFollowerInitialize
-    if (m_talonValidL1)
-        m_motorL1.ConfigSupplyCurrentLimit(m_supplyCurrentLimits);
-    if (m_talonValidL2)
-        m_motorL2.ConfigSupplyCurrentLimit(m_supplyCurrentLimits);
-    if (m_talonValidR3)
-        m_motorR3.ConfigSupplyCurrentLimit(m_supplyCurrentLimits);
-    if (m_talonValidR4)
-        m_motorR4.ConfigSupplyCurrentLimit(m_supplyCurrentLimits);
-
-#ifdef __FRC_ROBORIO__
-    if (m_talonValidL1)
-        m_motorL1.ConfigStatorCurrentLimit(m_statorCurrentLimits);
-    if (m_talonValidL2)
-        m_motorL2.ConfigStatorCurrentLimit(m_statorCurrentLimits);
-    if (m_talonValidR3)
-        m_motorR3.ConfigStatorCurrentLimit(m_statorCurrentLimits);
-    if (m_talonValidR4)
-        m_motorR4.ConfigStatorCurrentLimit(m_statorCurrentLimits);
-#endif
-
     //  Load config file values
     ConfigFileLoad();
 
@@ -232,7 +211,7 @@ void Drivetrain::ConfigFileLoad(void)
     frc::SmartDashboard::PutNumber("DTR_ramseteZeta", m_ramseteZeta);
 }
 
-void Drivetrain::TalonMasterInitialize(WPI_BaseMotorController &motor, bool inverted)
+void Drivetrain::TalonMasterInitialize(WPI_TalonFX &motor, bool inverted)
 {
     //  Setup motor direction, neutral mode, voltage compensation, and encoder
     motor.SetInverted(inverted);
@@ -245,13 +224,19 @@ void Drivetrain::TalonMasterInitialize(WPI_BaseMotorController &motor, bool inve
 
     motor.ConfigOpenloopRamp(m_openLoopRampRate, kCANTimeout);
     motor.ConfigClosedloopRamp(m_closedLoopRampRate, kCANTimeout);
+
+    motor.ConfigSupplyCurrentLimit(m_supplyCurrentLimits);
+    motor.ConfigStatorCurrentLimit(m_statorCurrentLimits);
 }
 
-void Drivetrain::TalonFollowerInitialize(WPI_BaseMotorController &motor, int master)
+void Drivetrain::TalonFollowerInitialize(WPI_TalonFX &motor, int master)
 {
     motor.Set(ControlMode::Follower, master);
     motor.SetInverted(InvertType::FollowMaster);
     motor.SetNeutralMode(NeutralMode::Coast);
+
+    motor.ConfigSupplyCurrentLimit(m_supplyCurrentLimits);
+    motor.ConfigStatorCurrentLimit(m_statorCurrentLimits);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
