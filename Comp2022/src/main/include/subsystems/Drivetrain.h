@@ -184,8 +184,8 @@ private:
 
     // Initialization methods
     void ConfigFileLoad(void);
-    void TalonMasterInitialize(WPI_BaseMotorController &motor, bool inverted);
-    void TalonFollowerInitialize(WPI_BaseMotorController &motor, int master);
+    void TalonMasterInitialize(WPI_TalonFX &motor, bool inverted);
+    void TalonFollowerInitialize(WPI_TalonFX &motor, int master);
 
     // Periodic update methods
     void UpdateOdometry(void);
