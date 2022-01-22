@@ -72,6 +72,6 @@
   AutoDriveLimelightShoot_path = driveForward46
   AutoDriveShoot_path = driveForward58
   path1 = forward39
-  path2 = right79
+  path2 = left79
   path3 = rightAngleTurn
   AUTO_WaitTime = 0.0

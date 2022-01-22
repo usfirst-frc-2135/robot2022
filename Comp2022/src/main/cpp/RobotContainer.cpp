@@ -57,6 +57,9 @@ RobotContainer::RobotContainer() :
         new AutoDrivePath("driveBackward", true, &m_drivetrain));
     frc::SmartDashboard::PutData("Limelight Drive", new DriveLimelight(false, &m_drivetrain, &m_vision));
 
+    frc::SmartDashboard::PutData("LEFT Drivetrain Motor Testing", new DrivetrainMotorTesting(true, &m_drivetrain));
+    frc::SmartDashboard::PutData("RIGHT Drivetrain Motor Testing", new DrivetrainMotorTesting(false, &m_drivetrain));
+
     // Group commands
     frc::SmartDashboard::PutData("Intaking Action", new IntakingAction(&m_intake, &m_floorConv, &m_vertConv));
     frc::SmartDashboard::PutData("Intaking Stop", new IntakingStop(&m_intake, &m_floorConv, &m_vertConv));
@@ -116,6 +119,7 @@ RobotContainer::RobotContainer() :
     m_chooser.AddOption(
         "Auto Drive LL Shoot",
         new AutoDriveLimelightShoot(&m_drivetrain, &m_intake, &m_floorConv, &m_vertConv, &m_shooter, &m_vision));
+    m_chooser.AddOption("Auto Path Sequence", new AutoPathSequence(&m_drivetrain));
 
     m_chooser.SetDefaultOption("Auto Drive Stop", new AutoDriveStop(&m_drivetrain));
 
