@@ -80,7 +80,7 @@ private:
     frc::sim::EncoderSim m_rightEncoderSim{ m_rightEncoder };
 
     // Gyro - same on robot and in simulation
-    WPI_PigeonIMU m_gyro{ 1 };
+    WPI_PigeonIMU m_gyro{ 0 };
 
     //    Declare constants
     const int m_driveDebug = 0; // Debug flag to disable extra logging calls
