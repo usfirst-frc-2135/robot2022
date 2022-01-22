@@ -301,6 +301,8 @@ void Drivetrain::UpdateDashboardValues(void)
     frc::SmartDashboard::PutNumber("DT_wheelSpeedLeft", m_wheelSpeeds.left.to<double>());
     frc::SmartDashboard::PutNumber("DT_wheelSpeedRight", m_wheelSpeeds.right.to<double>());
     frc::SmartDashboard::PutNumber("DT_heading", m_odometry.GetPose().Rotation().Degrees().to<double>());
+    frc::SmartDashboard::PutNumber("DT_currentX", m_odometry.GetPose().X().to<double>());
+    frc::SmartDashboard::PutNumber("DT_currentY", m_odometry.GetPose().Y().to<double>());
 
     frc::SmartDashboard::PutNumber("DT_Current_L1", m_currentl1);
     frc::SmartDashboard::PutNumber("DT_Current_L2", m_currentL2);
@@ -347,7 +349,7 @@ meter_t Drivetrain::GetDistanceMetersLeft()
 meter_t Drivetrain::GetDistanceMetersRight()
 {
     if (m_talonValidR3)
-        return DriveConstants::kEncoderMetersPerCount * -m_motorR3.GetSelectedSensorPosition(kPidIndex);
+        return DriveConstants::kEncoderMetersPerCount * m_motorR3.GetSelectedSensorPosition(kPidIndex);
 
     return 0_m;
 }
@@ -360,7 +362,7 @@ frc::DifferentialDriveWheelSpeeds Drivetrain::GetWheelSpeedsMPS()
     if (m_talonValidL1)
         leftVelocity = DriveConstants::kEncoderMetersPerCount * m_motorL1.GetSelectedSensorVelocity() * 10 / 1_s;
     if (m_talonValidR3)
-        rightVelocity = DriveConstants::kEncoderMetersPerCount * -m_motorR3.GetSelectedSensorVelocity() * 10 / 1_s;
+        rightVelocity = DriveConstants::kEncoderMetersPerCount * m_motorR3.GetSelectedSensorVelocity() * 10 / 1_s;
 
     return { leftVelocity, rightVelocity };
 }
@@ -725,9 +727,6 @@ void Drivetrain::RamseteFollowerExecute(void)
     // Apply the calculated values to the motors
     TankDriveVolts(leftTotalVolts, rightTotalVolts);
 
-    frc::SmartDashboard::PutNumber("DT_targetHeading", m_trajState.pose.Rotation().Degrees().to<double>());
-    frc::SmartDashboard::PutNumber("DT_targetPose", currentPose.X().to<double>());
-
     spdlog::info(
         "DTR cur XYR {:.2f} {:.2f} {:.1f} | targ XYR {:.2f} {:.2f} {:.1f} | chas XYO {:.2f} {:.2f} {:.1f} | whl LR {:.2f} {:.2f} ffV LR {:.2f} {:.2f} | toV LR {:.2f} {:.2f}",
         currentPose.X().to<double>(),
@@ -749,7 +748,7 @@ void Drivetrain::RamseteFollowerExecute(void)
 
 bool Drivetrain::RamseteFollowerIsFinished(void)
 {
-    return ((m_trajTimer.Get() >= m_trajectory.TotalTime()) && MoveIsStopped());
+    return ((m_trajTimer.Get() >= m_trajectory.TotalTime()));
 }
 
 void Drivetrain::RamseteFollowerEnd(void)
