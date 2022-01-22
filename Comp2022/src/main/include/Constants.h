@@ -32,9 +32,6 @@ namespace AutoConstants
 
 namespace DriveConstants
 {
-    static constexpr int kLeftEncoderPorts[]{ 1, 2 };
-    static constexpr int kRightEncoderPorts[]{ 3, 4 };
-
     // Odometry constants
     static constexpr int kEncoderCPR = 2048; // CPR is 2048 for new TalonFX
 // Gear Ratio Checker
