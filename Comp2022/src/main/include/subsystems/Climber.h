@@ -69,7 +69,6 @@ private:
     double m_pidKp;            // Climber PID proportional constant
     double m_pidKi;            // Climber PID integral constant
     double m_pidKd;            // Climber PID derivative constant
-    double m_arbFeedForward;   // Climber Motion Magic Arbitrary Feed Forward
     double m_neutralDeadband;  // Climber PID neutral deadband in percent
     double m_CLRampRate;       // Climber PID ramp rate
     int m_CLAllowedError;      // Climber PID allowable closed loop error in counts
@@ -88,8 +87,7 @@ private:
     double m_rung3Height;      // Setpoint for 3rd monkey bar
     double m_rung4Height;      // Setpoint for 4th monkey bar
 
-    const double m_circumInches =
-        (0.428 * M_PI); // Circumference in inches -> change based on climber height calculations
+    const double m_circumInches = (0.428 * M_PI); // Circumference in inches
 
 public:
     Climber();
@@ -119,7 +117,7 @@ public:
         CLIMBER_UP = 1
     };
 
-    int InchesToCounts(double inches);
+    double InchesToCounts(double inches);
     double CountsToInches(int counts);
     double GetCurrentInches(void);
     double GetCurrentArbFeedForward(void);

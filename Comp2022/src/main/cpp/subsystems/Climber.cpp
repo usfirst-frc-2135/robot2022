@@ -84,7 +84,7 @@ Climber::Climber()
     // Set motor peak outputs
     if (m_talonValidCL14)
     {
-        m_motorCL14.SetInverted(true);
+        m_motorCL14.SetInverted(false);
         m_motorCL14.SetNeutralMode(NeutralMode::Brake);
         m_motorCL14.SetSafetyEnabled(false);
 
@@ -105,8 +105,8 @@ Climber::Climber()
         m_motorCL14.SetSelectedSensorPosition(0, 0, kCANTimeout);
 
         // Set max power and ramp rate
-        m_motorCL14.ConfigPeakOutputForward(m_peakOut, kCANTimeout);
-        m_motorCL14.ConfigPeakOutputReverse(-m_peakOut, kCANTimeout);
+        // m_motorCL14.ConfigPeakOutputForward(m_peakOut, kCANTimeout);
+        // m_motorCL14.ConfigPeakOutputReverse(-m_peakOut, kCANTimeout);
         m_motorCL14.ConfigClosedloopRamp(m_CLRampRate, kCANTimeout);
 
         // Set allowable closed loop error
@@ -119,10 +119,10 @@ Climber::Climber()
         // m_motorCL14.EnableCurrentLimit(true);
 
         // Set soft limits for climber height
-        m_motorCL14.ConfigForwardSoftLimitThreshold(InchesToCounts(m_climberMaxHeight), kCANTimeout);
-        m_motorCL14.ConfigReverseSoftLimitThreshold(InchesToCounts(m_climberMinHeight), kCANTimeout);
-        m_motorCL14.ConfigForwardSoftLimitEnable(true, kCANTimeout);
-        m_motorCL14.ConfigReverseSoftLimitEnable(true, kCANTimeout);
+        //m_motorCL14.ConfigForwardSoftLimitThreshold(InchesToCounts(m_climberMaxHeight), kCANTimeout);
+        //m_motorCL14.ConfigReverseSoftLimitThreshold(InchesToCounts(m_climberMinHeight), kCANTimeout);
+        // m_motorCL14.ConfigForwardSoftLimitEnable(true, kCANTimeout);
+        // m_motorCL14.ConfigReverseSoftLimitEnable(true, kCANTimeout);
 
         // Configure Magic Motion settings
         m_motorCL14.SelectProfileSlot(0, 0);
@@ -295,15 +295,14 @@ void Climber::SetBrakeSolenoid(bool climberBrake)
 
 ///////////////////////// MOTION MAGIC ///////////////////////////////////
 
-int Climber::InchesToCounts(double inches)
+double Climber::InchesToCounts(double inches)
 {
-    int counts;
+    double counts;
     double inchesPerCount;
 
-    inchesPerCount =
-        (m_circumInches / 1) * (ClimberConstants::climberRolloutRatio / 1) * (1 / ClimberConstants::climberEncoderCPR);
-    counts = (int)round(inches / inchesPerCount);
-
+    inchesPerCount = (m_circumInches / 1) * (ClimberConstants::climberRolloutRatio / 1)
+                     * (1 / (double)ClimberConstants::climberEncoderCPR);
+    counts = inches / inchesPerCount;
     return counts;
 }
 
@@ -314,7 +313,7 @@ double Climber::CountsToInches(int counts)
 
     countsPerInches =
         (1 / m_circumInches) * (1 / ClimberConstants::climberRolloutRatio) * (ClimberConstants::climberEncoderCPR / 1);
-    inches = ((double)counts / countsPerInches);
+    inches = counts / countsPerInches;
     return inches;
 }
 
@@ -346,19 +345,6 @@ void Climber::SetClimberSpeed()
     m_motorCL14.Config_kD(0, m_pidKd, 0);
 }
 
-double Climber::GetCurrentArbFeedForward(void)
-{
-    double curArbFeedForward;
-
-    curArbFeedForward = m_arbFeedForward;
-
-    // Proportionally adjust arbFeedForward when climber slack is present (< 1.0 in)
-    if (m_curInches < 1.0)
-        curArbFeedForward *= m_curInches;
-
-    return curArbFeedForward;
-}
-
 void Climber::CalibrationOverride()
 {
     if (m_talonValidCL14)
@@ -375,7 +361,6 @@ void Climber::MoveClimberDistanceInit(double inches)
     int curCounts = 0;
 
     m_targetInches = inches;
-    m_targetCounts = InchesToCounts(m_targetInches);
 
     if (m_calibrated)
     {
@@ -404,10 +389,11 @@ void Climber::MoveClimberDistanceInit(double inches)
         m_safetyTimer.Reset();
         m_safetyTimer.Start();
 
+        m_targetCounts = InchesToCounts(m_targetInches);
         m_motorCL14.Set(ControlMode::MotionMagic, m_targetCounts);
 
         spdlog::info(
-            "Climber moving inches: {} -> {} inches (counts: {} -> {})",
+            "Climber moving: {} -> {} inches (counts: {} -> {})",
             m_curInches,
             m_targetInches,
             curCounts,
