@@ -73,7 +73,7 @@
   CL_Velocity = 2722
   CL_Acceleration = 2722
   CL_SCurveStrength = 0
-  CL_PidKf = 0.0470
+  CL_PidKf = 0.0496
   CL_PidKp = 0.00
   CL_PidKi = 0.000
   CL_PidKd = 0.000

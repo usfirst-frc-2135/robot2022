@@ -84,7 +84,7 @@ Climber::Climber()
     // Set motor peak outputs
     if (m_talonValidCL14)
     {
-        m_motorCL14.SetInverted(false);
+        m_motorCL14.SetInverted(true);
         m_motorCL14.SetNeutralMode(NeutralMode::Brake);
         m_motorCL14.SetSafetyEnabled(false);
 
@@ -302,7 +302,7 @@ int Climber::InchesToCounts(double inches)
 
     inchesPerCount =
         (m_circumInches / 1) * (ClimberConstants::climberRolloutRatio / 1) * (1 / ClimberConstants::climberEncoderCPR);
-    counts = (int)round(inches * inchesPerCount);
+    counts = (int)round(inches / inchesPerCount);
 
     return counts;
 }
@@ -314,7 +314,7 @@ double Climber::CountsToInches(int counts)
 
     countsPerInches =
         (1 / m_circumInches) * (1 / ClimberConstants::climberRolloutRatio) * (ClimberConstants::climberEncoderCPR / 1);
-    inches = ((double)counts * countsPerInches);
+    inches = ((double)counts / countsPerInches);
     return inches;
 }
 
