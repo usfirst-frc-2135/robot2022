@@ -385,7 +385,7 @@ void Climber::MoveClimberDistanceInit(double inches)
         }
 
         // Start the safety timer
-        m_safetyTimeout = 2.4_s;
+        m_safetyTimeout = 4.0_s;
         m_safetyTimer.Reset();
         m_safetyTimer.Start();
 
@@ -428,6 +428,7 @@ bool Climber::MoveClimberDistanceIsFinished()
         if (++withinTolerance >= 5)
         {
             isFinished = true;
+            spdlog::info("Current climber counts: {}", curCounts);
             spdlog::info("Climber move finished - Time: {}", m_safetyTimer.Get());
         }
     }

@@ -70,8 +70,8 @@
   CL_InitialDownSpeed = -0.25
   CL_CalibSpeed = 0.25
   CL_PeakOut = 1.0
-  CL_Velocity = 2722
-  CL_Acceleration = 2722
+  CL_Velocity = 5444
+  CL_Acceleration = 5444
   CL_SCurveStrength = 0
   CL_PidKf = 0.0496
   CL_PidKp = 0.00
