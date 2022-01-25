@@ -57,6 +57,9 @@ RobotContainer::RobotContainer() :
         new AutoDrivePath("driveBackward", true, &m_drivetrain));
     frc::SmartDashboard::PutData("Limelight Drive", new DriveLimelight(false, &m_drivetrain, &m_vision));
 
+    frc::SmartDashboard::PutData("LEFT Drivetrain Motor Testing", new DrivetrainMotorTesting(true, &m_drivetrain));
+    frc::SmartDashboard::PutData("RIGHT Drivetrain Motor Testing", new DrivetrainMotorTesting(false, &m_drivetrain));
+
     // Group commands
     frc::SmartDashboard::PutData("Intaking Action", new IntakingAction(&m_intake, &m_floorConv, &m_vertConv));
     frc::SmartDashboard::PutData("Intaking Stop", new IntakingStop(&m_intake, &m_floorConv, &m_vertConv));
@@ -116,6 +119,7 @@ RobotContainer::RobotContainer() :
     m_chooser.AddOption(
         "Auto Drive LL Shoot",
         new AutoDriveLimelightShoot(&m_drivetrain, &m_intake, &m_floorConv, &m_vertConv, &m_shooter, &m_vision));
+    m_chooser.AddOption("Auto Path Sequence", new AutoPathSequence(&m_drivetrain));
 
     m_chooser.SetDefaultOption("Auto Drive Stop", new AutoDriveStop(&m_drivetrain));
 
@@ -179,17 +183,19 @@ void RobotContainer::ConfigureButtonBindings()
     frc2::JoystickButton m_inStowOp{ &m_operatorController, (int)frc::XboxController::Button::kA };
     frc2::JoystickButton m_exhaustingOp{ &m_operatorController, (int)frc::XboxController::Button::kB };
     frc2::JoystickButton m_scoringOffOp{ &m_operatorController, (int)frc::XboxController::Button::kX };
-    frc2::JoystickButton m_inDeployOp{ &m_operatorController, (int)frc::XboxController::Button::kY };
+    //frc2::JoystickButton m_inDeployOp{ &m_operatorController, (int)frc::XboxController::Button::kY };
     frc2::JoystickButton m_intakingOp{ &m_operatorController, (int)frc::XboxController::Button::kLeftBumper };
     frc2::JoystickButton m_scoringPrimeOp{ &m_operatorController, (int)frc::XboxController::Button::kRightBumper };
     frc2::JoystickButton m_shooterAimOnOp{ &m_operatorController, (int)frc::XboxController::Button::kStart };
     frc2::JoystickButton m_shooterAimOffOp{ &m_operatorController, (int)frc::XboxController::Button::kBack };
+    frc2::JoystickButton m_climberMoveDistOp{ &m_operatorController, (int)frc::XboxController::Button::kY };
 
     // Operator - A, B, X, Y
     m_inStowOp.WhenPressed(IntakeDeploy(false), true);
     m_exhaustingOp.WhenPressed(ExhaustingAction(&m_intake, &m_floorConv, &m_vertConv), true);
     m_exhaustingOp.WhenReleased(ExhaustingStop(&m_intake, &m_floorConv, &m_vertConv), true);
-    m_inDeployOp.WhenPressed(IntakeDeploy(true), true);
+    // m_inDeployOp.WhenPressed(IntakeDeploy(true), true);
+    m_climberMoveDistOp.WhenPressed(ClimberMoveHeight(&m_climber), true);
 
     // Operator Bumpers
     m_intakingOp.WhenPressed(IntakingAction(&m_intake, &m_floorConv, &m_vertConv), true);
