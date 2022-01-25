@@ -149,7 +149,7 @@ void Drivetrain::Initialize(void)
     MoveStop();
 
     // Initialize the odometry
-    ResetOdometry({ { 0_m, 0_m }, 0_rad });
+    ResetOdometry({ { 0_m, 0_m }, m_gyro.GetRotation2d() });
     m_driveSim.SetPose(m_odometry.GetPose());
     m_field.SetRobotPose(m_odometry.GetPose());
 }
@@ -647,7 +647,7 @@ void Drivetrain::MoveWithLimelightEnd()
 //
 //  Autonomous command - Ramsete follower
 //
-void Drivetrain::RamseteFollowerInit(string pathName, bool resetOdometry)
+void Drivetrain::RamseteFollowerInit(string pathName)
 {
     m_tolerance = frc::SmartDashboard::GetNumber("DT_Tolerance", 0.05);
 
@@ -700,8 +700,8 @@ void Drivetrain::RamseteFollowerInit(string pathName, bool resetOdometry)
 
     // This initializes the odometry (where we are)
     SetBrakeMode(false);
-    if (resetOdometry)
-        ResetOdometry(m_trajectory.InitialPose());
+    ResetOdometry(m_trajectory.InitialPose());
+    m_driveSim.SetPose(m_odometry.GetPose());
     m_field.SetRobotPose(m_odometry.GetPose());
 }
 
