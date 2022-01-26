@@ -193,7 +193,6 @@ private:
 
     void ResetGyro(void);
     degree_t GetHeadingAngle(void);
-    degrees_per_second_t GetTurnRate(void);
 
     void ResetOdometry(frc::Pose2d pose);
 
