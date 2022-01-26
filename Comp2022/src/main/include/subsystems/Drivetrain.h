@@ -167,7 +167,6 @@ private:
     frc2::PIDController m_leftPid{ 0.0, 0.0, 0.0 };
     frc2::PIDController m_rightPid{ 0.0, 0.0, 0.0 };
     frc::Timer m_trajTimer;
-    frc::Trajectory::State m_trajState;
 
     // Path following variables
     double m_tolerance;
@@ -194,7 +193,6 @@ private:
 
     void ResetGyro(void);
     degree_t GetHeadingAngle(void);
-    degrees_per_second_t GetTurnRate(void);
 
     void ResetOdometry(frc::Pose2d pose);
 

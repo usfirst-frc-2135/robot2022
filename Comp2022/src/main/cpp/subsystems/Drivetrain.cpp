@@ -391,11 +391,6 @@ degree_t Drivetrain::GetHeadingAngle()
     return (-m_gyro.GetAngle() * 1_deg);
 }
 
-degrees_per_second_t Drivetrain::GetTurnRate()
-{
-    return (-m_gyro.GetRate() * 1_deg_per_s);
-}
-
 void Drivetrain::CalibrateGyro()
 {
     m_gyro.Calibrate();
@@ -706,8 +701,6 @@ void Drivetrain::RamseteFollowerExecute(void)
 
     frc::Trajectory::State trajState = m_trajectory.Sample(m_trajTimer.Get());
     frc::Pose2d currentPose = m_odometry.GetPose();
-
-    m_trajState = trajState;
 
     frc::ChassisSpeeds targetChassisSpeeds = m_ramseteController.Calculate(currentPose, trajState);
     frc::DifferentialDriveWheelSpeeds targetSpeed = m_kinematics.ToWheelSpeeds(targetChassisSpeeds);
