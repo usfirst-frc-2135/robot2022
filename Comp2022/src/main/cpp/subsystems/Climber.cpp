@@ -71,7 +71,6 @@ Climber::Climber()
     // Magic Motion variables
     m_curInches = 0.0;
     m_targetInches = 0.0;
-    m_targetCounts = 0;
     m_calibrated = false;
     m_calibrationState = 0;
 
@@ -145,31 +144,24 @@ void Climber::Periodic()
 {
     // Put code here to be run every loop
     static int periodicInterval = 0;
+    double outputCL14 = 0.0;
+
+    if (m_talonValidCL14)
+        outputCL14 = m_motorCL14.GetMotorOutputPercent();
+    frc::SmartDashboard::PutNumber("CL_Output_CL14", outputCL14);
+
+    int curCounts = 0;
+    if (m_talonValidCL14)
+    {
+        curCounts = m_motorCL14.GetSelectedSensorPosition(0);
+    }
+
+    m_curInches = CountsToInches(curCounts);
+    frc::SmartDashboard::PutNumber("CL Height", m_curInches);
 
     // Only update indicators every 100 ms to cut down on network traffic
     if (periodicInterval++ % 5 == 0)
     {
-        double outputCL14 = 0.0;
-
-        if (m_talonValidCL14)
-            outputCL14 = m_motorCL14.GetMotorOutputPercent();
-        frc::SmartDashboard::PutNumber("CL_Output_CL14", outputCL14);
-
-        int curCounts = 0;
-
-        if (m_talonValidCL14)
-        {
-            curCounts = m_motorCL14.GetSelectedSensorPosition(0);
-        }
-
-        m_curInches = CountsToInches(curCounts);
-
-        frc::SmartDashboard::PutNumber("CL Height", m_curInches);
-
-        // Update arbitrary feed forward if calibrated
-        if (m_calibrated)
-            m_motorCL14.Set(ControlMode::MotionMagic, m_targetCounts);
-
         if (m_climberDebug > 0)
         {
             double currentCL14 = 0.0;
@@ -216,7 +208,6 @@ void Climber::Initialize(void)
     }
 
     m_curInches = CountsToInches(curCounts);
-    m_targetCounts = curCounts;
     m_targetInches = m_curInches;
     m_isMoving = false;
     spdlog::info("CL Init Target Inches: {}", m_targetInches);
@@ -319,17 +310,6 @@ double Climber::CountsToInches(int counts)
     return inches;
 }
 
-double Climber::GetCurrentInches()
-{
-    int curCounts = 0;
-
-    if (m_talonValidCL14)
-        curCounts = m_motorCL14.GetSelectedSensorPosition(0);
-
-    m_curInches = CountsToInches(curCounts);
-    return m_curInches;
-}
-
 void Climber::CalibrationOverride()
 {
     if (m_talonValidCL14)
@@ -357,30 +337,19 @@ void Climber::MoveClimberDistanceInit(double inches)
     m_motorCL14.Config_kI(0, m_pidKi, 0);
     m_motorCL14.Config_kD(0, m_pidKd, 0);
 
-    int curCounts = 0;
-
-    m_targetInches = inches;
-
     if (m_calibrated)
     {
         // Height constraint check/soft limit for max and min height before raising
-        if (m_targetInches < m_climberMinHeight)
+        if (inches < m_climberMinHeight)
         {
-            spdlog::info("Target {} inches is limited by {} inches", m_targetInches, m_climberMinHeight);
-            m_targetInches = m_climberMinHeight;
+            spdlog::info("Target {} inches is limited by {} inches", inches, m_climberMinHeight);
+            inches = m_climberMinHeight;
         }
 
-        if (m_targetInches > m_climberMaxHeight)
+        if (inches > m_climberMaxHeight)
         {
-            spdlog::info("Target {} inches is limited by {} inches", m_targetInches, m_climberMaxHeight);
-            m_targetInches = m_climberMaxHeight;
-        }
-
-        // Get current position in inches and set position mode and target counts
-        if (m_talonValidCL14)
-        {
-            curCounts = m_motorCL14.GetSelectedSensorPosition(0);
-            m_curInches = CountsToInches(curCounts);
+            spdlog::info("Target {} inches is limited by {} inches", inches, m_climberMaxHeight);
+            inches = m_climberMaxHeight;
         }
 
         // Start the safety timer
@@ -388,15 +357,14 @@ void Climber::MoveClimberDistanceInit(double inches)
         m_safetyTimer.Reset();
         m_safetyTimer.Start();
 
-        m_targetCounts = InchesToCounts(m_targetInches);
-        m_motorCL14.Set(ControlMode::MotionMagic, m_targetCounts);
+        m_motorCL14.Set(ControlMode::MotionMagic, InchesToCounts(inches));
 
         spdlog::info(
-            "Climber moving: {} -> {} inches (counts: {} -> {})",
+            "Climber moving: {} -> {} inches  |  counts {:.1f} -> {:.1f}",
             m_curInches,
-            m_targetInches,
-            curCounts,
-            m_targetCounts);
+            inches, // target inches
+            InchesToCounts(m_curInches),
+            InchesToCounts(inches));
     }
     else
     {
@@ -410,16 +378,9 @@ bool Climber::MoveClimberDistanceIsFinished()
 {
     static int withinTolerance = 0;
     bool isFinished = false;
-    int curCounts = 0;
     double errorInInches = 0.0;
 
-    // If a real move was requested, check for completion
-    if (m_talonValidCL14)
-    {
-        curCounts = m_motorCL14.GetSelectedSensorPosition(0);
-    }
-
-    errorInInches = CountsToInches(m_targetCounts - curCounts);
+    errorInInches = m_targetInches - m_curInches;
 
     // Check to see if the error is in an acceptable number of inches
     if (fabs(errorInInches) < m_toleranceInches)
@@ -427,8 +388,7 @@ bool Climber::MoveClimberDistanceIsFinished()
         if (++withinTolerance >= 5)
         {
             isFinished = true;
-            spdlog::info("Current climber counts: {}", curCounts);
-            spdlog::info("Climber move finished - Time: {}", m_safetyTimer.Get());
+            spdlog::info("Climber move finished - Time: {}  |  Current inches: {}", m_safetyTimer.Get(), m_curInches);
         }
     }
     else

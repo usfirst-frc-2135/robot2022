@@ -50,7 +50,6 @@ private:
     double m_deadband = 0.2;
 
     double m_targetInches;   // Target inches of height that are requested of the climber
-    int m_targetCounts;      // Target encoder counts of height that are requested of the climber
     double m_curInches;      // Current elevator height in inches
     bool m_calibrated;       // Indicates whether the climber has been calibrated
     int m_calibrationState;  // State variable for calibration sequence
@@ -119,7 +118,6 @@ public:
 
     double InchesToCounts(double inches);
     double CountsToInches(int counts);
-    double GetCurrentInches(void);
     double GetCurrentArbFeedForward(void);
     void SetClimberSpeed();
     void CalibrationOverride();
