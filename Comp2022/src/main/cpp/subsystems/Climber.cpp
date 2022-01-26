@@ -206,6 +206,8 @@ void Climber::Initialize(void)
 
     SetClimberStopped();
 
+    CalibrationOverride();
+
     // PID Target is set to current encoder counts
     if (m_talonValidCL14)
     {
@@ -328,7 +330,18 @@ double Climber::GetCurrentInches()
     return m_curInches;
 }
 
-void Climber::SetClimberSpeed()
+void Climber::CalibrationOverride()
+{
+    if (m_talonValidCL14)
+    {
+        m_motorCL14.SetSelectedSensorPosition(0, 0, kCANTimeout);
+        m_motorCL14.Set(ControlMode::Position, 0.0);
+    }
+    m_calibrated = true;
+    frc::SmartDashboard::PutBoolean("CL Calibrated", m_calibrated);
+}
+
+void Climber::MoveClimberDistanceInit(double inches)
 {
     m_pidKf = frc::SmartDashboard::GetNumber("CL_PidKf", m_pidKf);
     m_velocity = frc::SmartDashboard::GetNumber("CL_Velocity", m_velocity);
@@ -343,21 +356,7 @@ void Climber::SetClimberSpeed()
     m_motorCL14.Config_kP(0, m_pidKp, 0);
     m_motorCL14.Config_kI(0, m_pidKi, 0);
     m_motorCL14.Config_kD(0, m_pidKd, 0);
-}
 
-void Climber::CalibrationOverride()
-{
-    if (m_talonValidCL14)
-    {
-        m_motorCL14.SetSelectedSensorPosition(0, 0, kCANTimeout);
-        m_motorCL14.Set(ControlMode::Position, 0.0);
-    }
-    m_calibrated = true;
-    frc::SmartDashboard::PutBoolean("CL Calibrated", m_calibrated);
-}
-
-void Climber::MoveClimberDistanceInit(double inches)
-{
     int curCounts = 0;
 
     m_targetInches = inches;

@@ -36,8 +36,6 @@ void ClimberMoveHeight::Initialize()
     m_targetHeight = frc::SmartDashboard::GetNumber("CL_Target Height", 0.0);
     spdlog::info("Climber Target Height = {}", m_targetHeight);
 
-    m_climber->CalibrationOverride();
-    m_climber->SetClimberSpeed();
     m_climber->MoveClimberDistanceInit(m_targetHeight);
 }
 
