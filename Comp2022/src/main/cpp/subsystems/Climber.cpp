@@ -75,6 +75,12 @@ Climber::Climber()
     frc::SmartDashboard::PutNumber("CL Setpoint", 0.0);
     frc::SmartDashboard::PutBoolean("CL Calibrated", m_calibrated);
 
+    SupplyCurrentLimitConfiguration supplyCurrentLimits;
+    supplyCurrentLimits = { true, 45.0, 45.0, 0.001 };
+
+    StatorCurrentLimitConfiguration statorCurrentLimits;
+    statorCurrentLimits = { true, 80.0, 80.0, 0.001 };
+
     // Set motor directions
     // Turn on Coast mode (not brake)
     // Set motor peak outputs
@@ -87,23 +93,12 @@ Climber::Climber()
         m_motorCL14.ConfigVoltageCompSaturation(12.0, 0);
         m_motorCL14.EnableVoltageCompensation(true);
 
-        SupplyCurrentLimitConfiguration supplyCurrentLimits;
-        supplyCurrentLimits = { true, 45.0, 45.0, 0.001 };
-
-        StatorCurrentLimitConfiguration statorCurrentLimits;
-        statorCurrentLimits = { true, 80.0, 80.0, 0.001 };
-
         m_motorCL14.ConfigSupplyCurrentLimit(supplyCurrentLimits);
 #ifdef __FRC_ROBORIO__
         m_motorCL14.ConfigStatorCurrentLimit(statorCurrentLimits);
 #endif
         // Configure sensor settings
         m_motorCL14.SetSelectedSensorPosition(0, 0, kCANTimeout);
-
-        // Set max power and ramp rate
-        // m_motorCL14.ConfigPeakOutputForward(m_peakOut, kCANTimeout);
-        // m_motorCL14.ConfigPeakOutputReverse(-m_peakOut, kCANTimeout);
-        m_motorCL14.ConfigClosedloopRamp(m_CLRampRate, kCANTimeout);
 
         // Set allowable closed loop error
         m_motorCL14.ConfigAllowableClosedloopError(0, m_CLAllowedError, kCANTimeout);
@@ -116,7 +111,6 @@ Climber::Climber()
 
         // Configure Magic Motion settings
         m_motorCL14.SelectProfileSlot(0, 0);
-        // m_motorCL14.ConfigClosedLoopPeakOutput(0, m_peakOut, kCANTimeout);
         m_motorCL14.ConfigMotionCruiseVelocity(m_velocity, kCANTimeout);
         m_motorCL14.ConfigMotionAcceleration(m_acceleration, kCANTimeout);
         m_motorCL14.ConfigMotionSCurveStrength(m_sCurveStrength, kCANTimeout);
@@ -126,6 +120,14 @@ Climber::Climber()
         m_motorCL14.Config_kD(0, m_pidKd, kCANTimeout);
 
         m_motorCL14.Set(ControlMode::PercentOutput, 0.0);
+    }
+
+    if (m_talonValidCL15)
+    {
+        m_motorCL15.Set(ControlMode::Follower, 14);
+        m_motorCL15.SetInverted(InvertType::OpposeMaster);
+        m_motorCL15.SetNeutralMode(NeutralMode::Brake);
+        m_motorCL15.ConfigSupplyCurrentLimit(supplyCurrentLimits);
     }
 
     Initialize();
@@ -186,8 +188,6 @@ void Climber::Initialize(void)
     SetGateHook(true);
 
     SetClimberStopped();
-
-    Calibrate();
 
     // PID Target is set to current encoder counts
     if (m_talonValidCL14)
@@ -279,24 +279,12 @@ void Climber::SetGateHook(bool hookClosed)
 
 double Climber::InchesToCounts(double inches)
 {
-    double counts;
-    double inchesPerCount;
-
-    inchesPerCount = (m_circumInches / 1) * (ClimberConstants::climberRolloutRatio / 1)
-                     * (1 / (double)ClimberConstants::climberEncoderCPR);
-    counts = inches / inchesPerCount;
-    return counts;
+    return inches / kInchesPerCount;
 }
 
 double Climber::CountsToInches(int counts)
 {
-    double inches;
-    double countsPerInches;
-
-    countsPerInches =
-        (1 / m_circumInches) * (1 / ClimberConstants::climberRolloutRatio) * (ClimberConstants::climberEncoderCPR / 1);
-    inches = counts / countsPerInches;
-    return inches;
+    return counts * kInchesPerCount;
 }
 
 void Climber::Calibrate()
