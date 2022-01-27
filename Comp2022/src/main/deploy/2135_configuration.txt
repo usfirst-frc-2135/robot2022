@@ -66,9 +66,6 @@
   SH_FlywheelTargetRPM = 3000.0
   SH_ToleranceRPM = 200.0
 # Climber settings
-  CL_InitialUpSpeed = 0.25
-  CL_InitialDownSpeed = -0.25
-  CL_CalibSpeed = 0.25
   CL_PeakOut = 1.0
   CL_Velocity = 5444
   CL_Acceleration = 5444
