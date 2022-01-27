@@ -702,8 +702,6 @@ void Drivetrain::RamseteFollowerExecute(void)
     frc::Trajectory::State trajState = m_trajectory.Sample(m_trajTimer.Get());
     frc::Pose2d currentPose = m_odometry.GetPose();
 
-    m_trajState = trajState;
-
     frc::ChassisSpeeds targetChassisSpeeds = m_ramseteController.Calculate(currentPose, trajState);
     frc::DifferentialDriveWheelSpeeds targetSpeed = m_kinematics.ToWheelSpeeds(targetChassisSpeeds);
 
