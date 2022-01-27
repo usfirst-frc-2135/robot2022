@@ -43,8 +43,7 @@ namespace DriveConstants
     static constexpr meter_t kWheelDiaMeters = 4.0_in; // Units library does the conversion
 #endif
     //static constexpr double kGearRatio = 12.75;
-    static constexpr meter_t kEncoderMetersPerCount =
-        (kWheelDiaMeters * wpi::numbers::pi) / static_cast<double>(kEncoderCPR) / kGearRatio;
+    static constexpr meter_t kEncoderMetersPerCount = (kWheelDiaMeters * wpi::numbers::pi) / (kEncoderCPR) / kGearRatio;
     static constexpr meter_t kTrackWidthMeters = 0.6477_m; // Measured track width
                                                            // Gear reduction
 
@@ -70,6 +69,9 @@ namespace ConveyorConstants
 
 namespace ClimberConstants
 {
+    static constexpr int climberEncoderCPR = 2048;
+    static constexpr double climberRolloutRatio = 0.1357; // inches per falcon rotation
+
 } // namespace ClimberConstants
 
 namespace ShooterConstants
