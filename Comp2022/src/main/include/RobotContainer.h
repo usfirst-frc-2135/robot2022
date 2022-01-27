@@ -28,6 +28,7 @@
 #include "commands/AutoShootTrenchRight.h"
 #include "commands/CalibrateGyro.h"
 #include "commands/ClimberBrake.h"
+#include "commands/ClimberCalibrate.h"
 #include "commands/ClimberMoveHeight.h"
 #include "commands/ClimberRun.h"
 #include "commands/DriveLimelight.h"
