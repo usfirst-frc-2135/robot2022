@@ -698,21 +698,6 @@ void Drivetrain::RamseteFollowerInit(string pathName)
             curState.pose.Rotation().Degrees());
     }
 
-#if 0 // REMOVE - only for onboard trajectory generation
-    //  Our trajectory maxSpeed/maxAccel will come from PathWeaver
-    // Set up config for trajectory
-    frc::TrajectoryConfig config(kMaxSpeed, kMaxAcceleration);
-
-    // Add kinematics to ensure max speed is actually obeyed
-    config.SetKinematics(m_kinematics);
-
-    // Apply the voltage constraint
-    config.AddConstraint(autoVoltageConstraint);
-
-    // Create a voltage constraint to ensure we don't accelerate too fast
-    frc::DifferentialDriveVoltageConstraint autoVoltageConstraint(m_feedforward, m_kinematics, 10_V);
-#endif
-
     // This initializes the odometry (where we are)
     SetBrakeMode(false);
     ResetOdometry(m_trajectory.InitialPose());

@@ -28,8 +28,8 @@ AutoPathSequence::AutoPathSequence(Drivetrain *drivetrain)
     // Add your commands here, e.g.
     // AddCommands(FooCommand(), BarCommand());
     frc2135::RobotConfig *config = frc2135::RobotConfig::GetInstance();
-    config->GetValueAsString("path1", path1, "driveForward");
-    config->GetValueAsString("path2", path2, "driveForward");
+    config->GetValueAsString("path1", path1, "forward39");
+    config->GetValueAsString("path2", path2, "right79");
     config->GetValueAsString("path3", path3, "driveForward");
 
     spdlog::info("AutoPathSequence: path1 name: {}", path1);
@@ -37,8 +37,8 @@ AutoPathSequence::AutoPathSequence(Drivetrain *drivetrain)
     spdlog::info("AutoPathSequence: path3 name: {}", path3);
 
     AddCommands(
-        AutoDrivePath(path1.c_str(), drivetrain),
-        AutoDrivePath(path2.c_str(), drivetrain),
+        AutoDrivePath(path1.c_str(), true, drivetrain),
+        AutoDrivePath(path2.c_str(), false, drivetrain),
         // AutoDrivePath(path3.c_str(), drivetrain)
         AutoDriveStop(drivetrain));
 }

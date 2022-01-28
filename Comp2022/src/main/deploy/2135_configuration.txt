@@ -66,12 +66,28 @@
   SH_FlywheelTargetRPM = 3000.0
   SH_ToleranceRPM = 200.0
 # Climber settings
-  CL_InitialUpSpeed = 0.25
-  CL_InitialDownSpeed = -0.25
+  CL_PeakOut = 1.0
+  CL_Velocity = 21776
+  CL_Acceleration = 87104
+  CL_SCurveStrength = 0
+  CL_PidKf = 0.0496
+  CL_PidKp = 0.00
+  CL_PidKi = 0.000
+  CL_PidKd = 0.000
+  CL_NeutralDeadband = 0.004
+  CL_CLRampRate = 0.000
+  CL_CLAllowedError = 0
+  CL_ToleranceInches = 0.75
+  CL_MaxHeight = 85.0
+  CL_MinHeight = 0.0
+  CL_Rung1Height = 12.0
+  CL_Rung2Height = 17.0
+  CL_Rung3Height = 20.0
+  Cl_Rung4Height = 21.0
 # Auto Settings
   AutoDriveLimelightShoot_path = driveForward46
   AutoDriveShoot_path = driveForward58
-  path1 = turn1
-  path2 = turn1Reverse
+  path1 = forward39
+  path2 = left79
   path3 = rightAngleTurn
   AUTO_WaitTime = 0.0
