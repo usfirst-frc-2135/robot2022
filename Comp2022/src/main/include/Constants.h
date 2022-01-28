@@ -69,8 +69,11 @@ namespace ConveyorConstants
 
 namespace ClimberConstants
 {
-    static constexpr int climberEncoderCPR = 2048;
-    static constexpr double climberRolloutRatio = 0.1357; // inches per falcon rotation
+    static constexpr int kClimberEncoderCPR = 2048;
+    static constexpr double kClimberRolloutRatio = 0.1357; // inches per falcon rotation
+    static constexpr double kCircumInches = 0.428 * M_PI;
+    static constexpr double kInchesPerCount =
+        kCircumInches * kClimberRolloutRatio * (1.0 / (double)kClimberEncoderCPR);
 
 } // namespace ClimberConstants
 
