@@ -34,7 +34,7 @@ void ClimberBrake::Initialize()
 void ClimberBrake::Execute()
 {
     RobotContainer *robotContainer = RobotContainer::GetInstance();
-    robotContainer->m_climber.SetBrakeSolenoid(m_climberBrake);
+    robotContainer->m_climber.SetGateHook(m_climberBrake);
 }
 
 // Make this return true when this Command no longer needs to run execute()

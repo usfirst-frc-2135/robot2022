@@ -50,11 +50,7 @@ private:
 
     // Sensors
 
-    // Simulated quadrature encoders, since TalonFX is not supported
-    frc::Encoder m_feederEncoder{ 5, 6 };
-    frc::Encoder m_flywheelEncoder{ 7, 8 };
-    frc::sim::EncoderSim m_feederEncoderSim{ m_feederEncoder };
-    frc::sim::EncoderSim m_flywheelEncoderSim{ m_flywheelEncoder };
+    // Simulated flywheels
     frc::sim::FlywheelSim m_feederSim{
         frc::LinearSystemId::FlywheelSystem(frc::DCMotor::Falcon500(1), 1.0 * 1.0_kg_sq_m, 1.0),
         frc::DCMotor::Falcon500(1),

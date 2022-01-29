@@ -393,7 +393,7 @@ degree_t Drivetrain::GetHeadingAngle()
 
 void Drivetrain::CalibrateGyro()
 {
-    m_gyro.Calibrate();
+    //  m_gyro.Calibrate();
 }
 
 //
