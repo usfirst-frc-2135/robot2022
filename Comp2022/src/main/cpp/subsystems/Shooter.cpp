@@ -87,6 +87,8 @@ Shooter::Shooter()
 
         m_motorSH10.ConfigSupplyCurrentLimit(supplyCurrentLimits);
 
+        m_motorSH10.ConfigStatorCurrentLimit(statorCurrentLimits);
+
         // Configure sensor settings
         m_motorSH10.ConfigSelectedFeedbackSensor(FeedbackDevice::IntegratedSensor, kPidIndex, kCANTimeout);
         m_motorSH10.SetSensorPhase(true);
@@ -117,6 +119,8 @@ Shooter::Shooter()
         m_motorSH11.ConfigPeakOutputReverse(0.0, kCANTimeout);
 
         m_motorSH11.ConfigSupplyCurrentLimit(supplyCurrentLimits);
+
+        m_motorSH11.ConfigStatorCurrentLimit(statorCurrentLimits);
 
         // Configure sensor settings
         m_motorSH11.ConfigSelectedFeedbackSensor(FeedbackDevice::IntegratedSensor, kPidIndex, kCANTimeout);
