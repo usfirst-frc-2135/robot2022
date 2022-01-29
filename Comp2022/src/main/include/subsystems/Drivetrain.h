@@ -238,4 +238,6 @@ public:
     void RamseteFollowerEnd(void);
 
     void DriveBackward(double tx, double ty, bool tv);
+
+    frc::Pose2d GetPose();
 };

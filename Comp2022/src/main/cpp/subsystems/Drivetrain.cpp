@@ -85,7 +85,7 @@ void Drivetrain::Periodic()
     // Put code here to be run every loop
     UpdateOdometry();
     UpdateDashboardValues();
-    m_field.SetRobotPose(m_odometry.GetPose());
+    m_field.SetRobotPose(GetPose());
 }
 
 void Drivetrain::SimulationPeriodic()
@@ -157,8 +157,8 @@ void Drivetrain::Initialize(void)
 
     // Initialize the odometry
     ResetOdometry({ { 0_m, 0_m }, 0_deg });
-    m_driveSim.SetPose(m_odometry.GetPose());
-    m_field.SetRobotPose(m_odometry.GetPose());
+    m_driveSim.SetPose(GetPose());
+    m_field.SetRobotPose(GetPose());
 }
 
 void Drivetrain::FaultDump(void)
@@ -300,9 +300,9 @@ void Drivetrain::UpdateDashboardValues(void)
     frc::SmartDashboard::PutNumber("DT_distanceRight", m_distanceRight.to<double>());
     frc::SmartDashboard::PutNumber("DT_wheelSpeedLeft", m_wheelSpeeds.left.to<double>());
     frc::SmartDashboard::PutNumber("DT_wheelSpeedRight", m_wheelSpeeds.right.to<double>());
-    frc::SmartDashboard::PutNumber("DT_heading", m_odometry.GetPose().Rotation().Degrees().to<double>());
-    frc::SmartDashboard::PutNumber("DT_currentX", m_odometry.GetPose().X().to<double>());
-    frc::SmartDashboard::PutNumber("DT_currentY", m_odometry.GetPose().Y().to<double>());
+    frc::SmartDashboard::PutNumber("DT_heading", GetPose().Rotation().Degrees().to<double>());
+    frc::SmartDashboard::PutNumber("DT_currentX", GetPose().X().to<double>());
+    frc::SmartDashboard::PutNumber("DT_currentY", GetPose().Y().to<double>());
 
     frc::SmartDashboard::PutNumber("DT_Current_L1", m_currentl1);
     frc::SmartDashboard::PutNumber("DT_Current_L2", m_currentL2);
@@ -314,7 +314,7 @@ void Drivetrain::UpdateDashboardValues(void)
     {
         spdlog::info(
             "DT deg {} LR dist {} {} amps {:.1f} {:.1f} {:.1f} {:.1f}",
-            m_odometry.GetPose().Rotation().Degrees(),
+            GetPose().Rotation().Degrees(),
             m_distanceLeft,
             m_distanceRight,
             m_currentl1,
@@ -687,7 +687,7 @@ void Drivetrain::RamseteFollowerInit(string pathName, bool resetOdometry)
     SetBrakeMode(false);
     if (resetOdometry)
         ResetOdometry(m_trajectory.InitialPose());
-    m_field.SetRobotPose(m_odometry.GetPose());
+    m_field.SetRobotPose(GetPose());
 }
 
 void Drivetrain::RamseteFollowerExecute(void)
@@ -695,7 +695,7 @@ void Drivetrain::RamseteFollowerExecute(void)
     // Need to step through the states through the trajectory
 
     frc::Trajectory::State trajState = m_trajectory.Sample(m_trajTimer.Get());
-    frc::Pose2d currentPose = m_odometry.GetPose();
+    frc::Pose2d currentPose = GetPose();
 
     frc::ChassisSpeeds targetChassisSpeeds = m_ramseteController.Calculate(currentPose, trajState);
     frc::DifferentialDriveWheelSpeeds targetSpeed = m_kinematics.ToWheelSpeeds(targetChassisSpeeds);
@@ -747,3 +747,8 @@ void Drivetrain::RamseteFollowerEnd(void)
 }
 
 void Drivetrain::DriveBackward(double tx, double ty, bool tv) {}
+
+frc::Pose2d Drivetrain::GetPose()
+{
+    return m_odometry.GetPose();
+}
