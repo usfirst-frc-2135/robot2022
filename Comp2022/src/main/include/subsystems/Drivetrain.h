@@ -226,7 +226,8 @@ public:
     void MoveWithJoysticks(frc::XboxController *driverPad);
     void MoveWithJoysticksEnd(void);
 
-    void MoveWithLimelightInit();
+    void MoveWithLimelightInit(bool m_endAtTarget);
+    double GetLimelightDistance(void);
     void MoveWithLimelightExecute(double tx, double ty, bool tv);
     bool MoveWithLimelightIsFinished(double tx, bool tv);
     void MoveWithLimelightEnd();
