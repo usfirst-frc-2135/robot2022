@@ -383,17 +383,17 @@ int Drivetrain::VelocityToNativeUnits(units::meters_per_second_t velocity)
 //
 void Drivetrain::ResetGyro()
 {
-    m_gyro.Reset();
+    m_gyro.SetFusedHeading(0.0);
 }
 
 degree_t Drivetrain::GetHeadingAngle()
 {
-    return (-m_gyro.GetAngle() * 1_deg);
+    return (-m_gyro.GetFusedHeading() * 1_deg);
 }
 
 void Drivetrain::CalibrateGyro()
 {
-    m_gyro.Calibrate();
+    //  m_gyro.Calibrate();
 }
 
 //

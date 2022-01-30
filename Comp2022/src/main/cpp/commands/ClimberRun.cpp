@@ -35,7 +35,7 @@ void ClimberRun::Initialize()
 // Called repeatedly when this Command is scheduled to run
 void ClimberRun::Execute()
 {
-    m_climber->RaiseClimberWithJoysticks(RobotContainer::GetInstance()->getOperatorController());
+    m_climber->MoveClimberWithJoysticks(RobotContainer::GetInstance()->getOperatorController());
 }
 
 // Make this return true when this Command no longer needs to run execute()
