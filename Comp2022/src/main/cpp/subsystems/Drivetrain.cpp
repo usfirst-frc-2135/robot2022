@@ -391,11 +391,6 @@ degree_t Drivetrain::GetHeadingAngle()
     return (-m_gyro.GetFusedHeading() * 1_deg);
 }
 
-void Drivetrain::CalibrateGyro()
-{
-    //  m_gyro.Calibrate();
-}
-
 //
 //  Odometry
 //
