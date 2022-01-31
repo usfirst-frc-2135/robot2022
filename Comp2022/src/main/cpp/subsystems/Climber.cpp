@@ -58,6 +58,11 @@ Climber::Climber()
     config->GetValueAsDouble("CL_ToleranceInches", m_toleranceInches, 0.75);
     config->GetValueAsDouble("CL_MaxHeight", m_climberMaxHeight, 85.0);
     config->GetValueAsDouble("CL_MinHeight", m_climberMinHeight, 0.0);
+    config->GetValueAsDouble("CL_StateHeight", m_stateHeight, 0.0);
+    config->GetValueAsDouble("CL_DefaultL1", m_defaultL1, 0.25);
+    config->GetValueAsDouble("CL_ExtendL2", m_extendL2, 29.0);
+    config->GetValueAsDouble("CL_RotateL3", m_rotateL3, 24.0);
+    config->GetValueAsDouble("CL_ExtendL3", m_extendL3, 31.5);
 
     frc::SmartDashboard::PutNumber("CL_PidKf", m_pidKf);
     frc::SmartDashboard::PutNumber("CL_Velocity", m_velocity);
@@ -65,6 +70,11 @@ Climber::Climber()
     frc::SmartDashboard::PutNumber("CL_PidKp", m_pidKp);
     frc::SmartDashboard::PutNumber("CL_PidKi", m_pidKi);
     frc::SmartDashboard::PutNumber("CL_PidKd", m_pidKd);
+    frc::SmartDashboard::PutNumber("CL_StateHeight", m_stateHeight);
+    frc::SmartDashboard::PutNumber("CL_DefaultL1", m_defaultL1);
+    frc::SmartDashboard::PutNumber("CL_ExtendL2", m_extendL2);
+    frc::SmartDashboard::PutNumber("Cl_RotateL3", m_rotateL3);
+    frc::SmartDashboard::PutNumber("CL_ExtendL3", m_extendL3);
 
     // Magic Motion variables
     m_curInches = 0.0;
@@ -86,7 +96,7 @@ Climber::Climber()
     // Set motor peak outputs
     if (m_talonValidCL14)
     {
-        m_motorCL14.SetInverted(false);
+        m_motorCL14.SetInverted(true);
         m_motorCL14.SetNeutralMode(NeutralMode::Brake);
         m_motorCL14.SetSafetyEnabled(false);
 
@@ -158,11 +168,15 @@ void Climber::Periodic()
         if (m_climberDebug > 0)
         {
             double currentCL14 = 0.0;
+            double currentCL15 = 0.0;
 
             if (m_talonValidCL14)
                 currentCL14 = m_motorCL14.GetOutputCurrent();
+            if (m_talonValidCL15)
+                currentCL15 = m_motorCL15.GetOutputCurrent();
 
             frc::SmartDashboard::PutNumber("CL_Current_CL14", currentCL14);
+            frc::SmartDashboard::PutNumber("CL_Current_CL15", currentCL15);
         }
     }
 }
@@ -185,7 +199,7 @@ void Climber::Initialize(void)
 
     spdlog::info("CL Init");
 
-    SetGateHook(true);
+    SetGateHook(false);
 
     SetClimberStopped();
 
@@ -222,12 +236,9 @@ void Climber::MoveClimberWithJoysticks(frc::XboxController *joystick)
         if (state != CLIMBER_STOPPED)
             spdlog::info("CL Climber Stopped");
         state = CLIMBER_STOPPED;
-
-        SetGateHook(CL_BRAKE_LOCKED);
     }
     else
     {
-        SetGateHook(CL_BRAKE_UNLOCKED);
         // If joystick is above a value, climber will move up
         if (yCLValue > m_deadband)
         {

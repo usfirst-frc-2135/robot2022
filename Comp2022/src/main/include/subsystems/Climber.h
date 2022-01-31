@@ -72,9 +72,11 @@ private:
 
     double m_climberMaxHeight; // Climber maximum allowable height
     double m_climberMinHeight; // Climber minimum allowable height
-    double m_rung2;            // Setpoint for 2nd rung
-    double m_rung3;            // Setpoint for 3rd rung
-    double m_rung4;            // Setpoint for 4th rung
+    double m_stateHeight;
+    double m_defaultL1; //
+    double m_extendL2;  //
+    double m_rotateL3;  //
+    double m_extendL3;
 
 public:
     Climber();
