@@ -34,6 +34,7 @@ namespace DriveConstants
 {
     // Odometry constants
     static constexpr int kEncoderCPR = 2048; // CPR is 2048 for new TalonFX
+    static constexpr int kRPM = 6380;
 // Gear Ratio Checker
 #if 1
     static constexpr double kGearRatio = 12.75;        // grogu- motor rotations to output shaft
