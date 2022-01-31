@@ -543,7 +543,7 @@ void Drivetrain::MoveWithJoysticksEnd(void)
 }
 
 // Movement during limelight shooting phase
-void Drivetrain::MoveWithLimelightInit()
+void Drivetrain::MoveWithLimelightInit(bool m_endAtTarget)
 {
     // get pid values from dashboard
     m_turnPidKp = frc::SmartDashboard::GetNumber("DTL_TurnPidKp", m_turnPidKp);
@@ -557,7 +557,7 @@ void Drivetrain::MoveWithLimelightInit()
     m_maxTurn = frc::SmartDashboard::GetNumber("DTL_MaxTurn", m_maxTurn);
     m_maxThrottle = frc::SmartDashboard::GetNumber("DTL_MaxThrottle", m_maxThrottle);
     m_targetAngle = frc::SmartDashboard::GetNumber("DTL_TargetAngle", m_targetAngle);
-    m_targetDistance = frc::SmartDashboard::GetNumber("DTL_TargetDistance", m_targetDistance);
+
     m_angleThreshold = frc::SmartDashboard::GetNumber("DTL_AngleThreshold", m_angleThreshold);
     m_distThreshold = frc::SmartDashboard::GetNumber("DTL_DistThreshold", m_distThreshold);
     m_throttleShape = frc::SmartDashboard::GetNumber("DTL_ThrottleShape", m_throttleShape);
@@ -575,6 +575,18 @@ void Drivetrain::MoveWithLimelightInit()
     m_distOffset = m_distance1 - m_slope * m_vertOffset1;
     frc::SmartDashboard::PutNumber("DTL_Slope", m_slope);
     frc::SmartDashboard::PutNumber("DTL_Offset", m_distOffset);
+
+    if (m_endAtTarget)
+    {
+        m_targetDistance = frc::SmartDashboard::GetNumber("DTL_TargetDistance", m_targetDistance);
+    }
+    else
+    {
+        RobotContainer *robotContainer = RobotContainer::GetInstance();
+        double ty = robotContainer->m_vision.GetVertOffsetDeg();
+        m_limelightDistance = m_slope * ty + m_distOffset;
+        m_targetDistance = m_limelightDistance;
+    }
 }
 
 void Drivetrain::MoveWithLimelightExecute(double tx, double ty, bool tv)

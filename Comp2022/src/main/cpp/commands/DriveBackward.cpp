@@ -33,7 +33,7 @@ void DriveBackward::Initialize()
 {
     spdlog::info("DriveBackward - Init");
     m_vision->SetLEDMode(Vision::LED_ON);
-    m_drivetrain->MoveWithLimelightInit();
+    m_drivetrain->MoveWithLimelightInit(false);
 }
 
 // Called repeatedly when this Command is scheduled to run
