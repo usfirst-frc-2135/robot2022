@@ -75,7 +75,8 @@ private:
 
     //    Declare constants
     const int m_driveDebug = 0; // Debug flag to disable extra logging calls
-    const int kPidIndex = 0;    // PID slot index for sensors
+    const int kSlotIndex = 0;   // PID slot index for sensors
+    const int kPidIndex = 0;    // PID index for primary sensor
     const int kCANTimeout = 10; // CAN timeout in msec to wait for response
 
     // TODO: adjust kV and kA angular from robot characterization
@@ -145,6 +146,7 @@ private:
     double m_limelightDistance;
 
     // Ramsete path follower drive
+    double m_ramsetePidKf = 0.0;
     double m_ramsetePidKp = 0.0;
     double m_ramsetePidKi = 0.0;
     double m_ramsetePidKd = 0.0;
@@ -188,8 +190,10 @@ private:
     meter_t GetDistanceMetersRight(void);
     frc::DifferentialDriveWheelSpeeds GetWheelSpeedsMPS(void);
 
-    int DistanceToNativeUnits(units::meter_t position);
-    int VelocityToNativeUnits(units::meters_per_second_t velocity);
+    int MetersToNativeUnits(units::meter_t position);
+    int MPSToNativeUnits(units::meters_per_second_t velocity);
+
+    double JoystickOutputToNative(double rpm);
 
     void ResetGyro(void);
     degree_t GetHeadingAngle(void);
