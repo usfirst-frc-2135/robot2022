@@ -1,6 +1,6 @@
 [
 {
-"acceleration": 0.3563170665448889,
+"acceleration": 2.5,
 "curvature": 0.0,
 "pose": {
 "rotation": {
@@ -15,7 +15,7 @@
 "velocity": 0.0
 },
 {
-"acceleration": 0.0,
+"acceleration": 1.6126553628031712,
 "curvature": 0.0,
 "pose": {
 "rotation": {
@@ -26,8 +26,8 @@
 "y": 3.0
 }
 },
-"time": 0.8419467608133946,
-"velocity": 0.3
+"time": 0.31785784762627356,
+"velocity": 0.794644619065684
 },
 {
 "acceleration": 0.0,
@@ -41,8 +41,8 @@
 "y": 3.0
 }
 },
-"time": 1.222829886754354,
-"velocity": 0.3
+"time": 0.44519775277337237,
+"velocity": 1.0
 },
 {
 "acceleration": 0.0,
@@ -56,8 +56,8 @@
 "y": 3.0
 }
 },
-"time": 1.5384764989217121,
-"velocity": 0.3
+"time": 0.5398917364235798,
+"velocity": 1.0
 },
 {
 "acceleration": 0.0,
@@ -71,8 +71,8 @@
 "y": 3.0
 }
 },
-"time": 1.777902416865031,
-"velocity": 0.3
+"time": 0.6117195118065755,
+"velocity": 1.0
 },
 {
 "acceleration": 0.0,
@@ -86,8 +86,8 @@
 "y": 3.0
 }
 },
-"time": 2.1175358804066966,
-"velocity": 0.3
+"time": 0.7136095508690752,
+"velocity": 1.0
 },
 {
 "acceleration": 0.0,
@@ -101,8 +101,8 @@
 "y": 3.0
 }
 },
-"time": 2.4399792397816933,
-"velocity": 0.3
+"time": 0.8103425586815742,
+"velocity": 1.0
 },
 {
 "acceleration": 0.0,
@@ -116,11 +116,11 @@
 "y": 3.0
 }
 },
-"time": 2.6703926150004023,
-"velocity": 0.3
+"time": 0.879466571247187,
+"velocity": 1.0
 },
 {
-"acceleration": 0.0,
+"acceleration": -1.7424677951778975,
 "curvature": 0.0,
 "pose": {
 "rotation": {
@@ -131,11 +131,11 @@
 "y": 3.0
 }
 },
-"time": 2.9756661904652884,
-"velocity": 0.3
+"time": 0.9710486438866528,
+"velocity": 1.0
 },
 {
-"acceleration": -0.3666535427175807,
+"acceleration": -2.5,
 "curvature": 0.0,
 "pose": {
 "rotation": {
@@ -146,11 +146,11 @@
 "y": 3.0
 }
 },
-"time": 3.345201161702474,
-"velocity": 0.3
+"time": 1.0953760658167897,
+"velocity": 0.7833634712292423
 },
 {
-"acceleration": -0.3666535427175807,
+"acceleration": -2.5,
 "curvature": 0.0,
 "pose": {
 "rotation": {
@@ -161,7 +161,7 @@
 "y": 3.0
 }
 },
-"time": 4.163412265777578,
+"time": 1.4087214543084867,
 "velocity": 0.0
 }
 ]
