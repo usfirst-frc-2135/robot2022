@@ -86,7 +86,6 @@ Shooter::Shooter()
         m_motorSH10.ConfigPeakOutputReverse(0.0, kCANTimeout);
 
         m_motorSH10.ConfigSupplyCurrentLimit(supplyCurrentLimits);
-
         m_motorSH10.ConfigStatorCurrentLimit(statorCurrentLimits);
 
         // Configure sensor settings
@@ -119,7 +118,6 @@ Shooter::Shooter()
         m_motorSH11.ConfigPeakOutputReverse(0.0, kCANTimeout);
 
         m_motorSH11.ConfigSupplyCurrentLimit(supplyCurrentLimits);
-
         m_motorSH11.ConfigStatorCurrentLimit(statorCurrentLimits);
 
         // Configure sensor settings

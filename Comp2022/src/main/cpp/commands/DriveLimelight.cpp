@@ -34,7 +34,7 @@ void DriveLimelight::Initialize()
 {
     spdlog::info("DriveLimelight - Init");
     m_vision->SetLEDMode(Vision::LED_ON);
-    m_drivetrain->MoveWithLimelightInit();
+    m_drivetrain->MoveWithLimelightInit(m_endAtTarget);
 }
 
 // Called repeatedly when this Command is scheduled to run
