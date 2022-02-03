@@ -17,9 +17,7 @@
 
 #include "commands/ClimberMoveHeight.h"
 
-ClimberMoveHeight::ClimberMoveHeight(double stateHeight, Climber *m_climber) :
-    m_stateHeight(stateHeight),
-    m_climber(m_climber)
+ClimberMoveHeight::ClimberMoveHeight(int state, Climber *m_climber) : m_state(state), m_climber(m_climber)
 {
     // Use AddRequirements() here to declare subsystem dependencies
     // eg. AddRequirements(m_Subsystem);
@@ -32,11 +30,8 @@ ClimberMoveHeight::ClimberMoveHeight(double stateHeight, Climber *m_climber) :
 // Called just before this Command runs the first time
 void ClimberMoveHeight::Initialize()
 {
-    spdlog::info("ClimberMoveHeight - Init");
-    m_stateHeight = frc::SmartDashboard::GetNumber("CL_Target Height", 0.0);
-    spdlog::info("Climber Target Height = {}", m_stateHeight);
-
-    m_climber->MoveClimberDistanceInit(m_stateHeight);
+    spdlog::info("ClimberMoveHeight - Init: {}", m_state);
+    m_climber->MoveClimberDistanceInit(m_state);
 }
 
 // Called repeatedly when this Command is scheduled to run

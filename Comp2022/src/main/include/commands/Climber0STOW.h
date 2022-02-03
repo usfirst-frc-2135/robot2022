@@ -50,5 +50,4 @@ public:
     bool RunsWhenDisabled() const override;
 
 private:
-    double m_defaultHeight;
 };

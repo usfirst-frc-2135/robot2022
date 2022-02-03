@@ -309,7 +309,7 @@ void Climber::Calibrate()
     frc::SmartDashboard::PutBoolean("CL Calibrated", m_calibrated);
 }
 
-void Climber::MoveClimberDistanceInit(double inches)
+void Climber::MoveClimberDistanceInit(int state)
 {
     m_pidKf = frc::SmartDashboard::GetNumber("CL_PidKf", m_pidKf);
     m_velocity = frc::SmartDashboard::GetNumber("CL_Velocity", m_velocity);
@@ -325,19 +325,40 @@ void Climber::MoveClimberDistanceInit(double inches)
     m_motorCL14.Config_kI(0, m_pidKi, 0);
     m_motorCL14.Config_kD(0, m_pidKd, 0);
 
+    switch (state)
+    {
+        case NOCHANGE_HEIGHT: // Do not change from current level!
+            break;
+        case STOW_HEIGHT:
+            m_targetInches = frc::SmartDashboard::GetNumber("CL_StowHeight", m_stowHeight);
+            break;
+        case EXTEND_L2_HEIGHT:
+            m_targetInches = frc::SmartDashboard::GetNumber("CL_ExtendL2", m_extendL2);
+            break;
+        case ROTATE_L3_HEIGHT:
+            m_targetInches = frc::SmartDashboard::GetNumber("Cl_RotateL3", m_rotateL3);
+            break;
+        case EXTEND_L3_HEIGHT:
+            m_targetInches = frc::SmartDashboard::GetNumber("CL_ExtendL3", m_rotateL3);
+            break;
+        default:
+            spdlog::info("CL requested height is invalid - {}", state);
+            return;
+    }
+
     if (m_calibrated)
     {
         // Height constraint check/soft limit for max and min height before raising
-        if (inches < m_climberMinHeight)
+        if (m_targetInches < m_climberMinHeight)
         {
-            spdlog::info("Target {} inches is limited by {} inches", inches, m_climberMinHeight);
-            inches = m_climberMinHeight;
+            spdlog::info("Target {} inches is limited by {} inches", m_targetInches, m_climberMinHeight);
+            m_targetInches = m_climberMinHeight;
         }
 
-        if (inches > m_climberMaxHeight)
+        if (m_targetInches > m_climberMaxHeight)
         {
-            spdlog::info("Target {} inches is limited by {} inches", inches, m_climberMaxHeight);
-            inches = m_climberMaxHeight;
+            spdlog::info("Target {} inches is limited by {} inches", m_targetInches, m_climberMaxHeight);
+            m_targetInches = m_climberMaxHeight;
         }
 
         // Start the safety timer
@@ -345,7 +366,6 @@ void Climber::MoveClimberDistanceInit(double inches)
         m_safetyTimer.Reset();
         m_safetyTimer.Start();
 
-        m_targetInches = inches;
         m_motorCL14.Set(ControlMode::MotionMagic, InchesToCounts(m_targetInches));
 
         spdlog::info(
