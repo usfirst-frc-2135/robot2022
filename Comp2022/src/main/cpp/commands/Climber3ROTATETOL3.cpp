@@ -28,7 +28,10 @@ ClimberRotateToL3::ClimberRotateToL3(Climber *climber)
     // Add your commands here, e.g.
     // AddCommands(FooCommand(), BarCommand());
 
-    // AddCommands(ClimberMoveHeight(climber), ClimberSetGateHook(false));
+    // Climber raises to 24 inches
+    // Gate hook activated (extended)
+
+    AddCommands(ClimberMoveHeight(Climber::ROTATE_L3_HEIGHT, climber), ClimberSetGateHook(true));
 }
 
 bool ClimberRotateToL3::RunsWhenDisabled() const

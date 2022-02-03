@@ -28,7 +28,10 @@ ClimberExtendToL3::ClimberExtendToL3(Climber *climber)
     // Add your commands here, e.g.
     // AddCommands(FooCommand(), BarCommand());
 
-    // AddCommands(ClimberMoveHeight(climber), ClimberSetGateHook(false));
+    // Climber raises to 31.5 inches
+    // Gate hook activated (extended) still
+
+    AddCommands(ClimberMoveHeight(Climber::EXTEND_L3_HEIGHT, climber), ClimberSetGateHook(true));
 }
 
 bool ClimberExtendToL3::RunsWhenDisabled() const

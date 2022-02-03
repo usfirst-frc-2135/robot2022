@@ -28,7 +28,10 @@ ClimberClimbToL3::ClimberClimbToL3(Climber *climber)
     // Add your commands here, e.g.
     // AddCommands(FooCommand(), BarCommand());
 
-    //AddCommands(ClimberMoveHeight(climber), ClimberSetGateHook(false));
+    // Climber lowers to 0.25 inches
+    // Gate hook is at default position
+
+    AddCommands(ClimberMoveHeight(Climber::STOW_HEIGHT, climber), ClimberSetGateHook(false));
 }
 
 bool ClimberClimbToL3::RunsWhenDisabled() const
