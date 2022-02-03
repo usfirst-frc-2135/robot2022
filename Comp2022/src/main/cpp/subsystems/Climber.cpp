@@ -59,7 +59,7 @@ Climber::Climber()
     config->GetValueAsDouble("CL_MaxHeight", m_climberMaxHeight, 85.0);
     config->GetValueAsDouble("CL_MinHeight", m_climberMinHeight, 0.0);
     config->GetValueAsDouble("CL_StateHeight", m_stateHeight, 0.0);
-    config->GetValueAsDouble("CL_DefaultL1", m_defaultL1, 0.25);
+    config->GetValueAsDouble("CL_StowHeight", m_stowHeight, 0.25);
     config->GetValueAsDouble("CL_ExtendL2", m_extendL2, 29.0);
     config->GetValueAsDouble("CL_RotateL3", m_rotateL3, 24.0);
     config->GetValueAsDouble("CL_ExtendL3", m_extendL3, 31.5);
@@ -71,7 +71,7 @@ Climber::Climber()
     frc::SmartDashboard::PutNumber("CL_PidKi", m_pidKi);
     frc::SmartDashboard::PutNumber("CL_PidKd", m_pidKd);
     frc::SmartDashboard::PutNumber("CL_StateHeight", m_stateHeight);
-    frc::SmartDashboard::PutNumber("CL_DefaultL1", m_defaultL1);
+    frc::SmartDashboard::PutNumber("CL_StowHeight", m_stowHeight);
     frc::SmartDashboard::PutNumber("CL_ExtendL2", m_extendL2);
     frc::SmartDashboard::PutNumber("Cl_RotateL3", m_rotateL3);
     frc::SmartDashboard::PutNumber("CL_ExtendL3", m_extendL3);
@@ -279,8 +279,8 @@ void Climber::SetGateHook(bool hookClosed)
 {
     if (hookClosed != m_gatehook.Get())
     {
-        spdlog::info("CL {}", (hookClosed) ? "STOPPED" : "RUNNING");
-        frc::SmartDashboard::PutBoolean("CL_Stopped", hookClosed);
+        spdlog::info("CL HOOK {}", (hookClosed) ? "OPEN" : "CLOSED");
+        frc::SmartDashboard::PutBoolean("CL_Hook_Closed", hookClosed);
 
         m_gatehook.Set(hookClosed);
     }

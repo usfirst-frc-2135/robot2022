@@ -33,8 +33,8 @@ void ClimberSetGateHook::Initialize()
 // Called repeatedly when this Command is scheduled to run
 void ClimberSetGateHook::Execute()
 {
-    // RobotContainer *robotContainer = RobotContainer::GetInstance();
-    // robotContainer->m_climber.SetGateHook(m_climberGateHookClosed);
+    RobotContainer *robotContainer = RobotContainer::GetInstance();
+    robotContainer->m_climber.SetGateHook(m_climberGateHookClosed);
 }
 
 // Make this return true when this Command no longer needs to run execute()

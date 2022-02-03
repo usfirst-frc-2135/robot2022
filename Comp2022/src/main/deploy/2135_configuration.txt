@@ -71,7 +71,7 @@
   CL_Acceleration = 87104
   CL_SCurveStrength = 0
   CL_PidKf = 0.0496
-  CL_PidKp = 0.00
+  CL_PidKp = 0.50
   CL_PidKi = 0.000
   CL_PidKd = 0.000
   CL_NeutralDeadband = 0.004
@@ -81,7 +81,7 @@
   CL_MaxHeight = 85.0
   CL_MinHeight = 0.0
   CL_TargetHeight = 0.0
-  CL_DefaultHeight = 0.25
+  CL_StowHeight = 0.25
   CL_ExtendL2 = 29.0
   CL_RotateL3 = 24.0
   CL_ExtendL3 = 31.5
