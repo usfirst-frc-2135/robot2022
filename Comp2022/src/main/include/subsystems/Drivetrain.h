@@ -224,6 +224,7 @@ public:
     bool MoveIsStopped(void);
 
     void TankDriveVolts(volt_t left, volt_t right);
+    void SyncTalonPIDFromDashboard(void);
 
     // Teleop mode
     void MoveWithJoysticksInit(void);
