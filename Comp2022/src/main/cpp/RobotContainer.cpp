@@ -47,6 +47,7 @@ RobotContainer::RobotContainer() :
     frc::SmartDashboard::PutData("Shooter Run: SHDIR_STOP", new ShooterRun(0, &m_shooter));
     frc::SmartDashboard::PutData("Shooter Run: SHDIR_SHOOT", new ShooterRun(1, &m_shooter));
     frc::SmartDashboard::PutData("LED Set", new LEDSet(LED::LEDCOLOR_DASH, &m_led));
+    frc::SmartDashboard::PutData("Robot Initialize", new RobotInitialize());
 
     frc::SmartDashboard::PutData(
         "Auto Drive Path: driveForward",
