@@ -83,7 +83,7 @@
   CL_TargetHeight = 0.0
   CL_StowHeight = 0.25
   CL_ExtendL2 = 29.0
-  CL_RotateL3 = 24.0
+  CL_RotateL3 = 21.0
   CL_ExtendL3 = 31.5
   CL_Rung1Height = 12.0
   CL_Rung2Height = 17.0
