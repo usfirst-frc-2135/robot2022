@@ -47,6 +47,7 @@ Drivetrain::Drivetrain()
     m_talonValidL2 = frc2135::TalonUtils::TalonCheck(m_motorL2, "DT", "L2");
     m_talonValidR3 = frc2135::TalonUtils::TalonCheck(m_motorR3, "DT", "R3");
     m_talonValidR4 = frc2135::TalonUtils::TalonCheck(m_motorR4, "DT", "R4");
+    m_pigeonValid = frc2135::TalonUtils::PigeonIMUInitialize(m_gyro);
 
     //  Load config file values
     ConfigFileLoad();
@@ -128,10 +129,10 @@ void Drivetrain::SimulationPeriodic()
 	 * Left output: +1 * -1 = -1
 	 * Right output: -1 * -1 = +1
 	 */
-    leftSim.SetIntegratedSensorRawPosition(DistanceToNativeUnits(m_driveSim.GetLeftPosition()));
-    leftSim.SetIntegratedSensorVelocity(VelocityToNativeUnits(m_driveSim.GetLeftVelocity()));
-    rightSim.SetIntegratedSensorRawPosition(DistanceToNativeUnits(m_driveSim.GetRightPosition()));
-    rightSim.SetIntegratedSensorVelocity(VelocityToNativeUnits(m_driveSim.GetRightVelocity()));
+    leftSim.SetIntegratedSensorRawPosition(MetersToNativeUnits(m_driveSim.GetLeftPosition()));
+    leftSim.SetIntegratedSensorVelocity(MPSToNativeUnits(m_driveSim.GetLeftVelocity()));
+    rightSim.SetIntegratedSensorRawPosition(MetersToNativeUnits(m_driveSim.GetRightPosition()));
+    rightSim.SetIntegratedSensorVelocity(MPSToNativeUnits(m_driveSim.GetRightVelocity()));
 
     pidgeonSim.SetRawHeading(m_driveSim.GetHeading().Degrees().to<double>());
 }
@@ -157,8 +158,11 @@ void Drivetrain::Initialize(void)
 
     // Initialize the odometry
     ResetOdometry({ { 0_m, 0_m }, 0_deg });
-    m_driveSim.SetPose(GetPose());
-    m_field.SetRobotPose(GetPose());
+    m_driveSim.SetPose(m_odometry.GetPose());
+    m_field.SetRobotPose(m_odometry.GetPose());
+
+    // Initialize PID values for velocity control
+    SyncTalonPIDFromDashboard();
 }
 
 void Drivetrain::FaultDump(void)
@@ -205,6 +209,7 @@ void Drivetrain::ConfigFileLoad(void)
     config->GetValueAsDouble("DTL_VertOffset2", m_vertOffset2, 0.0);
 
     // Ramsete follower settings
+    config->GetValueAsDouble("DTR_RamsetePidKf", m_ramsetePidKf, 0.0);
     config->GetValueAsDouble("DTR_RamsetePidKp", m_ramsetePidKp, 2.0);
     config->GetValueAsDouble("DTR_RamsetePidKi", m_ramsetePidKi, 0.0);
     config->GetValueAsDouble("DTR_RamsetePidKd", m_ramsetePidKd, 0.0);
@@ -232,6 +237,7 @@ void Drivetrain::ConfigFileLoad(void)
     frc::SmartDashboard::PutNumber("DTL_VertOffset1", m_vertOffset1);
     frc::SmartDashboard::PutNumber("DTL_VertOffset2", m_vertOffset2);
 
+    frc::SmartDashboard::PutNumber("DTR_ramsetePidKf", m_ramsetePidKf);
     frc::SmartDashboard::PutNumber("DTR_ramsetePidKp", m_ramsetePidKp);
     frc::SmartDashboard::PutNumber("DTR_ramsetePidKi", m_ramsetePidKi);
     frc::SmartDashboard::PutNumber("DTR_ramsetePidKd", m_ramsetePidKd);
@@ -368,14 +374,44 @@ frc::DifferentialDriveWheelSpeeds Drivetrain::GetWheelSpeedsMPS()
 }
 
 // Helper methods to convert between meters and native units
-int Drivetrain::DistanceToNativeUnits(units::meter_t position)
+int Drivetrain::MetersToNativeUnits(units::meter_t position)
 {
     return position / DriveConstants::kEncoderMetersPerCount;
 }
 
-int Drivetrain::VelocityToNativeUnits(units::meters_per_second_t velocity)
+int Drivetrain::MPSToNativeUnits(units::meters_per_second_t velocity)
 {
     return (velocity / DriveConstants::kEncoderMetersPerCount / 10).to<double>();
+}
+
+double Drivetrain::JoystickOutputToNative(double output)
+{
+    // Phoenix native encoder units are CPR / 100 msec
+    double outputScaling = 1.0;
+    return (output * outputScaling * DriveConstants::kRPM * DriveConstants::kEncoderCPR) / (60.0 * 10.0);
+}
+
+void Drivetrain::VelocityArcadeDrive(double yOutput, double xOutput)
+{
+    double leftOutput = JoystickOutputToNative(std::clamp(yOutput + xOutput, -1.0, 1.0));
+    double rightOutput = JoystickOutputToNative(std::clamp(yOutput - xOutput, -1.0, 1.0));
+
+    m_motorL1.Set(ControlMode::Velocity, leftOutput);
+    m_motorR3.Set(ControlMode::Velocity, rightOutput);
+
+    frc::SmartDashboard::PutNumber("VCL_LeftOutput", leftOutput);
+    frc::SmartDashboard::PutNumber("VCL_RightOuput", rightOutput);
+    // spdlog::info("DT motor speeds - left {:.1f} right {:.1f}", leftOutput, rightOutput);
+
+    double curLeftOutput = m_motorL1.GetSelectedSensorVelocity();
+    double curRightOutput = m_motorR3.GetSelectedSensorVelocity();
+    frc::SmartDashboard::PutNumber("VCL_CurLeftOutput", curLeftOutput);
+    frc::SmartDashboard::PutNumber("VCL_CurRightOuput", curRightOutput);
+
+    frc::SmartDashboard::PutNumber("VCL_LeftOutputError", leftOutput - curLeftOutput);
+    frc::SmartDashboard::PutNumber("VCL_RightOuputError", rightOutput - curRightOutput);
+
+    m_diffDrive.FeedWatchdog();
 }
 
 //
@@ -383,12 +419,14 @@ int Drivetrain::VelocityToNativeUnits(units::meters_per_second_t velocity)
 //
 void Drivetrain::ResetGyro()
 {
-    m_gyro.SetFusedHeading(0.0);
+    if (m_pigeonValid)
+        m_gyro.SetFusedHeading(0.0);
 }
 
 degree_t Drivetrain::GetHeadingAngle()
 {
-    return (-m_gyro.GetFusedHeading() * 1_deg);
+    if (m_pigeonValid)
+        return (-m_gyro.GetFusedHeading() * 1_deg);
 }
 
 //
@@ -434,6 +472,32 @@ void Drivetrain::TankDriveVolts(volt_t left, volt_t right)
         m_motorL1.SetVoltage(left);
     if (m_talonValidR3)
         m_motorR3.SetVoltage(right);
+}
+
+void Drivetrain::SyncTalonPIDFromDashboard(void)
+{
+    m_ramsetePidKf = frc::SmartDashboard::GetNumber("DTR_ramsetePidKf", m_ramsetePidKf);
+    m_ramsetePidKp = frc::SmartDashboard::GetNumber("DTR_ramsetePidKp", m_ramsetePidKp);
+    m_ramsetePidKi = frc::SmartDashboard::GetNumber("DTR_ramsetePidKi", m_ramsetePidKi);
+    m_ramsetePidKd = frc::SmartDashboard::GetNumber("DTR_ramsetePidKd", m_ramsetePidKd);
+
+    if (m_talonValidL1)
+    {
+        m_motorL1.Config_kF(kSlotIndex, m_ramsetePidKf, 0);
+        m_motorL1.Config_kP(kSlotIndex, m_ramsetePidKp, 0);
+        m_motorL1.Config_kI(kSlotIndex, m_ramsetePidKi, 0);
+        m_motorL1.Config_kD(kSlotIndex, m_ramsetePidKd, 0);
+        m_motorL1.SelectProfileSlot(kSlotIndex, kPidIndex);
+    }
+
+    if (m_talonValidR3)
+    {
+        m_motorR3.Config_kF(kSlotIndex, m_ramsetePidKf, 0);
+        m_motorR3.Config_kP(kSlotIndex, m_ramsetePidKp, 0);
+        m_motorR3.Config_kI(kSlotIndex, m_ramsetePidKi, 0);
+        m_motorR3.Config_kD(kSlotIndex, m_ramsetePidKd, 0);
+        m_motorR3.SelectProfileSlot(kSlotIndex, kPidIndex);
+    }
 }
 
 //
@@ -506,7 +570,7 @@ void Drivetrain::MoveWithJoysticksInit(void)
 void Drivetrain::MoveWithJoysticks(frc::XboxController *throttleJstick)
 {
     double xValue = throttleJstick->GetRightX();
-    double yValue = throttleJstick->GetLeftY();
+    double yValue = -throttleJstick->GetLeftY();
     double xOutput = 0.0;
     double yOutput = 0.0;
 
@@ -530,7 +594,7 @@ void Drivetrain::MoveWithJoysticks(frc::XboxController *throttleJstick)
     }
 
     if (m_talonValidL1 || m_talonValidR3)
-        m_diffDrive.CurvatureDrive(-yOutput, xOutput, m_isQuickTurn);
+        m_diffDrive.CurvatureDrive(yOutput, xOutput, m_isQuickTurn);
 }
 
 void Drivetrain::MoveWithJoysticksEnd(void)
@@ -648,14 +712,11 @@ void Drivetrain::RamseteFollowerInit(string pathName, bool resetOdometry)
 {
     m_tolerance = frc::SmartDashboard::GetNumber("DT_Tolerance", 0.05);
 
-    m_ramsetePidKp = frc::SmartDashboard::GetNumber("DTR_ramsetePidKp", m_ramsetePidKp);
-    m_ramsetePidKi = frc::SmartDashboard::GetNumber("DTR_ramsetePidKi", m_ramsetePidKi);
-    m_ramsetePidKd = frc::SmartDashboard::GetNumber("DTR_ramsetePidKd", m_ramsetePidKd);
     m_ramseteB = frc::SmartDashboard::GetNumber("DTR_ramseteB", m_ramseteB);
     m_ramseteZeta = frc::SmartDashboard::GetNumber("DTR_ramseteZeta", m_ramseteZeta);
 
-    m_leftPid = frc2::PIDController{ m_ramsetePidKp, m_ramsetePidKi, m_ramsetePidKd };
-    m_rightPid = frc2::PIDController{ m_ramsetePidKp, m_ramsetePidKi, m_ramsetePidKd };
+    // m_leftPid = frc2::PIDController{ m_ramsetePidKp, m_ramsetePidKi, m_ramsetePidKd };
+    // m_rightPid = frc2::PIDController{ m_ramsetePidKp, m_ramsetePidKi, m_ramsetePidKd };
     m_ramseteController = frc::RamseteController{ m_ramseteB, m_ramseteZeta };
 
     // TODO: Not sure if this is really needed or used
@@ -712,23 +773,30 @@ void Drivetrain::RamseteFollowerExecute(void)
     frc::ChassisSpeeds targetChassisSpeeds = m_ramseteController.Calculate(currentPose, trajState);
     frc::DifferentialDriveWheelSpeeds targetSpeed = m_kinematics.ToWheelSpeeds(targetChassisSpeeds);
 
-    // Calculates FF output contribution to reach the speed
-    volt_t leftFFVolts = m_feedforward.Calculate(targetSpeed.left);
-    volt_t rightFFVolts = m_feedforward.Calculate(targetSpeed.right);
+    double velLeft = MPSToNativeUnits(targetSpeed.left);
+    double velRight = MPSToNativeUnits(targetSpeed.right);
 
-    // Calculate Pid feedback output contribution to reach the speed
-    frc::DifferentialDriveWheelSpeeds curSpeed = GetWheelSpeedsMPS();
-    volt_t leftFBVolts = 1_V * m_leftPid.Calculate(curSpeed.left.to<double>(), targetSpeed.left.to<double>());
-    volt_t rightFBVolts = 1_V * m_rightPid.Calculate(curSpeed.right.to<double>(), targetSpeed.right.to<double>());
+    if (m_talonValidL1)
+        m_motorL1.Set(TalonFXControlMode::Velocity, velLeft);
+    if (m_talonValidR3)
+        m_motorR3.Set(TalonFXControlMode::Velocity, velRight);
 
-    volt_t leftTotalVolts = leftFBVolts + leftFFVolts;
-    volt_t rightTotalVolts = rightFBVolts + rightFFVolts;
+    frc::SmartDashboard::PutNumber("DTR_targetLeft", velLeft);
+    frc::SmartDashboard::PutNumber("DTR_targetRight", velRight);
 
-    // Apply the calculated values to the motors
-    TankDriveVolts(leftTotalVolts, rightTotalVolts);
+    double curVelLeft = m_motorL1.GetSelectedSensorVelocity();
+    double curVelRight = m_motorR3.GetSelectedSensorVelocity();
+
+    frc::SmartDashboard::PutNumber("DTR_CurrentLeft", curVelLeft);
+    frc::SmartDashboard::PutNumber("DTR_CurrentRight", curVelRight);
+
+    frc::SmartDashboard::PutNumber("DTR_LeftOutputError", velLeft - curVelLeft);
+    frc::SmartDashboard::PutNumber("DTR_RightOuputError", velRight - curVelRight);
+
+    m_diffDrive.Feed();
 
     spdlog::info(
-        "DTR cur XYR {:.2f} {:.2f} {:.1f} | targ XYR {:.2f} {:.2f} {:.1f} | chas XYO {:.2f} {:.2f} {:.1f} | whl LR {:.2f} {:.2f} ffV LR {:.2f} {:.2f} | toV LR {:.2f} {:.2f}",
+        "DTR cur XYR {:.2f} {:.2f} {:.1f} | targ XYR {:.2f} {:.2f} {:.1f} | chas XYO {:.2f} {:.2f} {:.1f} | targ vel LR {:.2f} {:.2f} | cur vel LR {:.2f} {:.2f}",
         currentPose.X().to<double>(),
         currentPose.Y().to<double>(),
         currentPose.Rotation().Degrees().to<double>(),
@@ -738,12 +806,10 @@ void Drivetrain::RamseteFollowerExecute(void)
         targetChassisSpeeds.vx.to<double>(),
         targetChassisSpeeds.vy.to<double>(),
         targetChassisSpeeds.omega.to<double>(),
-        targetSpeed.left.to<double>(),
-        targetSpeed.right.to<double>(),
-        leftFFVolts.to<double>(),
-        rightFFVolts.to<double>(),
-        leftTotalVolts.to<double>(),
-        rightTotalVolts.to<double>());
+        velLeft,
+        velRight,
+        curVelLeft,
+        curVelRight);
 }
 
 bool Drivetrain::RamseteFollowerIsFinished(void)
@@ -756,6 +822,16 @@ void Drivetrain::RamseteFollowerEnd(void)
     m_trajTimer.Stop();
     SetBrakeMode(true);
     TankDriveVolts(0.0_V, 0.0_V);
+
+    double curVelLeft = m_motorL1.GetSelectedSensorVelocity();
+    double curVelRight = m_motorR3.GetSelectedSensorVelocity();
+
+    frc::SmartDashboard::PutNumber("DTR_CurrentLeft", curVelLeft);
+    frc::SmartDashboard::PutNumber("DTR_CurrentRight", curVelRight);
+
+    // added for PID tuning, may be removed once completed
+    frc::SmartDashboard::PutNumber("DTR_LeftOutputError", 0 - curVelLeft);
+    frc::SmartDashboard::PutNumber("DTR_RightOuputError", 0 - curVelRight);
 }
 
 void Drivetrain::DriveBackward(double tx, double ty, bool tv) {}

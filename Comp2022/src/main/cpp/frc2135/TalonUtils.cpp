@@ -191,7 +191,7 @@ namespace frc2135
         if ((error = pigeonPtr.GetLastError()) != OKAY)
         {
             spdlog::error("{} {} GetDeviceNumber error - {}", subsystem, name, error);
-            return error;
+            return (error == OKAY);
         }
 
         for (i = 0; i < retries; i++)
@@ -200,7 +200,7 @@ namespace frc2135
             if ((error = pigeonPtr.GetLastError()) != OKAY)
             {
                 spdlog::error("{} {} ID {} GetFirmwareVersion error - {}", subsystem, name, deviceID, error);
-                return error;
+                return (error == OKAY);
             }
             else if (pigeonVersion == m_reqPigeonVer)
             {
