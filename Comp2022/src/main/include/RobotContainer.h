@@ -35,6 +35,8 @@
 #include "commands/Climber5ROTATEINTOL3.h"
 #include "commands/Climber6CLIMBTOL3.h"
 #include "commands/ClimberCalibrate.h"
+#include "commands/ClimberClimbL2RotateL3.h"
+#include "commands/ClimberClimbL3.h"
 #include "commands/ClimberMoveHeight.h"
 #include "commands/ClimberRun.h"
 #include "commands/ClimberSetGateHook.h"
