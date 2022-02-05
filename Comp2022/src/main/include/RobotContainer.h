@@ -25,6 +25,7 @@
 #include "commands/AutoDrive.h"
 #include "commands/AutoDrivePath.h"
 #include "commands/AutoDriveShoot.h"
+#include "commands/AutoShoot.h"
 #include "commands/AutoDriveStop.h"
 #include "commands/AutoPathSequence.h"
 #include "commands/ClimberBrake.h"
