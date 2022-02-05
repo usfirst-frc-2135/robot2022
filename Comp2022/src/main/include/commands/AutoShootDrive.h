@@ -25,10 +25,10 @@
  *
  * @author ExampleAuthor
  */
-class AutoDriveShoot : public frc2::CommandHelper<frc2::SequentialCommandGroup, AutoDriveShoot>
+class AutoShootDrive : public frc2::CommandHelper<frc2::SequentialCommandGroup, AutoShootDrive>
 {
 public:
-    explicit AutoDriveShoot(
+    explicit AutoShootDrive(
         Drivetrain *m_drivetrain,
         Intake *m_intake,
         FloorConveyor *m_floorConv,
