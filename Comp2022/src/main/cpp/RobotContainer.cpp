@@ -76,6 +76,9 @@ RobotContainer::RobotContainer() :
         "Auto Shoot Drive",
         new AutoShootDrive(&m_drivetrain, &m_intake, &m_floorConv, &m_vertConv, &m_shooter));
     frc::SmartDashboard::PutData(
+        "Auto Shoot Drive Shoot",
+        new AutoShootDriveShoot(&m_drivetrain, &m_intake, &m_floorConv, &m_vertConv, &m_shooter));
+    frc::SmartDashboard::PutData(
         "Auto Drive LL Shoot",
         new AutoDriveLimelightShoot(&m_drivetrain, &m_intake, &m_floorConv, &m_vertConv, &m_shooter, &m_vision));
 
@@ -109,6 +112,9 @@ RobotContainer::RobotContainer() :
     m_chooser.AddOption(
         "Auto Shoot Drive",
         new AutoShootDrive(&m_drivetrain, &m_intake, &m_floorConv, &m_vertConv, &m_shooter));
+    m_chooser.AddOption(
+        "Auto Shoot Drive Shoot",
+        new AutoShootDriveShoot(&m_drivetrain, &m_intake, &m_floorConv, &m_vertConv, &m_shooter));
     m_chooser.AddOption(
         "Auto Drive LL Shoot",
         new AutoDriveLimelightShoot(&m_drivetrain, &m_intake, &m_floorConv, &m_vertConv, &m_shooter, &m_vision));

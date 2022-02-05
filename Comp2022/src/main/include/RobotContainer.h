@@ -28,6 +28,7 @@
 #include "commands/AutoPathSequence.h"
 #include "commands/AutoShoot.h"
 #include "commands/AutoShootDrive.h"
+#include "commands/AutoShootDriveShoot.h"
 #include "commands/ClimberBrake.h"
 #include "commands/ClimberCalibrate.h"
 #include "commands/ClimberMoveHeight.h"
