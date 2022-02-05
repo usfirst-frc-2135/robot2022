@@ -47,6 +47,7 @@ Drivetrain::Drivetrain()
     m_talonValidL2 = frc2135::TalonUtils::TalonCheck(m_motorL2, "DT", "L2");
     m_talonValidR3 = frc2135::TalonUtils::TalonCheck(m_motorR3, "DT", "R3");
     m_talonValidR4 = frc2135::TalonUtils::TalonCheck(m_motorR4, "DT", "R4");
+    m_pigeonValid = frc2135::TalonUtils::PigeonIMUInitialize(m_gyro);
 
     //  Load config file values
     ConfigFileLoad();
@@ -394,12 +395,14 @@ double Drivetrain::JoystickOutputToNative(double output)
 //
 void Drivetrain::ResetGyro()
 {
-    m_gyro.SetFusedHeading(0.0);
+    if (m_pigeonValid)
+        m_gyro.SetFusedHeading(0.0);
 }
 
 degree_t Drivetrain::GetHeadingAngle()
 {
-    return (-m_gyro.GetFusedHeading() * 1_deg);
+    if (m_pigeonValid)
+        return (-m_gyro.GetFusedHeading() * 1_deg);
 }
 
 //
