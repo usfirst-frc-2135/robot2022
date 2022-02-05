@@ -390,6 +390,30 @@ double Drivetrain::JoystickOutputToNative(double output)
     double outputScaling = 1.0;
     return (output * outputScaling * DriveConstants::kRPM * DriveConstants::kEncoderCPR) / (60.0 * 10.0);
 }
+
+void Drivetrain::VelocityArcadeDrive(double yOutput, double xOutput)
+{
+    double leftOutput = JoystickOutputToNative(std::clamp(yOutput + xOutput, -1.0, 1.0));
+    double rightOutput = JoystickOutputToNative(std::clamp(yOutput - xOutput, -1.0, 1.0));
+
+    m_motorL1.Set(ControlMode::Velocity, leftOutput);
+    m_motorR3.Set(ControlMode::Velocity, rightOutput);
+
+    frc::SmartDashboard::PutNumber("VCL_LeftOutput", leftOutput);
+    frc::SmartDashboard::PutNumber("VCL_RightOuput", rightOutput);
+    // spdlog::info("DT motor speeds - left {:.1f} right {:.1f}", leftOutput, rightOutput);
+
+    double curLeftOutput = m_motorL1.GetSelectedSensorVelocity();
+    double curRightOutput = m_motorR3.GetSelectedSensorVelocity();
+    frc::SmartDashboard::PutNumber("VCL_CurLeftOutput", curLeftOutput);
+    frc::SmartDashboard::PutNumber("VCL_CurRightOuput", curRightOutput);
+
+    frc::SmartDashboard::PutNumber("VCL_LeftOutputError", leftOutput - curLeftOutput);
+    frc::SmartDashboard::PutNumber("VCL_RightOuputError", rightOutput - curRightOutput);
+
+    m_diffDrive.FeedWatchdog();
+}
+
 //
 //  Gyro
 //
@@ -570,31 +594,7 @@ void Drivetrain::MoveWithJoysticks(frc::XboxController *throttleJstick)
     }
 
     if (m_talonValidL1 || m_talonValidR3)
-    {
-#if 0
-        double leftOutput = JoystickOutputToNative(std::clamp(yOutput + xOutput, -1.0, 1.0));
-        double rightOutput = JoystickOutputToNative(std::clamp(yOutput - xOutput, -1.0, 1.0));
-
-        m_motorL1.Set(ControlMode::Velocity, leftOutput);
-        m_motorR3.Set(ControlMode::Velocity, rightOutput);
-
-        frc::SmartDashboard::PutNumber("VCL_LeftOutput", leftOutput);
-        frc::SmartDashboard::PutNumber("VCL_RightOuput", rightOutput);
-        // spdlog::info("DT motor speeds - left {:.1f} right {:.1f}", leftOutput, rightOutput);
-
-        double curLeftOutput = m_motorL1.GetSelectedSensorVelocity();
-        double curRightOutput = m_motorR3.GetSelectedSensorVelocity();
-        frc::SmartDashboard::PutNumber("VCL_CurLeftOutput", curLeftOutput);
-        frc::SmartDashboard::PutNumber("VCL_CurRightOuput", curRightOutput);
-
-        frc::SmartDashboard::PutNumber("VCL_LeftOutputError", leftOutput - curLeftOutput);
-        frc::SmartDashboard::PutNumber("VCL_RightOuputError", rightOutput - curRightOutput);
-
-        m_diffDrive.FeedWatchdog();
-#else
         m_diffDrive.CurvatureDrive(yOutput, xOutput, m_isQuickTurn);
-#endif
-    }
 }
 
 void Drivetrain::MoveWithJoysticksEnd(void)

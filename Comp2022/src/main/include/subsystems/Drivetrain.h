@@ -195,6 +195,8 @@ private:
 
     double JoystickOutputToNative(double rpm);
 
+    void VelocityArcadeDrive(double yOutput, double xOutput);
+
     void ResetGyro(void);
     degree_t GetHeadingAngle(void);
 
