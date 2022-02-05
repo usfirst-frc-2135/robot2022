@@ -42,7 +42,8 @@ ClimberStow::ClimberStow(
         // VerticalConveyorRun(VerticalConveyor::VCONVEYOR_STOP, vConv),
         // ShooterRun(Shooter::SHOOTERSPEED_STOP, shooter),
         ClimberMoveHeight(Climber::STOW_HEIGHT, climber),
-        ClimberSetGateHook(false));
+        ClimberSetGateHook(false),
+        frc2::WaitCommand(0.5_s));
 }
 
 bool ClimberStow::RunsWhenDisabled() const
