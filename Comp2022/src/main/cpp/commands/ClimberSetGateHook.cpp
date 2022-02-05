@@ -40,13 +40,13 @@ void ClimberSetGateHook::Execute()
 // Make this return true when this Command no longer needs to run execute()
 bool ClimberSetGateHook::IsFinished()
 {
-    return false;
+    return true;
 }
 
 // Called once after isFinished returns true
 void ClimberSetGateHook::End(bool interrupted)
 {
-    spdlog::info("Climber - End");
+    spdlog::info("ClimberSetGateHook - End");
 }
 
 bool ClimberSetGateHook::RunsWhenDisabled() const
