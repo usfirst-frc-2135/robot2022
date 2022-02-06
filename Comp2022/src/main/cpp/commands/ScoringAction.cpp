@@ -25,7 +25,6 @@ ScoringAction::ScoringAction(Intake *intake, FloorConveyor *fConv, VerticalConve
     // Need to add if Shooter is at speed part, turning on flashlight part
 
     AddCommands(
-        ShooterAim(true),
         ShooterRun(Shooter::SHOOTERSPEED_FORWARD, shooter),
         VerticalConveyorRun(VerticalConveyor::VCONVEYOR_ACQUIRE, vConv),
         FloorConveyorRun(FloorConveyor::FCONVEYOR_ACQUIRE, fConv),
