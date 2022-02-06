@@ -68,13 +68,12 @@
 # Climber settings
   CL_PeakOut = 1.0
   CL_Velocity = 21776
-  CL_Acceleration = 87104
+  CL_Acceleration = 43552
   CL_SCurveStrength = 0
   CL_PidKf = 0.0496
   CL_PidKp = 0.50
   CL_PidKi = 0.000
   CL_PidKd = 0.000
-  CL_NeutralDeadband = 0.004
   CL_CLRampRate = 0.000
   CL_CLAllowedError = 0
   CL_ToleranceInches = 0.75
@@ -85,10 +84,6 @@
   CL_ExtendL2 = 29.0
   CL_RotateL3 = 21.0
   CL_ExtendL3 = 31.5
-  CL_Rung1Height = 12.0
-  CL_Rung2Height = 17.0
-  CL_Rung3Height = 20.0
-  Cl_Rung4Height = 21.0
 # Auto Settings
   AutoDriveLimelightShoot_path = driveForward46
   AutoDriveShoot_path = driveForward58

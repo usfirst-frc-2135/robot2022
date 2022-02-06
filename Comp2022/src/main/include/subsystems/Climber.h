@@ -65,7 +65,6 @@ private:
     double m_pidKp;           // Climber PID proportional constant
     double m_pidKi;           // Climber PID integral constant
     double m_pidKd;           // Climber PID derivative constant
-    double m_neutralDeadband; // Climber PID neutral deadband in percent
     double m_CLRampRate;      // Climber PID ramp rate
     int m_CLAllowedError;     // Climber PID allowable closed loop error in counts
     double m_toleranceInches; // Climber PID tolerance in inches

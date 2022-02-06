@@ -45,14 +45,13 @@ Climber::Climber()
     // Initialize Variables
     frc2135::RobotConfig *config = frc2135::RobotConfig::GetInstance();
     config->GetValueAsDouble("CL_PeakOut", m_peakOut, 1.0);
-    config->GetValueAsInt("CL_Velocity", m_velocity, 0);
-    config->GetValueAsInt("CL_Acceleration", m_acceleration, 0);
+    config->GetValueAsInt("CL_Velocity", m_velocity, 21776);
+    config->GetValueAsInt("CL_Acceleration", m_acceleration, 43552);
     config->GetValueAsInt("CL_SCurveStrength", m_sCurveStrength, 0);
     config->GetValueAsDouble("CL_PidKf", m_pidKf, 0.0);
     config->GetValueAsDouble("CL_PidKp", m_pidKp, 0.0);
     config->GetValueAsDouble("CL_PidKi", m_pidKi, 0.000);
     config->GetValueAsDouble("CL_PidKd", m_pidKd, 0.000);
-    config->GetValueAsDouble("CL_NeutralDeadband", m_neutralDeadband, 0.004);
     config->GetValueAsDouble("CL_CLRampRate", m_CLRampRate, 0.000);
     config->GetValueAsInt("CL_CLAllowedError", m_CLAllowedError, 0);
     config->GetValueAsDouble("CL_ToleranceInches", m_toleranceInches, 0.75);
@@ -60,7 +59,7 @@ Climber::Climber()
     config->GetValueAsDouble("CL_MinHeight", m_climberMinHeight, 0.0);
     config->GetValueAsDouble("CL_StowHeight", m_stowHeight, 0.25);
     config->GetValueAsDouble("CL_ExtendL2", m_extendL2, 29.0);
-    config->GetValueAsDouble("CL_RotateL3", m_rotateL3, 24.0);
+    config->GetValueAsDouble("CL_RotateL3", m_rotateL3, 21.0);
     config->GetValueAsDouble("CL_ExtendL3", m_extendL3, 31.5);
 
     frc::SmartDashboard::PutNumber("CL_PidKf", m_pidKf);
