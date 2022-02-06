@@ -101,9 +101,8 @@ Climber::Climber()
         m_motorCL14.EnableVoltageCompensation(true);
 
         m_motorCL14.ConfigSupplyCurrentLimit(supplyCurrentLimits);
-#ifdef __FRC_ROBORIO__
         m_motorCL14.ConfigStatorCurrentLimit(statorCurrentLimits);
-#endif
+        
         // Configure sensor settings
         m_motorCL14.SetSelectedSensorPosition(0, 0, kCANTimeout);
 
