@@ -425,8 +425,7 @@ void Drivetrain::ResetGyro()
 
 degree_t Drivetrain::GetHeadingAngle()
 {
-    if (m_pigeonValid)
-        return (-m_gyro.GetFusedHeading() * 1_deg);
+    return (m_pigeonValid) ? (-m_gyro.GetFusedHeading() * 1_deg) : 0_deg;
 }
 
 //
