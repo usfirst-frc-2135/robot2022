@@ -181,6 +181,12 @@ void Robot::TeleopPeriodic() {}
  */
 void Robot::TestPeriodic() {}
 
+void Robot::SimulationInit()
+{
+    RobotContainer *robotContainer = RobotContainer::GetInstance();
+    robotContainer->m_drivetrain.SimulationInit();
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //  Fault handling utilities
 

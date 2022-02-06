@@ -81,6 +81,11 @@ Drivetrain::Drivetrain()
     Initialize();
 }
 
+void Drivetrain::SimulationInit()
+{
+    m_pigeonValid = true;
+}
+
 void Drivetrain::Periodic()
 {
     // Put code here to be run every loop
