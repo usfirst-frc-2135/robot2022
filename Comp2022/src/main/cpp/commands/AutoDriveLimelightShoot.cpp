@@ -11,9 +11,9 @@
 #include "commands/AutoDriveLimelightShoot.h"
 
 #include "commands/AutoDrivePath.h"
-#include "commands/AutoDriveStop.h"
-#include "commands/AutoDriveWait.h"
 #include "commands/AutoPathSequence.h"
+#include "commands/AutoStop.h"
+#include "commands/AutoWait.h"
 #include "commands/DriveLimelight.h"
 #include "commands/IntakeDeploy.h"
 #include "commands/ScoringAction.h"
@@ -45,7 +45,7 @@ AutoDriveLimelightShoot::AutoDriveLimelightShoot(
 
     AddCommands(
         IntakeDeploy(true),
-        AutoDriveWait(drivetrain),
+        AutoWait(drivetrain),
         AutoDrivePath(m_pathname.c_str(), true, drivetrain),
         //drive backwards until target is valid
         frc2::ParallelCommandGroup{ DriveLimelight(true, drivetrain, vision), ScoringPrime(shooter) },

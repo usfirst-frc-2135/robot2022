@@ -11,9 +11,9 @@
 #include "commands/AutoShootDriveShoot.h"
 
 #include "commands/AutoDrivePath.h"
-#include "commands/AutoDriveStop.h"
-#include "commands/AutoDriveWait.h"
 #include "commands/AutoPathSequence.h"
+#include "commands/AutoStop.h"
+#include "commands/AutoWait.h"
 #include "commands/IntakeDeploy.h"
 #include "commands/IntakingAction.h"
 #include "commands/ScoringAction.h"
@@ -46,14 +46,14 @@ AutoShootDriveShoot::AutoShootDriveShoot(
 
     AddCommands(
         IntakeDeploy(true),
-        AutoDriveWait(drivetrain),
+        AutoWait(drivetrain),
         ShooterRun(Shooter::SHOOTERSPEED_FORWARD, shooter),
-        frc2::ParallelCommandGroup{ AutoDriveStop(drivetrain), ScoringAction(intake, fConv, vConv, shooter) },
+        frc2::ParallelCommandGroup{ AutoStop(drivetrain), ScoringAction(intake, fConv, vConv, shooter) },
         frc2::ParallelCommandGroup{ AutoDrivePath(m_pathname1.c_str(), true, drivetrain),
                                     IntakingAction(intake, fConv, vConv) },
         frc2::ParallelCommandGroup{ AutoDrivePath(m_pathname2.c_str(), false, drivetrain),
                                     ShooterRun(Shooter::SHOOTERSPEED_FORWARD, shooter) },
-        frc2::ParallelCommandGroup{ AutoDriveStop(drivetrain), ScoringAction(intake, fConv, vConv, shooter) });
+        frc2::ParallelCommandGroup{ AutoStop(drivetrain), ScoringAction(intake, fConv, vConv, shooter) });
 }
 
 bool AutoShootDriveShoot::RunsWhenDisabled() const

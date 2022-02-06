@@ -10,8 +10,8 @@
 
 #include "commands/AutoShoot.h"
 
-#include "commands/AutoDriveStop.h"
-#include "commands/AutoDriveWait.h"
+#include "commands/AutoStop.h"
+#include "commands/AutoWait.h"
 #include "commands/IntakeDeploy.h"
 #include "commands/ScoringAction.h"
 #include "commands/ShooterRun.h"
@@ -37,9 +37,9 @@ AutoShoot::AutoShoot(
     // AddCommands(FooCommand(), BarCommand());
     AddCommands(
         IntakeDeploy(true),
-        AutoDriveWait(drivetrain),
+        AutoWait(drivetrain),
         ShooterRun(Shooter::SHOOTERSPEED_FORWARD, shooter),
-        frc2::ParallelCommandGroup{ AutoDriveStop(drivetrain), ScoringAction(intake, fConv, vConv, shooter) });
+        frc2::ParallelCommandGroup{ AutoStop(drivetrain), ScoringAction(intake, fConv, vConv, shooter) });
 }
 
 bool AutoShoot::RunsWhenDisabled() const

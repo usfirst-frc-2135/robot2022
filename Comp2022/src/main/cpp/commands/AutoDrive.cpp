@@ -11,8 +11,8 @@
 #include "commands/AutoDrive.h"
 
 #include "commands/AutoDrivePath.h"
-#include "commands/AutoDriveStop.h"
-#include "commands/AutoDriveWait.h"
+#include "commands/AutoStop.h"
+#include "commands/AutoWait.h"
 #include "commands/IntakeDeploy.h"
 #include "frc2135/RobotConfig.h"
 
@@ -35,9 +35,9 @@ AutoDrive::AutoDrive(Drivetrain *drivetrain, Intake *intake)
 
     AddCommands(
         IntakeDeploy(true),
-        AutoDriveWait(drivetrain),
+        AutoWait(drivetrain),
         AutoDrivePath(m_pathname.c_str(), true, drivetrain),
-        AutoDriveStop(drivetrain));
+        AutoStop(drivetrain));
 }
 
 bool AutoDrive::RunsWhenDisabled() const
