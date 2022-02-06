@@ -15,7 +15,7 @@
   DT_ClosedLoopRampRate = 0.0
   DT_StoppedTolerance = 0.05
 # Limelight settings
-  DTL_TurnPidKp = 0.035
+  DTL_TurnPidKp = 0.0175
   DTL_TurnPidKi = 0.0
   DTL_TurnPidKd = 0.0
   DTL_ThrottlePidKp = 0.02
@@ -28,12 +28,12 @@
   DTL_TargetDistance = 84.0
   DTL_AngleThreshold = 3.0
   DTL_DistThreshold = 42.0
-  DTL_Distance1 = 12
-  DTL_Distance2 = 36
+  DTL_Distance1 = 60
+  DTL_Distance2 = 84
   # DTL_VertOffset1 is typically positive
-  DTL_VertOffset1 = 5.18
+  DTL_VertOffset1 = 5.07
   # DTL_VertOffset2 is typically negative
-  DTL_VertOffset2 = -8.34
+  DTL_VertOffset2 = -2.37
 # Path following settings
   DTR_RamsetePidKf = 0.0465
   DTR_RamsetePidKp = 0.1 

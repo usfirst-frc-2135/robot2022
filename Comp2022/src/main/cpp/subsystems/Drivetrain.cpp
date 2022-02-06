@@ -650,6 +650,7 @@ void Drivetrain::MoveWithLimelightInit(bool m_endAtTarget)
         double ty = robotContainer->m_vision.GetVertOffsetDeg();
         m_limelightDistance = m_slope * ty + m_distOffset;
         m_targetDistance = m_limelightDistance;
+        spdlog::info("DTL Using Current Distance {}", m_targetDistance);
     }
 }
 
@@ -667,6 +668,7 @@ void Drivetrain::MoveWithLimelightExecute(double tx, double ty, bool tv)
     // put turn and throttle outputs on the dashboard
     frc::SmartDashboard::PutNumber("DTL_TurnOutput", turnOutput);
     frc::SmartDashboard::PutNumber("DTL_ThrottleOutput", throttleOutput);
+    frc::SmartDashboard::PutNumber("DTL_LimeLightDist", m_limelightDistance);
 
     // print out inputs and outputs, intermediate values (slope? throttle distance?)
     spdlog::info(
