@@ -18,9 +18,9 @@
 #include <frc2/command/SequentialCommandGroup.h>
 
 /**
- *
- *
- * @author ExampleAuthor
+ * https://docs.google.com/presentation/d/1SQlcOZpuv9mqVmsuJRcJQMyKcwuBd6hcQGlkFT-_Odg/edit?pli=1#slide=id.g10f6810cd96_0_18
+ * 
+ * @author ngupta-22
  */
 class AutoDrive : public frc2::CommandHelper<frc2::SequentialCommandGroup, AutoDrive>
 {

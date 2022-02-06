@@ -21,9 +21,9 @@
 #include <frc2/command/SequentialCommandGroup.h>
 
 /**
+ * https://docs.google.com/presentation/d/1SQlcOZpuv9mqVmsuJRcJQMyKcwuBd6hcQGlkFT-_Odg/edit?pli=1#slide=id.g10df825dbac_1_5
  *
- *
- * @author ExampleAuthor
+ * @author ngupta-22
  */
 class AutoShoot : public frc2::CommandHelper<frc2::SequentialCommandGroup, AutoShoot>
 {
