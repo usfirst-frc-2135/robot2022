@@ -188,10 +188,10 @@ void RobotContainer::ConfigureButtonBindings()
     m_shooterAimOffDr.WhenPressed(ShooterAim(false), true);
 
     // Operator Controller Assignments
-    // frc2::JoystickButton m_inStowOp{ &m_operatorController, (int)frc::XboxController::Button::kA };
+    frc2::JoystickButton m_inStowOp{ &m_operatorController, (int)frc::XboxController::Button::kA };
     frc2::JoystickButton m_exhaustingOp{ &m_operatorController, (int)frc::XboxController::Button::kB };
     frc2::JoystickButton m_scoringOffOp{ &m_operatorController, (int)frc::XboxController::Button::kX };
-    //frc2::JoystickButton m_inDeployOp{ &m_operatorController, (int)frc::XboxController::Button::kY };
+    frc2::JoystickButton m_inDeployOp{ &m_operatorController, (int)frc::XboxController::Button::kY };
 
     // frc2::JoystickButton m_climber0StowOp{ &m_operatorController, (int)frc::XboxController::Button::kA };
     // frc2::JoystickButton m_climber1DeployOp{ &m_operatorController, (int)frc::XboxController::Button::kB };
@@ -206,8 +206,8 @@ void RobotContainer::ConfigureButtonBindings()
     frc2::POVButton m_climber4ExtendL3Op{ &m_operatorController, 90, 0 };
     frc2::JoystickButton m_climber5RotateInL3Op{ &m_operatorController, (int)frc::XboxController::Button::kStart };
 
-    frc2::JoystickButton m_climberClimbL2RotateL3{ &m_operatorController, (int)frc::XboxController::Button::kA };
-    frc2::JoystickButton m_climberClimbL3{ &m_operatorController, (int)frc::XboxController::Button::kY };
+    // frc2::JoystickButton m_climberClimbL2RotateL3{ &m_operatorController, (int)frc::XboxController::Button::kA };
+    // frc2::JoystickButton m_climberClimbL3{ &m_operatorController, (int)frc::XboxController::Button::kY };
 
     frc2::JoystickButton m_intakingOp{ &m_operatorController, (int)frc::XboxController::Button::kLeftBumper };
     frc2::JoystickButton m_scoringPrimeOp{ &m_operatorController, (int)frc::XboxController::Button::kRightBumper };
@@ -215,8 +215,8 @@ void RobotContainer::ConfigureButtonBindings()
     frc2::JoystickButton m_shooterAimOffOp{ &m_operatorController, (int)frc::XboxController::Button::kBack };
 
     // Operator - A, B, X, Y
-    // m_inDeployOp.WhenPressed(IntakeDeploy(true), true);
-    // m_inStowOp.WhenPressed(IntakeDeploy(false), true);
+    m_inDeployOp.WhenPressed(IntakeDeploy(true), true);
+    m_inStowOp.WhenPressed(IntakeDeploy(false), true);
     m_exhaustingOp.WhenPressed(ExhaustingAction(&m_intake, &m_floorConv, &m_vertConv), true);
     m_exhaustingOp.WhenReleased(ExhaustingStop(&m_intake, &m_floorConv, &m_vertConv), true);
 
@@ -225,8 +225,8 @@ void RobotContainer::ConfigureButtonBindings()
     m_climber3RotateL3Op.WhenPressed(ClimberRotateToL3(&m_climber), true);
     m_climber4ExtendL3Op.WhenPressed(ClimberExtendToL3(&m_climber), true);
     m_climber5RotateInL3Op.WhenPressed(ClimberRotateIntoL3(&m_climber), true);
-    m_climberClimbL2RotateL3.WhenPressed(ClimberClimbL2RotateL3(&m_climber), true);
-    m_climberClimbL3.WhenPressed(ClimberClimbL3(&m_climber), true);
+    // m_climberClimbL2RotateL3.WhenPressed(ClimberClimbL2RotateL3(&m_climber), true);
+    // m_climberClimbL3.WhenPressed(ClimberClimbL3(&m_climber), true);
 
     // Operator Bumpers
     m_intakingOp.WhenPressed(IntakingAction(&m_intake, &m_floorConv, &m_vertConv), true);

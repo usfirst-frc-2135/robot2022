@@ -71,7 +71,6 @@ namespace ClimberConstants
 {
     static constexpr int kClimberEncoderCPR = 2048;
     static constexpr double kClimberRolloutRatio = 0.432; // inches per shaft rotation
-    // static constexpr double kCircumInches = 1.375 * M_PI;
     static constexpr double kInchesPerCount = kClimberRolloutRatio * (1.0 / (double)kClimberEncoderCPR);
 
 } // namespace ClimberConstants

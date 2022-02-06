@@ -72,7 +72,6 @@ private:
 
     double m_climberMaxHeight; // Climber maximum allowable height
     double m_climberMinHeight; // Climber minimum allowable height
-    double m_stateHeight;
     double m_stowHeight; //
     double m_extendL2;   //
     double m_rotateL3;   //
