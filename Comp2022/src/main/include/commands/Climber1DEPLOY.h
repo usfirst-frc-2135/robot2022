@@ -25,11 +25,6 @@
 
 using namespace std;
 
-/**
- *
- *
- * @author ExampleAuthor
- */
 class ClimberDeploy : public frc2::CommandHelper<frc2::SequentialCommandGroup, ClimberDeploy>
 {
 public:
@@ -41,5 +36,4 @@ public:
     bool RunsWhenDisabled() const override;
 
 private:
-    double m_extendToL2;
 };

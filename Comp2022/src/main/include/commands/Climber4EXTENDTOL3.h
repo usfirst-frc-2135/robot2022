@@ -23,11 +23,6 @@
 
 using namespace std;
 
-/**
- *
- *
- * @author ExampleAuthor
- */
 class ClimberExtendToL3 : public frc2::CommandHelper<frc2::SequentialCommandGroup, ClimberExtendToL3>
 {
 public:

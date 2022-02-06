@@ -32,8 +32,7 @@ ClimberRotateToL3::ClimberRotateToL3(Climber *climber)
     // Gate hook activated (extended)
 
     AddCommands(
-        ClimberMoveHeight(Climber::ROTATE_L3_HEIGHT, climber),
-        ClimberSetGateHook(true),
+        frc2::ParallelCommandGroup{ ClimberMoveHeight(Climber::ROTATE_L3_HEIGHT, climber), ClimberSetGateHook(true) },
         frc2::WaitCommand(0.5_s));
 }
 

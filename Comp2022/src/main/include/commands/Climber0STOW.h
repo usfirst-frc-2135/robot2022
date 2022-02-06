@@ -30,11 +30,6 @@
 
 using namespace std;
 
-/**
- *
- *
- * @author ExampleAuthor
- */
 class ClimberStow : public frc2::CommandHelper<frc2::SequentialCommandGroup, ClimberStow>
 {
 public:

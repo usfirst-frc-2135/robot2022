@@ -21,14 +21,8 @@
 #include <frc2/command/SequentialCommandGroup.h>
 #include <frc2/command/WaitCommand.h>
 
-
 using namespace std;
 
-/**
- *
- *
- * @author ExampleAuthor
- */
 class ClimberClimbToL3 : public frc2::CommandHelper<frc2::SequentialCommandGroup, ClimberClimbToL3>
 {
 public:
