@@ -38,7 +38,7 @@ AutoShootDrive::AutoShootDrive(
     // Add your commands here, e.g.
     // AddCommands(FooCommand(), BarCommand());
     frc2135::RobotConfig *config = frc2135::RobotConfig::GetInstance();
-    config->GetValueAsString("AutoShootDrive_path", m_pathname, "backward79");
+    config->GetValueAsString("AutoShootDrive_path", m_pathname, "forward79");
     spdlog::info("AutoShootDrive pathname {}", m_pathname.c_str());
 
     AddCommands(

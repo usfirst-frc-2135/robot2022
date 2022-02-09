@@ -84,9 +84,7 @@ RobotContainer::RobotContainer() :
 
     // Test autonomous routines
     frc::SmartDashboard::PutData("Auto Path Sequence", new AutoPathSequence(&m_drivetrain));
-    frc::SmartDashboard::PutData(
-        "Auto Drive Path: testTurnRight90deg",
-        new AutoDrivePath("testTurnRight90deg", true, &m_drivetrain));
+    frc::SmartDashboard::PutData("Auto Drive Path: left79", new AutoDrivePath("left79", true, &m_drivetrain));
     frc::SmartDashboard::PutData(
         "Auto Drive Path: testTurnLeft90deg",
         new AutoDrivePath("testTurnLeft90deg", true, &m_drivetrain));
