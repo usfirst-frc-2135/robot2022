@@ -92,3 +92,4 @@
   path2 = left79
   path3 = rightAngleTurn
   AUTO_WaitTime = 0.0
+  AUTO_ShootTime = 1.0
