@@ -202,7 +202,7 @@ namespace frc2135
                 spdlog::error("{} {} ID {} GetFirmwareVersion error - {}", subsystem, name, deviceID, error);
                 return (error == OKAY);
             }
-            else if (pigeonVersion == m_reqPigeonVer)
+            else if (pigeonVersion >= m_reqPigeonVer)
             {
                 pigeonValid = true;
                 break;
