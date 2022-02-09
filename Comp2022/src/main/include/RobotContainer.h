@@ -29,7 +29,6 @@
 #include "commands/AutoShootDrive.h"
 #include "commands/AutoShootDriveShoot.h"
 #include "commands/AutoStop.h"
-#include "commands/ClimberBrake.h"
 #include "commands/Climber0STOW.h"
 #include "commands/Climber1DEPLOY.h"
 #include "commands/Climber2CLIMBTOL2.h"
