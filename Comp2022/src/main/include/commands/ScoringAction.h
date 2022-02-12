@@ -12,7 +12,7 @@
 
 #include "commands/FloorConveyorRun.h"
 #include "commands/IntakeRun.h"
-#include "commands/ShooterRun.h"
+#include "commands/ShooterRunTimeout.h"
 #include "commands/VerticalConveyorRun.h"
 
 #include <frc2/command/CommandBase.h>
