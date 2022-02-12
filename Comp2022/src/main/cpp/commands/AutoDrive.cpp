@@ -36,7 +36,7 @@ AutoDrive::AutoDrive(Drivetrain *drivetrain, Intake *intake)
     AddCommands(
         IntakeDeploy(true),
         AutoWait(drivetrain),
-        AutoDrivePath(m_pathname.c_str(), true, drivetrain),
+        AutoDrivePath(true, m_pathname.c_str(), true, drivetrain),
         AutoStop(drivetrain));
 }
 
