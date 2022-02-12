@@ -10,26 +10,26 @@
 
 #pragma once
 
-#include "commands/FloorConveyorRun.h"
-#include "commands/IntakeRun.h"
-#include "commands/ShooterRun.h"
-#include "commands/VerticalConveyorRun.h"
+#include "subsystems/Drivetrain.h"
+#include "subsystems/Intake.h"
 
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
 #include <frc2/command/SequentialCommandGroup.h>
 
 /**
- *
- *
- * @author ExampleAuthor
+ * https://docs.google.com/presentation/d/1SQlcOZpuv9mqVmsuJRcJQMyKcwuBd6hcQGlkFT-_Odg/edit?pli=1#slide=id.g10f6810cd96_0_18
+ * 
+ * @author ngupta-22
  */
-class ScoringAction : public frc2::CommandHelper<frc2::SequentialCommandGroup, ScoringAction>
+class AutoDrive : public frc2::CommandHelper<frc2::SequentialCommandGroup, AutoDrive>
 {
 public:
-    explicit ScoringAction(Intake *intake, FloorConveyor *fConv, VerticalConveyor *vConv, Shooter *shooter);
+    explicit AutoDrive(Drivetrain *m_drivetrain, Intake *m_intake);
 
     bool RunsWhenDisabled() const override;
 
 private:
+    // Must be a member variable so commands can use it when they execute
+    std::string m_pathname;
 };
