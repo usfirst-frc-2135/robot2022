@@ -81,6 +81,11 @@ Drivetrain::Drivetrain()
     Initialize();
 }
 
+void Drivetrain::SimulationInit()
+{
+    m_pigeonValid = true;
+}
+
 void Drivetrain::Periodic()
 {
     // Put code here to be run every loop
@@ -131,8 +136,8 @@ void Drivetrain::SimulationPeriodic()
 	 */
     leftSim.SetIntegratedSensorRawPosition(MetersToNativeUnits(m_driveSim.GetLeftPosition()));
     leftSim.SetIntegratedSensorVelocity(MPSToNativeUnits(m_driveSim.GetLeftVelocity()));
-    rightSim.SetIntegratedSensorRawPosition(MetersToNativeUnits(m_driveSim.GetRightPosition()));
-    rightSim.SetIntegratedSensorVelocity(MPSToNativeUnits(m_driveSim.GetRightVelocity()));
+    rightSim.SetIntegratedSensorRawPosition(MetersToNativeUnits(-m_driveSim.GetRightPosition()));
+    rightSim.SetIntegratedSensorVelocity(MPSToNativeUnits(-m_driveSim.GetRightVelocity()));
 
     pidgeonSim.SetRawHeading(m_driveSim.GetHeading().Degrees().to<double>());
 }
@@ -306,6 +311,7 @@ void Drivetrain::UpdateDashboardValues(void)
     frc::SmartDashboard::PutNumber("DT_distanceRight", m_distanceRight.to<double>());
     frc::SmartDashboard::PutNumber("DT_wheelSpeedLeft", m_wheelSpeeds.left.to<double>());
     frc::SmartDashboard::PutNumber("DT_wheelSpeedRight", m_wheelSpeeds.right.to<double>());
+    frc::SmartDashboard::PutNumber("DT_getHeadingAngle", GetHeadingAngle().to<double>());
     frc::SmartDashboard::PutNumber("DT_heading", GetPose().Rotation().Degrees().to<double>());
     frc::SmartDashboard::PutNumber("DT_currentX", GetPose().X().to<double>());
     frc::SmartDashboard::PutNumber("DT_currentY", GetPose().Y().to<double>());
@@ -425,7 +431,7 @@ void Drivetrain::ResetGyro()
 
 degree_t Drivetrain::GetHeadingAngle()
 {
-    return (m_pigeonValid) ? (-m_gyro.GetFusedHeading() * 1_deg) : 0_deg;
+    return (m_pigeonValid) ? (m_gyro.GetFusedHeading() * 1_deg) : 0_deg;
 }
 
 //
@@ -436,6 +442,7 @@ void Drivetrain::ResetOdometry(frc::Pose2d pose)
     ResetSensors();
     m_driveSim.SetPose(pose);
     m_odometry.ResetPosition(pose, GetHeadingAngle());
+    spdlog::info("Heading angle after odometry reset {}", GetHeadingAngle());
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -792,6 +799,20 @@ void Drivetrain::RamseteFollowerExecute(void)
     frc::SmartDashboard::PutNumber("DTR_LeftOutputError", velLeft - curVelLeft);
     frc::SmartDashboard::PutNumber("DTR_RightOuputError", velRight - curVelRight);
 
+    // these distLeft and distRight calculations are only accurate for straight paths
+    double distLeft = MetersToNativeUnits(trajState.pose.Y());
+    double distRight = MetersToNativeUnits(trajState.pose.Y());
+    double curDistLeft = m_motorL1.GetSelectedSensorPosition();
+    double curDistRight = m_motorR3.GetSelectedSensorPosition();
+
+    frc::SmartDashboard::PutNumber("DTR_targetDistLeft", distLeft);
+    frc::SmartDashboard::PutNumber("DTR_targetDistRight", distRight);
+    frc::SmartDashboard::PutNumber("DTR_currentDistLeft", curDistLeft);
+    frc::SmartDashboard::PutNumber("DTR_currentDistRight", curDistRight);
+
+    frc::SmartDashboard::PutNumber("DTR_DistLeftOutputError", distLeft - curDistLeft);
+    frc::SmartDashboard::PutNumber("DTR_DistRightOuputError", distRight - curDistRight);
+
     m_diffDrive.Feed();
 
     spdlog::info(
@@ -813,7 +834,10 @@ void Drivetrain::RamseteFollowerExecute(void)
 
 bool Drivetrain::RamseteFollowerIsFinished(void)
 {
-    return ((m_trajTimer.Get() >= m_trajectory.TotalTime()));
+    return (
+        (m_trajTimer.Get() >= m_trajectory.TotalTime())
+        && (abs(m_motorL1.GetSelectedSensorVelocity()) <= 0 + m_tolerance)
+        && (abs(m_motorL1.GetSelectedSensorVelocity()) <= 0 + m_tolerance));
 }
 
 void Drivetrain::RamseteFollowerEnd(void)

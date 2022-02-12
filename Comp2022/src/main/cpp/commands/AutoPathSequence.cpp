@@ -9,7 +9,7 @@
 // it from being updated in the future.
 
 #include "commands/AutoDrivePath.h"
-#include "commands/AutoDriveStop.h"
+#include "commands/AutoStop.h"
 #include "frc2135/RobotConfig.h"
 
 #include <spdlog/spdlog.h>
@@ -40,7 +40,7 @@ AutoPathSequence::AutoPathSequence(Drivetrain *drivetrain)
         AutoDrivePath(path1.c_str(), true, drivetrain),
         AutoDrivePath(path2.c_str(), false, drivetrain),
         // AutoDrivePath(path3.c_str(), drivetrain)
-        AutoDriveStop(drivetrain));
+        AutoStop(drivetrain));
 }
 
 bool AutoPathSequence::RunsWhenDisabled() const

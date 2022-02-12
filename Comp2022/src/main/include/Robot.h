@@ -27,6 +27,7 @@ public:
     void TeleopInit() override;
     void TeleopPeriodic() override;
     void TestPeriodic() override;
+    void SimulationInit() override;
 
 private:
     // Have it null by default so that if testing teleop it
