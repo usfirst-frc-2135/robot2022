@@ -42,8 +42,8 @@
   DTR_RamseteB = 2.0
   DTR_RamseteZeta = 0.7
 # Intake settings
-  IN_AcquireSpeed = 1.0
-  IN_ExpelSpeed = -1.0
+  IN_AcquireSpeed = 0.6
+  IN_ExpelSpeed = -0.6
 # Floor Conveyor settings
   FC_AcquireSpeed = 1.0
   FC_ExpelSpeed = 0.2
@@ -58,13 +58,13 @@
   SH_FeederPidKi = 0.000
   SH_FeederPidKd = 0.000
   SH_FeederNeutralDeadband = 0.004
-  SH_FeederTargetRPM = 1450.0
+  SH_FeederTargetRPM = 2175.0
   SH_FlywheelPidKf = 0.0475
   SH_FlywheelPidKp = 0.05
   SH_FlywheelPidKi = 0.000
   SH_FlywheelPidKd = 0.000
   SH_FlywheelNeutralDeadband = 0.004
-  SH_FlywheelTargetRPM = 1450.0
+  SH_FlywheelTargetRPM = 2175.0
   SH_ToleranceRPM = 200.0
 # Climber settings
   CL_PeakOut = 1.0
