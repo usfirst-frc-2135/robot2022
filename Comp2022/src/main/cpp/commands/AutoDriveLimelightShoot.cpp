@@ -46,7 +46,7 @@ AutoDriveLimelightShoot::AutoDriveLimelightShoot(
     AddCommands(
         IntakeDeploy(true),
         AutoWait(drivetrain),
-        AutoDrivePath(true, m_pathname.c_str(), true, drivetrain),
+        AutoDrivePath(m_pathname.c_str(), true, drivetrain),
         //drive backwards until target is valid
         frc2::ParallelCommandGroup{ DriveLimelight(true, drivetrain, vision), ScoringPrime(shooter) },
         frc2::ParallelCommandGroup{ DriveLimelight(false, drivetrain, vision),

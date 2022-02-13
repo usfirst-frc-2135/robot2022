@@ -37,9 +37,9 @@ AutoPathSequence::AutoPathSequence(Drivetrain *drivetrain)
     spdlog::info("AutoPathSequence: path3 name: {}", path3);
 
     AddCommands(
-        AutoDrivePath(true, path1.c_str(), true, drivetrain),
-        AutoDrivePath(true, path2.c_str(), false, drivetrain),
-        // AutoDrivePath(true, path3.c_str(), drivetrain)
+        AutoDrivePath(path1.c_str(), true, drivetrain),
+        AutoDrivePath(path2.c_str(), false, drivetrain),
+        // AutoDrivePath(path3.c_str(), drivetrain)
         AutoStop(drivetrain));
 }
 

@@ -12,8 +12,7 @@
 
 #include <spdlog/spdlog.h>
 
-AutoDrivePath::AutoDrivePath(bool endAtTarget, const char *pathName, bool resetOdometry, Drivetrain *m_drivetrain) :
-    m_endAtTarget(endAtTarget),
+AutoDrivePath::AutoDrivePath(const char *pathName, bool resetOdometry, Drivetrain *m_drivetrain) :
     m_pathName(pathName),
     m_resetOdometry(resetOdometry),
     m_drivetrain(m_drivetrain)
@@ -40,8 +39,6 @@ void AutoDrivePath::Execute()
 // Make this return true when this Command no longer needs to run execute()
 bool AutoDrivePath::IsFinished()
 {
-    if (m_endAtTarget)
-        return m_drivetrain->RamseteFollowerIsFinished();
     return false;
 }
 
