@@ -17,7 +17,8 @@
 #include "frc2135/RobotConfig.h"
 
 #include <frc/smartdashboard/SmartDashboard.h>
-#include <frc2/command/ParallelCommandGroup.h>
+#include <frc2/command/ParallelDeadlineGroup.h>
+#include <frc2/command/WaitUntilCommand.h>
 #include <spdlog/spdlog.h>
 #include <wpi/SmallString.h>
 
@@ -36,7 +37,9 @@ AutoDrive::AutoDrive(Drivetrain *drivetrain, Intake *intake)
     AddCommands(
         IntakeDeploy(true),
         AutoWait(drivetrain),
-        AutoDrivePath(true, m_pathname.c_str(), true, drivetrain),
+        frc2::ParallelDeadlineGroup{
+            frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
+            AutoDrivePath(m_pathname.c_str(), true, drivetrain) },
         AutoStop(drivetrain));
 }
 

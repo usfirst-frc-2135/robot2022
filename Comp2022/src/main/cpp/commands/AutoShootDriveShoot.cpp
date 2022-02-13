@@ -18,10 +18,13 @@
 #include "commands/IntakingAction.h"
 #include "commands/ScoringAction.h"
 #include "commands/ScoringStop.h"
+#include "commands/ShooterRunTimeout.h"
 #include "frc2135/RobotConfig.h"
 
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/ParallelCommandGroup.h>
+#include <frc2/command/ParallelDeadlineGroup.h>
+#include <frc2/command/WaitUntilCommand.h>
 #include <spdlog/spdlog.h>
 #include <wpi/SmallString.h>
 
@@ -47,12 +50,18 @@ AutoShootDriveShoot::AutoShootDriveShoot(
     AddCommands(
         IntakeDeploy(true),
         AutoWait(drivetrain),
-        ShooterRun(Shooter::SHOOTERSPEED_FORWARD, shooter),
+        ShooterRunTimeout(Shooter::SHOOTERSPEED_FORWARD, shooter),
         frc2::ParallelCommandGroup{ AutoStop(drivetrain), ScoringAction(intake, fConv, vConv, shooter) },
-        frc2::ParallelCommandGroup{ AutoDrivePath(m_pathname1.c_str(), true, drivetrain),
-                                    IntakingAction(intake, fConv, vConv) },
-        frc2::ParallelCommandGroup{ AutoDrivePath(m_pathname2.c_str(), false, drivetrain),
-                                    ShooterRun(Shooter::SHOOTERSPEED_FORWARD, shooter) },
+        frc2::ParallelCommandGroup{
+            frc2::ParallelDeadlineGroup{
+                frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
+                AutoDrivePath(m_pathname1.c_str(), true, drivetrain) },
+            IntakingAction(intake, fConv, vConv) },
+        frc2::ParallelCommandGroup{
+            frc2::ParallelDeadlineGroup{
+                frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
+                AutoDrivePath(m_pathname2.c_str(), true, drivetrain) },
+            ShooterRunTimeout(Shooter::SHOOTERSPEED_FORWARD, shooter) },
         frc2::ParallelCommandGroup{ AutoStop(drivetrain), ScoringAction(intake, fConv, vConv, shooter) });
 }
 
