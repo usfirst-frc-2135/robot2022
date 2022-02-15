@@ -86,9 +86,7 @@ Shooter::Shooter()
         m_motorSH10.ConfigPeakOutputReverse(0.0, kCANTimeout);
 
         m_motorSH10.ConfigSupplyCurrentLimit(supplyCurrentLimits);
-#ifdef __FRC_ROBORIO__
         m_motorSH10.ConfigStatorCurrentLimit(statorCurrentLimits);
-#endif
 
         // Configure sensor settings
         m_motorSH10.ConfigSelectedFeedbackSensor(FeedbackDevice::IntegratedSensor, kPidIndex, kCANTimeout);
@@ -109,7 +107,7 @@ Shooter::Shooter()
     {
         // Set motor directions
         // Turn on Coast mode
-        m_motorSH11.SetInverted(true);
+        m_motorSH11.SetInverted(false);
         m_motorSH11.SetNeutralMode(NeutralMode::Coast);
         m_motorSH11.SetSafetyEnabled(false);
 
@@ -120,9 +118,7 @@ Shooter::Shooter()
         m_motorSH11.ConfigPeakOutputReverse(0.0, kCANTimeout);
 
         m_motorSH11.ConfigSupplyCurrentLimit(supplyCurrentLimits);
-#ifdef __FRC_ROBORIO__
         m_motorSH11.ConfigStatorCurrentLimit(statorCurrentLimits);
-#endif
 
         // Configure sensor settings
         m_motorSH11.ConfigSelectedFeedbackSensor(FeedbackDevice::IntegratedSensor, kPidIndex, kCANTimeout);

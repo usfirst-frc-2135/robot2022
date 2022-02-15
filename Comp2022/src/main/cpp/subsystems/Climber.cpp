@@ -45,19 +45,22 @@ Climber::Climber()
     // Initialize Variables
     frc2135::RobotConfig *config = frc2135::RobotConfig::GetInstance();
     config->GetValueAsDouble("CL_PeakOut", m_peakOut, 1.0);
-    config->GetValueAsInt("CL_Velocity", m_velocity, 0);
-    config->GetValueAsInt("CL_Acceleration", m_acceleration, 0);
+    config->GetValueAsInt("CL_Velocity", m_velocity, 21776);
+    config->GetValueAsInt("CL_Acceleration", m_acceleration, 43552);
     config->GetValueAsInt("CL_SCurveStrength", m_sCurveStrength, 0);
     config->GetValueAsDouble("CL_PidKf", m_pidKf, 0.0);
     config->GetValueAsDouble("CL_PidKp", m_pidKp, 0.0);
     config->GetValueAsDouble("CL_PidKi", m_pidKi, 0.000);
     config->GetValueAsDouble("CL_PidKd", m_pidKd, 0.000);
-    config->GetValueAsDouble("CL_NeutralDeadband", m_neutralDeadband, 0.004);
     config->GetValueAsDouble("CL_CLRampRate", m_CLRampRate, 0.000);
     config->GetValueAsInt("CL_CLAllowedError", m_CLAllowedError, 0);
     config->GetValueAsDouble("CL_ToleranceInches", m_toleranceInches, 0.75);
     config->GetValueAsDouble("CL_MaxHeight", m_climberMaxHeight, 85.0);
     config->GetValueAsDouble("CL_MinHeight", m_climberMinHeight, 0.0);
+    config->GetValueAsDouble("CL_StowHeight", m_stowHeight, 0.25);
+    config->GetValueAsDouble("CL_ExtendL2", m_extendL2, 29.0);
+    config->GetValueAsDouble("CL_RotateL3", m_rotateL3, 21.0);
+    config->GetValueAsDouble("CL_ExtendL3", m_extendL3, 31.5);
 
     frc::SmartDashboard::PutNumber("CL_PidKf", m_pidKf);
     frc::SmartDashboard::PutNumber("CL_Velocity", m_velocity);
@@ -65,6 +68,10 @@ Climber::Climber()
     frc::SmartDashboard::PutNumber("CL_PidKp", m_pidKp);
     frc::SmartDashboard::PutNumber("CL_PidKi", m_pidKi);
     frc::SmartDashboard::PutNumber("CL_PidKd", m_pidKd);
+    frc::SmartDashboard::PutNumber("CL_StowHeight", m_stowHeight);
+    frc::SmartDashboard::PutNumber("CL_ExtendL2", m_extendL2);
+    frc::SmartDashboard::PutNumber("Cl_RotateL3", m_rotateL3);
+    frc::SmartDashboard::PutNumber("CL_ExtendL3", m_extendL3);
 
     // Magic Motion variables
     m_curInches = 0.0;
@@ -86,7 +93,7 @@ Climber::Climber()
     // Set motor peak outputs
     if (m_talonValidCL14)
     {
-        m_motorCL14.SetInverted(false);
+        m_motorCL14.SetInverted(true);
         m_motorCL14.SetNeutralMode(NeutralMode::Brake);
         m_motorCL14.SetSafetyEnabled(false);
 
@@ -94,9 +101,8 @@ Climber::Climber()
         m_motorCL14.EnableVoltageCompensation(true);
 
         m_motorCL14.ConfigSupplyCurrentLimit(supplyCurrentLimits);
-#ifdef __FRC_ROBORIO__
         m_motorCL14.ConfigStatorCurrentLimit(statorCurrentLimits);
-#endif
+        
         // Configure sensor settings
         m_motorCL14.SetSelectedSensorPosition(0, 0, kCANTimeout);
 
@@ -158,11 +164,15 @@ void Climber::Periodic()
         if (m_climberDebug > 0)
         {
             double currentCL14 = 0.0;
+            double currentCL15 = 0.0;
 
             if (m_talonValidCL14)
                 currentCL14 = m_motorCL14.GetOutputCurrent();
+            if (m_talonValidCL15)
+                currentCL15 = m_motorCL15.GetOutputCurrent();
 
             frc::SmartDashboard::PutNumber("CL_Current_CL14", currentCL14);
+            frc::SmartDashboard::PutNumber("CL_Current_CL15", currentCL15);
         }
     }
 }
@@ -185,7 +195,7 @@ void Climber::Initialize(void)
 
     spdlog::info("CL Init");
 
-    SetGateHook(true);
+    SetGateHook(false);
 
     SetClimberStopped();
 
@@ -222,12 +232,9 @@ void Climber::MoveClimberWithJoysticks(frc::XboxController *joystick)
         if (state != CLIMBER_STOPPED)
             spdlog::info("CL Climber Stopped");
         state = CLIMBER_STOPPED;
-
-        SetGateHook(CL_BRAKE_LOCKED);
     }
     else
     {
-        SetGateHook(CL_BRAKE_UNLOCKED);
         // If joystick is above a value, climber will move up
         if (yCLValue > m_deadband)
         {
@@ -268,8 +275,8 @@ void Climber::SetGateHook(bool hookClosed)
 {
     if (hookClosed != m_gatehook.Get())
     {
-        spdlog::info("CL {}", (hookClosed) ? "STOPPED" : "RUNNING");
-        frc::SmartDashboard::PutBoolean("CL_Stopped", hookClosed);
+        spdlog::info("CL HOOK {}", (hookClosed) ? "OPEN" : "CLOSED");
+        frc::SmartDashboard::PutBoolean("CL_Hook_Closed", hookClosed);
 
         m_gatehook.Set(hookClosed);
     }
@@ -298,7 +305,7 @@ void Climber::Calibrate()
     frc::SmartDashboard::PutBoolean("CL Calibrated", m_calibrated);
 }
 
-void Climber::MoveClimberDistanceInit(double inches)
+void Climber::MoveClimberDistanceInit(int state)
 {
     m_pidKf = frc::SmartDashboard::GetNumber("CL_PidKf", m_pidKf);
     m_velocity = frc::SmartDashboard::GetNumber("CL_Velocity", m_velocity);
@@ -314,19 +321,40 @@ void Climber::MoveClimberDistanceInit(double inches)
     m_motorCL14.Config_kI(0, m_pidKi, 0);
     m_motorCL14.Config_kD(0, m_pidKd, 0);
 
+    switch (state)
+    {
+        case NOCHANGE_HEIGHT: // Do not change from current level!
+            break;
+        case STOW_HEIGHT:
+            m_targetInches = frc::SmartDashboard::GetNumber("CL_StowHeight", m_stowHeight);
+            break;
+        case EXTEND_L2_HEIGHT:
+            m_targetInches = frc::SmartDashboard::GetNumber("CL_ExtendL2", m_extendL2);
+            break;
+        case ROTATE_L3_HEIGHT:
+            m_targetInches = frc::SmartDashboard::GetNumber("Cl_RotateL3", m_rotateL3);
+            break;
+        case EXTEND_L3_HEIGHT:
+            m_targetInches = frc::SmartDashboard::GetNumber("CL_ExtendL3", m_rotateL3);
+            break;
+        default:
+            spdlog::info("CL requested height is invalid - {}", state);
+            return;
+    }
+
     if (m_calibrated)
     {
         // Height constraint check/soft limit for max and min height before raising
-        if (inches < m_climberMinHeight)
+        if (m_targetInches < m_climberMinHeight)
         {
-            spdlog::info("Target {} inches is limited by {} inches", inches, m_climberMinHeight);
-            inches = m_climberMinHeight;
+            spdlog::info("Target {} inches is limited by {} inches", m_targetInches, m_climberMinHeight);
+            m_targetInches = m_climberMinHeight;
         }
 
-        if (inches > m_climberMaxHeight)
+        if (m_targetInches > m_climberMaxHeight)
         {
-            spdlog::info("Target {} inches is limited by {} inches", inches, m_climberMaxHeight);
-            inches = m_climberMaxHeight;
+            spdlog::info("Target {} inches is limited by {} inches", m_targetInches, m_climberMaxHeight);
+            m_targetInches = m_climberMaxHeight;
         }
 
         // Start the safety timer
@@ -334,7 +362,6 @@ void Climber::MoveClimberDistanceInit(double inches)
         m_safetyTimer.Reset();
         m_safetyTimer.Start();
 
-        m_targetInches = inches;
         m_motorCL14.Set(ControlMode::MotionMagic, InchesToCounts(m_targetInches));
 
         spdlog::info(
