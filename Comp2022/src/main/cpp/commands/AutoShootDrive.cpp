@@ -21,7 +21,7 @@
 
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/ParallelCommandGroup.h>
-#include <frc2/command/ParallelDeadlineGroup.h>
+#include <frc2/command/ParallelRaceGroup.h>
 #include <frc2/command/WaitUntilCommand.h>
 #include <spdlog/spdlog.h>
 #include <wpi/SmallString.h>
@@ -47,9 +47,9 @@ AutoShootDrive::AutoShootDrive(
         IntakeDeploy(true),
         AutoWait(drivetrain),
         ShooterRunTimeout(Shooter::SHOOTERSPEED_FORWARD, shooter),
-        frc2::ParallelCommandGroup{ AutoStop(drivetrain), ScoringAction(intake, fConv, vConv, shooter) },
+        frc2::ParallelRaceGroup{ AutoStop(drivetrain), ScoringAction(intake, fConv, vConv, shooter) },
         frc2::ParallelCommandGroup{
-            frc2::ParallelDeadlineGroup{
+            frc2::ParallelRaceGroup{
                 frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
                 AutoDrivePath(m_pathname.c_str(), true, drivetrain) },
             ScoringStop(intake, fConv, vConv, shooter) });
