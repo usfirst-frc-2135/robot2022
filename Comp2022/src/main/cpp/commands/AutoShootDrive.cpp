@@ -44,10 +44,10 @@ AutoShootDrive::AutoShootDrive(
     spdlog::info("AutoShootDrive pathname {}", m_pathname.c_str());
 
     AddCommands(
-        IntakeDeploy(true),
+        frc2::ParallelRaceGroup{ IntakeDeploy(true), AutoStop(drivetrain) },
         AutoWait(drivetrain),
-        ShooterRunTimeout(Shooter::SHOOTERSPEED_FORWARD, shooter),
-        frc2::ParallelRaceGroup{ AutoStop(drivetrain), ScoringAction(intake, fConv, vConv, shooter) },
+        frc2::ParallelRaceGroup{ ShooterRunTimeout(Shooter::SHOOTERSPEED_FORWARD, shooter), AutoStop(drivetrain) },
+        frc2::ParallelRaceGroup{ ScoringAction(intake, fConv, vConv, shooter), AutoStop(drivetrain) },
         frc2::ParallelCommandGroup{
             frc2::ParallelRaceGroup{
                 frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),

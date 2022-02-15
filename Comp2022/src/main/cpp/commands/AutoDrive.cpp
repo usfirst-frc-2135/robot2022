@@ -35,7 +35,7 @@ AutoDrive::AutoDrive(Drivetrain *drivetrain, Intake *intake)
     spdlog::info("AutoDrive pathname {}", m_pathname.c_str());
 
     AddCommands(
-        IntakeDeploy(true),
+        frc2::ParallelRaceGroup{ IntakeDeploy(true), AutoStop(drivetrain) },
         AutoWait(drivetrain),
         frc2::ParallelRaceGroup{
             frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
