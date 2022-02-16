@@ -34,6 +34,7 @@ namespace DriveConstants
 {
     // Odometry constants
     static constexpr int kEncoderCPR = 2048; // CPR is 2048 for new TalonFX
+    static constexpr int kRPM = 6380;        // free speed for Falcon 500 motor
 // Gear Ratio Checker
 #if 1
     static constexpr double kGearRatio = 12.75;        // grogu- motor rotations to output shaft
@@ -70,10 +71,9 @@ namespace ConveyorConstants
 namespace ClimberConstants
 {
     static constexpr int kClimberEncoderCPR = 2048;
-    static constexpr double kClimberRolloutRatio = 0.1357; // inches per falcon rotation
-    static constexpr double kCircumInches = 0.428 * M_PI;
-    static constexpr double kInchesPerCount =
-        kCircumInches * kClimberRolloutRatio * (1.0 / (double)kClimberEncoderCPR);
+    static constexpr double kClimberRolloutRatio = 0.432; // inches per shaft rotation
+    static constexpr double kInchesPerCount = kClimberRolloutRatio * (1.0 / (double)kClimberEncoderCPR);
+
 
 } // namespace ClimberConstants
 
