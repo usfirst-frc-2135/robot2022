@@ -25,10 +25,12 @@ ScoringAction::ScoringAction(Intake *intake, FloorConveyor *fConv, VerticalConve
     // Need to add if Shooter is at speed part, turning on flashlight part
 
     AddCommands(
-        ShooterRunTimeout(Shooter::SHOOTERSPEED_FORWARD, shooter),
-        VerticalConveyorRun(VerticalConveyor::VCONVEYOR_ACQUIRE, vConv),
-        FloorConveyorRun(FloorConveyor::FCONVEYOR_ACQUIRE, fConv),
-        IntakeRun(Intake::INTAKE_ACQUIRE, intake));
+        frc2::ParallelRaceGroup{ frc2::WaitUntilCommand([shooter] { return shooter->AtDesiredRPM(); }),
+                                 ShooterRun(Shooter::SHOOTERSPEED_FORWARD, shooter) },
+        frc2::ParallelDeadlineGroup{ frc2::WaitCommand(1.0_s),
+                                     VerticalConveyorRun(VerticalConveyor::VCONVEYOR_ACQUIRE, vConv),
+                                     FloorConveyorRun(FloorConveyor::FCONVEYOR_ACQUIRE, fConv),
+                                     IntakeRun(Intake::INTAKE_ACQUIRE, intake) });
 }
 
 bool ScoringAction::RunsWhenDisabled() const
