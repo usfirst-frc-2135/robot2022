@@ -28,7 +28,7 @@ ScoringStop::ScoringStop(Intake *intake, FloorConveyor *fConv, VerticalConveyor 
         IntakeRun(Intake::INTAKE_STOP, intake),
         FloorConveyorRun(FloorConveyor::FCONVEYOR_STOP, fConv),
         VerticalConveyorRun(VerticalConveyor::VCONVEYOR_STOP, vConv),
-        ShooterRunTimeout(Shooter::SHOOTERSPEED_STOP, shooter));
+        ShooterRun(Shooter::SHOOTERSPEED_STOP, shooter));
 }
 
 bool ScoringStop::RunsWhenDisabled() const
