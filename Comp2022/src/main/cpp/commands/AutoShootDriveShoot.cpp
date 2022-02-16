@@ -17,8 +17,8 @@
 #include "commands/IntakeDeploy.h"
 #include "commands/IntakingAction.h"
 #include "commands/ScoringAction.h"
+#include "commands/ScoringPrime.h"
 #include "commands/ScoringStop.h"
-#include "commands/ShooterRunTimeout.h"
 #include "frc2135/RobotConfig.h"
 
 #include <frc/smartdashboard/SmartDashboard.h>
@@ -50,7 +50,6 @@ AutoShootDriveShoot::AutoShootDriveShoot(
     AddCommands(
         frc2::ParallelRaceGroup{ IntakeDeploy(true), AutoStop(drivetrain) },
         AutoWait(drivetrain),
-        frc2::ParallelRaceGroup{ ShooterRunTimeout(Shooter::SHOOTERSPEED_FORWARD, shooter), AutoStop(drivetrain) },
         frc2::ParallelCommandGroup{ ScoringAction(intake, fConv, vConv, shooter), AutoStop(drivetrain) },
         frc2::ParallelCommandGroup{
             frc2::ParallelRaceGroup{
@@ -61,8 +60,9 @@ AutoShootDriveShoot::AutoShootDriveShoot(
             frc2::ParallelRaceGroup{
                 frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
                 AutoDrivePath(m_pathname2.c_str(), true, drivetrain) },
-            ShooterRunTimeout(Shooter::SHOOTERSPEED_FORWARD, shooter) },
-        frc2::ParallelCommandGroup{ ScoringAction(intake, fConv, vConv, shooter), AutoStop(drivetrain) });
+            ScoringPrime(shooter) },
+        frc2::ParallelCommandGroup{ ScoringAction(intake, fConv, vConv, shooter), AutoStop(drivetrain) },
+        ScoringAction(intake, fConv, vConv, shooter));
 }
 
 bool AutoShootDriveShoot::RunsWhenDisabled() const

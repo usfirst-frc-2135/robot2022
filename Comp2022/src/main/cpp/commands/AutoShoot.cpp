@@ -14,7 +14,7 @@
 #include "commands/AutoWait.h"
 #include "commands/IntakeDeploy.h"
 #include "commands/ScoringAction.h"
-#include "commands/ShooterRunTimeout.h"
+#include "commands/ScoringStop.h"
 #include "frc2135/RobotConfig.h"
 
 #include <frc/smartdashboard/SmartDashboard.h>
@@ -39,8 +39,8 @@ AutoShoot::AutoShoot(
     AddCommands(
         frc2::ParallelRaceGroup{ IntakeDeploy(true), AutoStop(drivetrain) },
         AutoWait(drivetrain),
-        frc2::ParallelRaceGroup{ ShooterRunTimeout(Shooter::SHOOTERSPEED_FORWARD, shooter), AutoStop(drivetrain) },
-        frc2::ParallelRaceGroup{ ScoringAction(intake, fConv, vConv, shooter), AutoStop(drivetrain) });
+        frc2::ParallelRaceGroup{ ScoringAction(intake, fConv, vConv, shooter), AutoStop(drivetrain) },
+        ScoringStop(intake, fConv, vConv, shooter));
 }
 
 bool AutoShoot::RunsWhenDisabled() const
