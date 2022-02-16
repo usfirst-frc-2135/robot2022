@@ -86,9 +86,6 @@ RobotContainer::RobotContainer() :
     frc::SmartDashboard::PutData("Auto Path Sequence", new AutoPathSequence(&m_drivetrain));
     frc::SmartDashboard::PutData("Auto Drive Path: left79", new AutoDrivePath("left79", true, &m_drivetrain));
     frc::SmartDashboard::PutData(
-        "Auto Drive Pat: holdPosition",
-        new AutoDrivePath("holdPosition", true, &m_drivetrain));
-    frc::SmartDashboard::PutData(
         "Auto Drive Path: simCurvePath",
         new AutoDrivePath("simCurvePath", true, &m_drivetrain));
 
