@@ -134,6 +134,8 @@ Climber::Climber()
         m_motorCL15.SetInverted(InvertType::OpposeMaster);
         m_motorCL15.SetNeutralMode(NeutralMode::Brake);
         m_motorCL15.ConfigSupplyCurrentLimit(supplyCurrentLimits);
+        m_motorCL15.SetStatusFramePeriod(Status_1_General_, 255, kCANTimeout);
+        m_motorCL15.SetStatusFramePeriod(Status_2_Feedback0_, 255, kCANTimeout);
     }
 
     Initialize();
@@ -158,6 +160,14 @@ void Climber::Periodic()
     m_curInches = CountsToInches(curCounts);
     frc::SmartDashboard::PutNumber("CL Height", m_curInches);
 
+    m_currentLeftHeight = m_sensorCLleft.Get();
+    m_currentRightHeight = m_sensorCLright.Get();
+
+    frc::SmartDashboard::PutNumber("CL HS Left Height", m_currentLeftHeight);
+    frc::SmartDashboard::PutNumber("CL HS Right Height", m_currentRightHeight);
+
+    frc::SmartDashboard::PutNumber("CL Hook Rotation", m_hookRotation.GetPosition());
+
     // Only update indicators every 100 ms to cut down on network traffic
     if (periodicInterval++ % 5 == 0)
     {
@@ -175,6 +185,11 @@ void Climber::Periodic()
             frc::SmartDashboard::PutNumber("CL_Current_CL15", currentCL15);
         }
     }
+
+    GetYawPitchRoll();
+    frc::SmartDashboard::PutNumber("CL_GyroYaw", m_yaw);
+    frc::SmartDashboard::PutNumber("CL_GyroPitch", m_pitch);
+    frc::SmartDashboard::PutNumber("CL_GyroRoll", m_roll);
 }
 
 void Climber::SimulationPeriodic()
