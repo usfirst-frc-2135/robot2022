@@ -117,7 +117,6 @@ void Shooter::Periodic()
         // Show current drain and slave output if more debugging is needed
         if (m_shooterDebug > 0)
         {
-            double currentSH10 = 0.0;
             double currentSH11 = 0.0;
 
             if (m_talonValidSH11)
@@ -125,7 +124,6 @@ void Shooter::Periodic()
                 currentSH11 = m_motorSH11.GetOutputCurrent();
             }
 
-            frc::SmartDashboard::PutNumber("SH_Current_SH10", currentSH10);
             frc::SmartDashboard::PutNumber("SH_Current_SH11", currentSH11);
         }
     }

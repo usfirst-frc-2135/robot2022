@@ -35,14 +35,14 @@ LED::LED()
     SetColor(LEDCOLOR_BLUE);
 
     // Add options for colors in SmartDashboard
-    // m_ledChooser.AddOption("LED_Off", LEDCOLOR_OFF);
-    // m_ledChooser.AddOption("LED_White", LEDCOLOR_WHITE);
-    // m_ledChooser.AddOption("LED_Red", LEDCOLOR_RED);
-    // m_ledChooser.AddOption("LED_Orange", LEDCOLOR_ORANGE);
-    // m_ledChooser.AddOption("LED_Yellow", LEDCOLOR_YELLOW);
-    // m_ledChooser.AddOption("LED_Green", LEDCOLOR_GREEN);
-    // m_ledChooser.AddOption("LED_Blue", LEDCOLOR_BLUE);
-    // m_ledChooser.AddOption("LED_Purple", LEDCOLOR_PURPLE);
+    m_ledChooser.AddOption("LED_Off", LEDCOLOR_OFF);
+    m_ledChooser.AddOption("LED_White", LEDCOLOR_WHITE);
+    m_ledChooser.AddOption("LED_Red", LEDCOLOR_RED);
+    m_ledChooser.AddOption("LED_Orange", LEDCOLOR_ORANGE);
+    m_ledChooser.AddOption("LED_Yellow", LEDCOLOR_YELLOW);
+    m_ledChooser.AddOption("LED_Green", LEDCOLOR_GREEN);
+    m_ledChooser.AddOption("LED_Blue", LEDCOLOR_BLUE);
+    m_ledChooser.AddOption("LED_Purple", LEDCOLOR_PURPLE);
 
     frc::SmartDashboard::PutData("LED_Color", &m_ledChooser);
 }
