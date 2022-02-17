@@ -664,11 +664,13 @@ void Drivetrain::MoveWithLimelightInit(bool m_endAtTarget)
 
 void Drivetrain::MoveWithLimelightExecute(double tx, double ty, bool tv)
 {
+    RobotContainer *robotContainer = RobotContainer::GetInstance();
+
     // get turn value - just horizontal offset from target
-    double turnOutput = -m_turnPid.Calculate(tx, m_targetAngle);
+    double turnOutput = -m_turnPid.Calculate(robotContainer->m_vision.GetHorizOffsetDeg(), m_targetAngle);
 
     // get throttle value
-    m_limelightDistance = m_slope * ty + m_distOffset;
+    m_limelightDistance = robotContainer->m_vision.CalculateDist();
 
     double throttleDistance = m_throttlePid.Calculate(m_limelightDistance, m_targetDistance);
     double throttleOutput = -throttleDistance * pow(cos(turnOutput * wpi::numbers::pi / 180), m_throttleShape);
@@ -677,17 +679,6 @@ void Drivetrain::MoveWithLimelightExecute(double tx, double ty, bool tv)
     frc::SmartDashboard::PutNumber("DTL_TurnOutput", turnOutput);
     frc::SmartDashboard::PutNumber("DTL_ThrottleOutput", throttleOutput);
     frc::SmartDashboard::PutNumber("DTL_LimeLightDist", m_limelightDistance);
-
-    // print out inputs and outputs, intermediate values (slope? throttle distance?)
-    spdlog::info(
-        "DTL tv {} tx {:.1f} ty {:.1f} | turn {:.2f} throttle {:.2f} | limelightDist {:.1f} throttleDist {:.1f}",
-        tv,
-        tx,
-        ty,
-        turnOutput,
-        throttleOutput,
-        m_limelightDistance,
-        throttleDistance);
 
     // cap max turn and throttle output
     turnOutput = std::clamp(turnOutput, -m_maxTurn, m_maxTurn);

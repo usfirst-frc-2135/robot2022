@@ -47,6 +47,7 @@ private:
     double m_vertOffset1;
     double m_vertOffset2;
     double m_distOffset;
+    double m_distLight;
 
 public:
     Vision();
