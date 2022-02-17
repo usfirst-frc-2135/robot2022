@@ -137,13 +137,10 @@ void Shooter::SimulationPeriodic()
     /* Pass the robot battery voltage to the simulated Talon FXs */
     flywheelSim.SetBusVoltage(frc::RobotController::GetInputVoltage());
 
-    //feederSim.SetIntegratedSensorVelocity(VelocityToNativeUnits(feederSim.GetAngularVelocity()));
-
     m_flywheelSim.SetInputVoltage(1_V * m_motorSH11.Get() * frc::RobotController::GetInputVoltage());
 
     m_flywheelSim.Update(20_ms);
 
-    //m_feederEncoderSim.SetRate(m_feederSim.GetAngularVelocity().to<double>());
     //m_flywheelEncoderSim.SetRate(m_flywheelSim.GetAngularVelocity().to<double>());
 }
 
@@ -181,7 +178,6 @@ double Shooter::NativeToFlywheelRPM(double native)
 
 void Shooter::SetShooterSpeed(int state)
 {
-    double feederRPM = 0.0;
     double flywheelRPM = 0.0;
 
     m_state = state;
@@ -231,7 +227,7 @@ void Shooter::SetShooterSpeed(int state)
         m_motorSH11.Set(ControlMode::Velocity, FlywheelRPMToNative(flywheelRPM));
     }
 
-    spdlog::info("SH Set shooter speed - feeder {:.1f} flywheel {:.1f}", feederRPM, flywheelRPM);
+    spdlog::info("SH Set shooter speed -  flywheel {:.1f}", flywheelRPM);
 }
 
 void Shooter::FlashlightOn(bool onState)

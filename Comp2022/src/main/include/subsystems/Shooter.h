@@ -62,7 +62,7 @@ private:
 
     const double kFalconEncoderCPR = 2048; // CPR is 2048 from Falcon 500 Manual
 
-    const double kFlywheelGearRatio = (12.0 / 18.0); // No reduction 1:1
+    const double kFlywheelGearRatio = (12.0 / 18.0);
     const double kFlywheelCPR = kFalconEncoderCPR * kFlywheelGearRatio;
 
     // Declare module variables
