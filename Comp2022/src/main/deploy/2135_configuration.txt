@@ -53,12 +53,6 @@
   VC_ExpelSpeed = -0.2
   VC_ExpelSpeedFast = -1.0
 # Shooter settings
-  SH_FeederPidKf = 0.0475
-  SH_FeederPidKp = 0.00000
-  SH_FeederPidKi = 0.000
-  SH_FeederPidKd = 0.000
-  SH_FeederNeutralDeadband = 0.004
-  SH_FeederTargetRPM = 2175.0
   SH_FlywheelPidKf = 0.0475
   SH_FlywheelPidKp = 0.05
   SH_FlywheelPidKi = 0.000

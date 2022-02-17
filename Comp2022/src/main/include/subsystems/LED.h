@@ -35,7 +35,7 @@ private:
     // Declare constants
     // PWM port 9 - Must be a PWM header, not MXP or DIO
     static const int kLEDStringLength = 30;
-    frc::AddressableLED m_led{ 9 };
+    // frc::AddressableLED m_led{ 9 };
     // Reuse the buffer
     std::array<frc::AddressableLED::LEDData, kLEDStringLength> m_ledBuffer;
 
