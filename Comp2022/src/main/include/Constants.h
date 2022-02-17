@@ -36,7 +36,7 @@ namespace DriveConstants
     static constexpr int kEncoderCPR = 2048; // CPR is 2048 for new TalonFX
     static constexpr int kRPM = 6380;        // free speed for Falcon 500 motor
 // Gear Ratio Checker
-#if 1
+#if 0 // TODO: set to 1 for Grogu, set to 0 for 2022 bots
     static constexpr double kGearRatio = 12.75;        // grogu- motor rotations to output shaft
     static constexpr meter_t kWheelDiaMeters = 6.0_in; // Units library does the conversion
 #else

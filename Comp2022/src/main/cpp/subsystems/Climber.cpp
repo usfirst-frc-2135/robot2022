@@ -134,6 +134,8 @@ Climber::Climber()
         m_motorCL15.SetInverted(InvertType::OpposeMaster);
         m_motorCL15.SetNeutralMode(NeutralMode::Brake);
         m_motorCL15.ConfigSupplyCurrentLimit(supplyCurrentLimits);
+        m_motorCL15.SetStatusFramePeriod(Status_1_General_, 255, kCANTimeout);
+        m_motorCL15.SetStatusFramePeriod(Status_2_Feedback0_, 255, kCANTimeout);
     }
 
     Initialize();
