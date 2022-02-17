@@ -47,17 +47,15 @@ double Vision::CalculateDist()
     config->GetValueAsDouble("DTL_VertOffset1", m_vertOffset1, 0.0);
     config->GetValueAsDouble("DTL_VertOffset2", m_vertOffset2, 0.0);
 
-    m_distance1 = frc::SmartDashboard::GetNumber("DTL_Distance1", m_distance1);
+    /*m_distance1 = frc::SmartDashboard::GetNumber("DTL_Distance1", m_distance1);
     m_distance2 = frc::SmartDashboard::GetNumber("DTL_Distance2", m_distance2);
     m_vertOffset1 = frc::SmartDashboard::GetNumber("DTL_VertOffset1", m_vertOffset1);
-    m_vertOffset2 = frc::SmartDashboard::GetNumber("DTL_VertOffset2", m_vertOffset2);
+    m_vertOffset2 = frc::SmartDashboard::GetNumber("DTL_VertOffset2", m_vertOffset2);*/
     m_slope = (m_distance2 - m_distance1) / (m_vertOffset2 - m_vertOffset1);
     m_distOffset = m_distance1 - m_slope * m_vertOffset1;
-    frc::SmartDashboard::PutNumber("DTL_Slope", m_slope);
-    frc::SmartDashboard::PutNumber("DTL_Offset", m_distOffset);
-    frc::SmartDashboard::PutNumber("DTL_DistanceLimeLight", m_distOffset);
+    m_distLight = (m_slope * m_targetVertAngle) + m_distOffset;
 
-    return m_distOffset;
+    return m_distLight;
 }
 
 void Vision::Periodic()
@@ -65,7 +63,8 @@ void Vision::Periodic()
     // Put code here to be run every loop
 
     bool smOverrideEnabled = frc::SmartDashboard::GetBoolean("VI_SM_OVERRIDE_ENABLED", false);
-    if (smOverrideEnabled) {
+    if (smOverrideEnabled)
+    {
         // During daytime hours we can use smartdashboard to bipass the limelight.
         // This will allow us to calibrate the shooter distance without relying
         // on lighting conditions or limelight tuning.
@@ -74,7 +73,9 @@ void Vision::Periodic()
         m_targetArea = frc::SmartDashboard::GetNumber("VI_SM_OVERRIDE_TARGET_AREA", 0.0);
         m_targetSkew = frc::SmartDashboard::GetNumber("VI_SM_OVERRIDE_TARGET_SKEW", 0.0);
         m_targetValid = frc::SmartDashboard::GetBoolean("VI_SM_OVERRIDE_TARGET_VALID", true);
-    } else {
+    }
+    else
+    {
         m_targetHorizAngle = table->GetNumber("tx", 0.0);
         m_targetVertAngle = table->GetNumber("ty", 0.0);
         m_targetArea = table->GetNumber("ta", 0.0);
@@ -82,11 +83,15 @@ void Vision::Periodic()
         m_targetValid = (bool)table->GetNumber("tv", 0.0);
     }
 
+    CalculateDist();
+
     frc::SmartDashboard::PutNumber("VI_HORIZ_ANGLE", m_targetHorizAngle);
     frc::SmartDashboard::PutNumber("VI_VERT_ANGLE", m_targetVertAngle);
     frc::SmartDashboard::PutNumber("VI_TARGET_AREA", m_targetArea);
     frc::SmartDashboard::PutNumber("VI_TARGET_SKEW", m_targetSkew);
     frc::SmartDashboard::PutNumber("VI_TARGET_VALID", m_targetValid);
+    frc::SmartDashboard::PutNumber("VI_Slope", m_slope);
+    frc::SmartDashboard::PutNumber("VI_DistanceLimeLight", m_distLight);
 }
 
 void Vision::SimulationPeriodic()
