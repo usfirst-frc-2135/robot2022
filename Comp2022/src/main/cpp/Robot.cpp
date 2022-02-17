@@ -158,17 +158,6 @@ void Robot::TeleopInit()
         m_autonomousCommand->Cancel();
         m_autonomousCommand = nullptr;
     }
-
-    RobotContainer *robotContainer = RobotContainer::GetInstance();
-    robotContainer->m_drivetrain.Initialize();
-    robotContainer->m_intake.Initialize();
-    robotContainer->m_floorConv.Initialize();
-    robotContainer->m_vertConv.Initialize();
-    robotContainer->m_shooter.Initialize();
-    robotContainer->m_climber.Initialize();
-    robotContainer->m_pneumatics.Initialize();
-    robotContainer->m_power.Initialize();
-    robotContainer->m_led.Initialize();
 }
 
 /**
