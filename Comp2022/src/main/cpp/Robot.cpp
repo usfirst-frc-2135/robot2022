@@ -89,8 +89,6 @@ void Robot::DisabledInit()
         frc::DriverStation::GetMatchNumber(),
         AllianceToString(frc::DriverStation::GetAlliance()));
     RobotContainer *robotContainer = RobotContainer::GetInstance();
-    robotContainer->m_drivetrain.SetBrakeMode(false);
-
     robotContainer->m_drivetrain.Initialize();
     robotContainer->m_intake.Initialize();
     robotContainer->m_floorConv.Initialize();

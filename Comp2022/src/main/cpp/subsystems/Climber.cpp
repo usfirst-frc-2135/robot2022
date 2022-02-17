@@ -201,12 +201,8 @@ void Climber::Initialize(void)
 
     SetClimberStopped();
 
-    // PID Target is set to current encoder counts
     if (m_talonValidCL14)
-    {
-        m_motorCL14.Set(ControlMode::PercentOutput, 0.0);
         curCounts = m_motorCL14.GetSelectedSensorPosition(0);
-    }
 
     m_curInches = CountsToInches(curCounts);
     m_targetInches = m_curInches;
