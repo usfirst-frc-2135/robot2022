@@ -50,19 +50,20 @@ AutoShootDriveShoot::AutoShootDriveShoot(
     AddCommands(
         frc2::ParallelRaceGroup{ IntakeDeploy(true), AutoStop(drivetrain) },
         AutoWait(drivetrain),
-        frc2::ParallelCommandGroup{ ScoringAction(intake, fConv, vConv, shooter), AutoStop(drivetrain) },
+        frc2::ParallelRaceGroup{ ScoringAction(intake, fConv, vConv, shooter), AutoStop(drivetrain) },
         frc2::ParallelCommandGroup{
             frc2::ParallelRaceGroup{
                 frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
                 AutoDrivePath(m_pathname1.c_str(), true, drivetrain) },
-            IntakingAction(intake, fConv, vConv) },
+            IntakingAction(intake, fConv, vConv),
+            ShooterRun(Shooter::SHOOTERSPEED_STOP, shooter) },
         frc2::ParallelCommandGroup{
             frc2::ParallelRaceGroup{
                 frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
                 AutoDrivePath(m_pathname2.c_str(), true, drivetrain) },
             ScoringPrime(shooter) },
-        frc2::ParallelCommandGroup{ ScoringAction(intake, fConv, vConv, shooter), AutoStop(drivetrain) },
-        ScoringAction(intake, fConv, vConv, shooter));
+        frc2::ParallelRaceGroup{ ScoringAction(intake, fConv, vConv, shooter), AutoStop(drivetrain) },
+        ScoringStop(intake, fConv, vConv, shooter));
 }
 
 bool AutoShootDriveShoot::RunsWhenDisabled() const
