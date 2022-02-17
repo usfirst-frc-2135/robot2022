@@ -273,6 +273,8 @@ void Drivetrain::TalonFollowerInitialize(WPI_TalonFX &motor, int master)
     motor.Set(ControlMode::Follower, master);
     motor.SetInverted(InvertType::FollowMaster);
     motor.SetNeutralMode(NeutralMode::Coast);
+    motor.SetStatusFramePeriod(Status_1_General_, 255, kCANTimeout);
+    motor.SetStatusFramePeriod(Status_2_Feedback0_, 255, kCANTimeout);
 
     motor.ConfigSupplyCurrentLimit(m_supplyCurrentLimits);
     motor.ConfigStatorCurrentLimit(m_statorCurrentLimits);

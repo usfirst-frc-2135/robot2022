@@ -31,17 +31,32 @@ Vision::Vision()
     table->PutNumber("ledMode", LED_CUR_MODE);
     table->PutNumber("stream", PIP_SECONDARY);
 
+    frc::SmartDashboard::SetDefaultBoolean("VI_SM_OVERRIDE_ENABLED", false);
+
     Initialize();
 }
 
 void Vision::Periodic()
 {
     // Put code here to be run every loop
-    m_targetHorizAngle = table->GetNumber("tx", 0.0);
-    m_targetVertAngle = table->GetNumber("ty", 0.0);
-    m_targetArea = table->GetNumber("ta", 0.0);
-    m_targetSkew = table->GetNumber("ts", 0.0);
-    m_targetValid = (bool)table->GetNumber("tv", 0.0);
+
+    bool smOverrideEnabled = frc::SmartDashboard::GetBoolean("VI_SM_OVERRIDE_ENABLED", false);
+    if (smOverrideEnabled) {
+        // During daytime hours we can use smartdashboard to bipass the limelight.
+        // This will allow us to calibrate the shooter distance without relying
+        // on lighting conditions or limelight tuning.
+        m_targetHorizAngle = frc::SmartDashboard::GetNumber("VI_SM_OVERRIDE_H_ANGLE", 0.0);
+        m_targetVertAngle = frc::SmartDashboard::GetNumber("VI_SM_OVERRIDE_V_ANGLE", 0.0);
+        m_targetArea = frc::SmartDashboard::GetNumber("VI_SM_OVERRIDE_TARGET_AREA", 0.0);
+        m_targetSkew = frc::SmartDashboard::GetNumber("VI_SM_OVERRIDE_TARGET_SKEW", 0.0);
+        m_targetValid = frc::SmartDashboard::GetBoolean("VI_SM_OVERRIDE_TARGET_VALID", true);
+    } else {
+        m_targetHorizAngle = table->GetNumber("tx", 0.0);
+        m_targetVertAngle = table->GetNumber("ty", 0.0);
+        m_targetArea = table->GetNumber("ta", 0.0);
+        m_targetSkew = table->GetNumber("ts", 0.0);
+        m_targetValid = (bool)table->GetNumber("tv", 0.0);
+    }
 
     frc::SmartDashboard::PutNumber("VI_HORIZ_ANGLE", m_targetHorizAngle);
     frc::SmartDashboard::PutNumber("VI_VERT_ANGLE", m_targetVertAngle);
