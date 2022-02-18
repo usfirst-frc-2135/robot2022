@@ -36,14 +36,13 @@ namespace DriveConstants
     static constexpr int kEncoderCPR = 2048; // CPR is 2048 for new TalonFX
     static constexpr int kRPM = 6380;        // free speed for Falcon 500 motor
 // Gear Ratio Checker
-#if 0 // TODO: set to 1 for Grogu, set to 0 for 2022 bots
+#if 0 // TODO: remove Grogu gear ratio when unneeded
     static constexpr double kGearRatio = 12.75;        // grogu- motor rotations to output shaft
     static constexpr meter_t kWheelDiaMeters = 6.0_in; // Units library does the conversion
 #else
     static constexpr double kGearRatio = 8.45;         // comp2022- motor rotations to output shaft
     static constexpr meter_t kWheelDiaMeters = 4.0_in; // Units library does the conversion
 #endif
-    //static constexpr double kGearRatio = 12.75;
     static constexpr meter_t kEncoderMetersPerCount = (kWheelDiaMeters * wpi::numbers::pi) / (kEncoderCPR) / kGearRatio;
     static constexpr meter_t kTrackWidthMeters = 0.6477_m; // Measured track width
                                                            // Gear reduction
@@ -73,7 +72,6 @@ namespace ClimberConstants
     static constexpr int kClimberEncoderCPR = 2048;
     static constexpr double kClimberRolloutRatio = 0.432; // inches per shaft rotation
     static constexpr double kInchesPerCount = kClimberRolloutRatio * (1.0 / (double)kClimberEncoderCPR);
-
 
 } // namespace ClimberConstants
 
