@@ -788,31 +788,31 @@ void Drivetrain::RamseteFollowerExecute(void)
     if (m_talonValidR3)
         m_motorR3.Set(TalonFXControlMode::Velocity, velRight);
 
-    frc::SmartDashboard::PutNumber("DTR_targetLeft", velLeft);
-    frc::SmartDashboard::PutNumber("DTR_targetRight", velRight);
+    frc::SmartDashboard::PutNumber("DTR_targetVelLeft", velLeft);
+    frc::SmartDashboard::PutNumber("DTR_targetVelRight", velRight);
 
     double curVelLeft = m_motorL1.GetSelectedSensorVelocity();
     double curVelRight = m_motorR3.GetSelectedSensorVelocity();
 
-    frc::SmartDashboard::PutNumber("DTR_CurrentLeft", curVelLeft);
-    frc::SmartDashboard::PutNumber("DTR_CurrentRight", curVelRight);
+    frc::SmartDashboard::PutNumber("DTR_CurrentVelLeft", curVelLeft);
+    frc::SmartDashboard::PutNumber("DTR_CurrentVelRight", curVelRight);
 
-    frc::SmartDashboard::PutNumber("DTR_LeftOutputError", velLeft - curVelLeft);
-    frc::SmartDashboard::PutNumber("DTR_RightOuputError", velRight - curVelRight);
+    frc::SmartDashboard::PutNumber("DTR_LeftVelError", velLeft - curVelLeft);
+    frc::SmartDashboard::PutNumber("DTR_RightVelError", velRight - curVelRight);
 
     // these distLeft and distRight calculations are only accurate for straight paths
-    double distLeft = MetersToNativeUnits(trajState.pose.Y());
-    double distRight = MetersToNativeUnits(trajState.pose.Y());
-    double curDistLeft = m_motorL1.GetSelectedSensorPosition();
-    double curDistRight = m_motorR3.GetSelectedSensorPosition();
+    double xTrajTarget = trajState.pose.X().to<double>();
+    double yTrajTarget = trajState.pose.Y().to<double>();
+    double xTrajCurrent = currentPose.X().to<double>();
+    double yTrajCurrent = currentPose.Y().to<double>();
 
-    frc::SmartDashboard::PutNumber("DTR_targetDistLeft", distLeft);
-    frc::SmartDashboard::PutNumber("DTR_targetDistRight", distRight);
-    frc::SmartDashboard::PutNumber("DTR_currentDistLeft", curDistLeft);
-    frc::SmartDashboard::PutNumber("DTR_currentDistRight", curDistRight);
+    frc::SmartDashboard::PutNumber("DTR_xTrajCurrent", xTrajTarget);
+    frc::SmartDashboard::PutNumber("DTR_yTrajCurrent", yTrajTarget);
+    frc::SmartDashboard::PutNumber("DTR_xTrajTarget", xTrajCurrent);
+    frc::SmartDashboard::PutNumber("DTR_yTrajTarget", yTrajCurrent);
 
-    frc::SmartDashboard::PutNumber("DTR_DistLeftOutputError", distLeft - curDistLeft);
-    frc::SmartDashboard::PutNumber("DTR_DistRightOuputError", distRight - curDistRight);
+    frc::SmartDashboard::PutNumber("DTR_xTrajError", trajState.pose.RelativeTo(currentPose).X().to<double>());
+    frc::SmartDashboard::PutNumber("DTR_yTrajError", trajState.pose.RelativeTo(currentPose).Y().to<double>());
 
     m_diffDrive.Feed();
 
@@ -849,12 +849,12 @@ void Drivetrain::RamseteFollowerEnd(void)
     double curVelLeft = m_motorL1.GetSelectedSensorVelocity();
     double curVelRight = m_motorR3.GetSelectedSensorVelocity();
 
-    frc::SmartDashboard::PutNumber("DTR_CurrentLeft", curVelLeft);
-    frc::SmartDashboard::PutNumber("DTR_CurrentRight", curVelRight);
+    frc::SmartDashboard::PutNumber("DTR_CurrentVelLeft", curVelLeft);
+    frc::SmartDashboard::PutNumber("DTR_CurrentVelRight", curVelRight);
 
     // added for PID tuning, may be removed once completed
-    frc::SmartDashboard::PutNumber("DTR_LeftOutputError", 0 - curVelLeft);
-    frc::SmartDashboard::PutNumber("DTR_RightOuputError", 0 - curVelRight);
+    frc::SmartDashboard::PutNumber("DTR_LeftVelError", 0 - curVelLeft);
+    frc::SmartDashboard::PutNumber("DTR_RightVelError", 0 - curVelRight);
 }
 
 void Drivetrain::DriveBackward(double tx, double ty, bool tv) {}
