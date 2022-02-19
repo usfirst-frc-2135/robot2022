@@ -297,6 +297,14 @@ void Climber::SetGateHook(bool hookClosed)
     }
 }
 
+void Climber::GetYawPitchRoll(void)
+{
+    // m_yaw = m_gyro.GetYaw();
+    // m_pitch = m_gyro.GetPitch();
+    // m_roll = m_gyro.GetRoll();
+    // spdlog::info("Pigeon: Yaw {:.4f}  |  Pitch {:.4f}  | Roll {:.4f}", m_yaw, m_pitch, m_roll);
+}
+
 ///////////////////////// MOTION MAGIC ///////////////////////////////////
 
 double Climber::InchesToCounts(double inches)
