@@ -578,7 +578,7 @@ void Drivetrain::MoveWithJoysticksInit(void)
 void Drivetrain::MoveWithJoysticks(frc::XboxController *throttleJstick)
 {
     double xValue = throttleJstick->GetRightX();
-    double yValue = -throttleJstick->GetLeftY();
+    double yValue = throttleJstick->GetLeftY();
     double xOutput = 0.0;
     double yOutput = 0.0;
 
