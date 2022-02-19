@@ -8,8 +8,11 @@
 // update. Deleting the comments indicating the section will prevent
 // it from being updated in the future.
 
+#include "RobotContainer.h"
+#include "frc/RobotState.h"
 #include "frc2135/RobotConfig.h"
 #include "frc2135/TalonUtils.h"
+#include "subsystems/LED.h"
 
 #include <frc/RobotController.h>
 #include <spdlog/fmt/ostr.h>
@@ -102,7 +105,7 @@ Climber::Climber()
 
         m_motorCL14.ConfigSupplyCurrentLimit(supplyCurrentLimits);
         m_motorCL14.ConfigStatorCurrentLimit(statorCurrentLimits);
-        
+
         // Configure sensor settings
         m_motorCL14.SetSelectedSensorPosition(0, 0, kCANTimeout);
 
@@ -146,6 +149,20 @@ void Climber::Periodic()
     // Put code here to be run every loop
     static int periodicInterval = 0;
     double outputCL14 = 0.0;
+
+    // if disabled
+    if (frc::RobotState::IsDisabled())
+    {
+        RobotContainer *robotContainer = RobotContainer::GetInstance();
+        if (!m_climberDownLeft.Get() || !m_climberDownRight.Get())
+        {
+            robotContainer->m_led.SetColor(LED::LEDCOLOR_BLUE);
+        }
+        else
+        {
+            robotContainer->m_led.SetColor(LED::LEDCOLOR_OFF);
+        }
+    }
 
     if (m_talonValidCL14)
         outputCL14 = m_motorCL14.GetMotorOutputPercent();
