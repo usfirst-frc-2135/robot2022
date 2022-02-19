@@ -82,6 +82,9 @@ private:
     double m_extendL2;         //
     double m_rotateL3;         //
     double m_extendL3;
+    double m_yaw;
+    double m_pitch;
+    double m_roll;
 
 public:
     Climber();
@@ -121,6 +124,7 @@ public:
     double InchesToCounts(double inches);
     double CountsToInches(int counts);
     void Calibrate();
+    void GetYawPitchRoll();
 
     // Motion Magic - Moving to a position
     void MoveClimberDistanceInit(int state);
