@@ -10,7 +10,6 @@
 
 #include "commands/ClimberMoveHeight.h"
 #include "commands/ClimberSetGateHook.h"
-#include "commands/ClimberYawPitchRoll.h"
 #include "frc2135/RobotConfig.h"
 
 #include <spdlog/spdlog.h>
