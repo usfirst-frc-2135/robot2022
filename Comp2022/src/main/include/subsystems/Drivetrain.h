@@ -173,6 +173,11 @@ private:
     // Path following variables
     double m_tolerance;
 
+    // Gyro Measurements
+    double m_yaw;
+    double m_pitch;
+    double m_roll;
+
     ///////////////////////////////////////////////////////////////////////////
 
     // Initialization methods
@@ -223,6 +228,7 @@ public:
     void FaultDump(void);
 
     void ResetSensors(void);
+    void GetYawPitchRoll(void);
     void SetBrakeMode(bool brakeMode);
     void MoveSetQuickTurn(bool quickTurn);
     void MoveStop(void);
