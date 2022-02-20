@@ -61,7 +61,9 @@ RobotContainer::RobotContainer() :
     frc::SmartDashboard::PutData("Intaking Stop", new IntakingStop(&m_intake, &m_floorConv, &m_vertConv));
     frc::SmartDashboard::PutData("Exhausting Action", new ExhaustingAction(&m_intake, &m_floorConv, &m_vertConv));
     frc::SmartDashboard::PutData("Exhausting Stop", new ExhaustingStop(&m_intake, &m_floorConv, &m_vertConv));
-    frc::SmartDashboard::PutData("Scoring Action", new ScoringAction(&m_intake, &m_floorConv, &m_vertConv, &m_shooter));
+    frc::SmartDashboard::PutData(
+        "Scoring Action",
+        new ScoringAction(10_s, &m_intake, &m_floorConv, &m_vertConv, &m_shooter));
     frc::SmartDashboard::PutData("Scoring Stop", new ScoringStop(&m_intake, &m_floorConv, &m_vertConv, &m_shooter));
 
     // Autonomous chooser routines
@@ -161,7 +163,7 @@ void RobotContainer::ConfigureButtonBindings()
     m_intakingDr.WhenPressed(IntakingAction(&m_intake, &m_floorConv, &m_vertConv), true);
     m_intakingDr.WhenReleased(IntakingStop(&m_intake, &m_floorConv, &m_vertConv), true);
 
-    m_shootingDr.WhenPressed(ScoringAction(&m_intake, &m_floorConv, &m_vertConv, &m_shooter), true);
+    m_shootingDr.WhenPressed(ScoringAction(10_s, &m_intake, &m_floorConv, &m_vertConv, &m_shooter), true);
     m_shootingDr.WhenReleased(ScoringStop(&m_intake, &m_floorConv, &m_vertConv, &m_shooter), true);
 
     // Triggers EXAMPLE ONLY: FIXME WITH CORRECT COMMANDS!
