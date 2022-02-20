@@ -12,7 +12,12 @@
 
 #include <spdlog/spdlog.h>
 
-ScoringAction::ScoringAction(Intake *intake, FloorConveyor *fConv, VerticalConveyor *vConv, Shooter *shooter)
+ScoringAction::ScoringAction(
+    second_t waitTime,
+    Intake *intake,
+    FloorConveyor *fConv,
+    VerticalConveyor *vConv,
+    Shooter *shooter)
 {
     // Use AddRequirements() here to declare subsystem dependencies
     // eg. AddRequirements(m_Subsystem);
@@ -20,14 +25,16 @@ ScoringAction::ScoringAction(Intake *intake, FloorConveyor *fConv, VerticalConve
 
     spdlog::info("ScoringAction");
 
+    // get wait time parameter
+
     // Add your commands here, e.g.
     // AddCommands(FooCommand(), BarCommand());
     // Need to add if Shooter is at speed part, turning on flashlight part
 
     AddCommands(
-        frc2::ParallelRaceGroup{ frc2::WaitUntilCommand([shooter] { return shooter->AtDesiredRPM(); }),
-                                 ShooterRun(Shooter::SHOOTERSPEED_FORWARD, shooter) },
-        frc2::ParallelDeadlineGroup{ frc2::WaitCommand(1.0_s),
+        frc2::ParallelDeadlineGroup{ frc2::WaitUntilCommand([shooter] { return shooter->AtDesiredRPM(); }),
+                                     ShooterRun(Shooter::SHOOTERSPEED_FORWARD, shooter) },
+        frc2::ParallelDeadlineGroup{ frc2::WaitCommand(waitTime),
                                      VerticalConveyorRun(VerticalConveyor::VCONVEYOR_ACQUIRE, vConv),
                                      FloorConveyorRun(FloorConveyor::FCONVEYOR_ACQUIRE, fConv),
                                      IntakeRun(Intake::INTAKE_ACQUIRE, intake) });
