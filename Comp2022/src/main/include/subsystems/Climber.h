@@ -124,7 +124,6 @@ public:
     double InchesToCounts(double inches);
     double CountsToInches(int counts);
     void Calibrate();
-    void GetYawPitchRoll();
 
     // Motion Magic - Moving to a position
     void MoveClimberDistanceInit(int state);
