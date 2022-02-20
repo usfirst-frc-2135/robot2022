@@ -223,6 +223,9 @@ void Drivetrain::ConfigFileLoad(void)
 
     // Put tunable items to dashboard
     frc::SmartDashboard::PutNumber("DT_Tolerance", m_tolerance);
+    frc::SmartDashboard::PutNumber("DT_GyroYaw", m_yaw);
+    frc::SmartDashboard::PutNumber("DT_GyroPitch", m_pitch);
+    frc::SmartDashboard::PutNumber("DT_GyroRoll", m_roll);
 
     frc::SmartDashboard::PutNumber("DTL_TurnPidKp", m_turnPidKp);
     frc::SmartDashboard::PutNumber("DTL_TurnPidKi", m_turnPidKi);
@@ -434,6 +437,13 @@ void Drivetrain::ResetGyro()
 degree_t Drivetrain::GetHeadingAngle()
 {
     return (m_pigeonValid) ? (m_gyro.GetFusedHeading() * 1_deg) : 0_deg;
+}
+
+void Drivetrain::GetYawPitchRoll()
+{
+    m_yaw = m_gyro.GetYaw();
+    m_pitch = m_gyro.GetPitch();
+    m_roll = m_gyro.GetRoll();
 }
 
 //
