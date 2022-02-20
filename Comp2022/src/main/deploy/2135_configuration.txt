@@ -84,7 +84,8 @@
 # Auto Settings
   AutoDrive_path = forward79
   AutoShootDrive_path = forward79
-  AutoShootDriveShoot_path = forward79
+  AutoShootDriveShoot_path1 = forward79
+  AutoShootDriveShoot_path2 = backward79
   path1 = forward39
   path2 = left79
   path3 = rightAngleTurn

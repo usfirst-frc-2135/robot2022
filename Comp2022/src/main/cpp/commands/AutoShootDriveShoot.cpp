@@ -43,14 +43,14 @@ AutoShootDriveShoot::AutoShootDriveShoot(
     // AddCommands(FooCommand(), BarCommand());
     frc2135::RobotConfig *config = frc2135::RobotConfig::GetInstance();
     config->GetValueAsString("AutoShootDriveShoot_path1", m_pathname1, "forward79");
-    config->GetValueAsString("AutoShootDriveShoot_path2", m_pathname2, "forward79");
+    config->GetValueAsString("AutoShootDriveShoot_path2", m_pathname2, "backward79");
     spdlog::info("AutoShootDriveShoot pathname 1 {}", m_pathname1.c_str());
     spdlog::info("AutoShootDriveShoot pathname 2 {}", m_pathname2.c_str());
 
     AddCommands(
         frc2::ParallelRaceGroup{ IntakeDeploy(true), AutoStop(drivetrain) },
         AutoWait(drivetrain),
-        frc2::ParallelRaceGroup{ ScoringAction(intake, fConv, vConv, shooter), AutoStop(drivetrain) },
+        frc2::ParallelRaceGroup{ ScoringAction(5_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
         frc2::ParallelCommandGroup{
             frc2::ParallelRaceGroup{
                 frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
@@ -60,9 +60,9 @@ AutoShootDriveShoot::AutoShootDriveShoot(
         frc2::ParallelCommandGroup{
             frc2::ParallelRaceGroup{
                 frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
-                AutoDrivePath(m_pathname2.c_str(), true, drivetrain) },
+                AutoDrivePath(m_pathname2.c_str(), false, drivetrain) },
             ScoringPrime(shooter) },
-        frc2::ParallelRaceGroup{ ScoringAction(intake, fConv, vConv, shooter), AutoStop(drivetrain) },
+        frc2::ParallelRaceGroup{ ScoringAction(5_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
         ScoringStop(intake, fConv, vConv, shooter));
 }
 
