@@ -8,8 +8,8 @@
 // update. Deleting the comments indicating the section will prevent
 // it from being updated in the future.
 
-#include "commands/Climber2CLIMBTOL2.h"
-#include "commands/Climber3ROTATETOL3.h"
+#include "commands/Climber2ClimbToL2.h"
+#include "commands/Climber3RotateToL3.h"
 #include "frc2135/RobotConfig.h"
 
 #include <spdlog/spdlog.h>

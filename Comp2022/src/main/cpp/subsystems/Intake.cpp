@@ -61,6 +61,9 @@ Intake::Intake()
         SupplyCurrentLimitConfiguration supplyCurrentLimits;
         supplyCurrentLimits = { true, 45.0, 45.0, 0.001 };
         m_motorIN6.ConfigSupplyCurrentLimit(supplyCurrentLimits);
+
+        m_motorIN6.SetStatusFramePeriod(Status_1_General_, 255, kCANTimeout);
+        m_motorIN6.SetStatusFramePeriod(Status_2_Feedback0_, 255, kCANTimeout);
     }
 
     Initialize();

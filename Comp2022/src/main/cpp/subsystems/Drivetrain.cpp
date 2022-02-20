@@ -72,10 +72,7 @@ Drivetrain::Drivetrain()
     m_turnPid = frc2::PIDController(m_turnPidKp, m_turnPidKi, m_turnPidKd);
     m_throttlePid = frc2::PIDController(m_throttlePidKp, m_throttlePidKi, m_throttlePidKd);
 
-    // Ramsete Pid Controllers
-    m_leftPid = frc2::PIDController(m_ramsetePidKp, m_ramsetePidKi, m_ramsetePidKd);
-    m_rightPid = frc2::PIDController(m_ramsetePidKp, m_ramsetePidKi, m_ramsetePidKd);
-
+    // Ramsete Controller
     m_ramseteController = frc::RamseteController(m_ramseteB, m_ramseteZeta);
 
     Initialize();
@@ -223,6 +220,9 @@ void Drivetrain::ConfigFileLoad(void)
 
     // Put tunable items to dashboard
     frc::SmartDashboard::PutNumber("DT_Tolerance", m_tolerance);
+    frc::SmartDashboard::PutNumber("DT_GyroYaw", m_yaw);
+    frc::SmartDashboard::PutNumber("DT_GyroPitch", m_pitch);
+    frc::SmartDashboard::PutNumber("DT_GyroRoll", m_roll);
 
     frc::SmartDashboard::PutNumber("DTL_TurnPidKp", m_turnPidKp);
     frc::SmartDashboard::PutNumber("DTL_TurnPidKi", m_turnPidKi);
@@ -436,6 +436,13 @@ degree_t Drivetrain::GetHeadingAngle()
     return (m_pigeonValid) ? (m_gyro.GetFusedHeading() * 1_deg) : 0_deg;
 }
 
+void Drivetrain::GetYawPitchRoll()
+{
+    m_yaw = m_gyro.GetYaw();
+    m_pitch = m_gyro.GetPitch();
+    m_roll = m_gyro.GetRoll();
+}
+
 //
 //  Odometry
 //
@@ -578,7 +585,7 @@ void Drivetrain::MoveWithJoysticksInit(void)
 void Drivetrain::MoveWithJoysticks(frc::XboxController *throttleJstick)
 {
     double xValue = throttleJstick->GetRightX();
-    double yValue = -throttleJstick->GetLeftY();
+    double yValue = throttleJstick->GetLeftY();
     double xOutput = 0.0;
     double yOutput = 0.0;
 
@@ -715,14 +722,7 @@ void Drivetrain::RamseteFollowerInit(string pathName, bool resetOdometry)
 
     m_ramseteB = frc::SmartDashboard::GetNumber("DTR_ramseteB", m_ramseteB);
     m_ramseteZeta = frc::SmartDashboard::GetNumber("DTR_ramseteZeta", m_ramseteZeta);
-
-    // m_leftPid = frc2::PIDController{ m_ramsetePidKp, m_ramsetePidKi, m_ramsetePidKd };
-    // m_rightPid = frc2::PIDController{ m_ramsetePidKp, m_ramsetePidKi, m_ramsetePidKd };
     m_ramseteController = frc::RamseteController{ m_ramseteB, m_ramseteZeta };
-
-    // TODO: Not sure if this is really needed or used
-    m_leftPid.SetTolerance(m_tolerance);
-    m_rightPid.SetTolerance(m_tolerance);
 
     // Get our trajectory
     // TODO: Move this to be able to load a trajectory while disabled when
