@@ -36,21 +36,17 @@ Vision::Vision()
 
     frc::SmartDashboard::SetDefaultBoolean("VI_SM_OVERRIDE_ENABLED", false);
 
-    Initialize();
-}
-
-double Vision::CalculateDist()
-{
     frc2135::RobotConfig *config = frc2135::RobotConfig::GetInstance();
     config->GetValueAsDouble("DTL_Distance1", m_distance1, 0.0);
     config->GetValueAsDouble("DTL_Distance2", m_distance2, 0.0);
     config->GetValueAsDouble("DTL_VertOffset1", m_vertOffset1, 0.0);
     config->GetValueAsDouble("DTL_VertOffset2", m_vertOffset2, 0.0);
 
-    /*m_distance1 = frc::SmartDashboard::GetNumber("DTL_Distance1", m_distance1);
-    m_distance2 = frc::SmartDashboard::GetNumber("DTL_Distance2", m_distance2);
-    m_vertOffset1 = frc::SmartDashboard::GetNumber("DTL_VertOffset1", m_vertOffset1);
-    m_vertOffset2 = frc::SmartDashboard::GetNumber("DTL_VertOffset2", m_vertOffset2);*/
+    Initialize();
+}
+
+double Vision::CalculateDist()
+{
     m_slope = (m_distance2 - m_distance1) / (m_vertOffset2 - m_vertOffset1);
     m_distOffset = m_distance1 - m_slope * m_vertOffset1;
     m_distLight = (m_slope * m_targetVertAngle) + m_distOffset;
@@ -94,6 +90,14 @@ void Vision::Periodic()
     frc::SmartDashboard::PutNumber("VI_DistanceLimeLight", m_distLight);
 }
 
+void Vision::SyncStateFromDashboard(void)
+{
+    m_distance1 = frc::SmartDashboard::GetNumber("DTL_Distance1", m_distance1);
+    m_distance2 = frc::SmartDashboard::GetNumber("DTL_Distance2", m_distance2);
+    m_vertOffset1 = frc::SmartDashboard::GetNumber("DTL_VertOffset1", m_vertOffset1);
+    m_vertOffset2 = frc::SmartDashboard::GetNumber("DTL_VertOffset2", m_vertOffset2);
+}
+
 void Vision::SimulationPeriodic()
 {
     // This method will be called once per scheduler run when in simulation
@@ -110,6 +114,7 @@ void Vision::Initialize(void)
 {
     spdlog::info("VI Init");
     table->PutNumber("ledMode", LED_OFF);
+    SyncStateFromDashboard();
 }
 
 double Vision::GetHorizOffsetDeg()

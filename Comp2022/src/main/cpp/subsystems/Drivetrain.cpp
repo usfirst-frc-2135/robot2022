@@ -202,7 +202,7 @@ void Drivetrain::ConfigFileLoad(void)
     config->GetValueAsDouble("DTL_MaxThrottle", m_maxThrottle, 0.2);
     config->GetValueAsDouble("DTL_ThrottleShape", m_throttleShape, 10.0);
     config->GetValueAsDouble("DTL_TargetAngle", m_targetAngle, 0.0);
-    config->GetValueAsDouble("DTL_TargetDistance", m_targetDistance, 12.0);
+    config->GetValueAsDouble("DTL_TargetDistance", m_setPointDistance, 12.0);
     config->GetValueAsDouble("DTL_AngleThreshold", m_angleThreshold, 3.0);
     config->GetValueAsDouble("DTL_DistThreshold", m_distThreshold, 6.0);
     config->GetValueAsDouble("DTL_Distance1", m_distance1, 0.0);
@@ -234,7 +234,7 @@ void Drivetrain::ConfigFileLoad(void)
     frc::SmartDashboard::PutNumber("DTL_MaxThrottle", m_maxThrottle);
     frc::SmartDashboard::PutNumber("DTL_ThrottleShape", m_throttleShape);
     frc::SmartDashboard::PutNumber("DTL_TargetAngle", m_targetAngle);
-    frc::SmartDashboard::PutNumber("DTL_TargetDistance", m_targetDistance);
+    frc::SmartDashboard::PutNumber("DTL_TargetDistance", m_setPointDistance);
     frc::SmartDashboard::PutNumber("DTL_AngleThreshold", m_angleThreshold);
     frc::SmartDashboard::PutNumber("DTL_DistThreshold", m_distThreshold);
     frc::SmartDashboard::PutNumber("DTL_Distance1", m_distance1);
@@ -649,24 +649,7 @@ void Drivetrain::MoveWithLimelightInit(bool m_endAtTarget)
     m_turnPid = frc2::PIDController(m_turnPidKp, m_turnPidKi, m_turnPidKd);
     m_throttlePid = frc2::PIDController(m_throttlePidKp, m_throttlePidKi, m_throttlePidKd);
 
-    // calculate slope and y-intercept
-    m_slope = (m_distance2 - m_distance1) / (m_vertOffset2 - m_vertOffset1);
-    m_distOffset = m_distance1 - m_slope * m_vertOffset1;
-    frc::SmartDashboard::PutNumber("DTL_Slope", m_slope);
-    frc::SmartDashboard::PutNumber("DTL_Offset", m_distOffset);
-
-    if (m_endAtTarget)
-    {
-        m_targetDistance = frc::SmartDashboard::GetNumber("DTL_TargetDistance", m_targetDistance);
-    }
-    else
-    {
-        RobotContainer *robotContainer = RobotContainer::GetInstance();
-        double ty = robotContainer->m_vision.GetVertOffsetDeg();
-        m_limelightDistance = m_slope * ty + m_distOffset;
-        m_targetDistance = m_limelightDistance;
-        spdlog::info("DTL Using Current Distance {}", m_targetDistance);
-    }
+    m_setPointDistance = frc::SmartDashboard::GetNumber("DTL_SetPointDistance", m_setPointDistance);
 }
 
 void Drivetrain::MoveWithLimelightExecute(double tx, double ty, bool tv)
@@ -679,7 +662,7 @@ void Drivetrain::MoveWithLimelightExecute(double tx, double ty, bool tv)
     // get throttle value
     m_limelightDistance = robotContainer->m_vision.CalculateDist();
 
-    double throttleDistance = m_throttlePid.Calculate(m_limelightDistance, m_targetDistance);
+    double throttleDistance = m_throttlePid.Calculate(m_limelightDistance, m_setPointDistance);
     double throttleOutput = -throttleDistance * pow(cos(turnOutput * wpi::numbers::pi / 180), m_throttleShape);
 
     // put turn and throttle outputs on the dashboard
@@ -702,7 +685,7 @@ void Drivetrain::MoveWithLimelightExecute(double tx, double ty, bool tv)
 bool Drivetrain::MoveWithLimelightIsFinished(double tx, bool tv)
 {
     return (
-        tv && (fabs(tx) <= m_angleThreshold) && (fabs(m_targetDistance - m_limelightDistance) <= m_distThreshold)
+        tv && (fabs(tx) <= m_angleThreshold) && (fabs(m_setPointDistance - m_limelightDistance) <= m_distThreshold)
         && MoveIsStopped());
 }
 

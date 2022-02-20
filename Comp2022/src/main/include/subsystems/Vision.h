@@ -55,6 +55,7 @@ public:
     void SimulationPeriodic() override;
     void Initialize(void);
     double CalculateDist(void);
+    void SyncStateFromDashboard(void);
 
     // Limelight LED mode states
     typedef enum ledMode_e
