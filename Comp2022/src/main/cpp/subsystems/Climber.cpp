@@ -64,10 +64,13 @@ Climber::Climber()
     config->GetValueAsDouble("CL_ExtendL2", m_extendL2, 29.0);
     config->GetValueAsDouble("CL_RotateL3", m_rotateL3, 21.0);
     config->GetValueAsDouble("CL_ExtendL3", m_extendL3, 31.5);
+    config->GetValueAsDouble("CL_LowerL3", m_lowerL3, 0.35);
+    config->GetValueAsDouble("CL_RaiseL4", m_raiseL4, 25.25);
 
     frc::SmartDashboard::PutNumber("CL_PidKf", m_pidKf);
     frc::SmartDashboard::PutNumber("CL_Velocity", m_velocity);
     frc::SmartDashboard::PutNumber("CL_Acceleration", m_acceleration);
+    frc::SmartDashboard::PutNumber("CL_SCurveStrength", m_sCurveStrength);
     frc::SmartDashboard::PutNumber("CL_PidKp", m_pidKp);
     frc::SmartDashboard::PutNumber("CL_PidKi", m_pidKi);
     frc::SmartDashboard::PutNumber("CL_PidKd", m_pidKd);
@@ -75,6 +78,8 @@ Climber::Climber()
     frc::SmartDashboard::PutNumber("CL_ExtendL2", m_extendL2);
     frc::SmartDashboard::PutNumber("Cl_RotateL3", m_rotateL3);
     frc::SmartDashboard::PutNumber("CL_ExtendL3", m_extendL3);
+    frc::SmartDashboard::PutNumber("CL_LowerL3", m_lowerL3);
+    frc::SmartDashboard::PutNumber("CL_RaiseL4", m_raiseL4);
 
     // Magic Motion variables
     m_curInches = 0.0;
@@ -325,6 +330,7 @@ void Climber::MoveClimberDistanceInit(int state)
     m_pidKf = frc::SmartDashboard::GetNumber("CL_PidKf", m_pidKf);
     m_velocity = frc::SmartDashboard::GetNumber("CL_Velocity", m_velocity);
     m_acceleration = frc::SmartDashboard::GetNumber("CL_Acceleration", m_acceleration);
+    m_sCurveStrength = frc::SmartDashboard::PutNumber("CL_SCurveStrength", m_sCurveStrength);
     m_pidKp = frc::SmartDashboard::GetNumber("CL_PidKp", m_pidKp);
     m_pidKi = frc::SmartDashboard::GetNumber("CL_PidKi", m_pidKi);
     m_pidKd = frc::SmartDashboard::GetNumber("CL_PidKd", m_pidKd);
@@ -351,6 +357,12 @@ void Climber::MoveClimberDistanceInit(int state)
             break;
         case EXTEND_L3_HEIGHT:
             m_targetInches = frc::SmartDashboard::GetNumber("CL_ExtendL3", m_rotateL3);
+            break;
+        case LOWER_L3_HEIGHT:
+            m_targetInches = frc::SmartDashboard::GetNumber("CL_LowerL3", m_lowerL3);
+            break;
+        case RAISE_L4_HEIGHT:
+            m_targetInches = frc::SmartDashboard::GetNumber("CL_RaiseL3", m_raiseL4);
             break;
         default:
             spdlog::info("CL requested height is invalid - {}", state);

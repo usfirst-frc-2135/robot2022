@@ -77,8 +77,10 @@
   CL_TargetHeight = 0.0
   CL_StowHeight = 0.25
   CL_ExtendL2 = 29.0
-  CL_RotateL3 = 21.0
+  CL_RotateL3 = 31.25
   CL_ExtendL3 = 31.5
+  CL_LowerL3 = 0.35
+  CL_RaiseL4 = 25.25
 # Auto Settings
   AutoDriveLimelightShoot_path = driveForward46
   AutoDriveShoot_path = driveForward58
