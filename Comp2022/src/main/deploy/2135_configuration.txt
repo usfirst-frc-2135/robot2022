@@ -58,7 +58,7 @@
   SH_FlywheelPidKi = 0.000
   SH_FlywheelPidKd = 0.000
   SH_FlywheelNeutralDeadband = 0.004
-  SH_FlywheelTargetRPM = 2175.0
+  SH_FlywheelTargetRPM = 1450.0
   SH_ToleranceRPM = 200.0
 # Climber settings
   CL_PeakOut = 1.0
