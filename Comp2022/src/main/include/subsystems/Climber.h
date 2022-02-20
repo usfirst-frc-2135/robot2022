@@ -78,10 +78,16 @@ private:
 
     double m_climberMaxHeight; // Climber maximum allowable height
     double m_climberMinHeight; // Climber minimum allowable height
-    double m_stowHeight;       //
-    double m_extendL2;         //
-    double m_rotateL3;         //
-    double m_extendL3;
+
+    double m_stowHeight;        // 0.25 inches
+    double m_extendL2;          // 29 inches
+    double m_rotateL3;          // 21 inches
+    double m_extendL3;          // 31.5 inches
+    double m_lowerL3;           // 0.35 inches
+    double m_raiseL4;           // 25.25 inches
+    double m_currentLeftHeight; // Current height encoder read from hall sensors
+    double m_currentRightHeight;
+
     double m_yaw;
     double m_pitch;
     double m_roll;
@@ -105,6 +111,8 @@ public:
         EXTEND_L2_HEIGHT = 1, // Move to extend to L2 height
         ROTATE_L3_HEIGHT = 2, // Move to rotate to L3 height
         EXTEND_L3_HEIGHT = 3, // Move to extend to L3 height
+        LOWER_L3_HEIGHT = 4,  // Move to lower on L3 height so gate hooks clamp
+        RAISE_L4_HEIGHT = 5   // Move to extend on last rung ~6 inches
     };
 
     void Initialize(void);

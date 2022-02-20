@@ -40,6 +40,7 @@
 #include "commands/ClimberCalibrate.h"
 #include "commands/ClimberClimbL2RotateL3.h"
 #include "commands/ClimberClimbL3.h"
+#include "commands/ClimberFullClimb.h"
 #include "commands/ClimberMoveHeight.h"
 #include "commands/ClimberRun.h"
 #include "commands/ClimberSetGateHook.h"
