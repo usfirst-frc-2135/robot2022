@@ -217,6 +217,7 @@ void Drivetrain::ConfigFileLoad(void)
     config->GetValueAsDouble("DTR_RamsetePidKd", m_ramsetePidKd, 0.0);
     config->GetValueAsDouble("DTR_RamseteB", m_ramseteB, 2.0);
     config->GetValueAsDouble("DTR_RamseteZeta", m_ramseteZeta, 0.7);
+    config->GetValueAsBool("DTR_RamseteTuningMode", m_ramseteTuningMode, false);
 
     // Put tunable items to dashboard
     frc::SmartDashboard::PutNumber("DT_Tolerance", m_tolerance);
@@ -482,7 +483,7 @@ void Drivetrain::SetBrakeMode(bool brakeMode)
 //
 void Drivetrain::TankDriveVolts(volt_t left, volt_t right)
 {
-    m_diffDrive.Feed();
+    m_diffDrive.FeedWatchdog();
     if (m_talonValidL1)
         m_motorL1.SetVoltage(left);
     if (m_talonValidR3)
@@ -780,57 +781,69 @@ void Drivetrain::RamseteFollowerExecute(void)
     frc::ChassisSpeeds targetChassisSpeeds = m_ramseteController.Calculate(currentPose, trajState);
     frc::DifferentialDriveWheelSpeeds targetSpeed = m_kinematics.ToWheelSpeeds(targetChassisSpeeds);
 
-    double velLeft = MPSToNativeUnits(targetSpeed.left);
-    double velRight = MPSToNativeUnits(targetSpeed.right);
+    double velLeftTarget = MPSToNativeUnits(targetSpeed.left);
+    double velRightTarget = MPSToNativeUnits(targetSpeed.right);
+    double velLeftCurrent = m_motorL1.GetSelectedSensorVelocity();
+    double velRightCurrent = m_motorR3.GetSelectedSensorVelocity();
 
-    if (m_talonValidL1)
-        m_motorL1.Set(TalonFXControlMode::Velocity, velLeft);
-    if (m_talonValidR3)
-        m_motorR3.Set(TalonFXControlMode::Velocity, velRight);
-
-    frc::SmartDashboard::PutNumber("DTR_targetVelLeft", velLeft);
-    frc::SmartDashboard::PutNumber("DTR_targetVelRight", velRight);
-
-    double curVelLeft = m_motorL1.GetSelectedSensorVelocity();
-    double curVelRight = m_motorR3.GetSelectedSensorVelocity();
-
-    frc::SmartDashboard::PutNumber("DTR_CurrentVelLeft", curVelLeft);
-    frc::SmartDashboard::PutNumber("DTR_CurrentVelRight", curVelRight);
-
-    frc::SmartDashboard::PutNumber("DTR_LeftVelError", velLeft - curVelLeft);
-    frc::SmartDashboard::PutNumber("DTR_RightVelError", velRight - curVelRight);
-
-    // these distLeft and distRight calculations are only accurate for straight paths
     double xTrajTarget = trajState.pose.X().to<double>();
     double yTrajTarget = trajState.pose.Y().to<double>();
     double xTrajCurrent = currentPose.X().to<double>();
     double yTrajCurrent = currentPose.Y().to<double>();
 
-    frc::SmartDashboard::PutNumber("DTR_xTrajCurrent", xTrajTarget);
-    frc::SmartDashboard::PutNumber("DTR_yTrajCurrent", yTrajTarget);
-    frc::SmartDashboard::PutNumber("DTR_xTrajTarget", xTrajCurrent);
-    frc::SmartDashboard::PutNumber("DTR_yTrajTarget", yTrajCurrent);
+    double headingTarget = trajState.pose.Rotation().Degrees().to<double>();
+    double headingCurrent = currentPose.Rotation().Degrees().to<double>();
 
-    frc::SmartDashboard::PutNumber("DTR_xTrajError", trajState.pose.RelativeTo(currentPose).X().to<double>());
-    frc::SmartDashboard::PutNumber("DTR_yTrajError", trajState.pose.RelativeTo(currentPose).Y().to<double>());
+    if (m_talonValidL1)
+        m_motorL1.Set(TalonFXControlMode::Velocity, velLeftTarget);
+    if (m_talonValidR3)
+        m_motorR3.Set(TalonFXControlMode::Velocity, velRightTarget);
 
-    m_diffDrive.Feed();
+    if (m_ramseteTuningMode)
+    {
+        // target velocity and its error
+        frc::SmartDashboard::PutNumber("DTR_velLeftTarget", velLeftTarget);
+        frc::SmartDashboard::PutNumber("DTR_velRightTarget", velRightTarget);
+        frc::SmartDashboard::PutNumber("DTR_velLeftCurrent", velLeftCurrent);
+        frc::SmartDashboard::PutNumber("DTR_velRightCurrent", velRightCurrent);
+
+        frc::SmartDashboard::PutNumber("DTR_velLeftError", velLeftTarget - velLeftTarget);
+        frc::SmartDashboard::PutNumber("DTR_velRightError", velRightTarget - velRightCurrent);
+
+        // target distance and its error
+        frc::SmartDashboard::PutNumber("DTR_xTrajCurrent", xTrajTarget);
+        frc::SmartDashboard::PutNumber("DTR_yTrajCurrent", yTrajTarget);
+        frc::SmartDashboard::PutNumber("DTR_xTrajTarget", xTrajCurrent);
+        frc::SmartDashboard::PutNumber("DTR_yTrajTarget", yTrajCurrent);
+
+        frc::SmartDashboard::PutNumber("DTR_xTrajError", trajState.pose.RelativeTo(currentPose).X().to<double>());
+        frc::SmartDashboard::PutNumber("DTR_yTrajError", trajState.pose.RelativeTo(currentPose).Y().to<double>());
+
+        // target heading and its error
+        frc::SmartDashboard::PutNumber("DTR_headingTarget", headingTarget);
+        frc::SmartDashboard::PutNumber("DTR_headingCurrent", headingCurrent);
+        frc::SmartDashboard::PutNumber(
+            "DTR_headingError",
+            trajState.pose.RelativeTo(currentPose).Rotation().Degrees().to<double>());
+    }
+
+    m_diffDrive.FeedWatchdog();
 
     spdlog::info(
         "DTR cur XYR {:.2f} {:.2f} {:.1f} | targ XYR {:.2f} {:.2f} {:.1f} | chas XYO {:.2f} {:.2f} {:.1f} | targ vel LR {:.2f} {:.2f} | cur vel LR {:.2f} {:.2f}",
-        currentPose.X().to<double>(),
-        currentPose.Y().to<double>(),
-        currentPose.Rotation().Degrees().to<double>(),
-        trajState.pose.X().to<double>(),
-        trajState.pose.Y().to<double>(),
-        trajState.pose.Rotation().Degrees().to<double>(),
+        xTrajCurrent,
+        yTrajCurrent,
+        headingCurrent,
+        xTrajTarget,
+        yTrajTarget,
+        headingTarget,
         targetChassisSpeeds.vx.to<double>(),
         targetChassisSpeeds.vy.to<double>(),
         targetChassisSpeeds.omega.to<double>(),
-        velLeft,
-        velRight,
-        curVelLeft,
-        curVelRight);
+        velLeftTarget,
+        velRightTarget,
+        velLeftCurrent,
+        velRightCurrent);
 }
 
 bool Drivetrain::RamseteFollowerIsFinished(void)

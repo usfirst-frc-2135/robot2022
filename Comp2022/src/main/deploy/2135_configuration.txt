@@ -41,6 +41,7 @@
   DTR_RamsetePidKd = 0.0
   DTR_RamseteB = 2.0
   DTR_RamseteZeta = 0.7
+  DTR_RamseteTuningMode = false
 # Intake settings
   IN_AcquireSpeed = 0.6
   IN_ExpelSpeed = -0.6
