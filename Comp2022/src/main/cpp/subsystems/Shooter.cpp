@@ -8,8 +8,10 @@
 // update. Deleting the comments indicating the section will prevent
 // it from being updated in the future.
 
+#include "RobotContainer.h"
 #include "frc2135/RobotConfig.h"
 #include "frc2135/TalonUtils.h"
+#include "subsystems/LED.h"
 
 #include <frc/RobotController.h>
 #include <spdlog/fmt/ostr.h>
@@ -95,38 +97,42 @@ Shooter::Shooter()
 
 void Shooter::Periodic()
 {
-    static int periodicInterval = 0;
+    RobotContainer *robotContainer = RobotContainer::GetInstance();
     // Put code here to be run every loop
 
-    // Only update indicators every 100 ms to cut down on network traffic
-    if (periodicInterval++ % 5 == 0)
+    if (m_talonValidSH11)
     {
-        if (m_talonValidSH11)
-        {
-            m_flywheelCurrentRPM =
-                m_flywheelFilter.Calculate(NativeToFlywheelRPM(m_motorSH11.GetSelectedSensorVelocity(kPidIndex)));
-        }
+        m_flywheelCurrentRPM =
+            m_flywheelFilter.Calculate(NativeToFlywheelRPM(m_motorSH11.GetSelectedSensorVelocity(kPidIndex)));
+    }
 
-        frc::SmartDashboard::PutNumber("SH_FlywheelRPM", m_flywheelCurrentRPM);
+    frc::SmartDashboard::PutNumber("SH_FlywheelRPM", m_flywheelCurrentRPM);
 
-        if ((m_state == SHOOTERSPEED_FORWARD) && !AtDesiredRPM())
+    if (m_state == SHOOTERSPEED_FORWARD)
+    {
+        if (!AtDesiredRPM())
         {
+            robotContainer->m_led.SetColor(LED::LEDCOLOR_BLUE);
             spdlog::info("SH m_flywheelCurrentRPM {:.1f}", m_flywheelCurrentRPM);
         }
-
-        // Show current drain and slave output if more debugging is needed
-        if (m_shooterDebug > 0)
+        else
         {
-            double currentSH11 = 0.0;
-
-            if (m_talonValidSH11)
-            {
-                currentSH11 = m_motorSH11.GetOutputCurrent();
-            }
-
-            frc::SmartDashboard::PutNumber("SH_Current_SH11", currentSH11);
+            robotContainer->m_led.SetColor(LED::LEDCOLOR_GREEN);
         }
     }
+    else
+    {
+        robotContainer->m_led.SetColor(LED::LEDCOLOR_OFF);
+    }
+
+    double currentSH11 = 0.0;
+
+    if (m_talonValidSH11)
+    {
+        currentSH11 = m_motorSH11.GetOutputCurrent();
+    }
+
+    frc::SmartDashboard::PutNumber("SH_Current_SH11", currentSH11);
 }
 
 void Shooter::SimulationPeriodic()
@@ -174,6 +180,18 @@ double Shooter::NativeToFlywheelRPM(double native)
 {
     // Phoenix native encoder units are CPR / 100 msec
     return (native * 60.0 * 10.0) / kFlywheelCPR;
+}
+
+bool Shooter::AtDesiredRPM()
+{
+    bool atDesiredSpeed = (fabs(m_flywheelTargetRPM - m_flywheelCurrentRPM) < m_toleranceRPM);
+
+    if (atDesiredSpeed)
+    {
+        spdlog::info("SH RPM at Speed {}", (atDesiredSpeed) ? "TRUE" : "FALSE");
+    }
+
+    return atDesiredSpeed;
 }
 
 void Shooter::SetShooterSpeed(int state)
@@ -236,16 +254,4 @@ void Shooter::FlashlightOn(bool onState)
     frc::SmartDashboard::PutBoolean("SH_Flashlight", onState);
 
     m_flashlight.Set(onState);
-}
-
-bool Shooter::AtDesiredRPM()
-{
-    bool atDesiredSpeed = (fabs(m_flywheelTargetRPM - m_flywheelCurrentRPM) < m_toleranceRPM);
-
-    if (atDesiredSpeed)
-    {
-        spdlog::info("SH RPM at Speed {}", (atDesiredSpeed) ? "TRUE" : "FALSE");
-    }
-
-    return atDesiredSpeed;
 }

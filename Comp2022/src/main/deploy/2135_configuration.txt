@@ -58,7 +58,7 @@
   SH_FlywheelPidKi = 0.000
   SH_FlywheelPidKd = 0.000
   SH_FlywheelNeutralDeadband = 0.004
-  SH_FlywheelTargetRPM = 2175.0
+  SH_FlywheelTargetRPM = 1450.0
   SH_ToleranceRPM = 200.0
 # Climber settings
   CL_PeakOut = 1.0
@@ -77,8 +77,10 @@
   CL_TargetHeight = 0.0
   CL_StowHeight = 0.25
   CL_ExtendL2 = 29.0
-  CL_RotateL3 = 21.0
+  CL_RotateL3 = 31.25
   CL_ExtendL3 = 31.5
+  CL_LowerL3 = 0.35
+  CL_RaiseL4 = 25.25
 # Auto Settings
   AutoDriveLimelightShoot_path = driveForward46
   AutoDriveShoot_path = driveForward58

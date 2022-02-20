@@ -77,50 +77,50 @@ void LED::SetColor(int color)
 {
     const char *strName;
 
-    if (color == (LEDCOLOR_DASH))
+    if (m_previousColor != color)
     {
-        color = m_ledChooser.GetSelected();
-    }
+        if (color == (LEDCOLOR_DASH))
+        {
+            color = m_ledChooser.GetSelected();
+        }
 
-    switch (color)
-    {
-        default:
-        case LEDCOLOR_OFF:
-            strName = "OFF";
-            SendRGBToString(0, 0, 0); //black
-            break;
-        case LEDCOLOR_WHITE:
-            strName = "WHITE";
-            SendRGBToString(255, 255, 255); //white
-            break;
-        case LEDCOLOR_RED:
-            strName = "RED";
-            SendRGBToString(255, 0, 0); //red
-            break;
-        case LEDCOLOR_ORANGE:
-            strName = "ORANGE";
-            SendRGBToString(255, 80, 0); //orange
-            break;
-        case LEDCOLOR_YELLOW:
-            strName = "YELLOW";
-            SendRGBToString(255, 255, 0); //yellow
-            break;
-        case LEDCOLOR_GREEN:
-            strName = "GREEN";
-            SendRGBToString(0, 255, 0); //green
-            break;
-        case LEDCOLOR_BLUE:
-            strName = "BLUE";
-            SendRGBToString(0, 0, 255); //blue
-            break;
-        case LEDCOLOR_PURPLE:
-            strName = "PURPLE";
-            SendRGBToString(255, 0, 255); //purple
-            break;
-    }
+        switch (color)
+        {
+            default:
+            case LEDCOLOR_OFF:
+                strName = "OFF";
+                SendRGBToString(0, 0, 0); //black
+                break;
+            case LEDCOLOR_WHITE:
+                strName = "WHITE";
+                SendRGBToString(255, 255, 255); //white
+                break;
+            case LEDCOLOR_RED:
+                strName = "RED";
+                SendRGBToString(255, 0, 0); //red
+                break;
+            case LEDCOLOR_ORANGE:
+                strName = "ORANGE";
+                SendRGBToString(255, 80, 0); //orange
+                break;
+            case LEDCOLOR_YELLOW:
+                strName = "YELLOW";
+                SendRGBToString(255, 255, 0); //yellow
+                break;
+            case LEDCOLOR_GREEN:
+                strName = "GREEN";
+                SendRGBToString(0, 255, 0); //green
+                break;
+            case LEDCOLOR_BLUE:
+                strName = "BLUE";
+                SendRGBToString(0, 0, 255); //blue
+                break;
+            case LEDCOLOR_PURPLE:
+                strName = "PURPLE";
+                SendRGBToString(255, 0, 255); //purple
+                break;
+        }
 
-    // if (m_previousColor != color)
-    {
         spdlog::info("LED Color Set to {}", strName);
         m_previousColor = color;
     }
