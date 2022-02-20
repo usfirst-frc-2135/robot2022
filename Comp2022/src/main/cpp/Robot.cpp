@@ -98,6 +98,7 @@ void Robot::DisabledInit()
     robotContainer->m_pneumatics.Initialize();
     robotContainer->m_power.Initialize();
     robotContainer->m_led.Initialize();
+    robotContainer->m_vision.Initialize();
 }
 
 void Robot::DisabledPeriodic()
