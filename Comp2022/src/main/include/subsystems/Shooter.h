@@ -55,14 +55,13 @@ private:
         1.5
     };
 
-    const int m_shooterDebug = 1; // DEBUG flag to disable/enable extra logging calls
-    const int kPidIndex = 0;      // PID index for primary sensor
-    const int kSlotIndex = 0;     // PID slot index for sensors
-    const int kCANTimeout = 10;   // CAN timeout in msec to wait for response
+    const int kPidIndex = 0;    // PID index for primary sensor
+    const int kSlotIndex = 0;   // PID slot index for sensors
+    const int kCANTimeout = 10; // CAN timeout in msec to wait for response
 
     const double kFalconEncoderCPR = 2048; // CPR is 2048 from Falcon 500 Manual
 
-    const double kFlywheelGearRatio = (12.0 / 18.0);
+    const double kFlywheelGearRatio = (18.0 / 12.0);
     const double kFlywheelCPR = kFalconEncoderCPR * kFlywheelGearRatio;
 
     // Declare module variables
@@ -108,7 +107,7 @@ public:
     void Initialize(void);
     void FaultDump(void);
 
+    bool AtDesiredRPM();
     void SetShooterSpeed(int state);
     void FlashlightOn(bool onState);
-    bool AtDesiredRPM();
 };

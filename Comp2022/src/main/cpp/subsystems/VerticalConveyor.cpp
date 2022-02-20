@@ -42,7 +42,7 @@ VerticalConveyor::VerticalConveyor()
     // Initialize modes and set power to off
     if (m_talonValidVC9)
     {
-        m_motorVC9.SetInverted(true);
+        m_motorVC9.SetInverted(false);
         m_motorVC9.SetNeutralMode(NeutralMode::Coast);
         m_motorVC9.Set(ControlMode::PercentOutput, 0.0);
 

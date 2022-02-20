@@ -223,6 +223,9 @@ void Drivetrain::ConfigFileLoad(void)
 
     // Put tunable items to dashboard
     frc::SmartDashboard::PutNumber("DT_Tolerance", m_tolerance);
+    frc::SmartDashboard::PutNumber("DT_GyroYaw", m_yaw);
+    frc::SmartDashboard::PutNumber("DT_GyroPitch", m_pitch);
+    frc::SmartDashboard::PutNumber("DT_GyroRoll", m_roll);
 
     frc::SmartDashboard::PutNumber("DTL_TurnPidKp", m_turnPidKp);
     frc::SmartDashboard::PutNumber("DTL_TurnPidKi", m_turnPidKi);
@@ -436,6 +439,13 @@ degree_t Drivetrain::GetHeadingAngle()
     return (m_pigeonValid) ? (m_gyro.GetFusedHeading() * 1_deg) : 0_deg;
 }
 
+void Drivetrain::GetYawPitchRoll()
+{
+    m_yaw = m_gyro.GetYaw();
+    m_pitch = m_gyro.GetPitch();
+    m_roll = m_gyro.GetRoll();
+}
+
 //
 //  Odometry
 //
@@ -578,7 +588,7 @@ void Drivetrain::MoveWithJoysticksInit(void)
 void Drivetrain::MoveWithJoysticks(frc::XboxController *throttleJstick)
 {
     double xValue = throttleJstick->GetRightX();
-    double yValue = -throttleJstick->GetLeftY();
+    double yValue = throttleJstick->GetLeftY();
     double xOutput = 0.0;
     double yOutput = 0.0;
 
