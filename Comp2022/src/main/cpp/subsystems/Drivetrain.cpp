@@ -73,7 +73,7 @@ Drivetrain::Drivetrain()
     m_throttlePid = frc2::PIDController(m_throttlePidKp, m_throttlePidKi, m_throttlePidKd);
 
     // Ramsete Controller
-    m_ramseteController = frc::RamseteController(m_ramseteB, m_ramseteZeta);
+    m_ramseteController = frc::RamseteController(m_ramseteB * 1_rad * 1_rad / (1_m * 1_m), m_ramseteZeta / 1_rad);
 
     Initialize();
 }
@@ -729,7 +729,7 @@ void Drivetrain::RamseteFollowerInit(string pathName, bool resetOdometry)
 
     m_ramseteB = frc::SmartDashboard::GetNumber("DTR_ramseteB", m_ramseteB);
     m_ramseteZeta = frc::SmartDashboard::GetNumber("DTR_ramseteZeta", m_ramseteZeta);
-    m_ramseteController = frc::RamseteController{ m_ramseteB, m_ramseteZeta };
+    m_ramseteController = frc::RamseteController{ m_ramseteB * 1_rad * 1_rad / (1_m * 1_m), m_ramseteZeta / 1_rad };
 
     // Get our trajectory
     // TODO: Move this to be able to load a trajectory while disabled when
