@@ -17,8 +17,6 @@
 #include <frc/XboxController.h>
 #include <frc/controller/PIDController.h>
 #include <frc/controller/RamseteController.h>
-#include <frc/controller/SimpleMotorFeedforward.h>
-#include <frc/kinematics/DifferentialDriveKinematics.h>
 #include <frc/kinematics/DifferentialDriveOdometry.h>
 #include <frc/simulation/DifferentialDrivetrainSim.h>
 #include <frc/smartdashboard/Field2d.h>
@@ -133,7 +131,7 @@ private:
     double m_maxTurn;
     double m_maxThrottle;
     double m_targetAngle;
-    double m_targetDistance;
+    double m_setPointDistance;
     double m_angleThreshold;
     double m_distThreshold;
     double m_throttleShape;
@@ -164,10 +162,7 @@ private:
     // Ramsete follower objects
     frc::Trajectory m_trajectory;
     frc::RamseteController m_ramseteController;
-    frc::SimpleMotorFeedforward<meter> m_feedforward{ DriveConstants::ks, DriveConstants::kv, DriveConstants::ka };
     frc::DifferentialDriveKinematics m_kinematics{ DriveConstants::kTrackWidthMeters };
-    frc2::PIDController m_leftPid{ 0.0, 0.0, 0.0 };
-    frc2::PIDController m_rightPid{ 0.0, 0.0, 0.0 };
     frc::Timer m_trajTimer;
 
     // Path following variables

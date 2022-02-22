@@ -72,11 +72,8 @@ Drivetrain::Drivetrain()
     m_turnPid = frc2::PIDController(m_turnPidKp, m_turnPidKi, m_turnPidKd);
     m_throttlePid = frc2::PIDController(m_throttlePidKp, m_throttlePidKi, m_throttlePidKd);
 
-    // Ramsete Pid Controllers
-    m_leftPid = frc2::PIDController(m_ramsetePidKp, m_ramsetePidKi, m_ramsetePidKd);
-    m_rightPid = frc2::PIDController(m_ramsetePidKp, m_ramsetePidKi, m_ramsetePidKd);
-
-    m_ramseteController = frc::RamseteController(m_ramseteB, m_ramseteZeta);
+    // Ramsete Controller
+    m_ramseteController = frc::RamseteController(m_ramseteB * 1_rad * 1_rad / (1_m * 1_m), m_ramseteZeta / 1_rad);
 
     Initialize();
 }
@@ -205,7 +202,7 @@ void Drivetrain::ConfigFileLoad(void)
     config->GetValueAsDouble("DTL_MaxThrottle", m_maxThrottle, 0.2);
     config->GetValueAsDouble("DTL_ThrottleShape", m_throttleShape, 10.0);
     config->GetValueAsDouble("DTL_TargetAngle", m_targetAngle, 0.0);
-    config->GetValueAsDouble("DTL_TargetDistance", m_targetDistance, 12.0);
+    config->GetValueAsDouble("DTL_TargetDistance", m_setPointDistance, 12.0);
     config->GetValueAsDouble("DTL_AngleThreshold", m_angleThreshold, 3.0);
     config->GetValueAsDouble("DTL_DistThreshold", m_distThreshold, 6.0);
     config->GetValueAsDouble("DTL_Distance1", m_distance1, 0.0);
@@ -237,7 +234,7 @@ void Drivetrain::ConfigFileLoad(void)
     frc::SmartDashboard::PutNumber("DTL_MaxThrottle", m_maxThrottle);
     frc::SmartDashboard::PutNumber("DTL_ThrottleShape", m_throttleShape);
     frc::SmartDashboard::PutNumber("DTL_TargetAngle", m_targetAngle);
-    frc::SmartDashboard::PutNumber("DTL_TargetDistance", m_targetDistance);
+    frc::SmartDashboard::PutNumber("DTL_TargetDistance", m_setPointDistance);
     frc::SmartDashboard::PutNumber("DTL_AngleThreshold", m_angleThreshold);
     frc::SmartDashboard::PutNumber("DTL_DistThreshold", m_distThreshold);
     frc::SmartDashboard::PutNumber("DTL_Distance1", m_distance1);
@@ -652,50 +649,26 @@ void Drivetrain::MoveWithLimelightInit(bool m_endAtTarget)
     m_turnPid = frc2::PIDController(m_turnPidKp, m_turnPidKi, m_turnPidKd);
     m_throttlePid = frc2::PIDController(m_throttlePidKp, m_throttlePidKi, m_throttlePidKd);
 
-    // calculate slope and y-intercept
-    m_slope = (m_distance2 - m_distance1) / (m_vertOffset2 - m_vertOffset1);
-    m_distOffset = m_distance1 - m_slope * m_vertOffset1;
-    frc::SmartDashboard::PutNumber("DTL_Slope", m_slope);
-    frc::SmartDashboard::PutNumber("DTL_Offset", m_distOffset);
-
-    if (m_endAtTarget)
-    {
-        m_targetDistance = frc::SmartDashboard::GetNumber("DTL_TargetDistance", m_targetDistance);
-    }
-    else
-    {
-        RobotContainer *robotContainer = RobotContainer::GetInstance();
-        double ty = robotContainer->m_vision.GetVertOffsetDeg();
-        m_limelightDistance = m_slope * ty + m_distOffset;
-        m_targetDistance = m_limelightDistance;
-    }
+    m_setPointDistance = frc::SmartDashboard::GetNumber("DTL_SetPointDistance", m_setPointDistance);
 }
 
 void Drivetrain::MoveWithLimelightExecute(double tx, double ty, bool tv)
 {
+    RobotContainer *robotContainer = RobotContainer::GetInstance();
+
     // get turn value - just horizontal offset from target
-    double turnOutput = -m_turnPid.Calculate(tx, m_targetAngle);
+    double turnOutput = -m_turnPid.Calculate(robotContainer->m_vision.GetHorizOffsetDeg(), m_targetAngle);
 
     // get throttle value
-    m_limelightDistance = m_slope * ty + m_distOffset;
+    m_limelightDistance = robotContainer->m_vision.CalculateDist();
 
-    double throttleDistance = m_throttlePid.Calculate(m_limelightDistance, m_targetDistance);
+    double throttleDistance = m_throttlePid.Calculate(m_limelightDistance, m_setPointDistance);
     double throttleOutput = -throttleDistance * pow(cos(turnOutput * wpi::numbers::pi / 180), m_throttleShape);
 
     // put turn and throttle outputs on the dashboard
     frc::SmartDashboard::PutNumber("DTL_TurnOutput", turnOutput);
     frc::SmartDashboard::PutNumber("DTL_ThrottleOutput", throttleOutput);
-
-    // print out inputs and outputs, intermediate values (slope? throttle distance?)
-    spdlog::info(
-        "DTL tv {} tx {:.1f} ty {:.1f} | turn {:.2f} throttle {:.2f} | limelightDist {:.1f} throttleDist {:.1f}",
-        tv,
-        tx,
-        ty,
-        turnOutput,
-        throttleOutput,
-        m_limelightDistance,
-        throttleDistance);
+    frc::SmartDashboard::PutNumber("DTL_LimeLightDist", m_limelightDistance);
 
     // cap max turn and throttle output
     turnOutput = std::clamp(turnOutput, -m_maxTurn, m_maxTurn);
@@ -712,7 +685,7 @@ void Drivetrain::MoveWithLimelightExecute(double tx, double ty, bool tv)
 bool Drivetrain::MoveWithLimelightIsFinished(double tx, bool tv)
 {
     return (
-        tv && (fabs(tx) <= m_angleThreshold) && (fabs(m_targetDistance - m_limelightDistance) <= m_distThreshold)
+        tv && (fabs(tx) <= m_angleThreshold) && (fabs(m_setPointDistance - m_limelightDistance) <= m_distThreshold)
         && MoveIsStopped());
 }
 
@@ -732,14 +705,7 @@ void Drivetrain::RamseteFollowerInit(string pathName, bool resetOdometry)
 
     m_ramseteB = frc::SmartDashboard::GetNumber("DTR_ramseteB", m_ramseteB);
     m_ramseteZeta = frc::SmartDashboard::GetNumber("DTR_ramseteZeta", m_ramseteZeta);
-
-    // m_leftPid = frc2::PIDController{ m_ramsetePidKp, m_ramsetePidKi, m_ramsetePidKd };
-    // m_rightPid = frc2::PIDController{ m_ramsetePidKp, m_ramsetePidKi, m_ramsetePidKd };
-    m_ramseteController = frc::RamseteController{ m_ramseteB, m_ramseteZeta };
-
-    // TODO: Not sure if this is really needed or used
-    m_leftPid.SetTolerance(m_tolerance);
-    m_rightPid.SetTolerance(m_tolerance);
+    m_ramseteController = frc::RamseteController{ m_ramseteB * 1_rad * 1_rad / (1_m * 1_m), m_ramseteZeta / 1_rad };
 
     // Get our trajectory
     // TODO: Move this to be able to load a trajectory while disabled when
