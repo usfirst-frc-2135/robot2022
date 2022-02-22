@@ -444,6 +444,11 @@ void Drivetrain::GetYawPitchRoll()
     m_roll = m_gyro.GetRoll();
 }
 
+frc::Pose2d Drivetrain::GetPose()
+{
+    return m_odometry.GetPose();
+}
+
 //
 //  Odometry
 //
@@ -807,7 +812,7 @@ void Drivetrain::RamseteFollowerExecute(void)
         frc::SmartDashboard::PutNumber("DTR_velLeftCurrent", velLeftCurrent);
         frc::SmartDashboard::PutNumber("DTR_velRightCurrent", velRightCurrent);
 
-        frc::SmartDashboard::PutNumber("DTR_velLeftError", velLeftTarget - velLeftTarget);
+        frc::SmartDashboard::PutNumber("DTR_velLeftError", velLeftTarget - velLeftCurrent);
         frc::SmartDashboard::PutNumber("DTR_velRightError", velRightTarget - velRightCurrent);
 
         // target distance and its error
@@ -857,22 +862,5 @@ bool Drivetrain::RamseteFollowerIsFinished(void)
 void Drivetrain::RamseteFollowerEnd(void)
 {
     m_trajTimer.Stop();
-    TankDriveVolts(0.0_V, 0.0_V);
-
-    double curVelLeft = m_motorL1.GetSelectedSensorVelocity();
-    double curVelRight = m_motorR3.GetSelectedSensorVelocity();
-
-    frc::SmartDashboard::PutNumber("DTR_CurrentVelLeft", curVelLeft);
-    frc::SmartDashboard::PutNumber("DTR_CurrentVelRight", curVelRight);
-
-    // added for PID tuning, may be removed once completed
-    frc::SmartDashboard::PutNumber("DTR_LeftVelError", 0 - curVelLeft);
-    frc::SmartDashboard::PutNumber("DTR_RightVelError", 0 - curVelRight);
-}
-
-void Drivetrain::DriveBackward(double tx, double ty, bool tv) {}
-
-frc::Pose2d Drivetrain::GetPose()
-{
-    return m_odometry.GetPose();
+    VelocityArcadeDrive(0.0, 0.0);
 }
