@@ -131,7 +131,7 @@ private:
     double m_maxTurn;
     double m_maxThrottle;
     double m_targetAngle;
-    double m_targetDistance;
+    double m_setPointDistance;
     double m_angleThreshold;
     double m_distThreshold;
     double m_throttleShape;
