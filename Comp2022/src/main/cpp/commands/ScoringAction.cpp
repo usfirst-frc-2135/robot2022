@@ -31,7 +31,7 @@ ScoringAction::ScoringAction(
     // AddCommands(FooCommand(), BarCommand());
 
     AddCommands(
-        frc2::ParallelDeadlineGroup{ frc2::WaitUntilCommand([shooter] { return shooter->AtDesiredRPM(); }),
+        frc2::ParallelDeadlineGroup{ frc2::WaitUntilCommand([shooter] { return shooter->IsAtDesiredRPM(); }),
                                      ShooterRun(Shooter::SHOOTERSPEED_LOWHUB, shooter) },
         frc2::ParallelDeadlineGroup{ frc2::WaitCommand(waitTime),
                                      VerticalConveyorRun(VerticalConveyor::VCONVEYOR_ACQUIRE, vConv),
