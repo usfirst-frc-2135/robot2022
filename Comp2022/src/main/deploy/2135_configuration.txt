@@ -39,11 +39,12 @@
   DTL_VertOffset2 = -7.26
 # Path following settings
   DTR_RamsetePidKf = 0.0465
-  DTR_RamsetePidKp = 0.1 
+  DTR_RamsetePidKp = 0.1125
   DTR_RamsetePidKi = 0.0
   DTR_RamsetePidKd = 0.0
   DTR_RamseteB = 2.0
   DTR_RamseteZeta = 0.7
+  DTR_RamseteTuningMode = false
 # Intake settings
   IN_AcquireSpeed = 0.6
   IN_ExpelSpeed = -0.6
@@ -61,7 +62,7 @@
   SH_FlywheelPidKi = 0.000
   SH_FlywheelPidKd = 0.000
   SH_FlywheelNeutralDeadband = 0.004
-  SH_FlywheelTargetRPM = 2175.0
+  SH_FlywheelTargetRPM = 1450.0
   SH_ToleranceRPM = 200.0
 # Climber settings
   CL_PeakOut = 1.0
@@ -85,10 +86,13 @@
   CL_LowerL3 = 0.35
   CL_RaiseL4 = 25.25
 # Auto Settings
-  AutoDriveLimelightShoot_path = driveForward46
-  AutoDriveShoot_path = driveForward58
+  AutoDrive_path = forward79
+  AutoShootDrive_path = forward79
+  AutoShootDriveShoot_path1 = forward79
+  AutoShootDriveShoot_path2 = backward79
   path1 = forward39
   path2 = left79
   path3 = rightAngleTurn
   AUTO_WaitTime = 0.0
-  AUTO_ShootTime = 1.0
+  AutoDriveLimelightShoot_path = forward79
+  AutoDriveShoot_path = forward79

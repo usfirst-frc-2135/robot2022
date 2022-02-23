@@ -11,7 +11,6 @@
 #include "commands/AutoShootDrive.h"
 
 #include "commands/AutoDrivePath.h"
-#include "commands/AutoPathSequence.h"
 #include "commands/AutoStop.h"
 #include "commands/AutoWait.h"
 #include "commands/IntakeDeploy.h"
@@ -21,6 +20,8 @@
 
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/ParallelCommandGroup.h>
+#include <frc2/command/ParallelRaceGroup.h>
+#include <frc2/command/WaitUntilCommand.h>
 #include <spdlog/spdlog.h>
 #include <wpi/SmallString.h>
 
@@ -41,13 +42,15 @@ AutoShootDrive::AutoShootDrive(
     config->GetValueAsString("AutoShootDrive_path", m_pathname, "forward79");
     spdlog::info("AutoShootDrive pathname {}", m_pathname.c_str());
 
-    AddCommands(
-        IntakeDeploy(true),
+    AddCommands( // Sequential command
+        frc2::ParallelRaceGroup{ IntakeDeploy(true), AutoStop(drivetrain) },
         AutoWait(drivetrain),
-        ShooterRun(Shooter::SHOOTERSPEED_FORWARD, shooter),
-        frc2::ParallelCommandGroup{ AutoStop(drivetrain), ScoringAction(intake, fConv, vConv, shooter) },
-        frc2::ParallelCommandGroup{ AutoDrivePath(m_pathname.c_str(), true, drivetrain),
-                                    ScoringStop(intake, fConv, vConv, shooter) });
+        frc2::ParallelRaceGroup{ ScoringAction(5_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
+        frc2::ParallelCommandGroup{
+            frc2::ParallelRaceGroup{
+                frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
+                AutoDrivePath(m_pathname.c_str(), true, drivetrain) },
+            ScoringStop(intake, fConv, vConv, shooter) });
 }
 
 bool AutoShootDrive::RunsWhenDisabled() const
