@@ -67,12 +67,13 @@ private:
 
     // Configuration file parameters
 
-    double m_flywheelPidKf;           // Flywheel PID force constant
-    double m_flywheelPidKp;           // Flywheel PID proportional constant
-    double m_flywheelPidKi;           // Flywheel PID integral constant
-    double m_flywheelPidKd;           // Flywheel PID derivative constant
-    double m_flywheelNeutralDeadband; // Flywheel PID neutral deadband in percent
-    double m_flywheelTargetRPM;       // Target flywheel RPM for shooting
+    double m_flywheelPidKf;             // Flywheel PID force constant
+    double m_flywheelPidKp;             // Flywheel PID proportional constant
+    double m_flywheelPidKi;             // Flywheel PID integral constant
+    double m_flywheelPidKd;             // Flywheel PID derivative constant
+    double m_flywheelNeutralDeadband;   // Flywheel PID neutral deadband in percent
+    double m_flywheelLowerHubTargetRPM; // Target flywheel RPM for shooting lower hub
+    double m_flywheelUpperHubTargetRPM; // Target flywheel RPM for shooting upper hub
 
     // Measured RPM
     double m_flywheelCurrentRPM; // Current flywheel RPM
