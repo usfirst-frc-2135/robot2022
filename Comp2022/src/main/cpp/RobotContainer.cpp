@@ -45,7 +45,8 @@ RobotContainer::RobotContainer() :
     frc::SmartDashboard::PutData("Shooter Aim: LIGHT_ON", new ShooterAim(true));
     frc::SmartDashboard::PutData("Shooter Aim: LIGHT_OFF", new ShooterAim(false));
     frc::SmartDashboard::PutData("Shooter Run: SHDIR_STOP", new ShooterRun(0, &m_shooter));
-    frc::SmartDashboard::PutData("Shooter Run: SHDIR_SHOOT", new ShooterRun(1, &m_shooter));
+    frc::SmartDashboard::PutData("Shooter Run: SHDIR_SHOOT_LOW", new ShooterRun(1, &m_shooter));
+    frc::SmartDashboard::PutData("Shooter Run: SHDIR_SHOOT_HIGH", new ShooterRun(2, &m_shooter));
     frc::SmartDashboard::PutData("LED Set", new LEDSet(LED::LEDCOLOR_DASH, &m_led));
     frc::SmartDashboard::PutData("Robot Initialize", new RobotInitialize());
 

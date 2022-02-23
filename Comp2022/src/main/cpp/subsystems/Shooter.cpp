@@ -108,7 +108,7 @@ void Shooter::Periodic()
 
     frc::SmartDashboard::PutNumber("SH_FlywheelRPM", m_flywheelCurrentRPM);
 
-    if (m_state == SHOOTERSPEED_FORWARD)
+    if (m_state == SHOOTERSPEED_LOWHUB)
     {
         if (!AtDesiredRPM())
         {
@@ -230,7 +230,7 @@ void Shooter::SetShooterSpeed(int state)
         case SHOOTERSPEED_STOP:
             flywheelRPM = 0.0;
             break;
-        case SHOOTERSPEED_FORWARD:
+        case SHOOTERSPEED_LOWHUB:
             flywheelRPM = m_flywheelTargetRPM;
             break;
         default:

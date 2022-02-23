@@ -44,7 +44,7 @@ AutoShootDrive::AutoShootDrive(
     AddCommands(
         IntakeDeploy(true),
         AutoWait(drivetrain),
-        ShooterRun(Shooter::SHOOTERSPEED_FORWARD, shooter),
+        ShooterRun(Shooter::SHOOTERSPEED_LOWHUB, shooter),
         frc2::ParallelCommandGroup{ AutoStop(drivetrain), ScoringAction(intake, fConv, vConv, shooter) },
         frc2::ParallelCommandGroup{ AutoDrivePath(m_pathname.c_str(), true, drivetrain),
                                     ScoringStop(intake, fConv, vConv, shooter) });

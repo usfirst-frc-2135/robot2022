@@ -101,7 +101,8 @@ public:
     typedef enum shooterSpeed_e
     {
         SHOOTERSPEED_STOP = 0,    // Stop shooter
-        SHOOTERSPEED_FORWARD = 1, // Shooter velocity
+        SHOOTERSPEED_LOWHUB = 1,  // Shooter Low Hub velocity
+        SHOOTERSPEED_HIGHHUB = 2, // Shooter High Hub velocity
     } shooterSpeed_e;
 
     void Initialize(void);
