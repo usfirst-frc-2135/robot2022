@@ -22,7 +22,6 @@ ScoringAction::ScoringAction(Intake *intake, FloorConveyor *fConv, VerticalConve
 
     // Add your commands here, e.g.
     // AddCommands(FooCommand(), BarCommand());
-    // Need to add if Shooter is at speed part, turning on flashlight part
 
     AddCommands(
         ShooterRun(Shooter::SHOOTERSPEED_LOWHUB, shooter),
