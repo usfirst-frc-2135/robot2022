@@ -31,10 +31,9 @@ ClimberClimbToL4::ClimberClimbToL4(Climber *climber)
     // Climber lowers to 25.25 inches
     // Gate hook is at default position
 
-    AddCommands(
+    AddCommands( // Sequential command
         ClimberMoveHeight(Climber::RAISE_L4_HEIGHT, climber),
-        ClimberSetGateHook(false),
-        frc2::WaitCommand(0.5_s));
+        ClimberSetGateHook(false));
 }
 
 bool ClimberClimbToL4::RunsWhenDisabled() const

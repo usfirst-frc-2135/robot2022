@@ -64,7 +64,7 @@ Climber::Climber()
     config->GetValueAsDouble("CL_ExtendL2", m_extendL2, 29.0);
     config->GetValueAsDouble("CL_RotateL3", m_rotateL3, 21.0);
     config->GetValueAsDouble("CL_ExtendL3", m_extendL3, 31.5);
-    config->GetValueAsDouble("CL_LowerL3", m_lowerL3, 0.35);
+    config->GetValueAsDouble("CL_GatehookRestHeight", m_gatehookRestHeight, 0.35);
     config->GetValueAsDouble("CL_RaiseL4", m_raiseL4, 25.25);
 
     frc::SmartDashboard::PutNumber("CL_PidKf", m_pidKf);
@@ -78,7 +78,7 @@ Climber::Climber()
     frc::SmartDashboard::PutNumber("CL_ExtendL2", m_extendL2);
     frc::SmartDashboard::PutNumber("Cl_RotateL3", m_rotateL3);
     frc::SmartDashboard::PutNumber("CL_ExtendL3", m_extendL3);
-    frc::SmartDashboard::PutNumber("CL_LowerL3", m_lowerL3);
+    frc::SmartDashboard::PutNumber("CL_GatehookRestHeight", m_gatehookRestHeight);
     frc::SmartDashboard::PutNumber("CL_RaiseL4", m_raiseL4);
 
     // Magic Motion variables
@@ -104,9 +104,6 @@ Climber::Climber()
         m_motorCL14.SetInverted(true);
         m_motorCL14.SetNeutralMode(NeutralMode::Brake);
         m_motorCL14.SetSafetyEnabled(false);
-
-        m_motorCL14.ConfigVoltageCompSaturation(12.0, 0);
-        m_motorCL14.EnableVoltageCompensation(true);
 
         m_motorCL14.ConfigSupplyCurrentLimit(supplyCurrentLimits);
         m_motorCL14.ConfigStatorCurrentLimit(statorCurrentLimits);
@@ -245,7 +242,7 @@ void Climber::MoveClimberWithJoysticks(frc::XboxController *joystick)
     double yCLValue = 0.0;
     double motorOutput = 0.0;
 
-    yCLValue = joystick->GetLeftY();
+    yCLValue = -joystick->GetLeftY();
 
     if (yCLValue > -0.1 && yCLValue < 0.1)
     {
@@ -330,7 +327,7 @@ void Climber::MoveClimberDistanceInit(int state)
     m_pidKf = frc::SmartDashboard::GetNumber("CL_PidKf", m_pidKf);
     m_velocity = frc::SmartDashboard::GetNumber("CL_Velocity", m_velocity);
     m_acceleration = frc::SmartDashboard::GetNumber("CL_Acceleration", m_acceleration);
-    m_sCurveStrength = frc::SmartDashboard::PutNumber("CL_SCurveStrength", m_sCurveStrength);
+    m_sCurveStrength = frc::SmartDashboard::GetNumber("CL_SCurveStrength", m_sCurveStrength);
     m_pidKp = frc::SmartDashboard::GetNumber("CL_PidKp", m_pidKp);
     m_pidKi = frc::SmartDashboard::GetNumber("CL_PidKi", m_pidKi);
     m_pidKd = frc::SmartDashboard::GetNumber("CL_PidKd", m_pidKd);
@@ -338,6 +335,7 @@ void Climber::MoveClimberDistanceInit(int state)
     m_motorCL14.Config_kF(0, m_pidKf, 0);
     m_motorCL14.ConfigMotionCruiseVelocity(m_velocity, 0);
     m_motorCL14.ConfigMotionAcceleration(m_acceleration, 0);
+    m_motorCL14.ConfigMotionSCurveStrength(m_sCurveStrength, 0);
     m_motorCL14.Config_kP(0, m_pidKp, 0);
     m_motorCL14.Config_kI(0, m_pidKi, 0);
     m_motorCL14.Config_kD(0, m_pidKd, 0);
@@ -358,8 +356,8 @@ void Climber::MoveClimberDistanceInit(int state)
         case EXTEND_L3_HEIGHT:
             m_targetInches = frc::SmartDashboard::GetNumber("CL_ExtendL3", m_rotateL3);
             break;
-        case LOWER_L3_HEIGHT:
-            m_targetInches = frc::SmartDashboard::GetNumber("CL_LowerL3", m_lowerL3);
+        case GATEHOOK_REST_HEIGHT:
+            m_targetInches = frc::SmartDashboard::GetNumber("CL_GatehookRestHeight", m_gatehookRestHeight);
             break;
         case RAISE_L4_HEIGHT:
             m_targetInches = frc::SmartDashboard::GetNumber("CL_RaiseL3", m_raiseL4);
@@ -420,7 +418,7 @@ bool Climber::MoveClimberDistanceIsFinished()
         if (++withinTolerance >= 5)
         {
             isFinished = true;
-            spdlog::info("Climber move finished - Time: {}  |  Current inches: {}", m_safetyTimer.Get(), m_curInches);
+            spdlog::info("Climber move finished - Time: {:.5f}  |  Current inches: {:.4f}", m_safetyTimer.Get(), m_curInches);
         }
     }
     else

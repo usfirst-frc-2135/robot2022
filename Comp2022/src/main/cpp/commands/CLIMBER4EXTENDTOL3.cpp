@@ -31,10 +31,9 @@ ClimberExtendToL3::ClimberExtendToL3(Climber *climber)
     // Climber raises to 31.5 inches
     // Gate hook activated (extended) still
 
-    AddCommands(
+    AddCommands( // Sequential command
         ClimberMoveHeight(Climber::EXTEND_L3_HEIGHT, climber),
-        ClimberSetGateHook(true),
-        frc2::WaitCommand(0.5_s));
+        ClimberSetGateHook(true));
 }
 
 bool ClimberExtendToL3::RunsWhenDisabled() const
