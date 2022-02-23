@@ -66,7 +66,7 @@ Shooter::Shooter()
     {
         // Set motor directions
         // Turn on Coast mode
-        m_motorSH11.SetInverted(false);
+        m_motorSH11.SetInverted(true);
         m_motorSH11.SetNeutralMode(NeutralMode::Coast);
         m_motorSH11.SetSafetyEnabled(false);
 
