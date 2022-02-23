@@ -62,22 +62,26 @@ ClimberFullClimb::ClimberFullClimb(Climber *climber)
     // Gate hook is at default position
 
     // state 8
+    // Wait 3 seconds
     // Climber lowers to 0.35 inches
     // Gate hook is at default position
 
     AddCommands(
         ClimberClimbToL2(climber),
+        frc2::WaitCommand(0.5_s), // check to see if timer is necessary here
         ClimberRotateToL3(climber),
-        frc2::WaitCommand(0.5_s),
+        frc2::WaitCommand(1.0_s),
         ClimberRotateIntoL3(climber),
-        frc2::WaitCommand(0.2_s),
+        frc2::WaitCommand(1.0_s),
         ClimberClimbToL3(climber),
+        frc2::WaitCommand(0.5_s),
         // next rung climb!
         ClimberRotateToL3(climber),
-        frc2::WaitCommand(0.5_s),
+        frc2::WaitCommand(1.0_s),
         ClimberRotateIntoL3(climber),
-        frc2::WaitCommand(0.2_s),
+        frc2::WaitCommand(1.0_s),
         ClimberClimbToL4(climber),
+        frc2::WaitCommand(3.0_s),
         ClimberSettleToL4(climber));
 }
 

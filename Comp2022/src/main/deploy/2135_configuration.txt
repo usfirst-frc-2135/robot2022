@@ -84,7 +84,7 @@
   CL_ExtendL2 = 29.0
   CL_RotateL3 = 31.25
   CL_ExtendL3 = 31.5
-  CL_LowerL3 = 0.35
+  CL_GatehookRestHeight = 0.35
   CL_RaiseL4 = 25.25
 # Auto Settings
   AutoDrive_path = forward79
