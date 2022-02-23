@@ -12,7 +12,12 @@
 
 #include <spdlog/spdlog.h>
 
-ScoringAction::ScoringAction(Intake *intake, FloorConveyor *fConv, VerticalConveyor *vConv, Shooter *shooter)
+ScoringAction::ScoringAction(
+    second_t waitTime,
+    Intake *intake,
+    FloorConveyor *fConv,
+    VerticalConveyor *vConv,
+    Shooter *shooter)
 {
     // Use AddRequirements() here to declare subsystem dependencies
     // eg. AddRequirements(m_Subsystem);
@@ -20,14 +25,18 @@ ScoringAction::ScoringAction(Intake *intake, FloorConveyor *fConv, VerticalConve
 
     spdlog::info("ScoringAction");
 
+    // get wait time parameter
+
     // Add your commands here, e.g.
     // AddCommands(FooCommand(), BarCommand());
 
     AddCommands(
-        ShooterRun(Shooter::SHOOTERSPEED_LOWHUB, shooter),
-        VerticalConveyorRun(VerticalConveyor::VCONVEYOR_ACQUIRE, vConv),
-        FloorConveyorRun(FloorConveyor::FCONVEYOR_ACQUIRE, fConv),
-        IntakeRun(Intake::INTAKE_ACQUIRE, intake));
+        frc2::ParallelDeadlineGroup{ frc2::WaitUntilCommand([shooter] { return shooter->AtDesiredRPM(); }),
+                                     ShooterRun(Shooter::SHOOTERSPEED_LOWHUB, shooter) },
+        frc2::ParallelDeadlineGroup{ frc2::WaitCommand(waitTime),
+                                     VerticalConveyorRun(VerticalConveyor::VCONVEYOR_ACQUIRE, vConv),
+                                     FloorConveyorRun(FloorConveyor::FCONVEYOR_ACQUIRE, fConv),
+                                     IntakeRun(Intake::INTAKE_ACQUIRE, intake) });
 }
 
 bool ScoringAction::RunsWhenDisabled() const

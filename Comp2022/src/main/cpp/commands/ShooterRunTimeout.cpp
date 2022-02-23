@@ -63,7 +63,7 @@ bool ShooterRunTimeout::IsFinished()
 void ShooterRunTimeout::End(bool interrupted)
 {
     // Check to see if the Shooter Timer has timed out
-    spdlog::info("ShooterRun - End");
+    spdlog::info("ShooterRunTimeout - End");
 }
 
 bool ShooterRunTimeout::RunsWhenDisabled() const

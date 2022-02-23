@@ -150,6 +150,7 @@ private:
     double m_ramsetePidKd = 0.0;
     double m_ramseteB = 0.0;
     double m_ramseteZeta = 0.0;
+    bool m_ramseteTuningMode;
 
     // Current limit settings
     SupplyCurrentLimitConfiguration m_supplyCurrentLimits = { true, 45.0, 45.0, 0.001 };
@@ -248,8 +249,6 @@ public:
     void RamseteFollowerExecute(void);
     bool RamseteFollowerIsFinished(void);
     void RamseteFollowerEnd(void);
-
-    void DriveBackward(double tx, double ty, bool tv);
 
     frc::Pose2d GetPose();
 };
