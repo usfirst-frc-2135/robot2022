@@ -17,7 +17,12 @@
 
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
+#include <frc2/command/ParallelDeadlineGroup.h>
 #include <frc2/command/SequentialCommandGroup.h>
+#include <frc2/command/WaitUntilCommand.h>
+#include <frc2/command/WaitCommand.h>
+
+using namespace units::time;
 
 /**
  *
@@ -27,7 +32,7 @@
 class ScoringAction : public frc2::CommandHelper<frc2::SequentialCommandGroup, ScoringAction>
 {
 public:
-    explicit ScoringAction(Intake *intake, FloorConveyor *fConv, VerticalConveyor *vConv, Shooter *shooter);
+    explicit ScoringAction(second_t waitTime, Intake *intake, FloorConveyor *fConv, VerticalConveyor *vConv, Shooter *shooter);
 
     bool RunsWhenDisabled() const override;
 
