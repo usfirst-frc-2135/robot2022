@@ -15,50 +15,49 @@
   DT_ClosedLoopRampRate = 0.0
   DT_StoppedTolerance = 0.05
 # Limelight settings
-  DTL_TurnPidKp = 0.035
+  DTL_TurnPidKp = 0.0025
   DTL_TurnPidKi = 0.0
   DTL_TurnPidKd = 0.0
-  DTL_ThrottlePidKp = 0.02
+  DTL_ThrottlePidKp = 0.0065
   DTL_ThrottlePidKi = 0.0
   DTL_ThrottlePidKd = 0.0
   DTL_MaxTurn = 0.4
-  DTL_MaxThrottle = 0.2
+  DTL_MaxThrottle = 0.4
   DTL_ThrottleShape = 10.0
-  DTL_TargetAngle = -0.41
-  DTL_TargetDistance = 84.0
-  DTL_AngleThreshold = 3.0
-  DTL_DistThreshold = 42.0
-  DTL_Distance1 = 12
-  DTL_Distance2 = 36
-  # DTL_VertOffset1 is typically positive
-  DTL_VertOffset1 = 5.18
-  # DTL_VertOffset2 is typically negative
-  DTL_VertOffset2 = -8.34
+  DTL_TargetAngle = 0.0
+  DTL_SetPointDistance = 87.0
+  DTL_AngleThreshold = 2.0
+  #Keep around 10
+  DTL_DistThreshold = 8.0
+
+  //this is used to calibrate the distance for Grogu
+  DTL_Distance1 = 59  
+  DTL_Distance2 = 135 
+  # DTL_VertOffset1 is typically positive####
+  DTL_VertOffset1 = 10.72
+  # DTL_VertOffset2 is typically negative####
+  DTL_VertOffset2 = -16.91
 # Path following settings
   DTR_RamsetePidKf = 0.0465
-  DTR_RamsetePidKp = 0.1 
+  DTR_RamsetePidKp = 0.1125
   DTR_RamsetePidKi = 0.0
   DTR_RamsetePidKd = 0.0
   DTR_RamseteB = 2.0
   DTR_RamseteZeta = 0.7
+  DTR_RamseteTuningMode = false
 # Intake settings
-  IN_AcquireSpeed = 1.0
-  IN_ExpelSpeed = -1.0
+  IN_AcquireSpeed = 0.6
+  IN_ExpelSpeed = -0.6
 # Floor Conveyor settings
   FC_AcquireSpeed = 1.0
   FC_ExpelSpeed = 0.2
   FC_ExpelSpeedFast = -1.0
 # Vert Conveyor settings
   VC_AcquireSpeed = 1.0
+  VC_AcquireSpeedSlow = 0.2
   VC_ExpelSpeed = -0.2
   VC_ExpelSpeedFast = -1.0
 # Shooter settings
-  SH_FeederPidKf = 0.0475
-  SH_FeederPidKp = 0.00000
-  SH_FeederPidKi = 0.000
-  SH_FeederPidKd = 0.000
-  SH_FeederNeutralDeadband = 0.004
-  SH_FeederTargetRPM = 1450.0
   SH_FlywheelPidKf = 0.0475
   SH_FlywheelPidKp = 0.05
   SH_FlywheelPidKi = 0.000
@@ -83,13 +82,18 @@
   CL_TargetHeight = 0.0
   CL_StowHeight = 0.25
   CL_ExtendL2 = 29.0
-  CL_RotateL3 = 21.0
+  CL_RotateL3 = 31.25
   CL_ExtendL3 = 31.5
+  CL_LowerL3 = 0.35
+  CL_RaiseL4 = 25.25
 # Auto Settings
-  AutoDriveLimelightShoot_path = driveForward46
-  AutoDriveShoot_path = driveForward58
+  AutoDrive_path = forward79
+  AutoShootDrive_path = forward79
+  AutoShootDriveShoot_path1 = forward79
+  AutoShootDriveShoot_path2 = backward79
   path1 = forward39
   path2 = left79
   path3 = rightAngleTurn
   AUTO_WaitTime = 0.0
-  AUTO_ShootTime = 1.0
+  AutoDriveLimelightShoot_path = forward79
+  AutoDriveShoot_path = forward79

@@ -40,7 +40,7 @@ AutoDriveLimelightShoot::AutoDriveLimelightShoot(
     // Add your commands here, e.g.
     // AddCommands(FooCommand(), BarCommand());
     frc2135::RobotConfig *config = frc2135::RobotConfig::GetInstance();
-    config->GetValueAsString("AutoDriveLimelightShoot_path", m_pathname, "driveForward46");
+    config->GetValueAsString("AutoDriveLimelightShoot_path", m_pathname, "forward79");
     spdlog::info("AutoDriveLimelightShoot pathname {}", m_pathname.c_str());
 
     AddCommands(
@@ -50,7 +50,7 @@ AutoDriveLimelightShoot::AutoDriveLimelightShoot(
         //drive backwards until target is valid
         frc2::ParallelCommandGroup{ DriveLimelight(true, drivetrain, vision), ScoringPrime(shooter) },
         frc2::ParallelCommandGroup{ DriveLimelight(false, drivetrain, vision),
-                                    ScoringAction(intake, fConv, vConv, shooter) }
+                                    ScoringAction(10_s, intake, fConv, vConv, shooter) }
         // drive limelight servo instead of drive limelight in parallel with scoringaction
     );
 }

@@ -40,11 +40,23 @@ private:
     double m_targetSkew;       // Target Skew or rotation (-90 degrees to 0 degrees)
     bool m_targetValid;        // Target Valid or not
 
+    //variables in inches to calculate limelight distance
+    double m_distance1;
+    double m_distance2;
+    double m_slope;
+    double m_vertOffset1;
+    double m_vertOffset2;
+    double m_distOffset;
+    double m_distLight;
+    double m_setPointDistance;
+
 public:
     Vision();
     void Periodic() override;
     void SimulationPeriodic() override;
     void Initialize(void);
+    double CalculateDist(void);
+    void SyncStateFromDashboard(void);
 
     // Limelight LED mode states
     typedef enum ledMode_e

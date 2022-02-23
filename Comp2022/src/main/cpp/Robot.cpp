@@ -89,8 +89,6 @@ void Robot::DisabledInit()
         frc::DriverStation::GetMatchNumber(),
         AllianceToString(frc::DriverStation::GetAlliance()));
     RobotContainer *robotContainer = RobotContainer::GetInstance();
-    robotContainer->m_drivetrain.SetBrakeMode(false);
-
     robotContainer->m_drivetrain.Initialize();
     robotContainer->m_intake.Initialize();
     robotContainer->m_floorConv.Initialize();
@@ -100,6 +98,7 @@ void Robot::DisabledInit()
     robotContainer->m_pneumatics.Initialize();
     robotContainer->m_power.Initialize();
     robotContainer->m_led.Initialize();
+    robotContainer->m_vision.Initialize();
 }
 
 void Robot::DisabledPeriodic()
@@ -158,17 +157,6 @@ void Robot::TeleopInit()
         m_autonomousCommand->Cancel();
         m_autonomousCommand = nullptr;
     }
-
-    RobotContainer *robotContainer = RobotContainer::GetInstance();
-    robotContainer->m_drivetrain.Initialize();
-    robotContainer->m_intake.Initialize();
-    robotContainer->m_floorConv.Initialize();
-    robotContainer->m_vertConv.Initialize();
-    robotContainer->m_shooter.Initialize();
-    robotContainer->m_climber.Initialize();
-    robotContainer->m_pneumatics.Initialize();
-    robotContainer->m_power.Initialize();
-    robotContainer->m_led.Initialize();
 }
 
 /**

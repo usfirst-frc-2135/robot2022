@@ -17,8 +17,6 @@
 #include <frc/XboxController.h>
 #include <frc/controller/PIDController.h>
 #include <frc/controller/RamseteController.h>
-#include <frc/controller/SimpleMotorFeedforward.h>
-#include <frc/kinematics/DifferentialDriveKinematics.h>
 #include <frc/kinematics/DifferentialDriveOdometry.h>
 #include <frc/simulation/DifferentialDrivetrainSim.h>
 #include <frc/smartdashboard/Field2d.h>
@@ -133,7 +131,7 @@ private:
     double m_maxTurn;
     double m_maxThrottle;
     double m_targetAngle;
-    double m_targetDistance;
+    double m_setPointDistance;
     double m_angleThreshold;
     double m_distThreshold;
     double m_throttleShape;
@@ -152,6 +150,7 @@ private:
     double m_ramsetePidKd = 0.0;
     double m_ramseteB = 0.0;
     double m_ramseteZeta = 0.0;
+    bool m_ramseteTuningMode;
 
     // Current limit settings
     SupplyCurrentLimitConfiguration m_supplyCurrentLimits = { true, 45.0, 45.0, 0.001 };
@@ -164,14 +163,16 @@ private:
     // Ramsete follower objects
     frc::Trajectory m_trajectory;
     frc::RamseteController m_ramseteController;
-    frc::SimpleMotorFeedforward<meter> m_feedforward{ DriveConstants::ks, DriveConstants::kv, DriveConstants::ka };
     frc::DifferentialDriveKinematics m_kinematics{ DriveConstants::kTrackWidthMeters };
-    frc2::PIDController m_leftPid{ 0.0, 0.0, 0.0 };
-    frc2::PIDController m_rightPid{ 0.0, 0.0, 0.0 };
     frc::Timer m_trajTimer;
 
     // Path following variables
     double m_tolerance;
+
+    // Gyro Measurements
+    double m_yaw;
+    double m_pitch;
+    double m_roll;
 
     ///////////////////////////////////////////////////////////////////////////
 
@@ -223,6 +224,7 @@ public:
     void FaultDump(void);
 
     void ResetSensors(void);
+    void GetYawPitchRoll(void);
     void SetBrakeMode(bool brakeMode);
     void MoveSetQuickTurn(bool quickTurn);
     void MoveStop(void);
@@ -247,8 +249,6 @@ public:
     void RamseteFollowerExecute(void);
     bool RamseteFollowerIsFinished(void);
     void RamseteFollowerEnd(void);
-
-    void DriveBackward(double tx, double ty, bool tv);
 
     frc::Pose2d GetPose();
 };

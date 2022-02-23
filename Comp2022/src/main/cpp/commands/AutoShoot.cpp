@@ -14,11 +14,12 @@
 #include "commands/AutoWait.h"
 #include "commands/IntakeDeploy.h"
 #include "commands/ScoringAction.h"
-#include "commands/ShooterRun.h"
+#include "commands/ScoringStop.h"
 #include "frc2135/RobotConfig.h"
 
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/ParallelCommandGroup.h>
+#include <frc2/command/ParallelRaceGroup.h>
 #include <spdlog/spdlog.h>
 #include <wpi/SmallString.h>
 
@@ -35,11 +36,11 @@ AutoShoot::AutoShoot(
 
     // Add your commands here, e.g.
     // AddCommands(FooCommand(), BarCommand());
-    AddCommands(
-        IntakeDeploy(true),
+    AddCommands( // Sequential command
+        frc2::ParallelRaceGroup{ IntakeDeploy(true), AutoStop(drivetrain) },
         AutoWait(drivetrain),
-        ShooterRun(Shooter::SHOOTERSPEED_FORWARD, shooter),
-        frc2::ParallelCommandGroup{ AutoStop(drivetrain), ScoringAction(intake, fConv, vConv, shooter) });
+        frc2::ParallelRaceGroup{ ScoringAction(5_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
+        ScoringStop(intake, fConv, vConv, shooter));
 }
 
 bool AutoShoot::RunsWhenDisabled() const
