@@ -34,6 +34,7 @@ VerticalConveyor::VerticalConveyor()
     // Initialize Variables
     frc2135::RobotConfig *config = frc2135::RobotConfig::GetInstance();
     config->GetValueAsDouble("VC_AcquireSpeed", m_acquireSpeed, 1.0);
+    config->GetValueAsDouble("VC_AcquireSpeedSlow", m_acquireSpeedSlow, 0.2);
     config->GetValueAsDouble("VC_ExpelSpeed", m_expelSpeed, -0.2);
     config->GetValueAsDouble("VC_ExpelSpeedFast", m_expelSpeedFast, -1.0);
 
@@ -120,6 +121,10 @@ void VerticalConveyor::SetVerticalConveyorSpeed(int mode)
             strName = "ACQUIRE";
             outputVC = m_acquireSpeed;
             break;
+        case VCONVEYOR_ACQUIRE_SLOW:
+            strName = "ACQUIRE_SLOW";
+            outputVC = m_acquireSpeedSlow;
+            break;
         case VCONVEYOR_EXPEL:
             strName = "EXPEL";
             outputVC = m_expelSpeed;
@@ -134,4 +139,9 @@ void VerticalConveyor::SetVerticalConveyorSpeed(int mode)
 
     if (m_talonValidVC9)
         m_motorVC9.Set(ControlMode::PercentOutput, outputVC);
+}
+
+bool VerticalConveyor::IsCargoDetected(void)
+{
+    return m_cargoDetected.Get();
 }

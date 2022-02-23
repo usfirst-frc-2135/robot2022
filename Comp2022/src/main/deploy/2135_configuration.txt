@@ -54,6 +54,7 @@
   FC_ExpelSpeedFast = -1.0
 # Vert Conveyor settings
   VC_AcquireSpeed = 1.0
+  VC_AcquireSpeedSlow = 0.2
   VC_ExpelSpeed = -0.2
   VC_ExpelSpeedFast = -1.0
 # Shooter settings
