@@ -36,14 +36,14 @@ ClimberStow::ClimberStow(
     // Climber starts at 0.25 inches
     // Gate hook is at default position (closed)
 
-    AddCommands(
+    AddCommands( // Sequential command
+        IntakeDeploy(false),
         IntakeRun(Intake::INTAKE_STOP, intake),
         FloorConveyorRun(FloorConveyor::FCONVEYOR_STOP, fConv),
-        // VerticalConveyorRun(VerticalConveyor::VCONVEYOR_STOP, vConv),
-        // ShooterRun(Shooter::SHOOTERSPEED_STOP, shooter),
+        VerticalConveyorRun(VerticalConveyor::VCONVEYOR_STOP, vConv),
+        ShooterRun(Shooter::SHOOTERSPEED_STOP, shooter),
         ClimberMoveHeight(Climber::STOW_HEIGHT, climber),
-        ClimberSetGateHook(false),
-        frc2::WaitCommand(0.5_s));
+        ClimberSetGateHook(false));
 }
 
 bool ClimberStow::RunsWhenDisabled() const
