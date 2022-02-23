@@ -94,5 +94,6 @@
   path2 = left79
   path3 = rightAngleTurn
   AUTO_WaitTime = 0.0
-  AutoDriveLimelightShoot_path = forward79
+  AutoDriveLimelightShoot_path1 = forward79
+  AutoDriveLimelightShoot_path2 = backward79
   AutoDriveShoot_path = forward79
