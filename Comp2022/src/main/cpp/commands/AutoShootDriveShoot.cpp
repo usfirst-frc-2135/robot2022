@@ -47,7 +47,7 @@ AutoShootDriveShoot::AutoShootDriveShoot(
     spdlog::info("AutoShootDriveShoot pathname 1 {}", m_pathname1.c_str());
     spdlog::info("AutoShootDriveShoot pathname 2 {}", m_pathname2.c_str());
 
-    AddCommands(
+    AddCommands( // Sequential command
         frc2::ParallelRaceGroup{ IntakeDeploy(true), AutoStop(drivetrain) },
         AutoWait(drivetrain),
         frc2::ParallelRaceGroup{ ScoringAction(5_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },

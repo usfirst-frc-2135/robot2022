@@ -42,7 +42,7 @@ AutoShootDrive::AutoShootDrive(
     config->GetValueAsString("AutoShootDrive_path", m_pathname, "forward79");
     spdlog::info("AutoShootDrive pathname {}", m_pathname.c_str());
 
-    AddCommands(
+    AddCommands( // Sequential command
         frc2::ParallelRaceGroup{ IntakeDeploy(true), AutoStop(drivetrain) },
         AutoWait(drivetrain),
         frc2::ParallelRaceGroup{ ScoringAction(5_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },

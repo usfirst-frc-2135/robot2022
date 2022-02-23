@@ -34,7 +34,7 @@ AutoDrive::AutoDrive(Drivetrain *drivetrain, Intake *intake)
     config->GetValueAsString("AutoDrive_path", m_pathname, "forward79");
     spdlog::info("AutoDrive pathname {}", m_pathname.c_str());
 
-    AddCommands(
+    AddCommands( // Sequential command
         frc2::ParallelRaceGroup{ IntakeDeploy(true), AutoStop(drivetrain) },
         AutoWait(drivetrain),
         frc2::ParallelRaceGroup{
