@@ -28,13 +28,12 @@ ClimberRotateIntoL3::ClimberRotateIntoL3(Climber *climber)
     // Add your commands here, e.g.
     // AddCommands(FooCommand(), BarCommand());
 
-    // Climber stays at 31.5 inches (no movement)
+    // Climber stays at 31.25 inches (no movement)
     // Gate hook move to default position (closed)
 
-    AddCommands(
+    AddCommands( // Sequential command
         ClimberMoveHeight(Climber::NOCHANGE_HEIGHT, climber),
-        ClimberSetGateHook(false),
-        frc2::WaitCommand(0.5_s));
+        ClimberSetGateHook(false));
 }
 
 bool ClimberRotateIntoL3::RunsWhenDisabled() const

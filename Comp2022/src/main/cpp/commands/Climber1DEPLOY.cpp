@@ -31,10 +31,9 @@ ClimberDeploy::ClimberDeploy(Climber *climber)
     // Gate hook is at default position (closed)
     // Driver needs to drive away manually from the hanger toward the rung it wants to hook on
 
-    AddCommands(
+    AddCommands( // Sequential command
         ClimberMoveHeight(Climber::EXTEND_L2_HEIGHT, climber),
-        ClimberSetGateHook(false),
-        frc2::WaitCommand(0.5_s));
+        ClimberSetGateHook(false));
 }
 
 bool ClimberDeploy::RunsWhenDisabled() const
