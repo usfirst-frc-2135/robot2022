@@ -202,7 +202,7 @@ void Drivetrain::ConfigFileLoad(void)
     config->GetValueAsDouble("DTL_MaxThrottle", m_maxThrottle, 0.2);
     config->GetValueAsDouble("DTL_ThrottleShape", m_throttleShape, 10.0);
     config->GetValueAsDouble("DTL_TargetAngle", m_targetAngle, 0.0);
-    config->GetValueAsDouble("DTL_TargetDistance", m_setPointDistance, 12.0);
+    config->GetValueAsDouble("DTL_SetPointDistance", m_setPointDistance, 12.0);
     config->GetValueAsDouble("DTL_AngleThreshold", m_angleThreshold, 3.0);
     config->GetValueAsDouble("DTL_DistThreshold", m_distThreshold, 6.0);
     config->GetValueAsDouble("DTL_Distance1", m_distance1, 0.0);
@@ -235,7 +235,7 @@ void Drivetrain::ConfigFileLoad(void)
     frc::SmartDashboard::PutNumber("DTL_MaxThrottle", m_maxThrottle);
     frc::SmartDashboard::PutNumber("DTL_ThrottleShape", m_throttleShape);
     frc::SmartDashboard::PutNumber("DTL_TargetAngle", m_targetAngle);
-    frc::SmartDashboard::PutNumber("DTL_TargetDistance", m_setPointDistance);
+    frc::SmartDashboard::PutNumber("DTL_SetPointDistance", m_setPointDistance);
     frc::SmartDashboard::PutNumber("DTL_AngleThreshold", m_angleThreshold);
     frc::SmartDashboard::PutNumber("DTL_DistThreshold", m_distThreshold);
     frc::SmartDashboard::PutNumber("DTL_Distance1", m_distance1);
@@ -407,18 +407,6 @@ void Drivetrain::VelocityArcadeDrive(double yOutput, double xOutput)
 
     m_motorL1.Set(ControlMode::Velocity, leftOutput);
     m_motorR3.Set(ControlMode::Velocity, rightOutput);
-
-    frc::SmartDashboard::PutNumber("VCL_LeftOutput", leftOutput);
-    frc::SmartDashboard::PutNumber("VCL_RightOuput", rightOutput);
-    // spdlog::info("DT motor speeds - left {:.1f} right {:.1f}", leftOutput, rightOutput);
-
-    double curLeftOutput = m_motorL1.GetSelectedSensorVelocity();
-    double curRightOutput = m_motorR3.GetSelectedSensorVelocity();
-    frc::SmartDashboard::PutNumber("VCL_CurLeftOutput", curLeftOutput);
-    frc::SmartDashboard::PutNumber("VCL_CurRightOuput", curRightOutput);
-
-    frc::SmartDashboard::PutNumber("VCL_LeftOutputError", leftOutput - curLeftOutput);
-    frc::SmartDashboard::PutNumber("VCL_RightOuputError", rightOutput - curRightOutput);
 
     m_diffDrive.FeedWatchdog();
 }
@@ -654,8 +642,6 @@ void Drivetrain::MoveWithLimelightInit(bool m_endAtTarget)
     // load in Pid constants to controller
     m_turnPid = frc2::PIDController(m_turnPidKp, m_turnPidKi, m_turnPidKd);
     m_throttlePid = frc2::PIDController(m_throttlePidKp, m_throttlePidKi, m_throttlePidKd);
-
-    m_setPointDistance = frc::SmartDashboard::GetNumber("DTL_SetPointDistance", m_setPointDistance);
 }
 
 void Drivetrain::MoveWithLimelightExecute(double tx, double ty, bool tv)
@@ -669,7 +655,7 @@ void Drivetrain::MoveWithLimelightExecute(double tx, double ty, bool tv)
     m_limelightDistance = robotContainer->m_vision.CalculateDist();
 
     double throttleDistance = m_throttlePid.Calculate(m_limelightDistance, m_setPointDistance);
-    double throttleOutput = -throttleDistance * pow(cos(turnOutput * wpi::numbers::pi / 180), m_throttleShape);
+    double throttleOutput = throttleDistance * pow(cos(turnOutput * wpi::numbers::pi / 180), m_throttleShape);
 
     // put turn and throttle outputs on the dashboard
     frc::SmartDashboard::PutNumber("DTL_TurnOutput", turnOutput);
@@ -685,7 +671,7 @@ void Drivetrain::MoveWithLimelightExecute(double tx, double ty, bool tv)
     frc::SmartDashboard::PutNumber("DTL_ThrottleOutputClamped", throttleOutput);
 
     if (m_talonValidL1 || m_talonValidR3)
-        m_diffDrive.ArcadeDrive(throttleOutput, turnOutput, false);
+        VelocityArcadeDrive(throttleOutput, turnOutput);
 }
 
 bool Drivetrain::MoveWithLimelightIsFinished(double tx, bool tv)
@@ -698,7 +684,7 @@ bool Drivetrain::MoveWithLimelightIsFinished(double tx, bool tv)
 void Drivetrain::MoveWithLimelightEnd()
 {
     if (m_talonValidL1 || m_talonValidR3)
-        m_diffDrive.ArcadeDrive(0.0, 0.0, false);
+        VelocityArcadeDrive(0.0, 0.0);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
