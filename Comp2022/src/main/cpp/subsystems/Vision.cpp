@@ -96,6 +96,7 @@ void Vision::SyncStateFromDashboard(void)
     m_distance2 = frc::SmartDashboard::GetNumber("DTL_Distance2", m_distance2);
     m_vertOffset1 = frc::SmartDashboard::GetNumber("DTL_VertOffset1", m_vertOffset1);
     m_vertOffset2 = frc::SmartDashboard::GetNumber("DTL_VertOffset2", m_vertOffset2);
+    m_setPointDistance = frc::SmartDashboard::GetNumber("DTL_SetPointDistance", m_setPointDistance);
 }
 
 void Vision::SimulationPeriodic()
