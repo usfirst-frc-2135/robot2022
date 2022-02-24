@@ -30,7 +30,6 @@ void ShooterAim::Initialize()
 {
     spdlog::info("ShooterAim - Init - Flashlight and Limelight {}", (m_lightOn) ? "ON" : "OFF");
     RobotContainer *robotContainer = RobotContainer::GetInstance();
-    robotContainer->m_shooter.FlashlightOn(m_lightOn);
 
     robotContainer->m_vision.SetLEDMode((m_lightOn) ? Vision::LED_ON : Vision::LED_OFF);
 }
