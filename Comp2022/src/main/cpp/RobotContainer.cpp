@@ -45,7 +45,8 @@ RobotContainer::RobotContainer() :
     frc::SmartDashboard::PutData("Shooter Aim: LIGHT_ON", new ShooterAim(true));
     frc::SmartDashboard::PutData("Shooter Aim: LIGHT_OFF", new ShooterAim(false));
     frc::SmartDashboard::PutData("Shooter Run: SHDIR_STOP", new ShooterRun(0, &m_shooter));
-    frc::SmartDashboard::PutData("Shooter Run: SHDIR_SHOOT", new ShooterRun(1, &m_shooter));
+    frc::SmartDashboard::PutData("Shooter Run: SHDIR_SHOOT_LOW", new ShooterRun(1, &m_shooter));
+    frc::SmartDashboard::PutData("Shooter Run: SHDIR_SHOOT_HIGH", new ShooterRun(2, &m_shooter));
     frc::SmartDashboard::PutData("LED Set", new LEDSet(LED::LEDCOLOR_DASH, &m_led));
     frc::SmartDashboard::PutData("Robot Initialize", new RobotInitialize());
 
@@ -164,23 +165,20 @@ void RobotContainer::ConfigureButtonBindings()
     // Driver - A, B, X, Y
     m_quickturn.WhileHeld(DriveQuickturn(), true);
 
-    // Driver Bumpers
+    // Driver - Bumpers
     m_intakingDr.WhenPressed(IntakingAction(&m_intake, &m_floorConv, &m_vertConv), true);
     m_intakingDr.WhenReleased(IntakingStop(&m_intake, &m_floorConv, &m_vertConv), true);
-
     m_shootingDr.WhenPressed(ScoringAction(10_s, &m_intake, &m_floorConv, &m_vertConv, &m_shooter), true);
     m_shootingDr.WhenReleased(ScoringStop(&m_intake, &m_floorConv, &m_vertConv, &m_shooter), true);
 
-    // Triggers EXAMPLE ONLY: FIXME WITH CORRECT COMMANDS!
+    // Driver - Triggers
     m_leftTriggerDr.WhenPressed(ShooterAim(true), true);
     m_leftTriggerDr.WhenReleased(ShooterAim(false), true);
-
-    // Driver Trigger for Limelight Mode
     m_rightTriggerDr.WhileHeld(
         DriveLimelightShoot(&m_drivetrain, &m_intake, &m_floorConv, &m_vertConv, &m_shooter, &m_vision));
     m_rightTriggerDr.WhenReleased(ScoringStop(&m_intake, &m_floorConv, &m_vertConv, &m_shooter), true);
 
-    // Start/back
+    // Driver - Start/back
     m_shooterAimOnDr.WhenPressed(ShooterAim(true), true);
     m_shooterAimOffDr.WhenPressed(ShooterAim(false), true);
 
@@ -208,15 +206,15 @@ void RobotContainer::ConfigureButtonBindings()
     m_exhaustingOp.WhenPressed(ExhaustingAction(&m_intake, &m_floorConv, &m_vertConv), true);
     m_exhaustingOp.WhenReleased(ExhaustingStop(&m_intake, &m_floorConv, &m_vertConv), true);
 
+    // Operator - POV buttons
     m_climber0StowOp.WhenPressed(ClimberStow(&m_climber, &m_intake, &m_floorConv, &m_vertConv, &m_shooter), true);
     m_climber1DeployOp.WhenPressed(ClimberDeploy(&m_climber), true);
     m_climber3RotateL3Op.WhenPressed(ClimberRotateToL3(&m_climber), true);
     m_climber5RotateInL3Op.WhenPressed(ClimberRotateIntoL3(&m_climber), true);
 
-    // Operator Bumpers
+    // Operator - Bumpers
     m_intakingOp.WhenPressed(IntakingAction(&m_intake, &m_floorConv, &m_vertConv), true);
     m_intakingOp.WhenReleased(IntakingStop(&m_intake, &m_floorConv, &m_vertConv), true);
-
     m_scoringPrimeOp.WhenPressed(ScoringPrime(&m_shooter), true);
     m_scoringOffOp.WhenPressed(ScoringStop(&m_intake, &m_floorConv, &m_vertConv, &m_shooter), true);
 

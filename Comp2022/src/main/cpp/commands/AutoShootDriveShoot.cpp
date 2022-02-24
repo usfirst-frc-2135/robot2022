@@ -11,7 +11,6 @@
 #include "commands/AutoShootDriveShoot.h"
 
 #include "commands/AutoDrivePath.h"
-#include "commands/AutoPathSequence.h"
 #include "commands/AutoStop.h"
 #include "commands/AutoWait.h"
 #include "commands/IntakeDeploy.h"
@@ -56,7 +55,7 @@ AutoShootDriveShoot::AutoShootDriveShoot(
                 frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
                 AutoDrivePath(m_pathname1.c_str(), true, drivetrain) },
             IntakingAction(intake, fConv, vConv),
-            ShooterRun(Shooter::SHOOTERSPEED_STOP, shooter) },
+            ShooterRun(Shooter::SHOOTERSPEED_LOWHUB, shooter) },
         frc2::ParallelCommandGroup{
             frc2::ParallelRaceGroup{
                 frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),

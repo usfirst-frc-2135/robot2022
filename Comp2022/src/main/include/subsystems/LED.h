@@ -44,7 +44,7 @@ private:
     // int firstPixelHue = 0;
     //bool m_sourceEnabled = true;
 
-    void SendRGBToString(int rgbRed, int rgbGreen, int rgbBlue);
+    void SendRGBToLED(int rgbRed, int rgbGreen, int rgbBlue);
 
 public:
     LED();
