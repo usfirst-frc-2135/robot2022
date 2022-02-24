@@ -11,7 +11,6 @@
 #include "commands/AutoShootDriveShoot.h"
 
 #include "commands/AutoDrivePath.h"
-#include "commands/AutoPathSequence.h"
 #include "commands/AutoStop.h"
 #include "commands/AutoWait.h"
 #include "commands/IntakeDeploy.h"
