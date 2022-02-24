@@ -687,6 +687,26 @@ void Drivetrain::MoveWithLimelightEnd()
         VelocityArcadeDrive(0.0, 0.0);
 }
 
+// sanity check for AutoShootDriveLLShoot
+bool Drivetrain::LimelightSanityCheck()
+{
+    // check whether target is valid
+    // check whether the limelight tx and ty is within a certain tolerance
+    // check whether distance is within a certain tolerance
+    RobotContainer *robotContainer = RobotContainer::GetInstance();
+    double tx = robotContainer->m_vision.GetHorizOffsetDeg();
+    double ty = robotContainer->m_vision.GetVertOffsetDeg();
+    bool tv = robotContainer->m_vision.GetTargetValid();
+
+    double horizAngleRange = 10;
+    double vertAngleRange = 10;
+    double distRange = 5;
+
+    return (
+        tv && (fabs(tx) <= horizAngleRange) && (fabs(ty) <= vertAngleRange)
+        && (fabs(m_setPointDistance - m_limelightDistance) <= distRange));
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 //  Autonomous command - Ramsete follower

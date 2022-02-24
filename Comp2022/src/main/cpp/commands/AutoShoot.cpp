@@ -18,7 +18,6 @@
 #include "frc2135/RobotConfig.h"
 
 #include <frc/smartdashboard/SmartDashboard.h>
-#include <frc2/command/ParallelCommandGroup.h>
 #include <frc2/command/ParallelRaceGroup.h>
 #include <spdlog/spdlog.h>
 #include <wpi/SmallString.h>
