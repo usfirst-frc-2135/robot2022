@@ -13,7 +13,7 @@
 #include "commands/AutoStop.h"
 #include "commands/AutoWait.h"
 #include "commands/IntakeDeploy.h"
-#include "commands/ScoringAction.h"
+#include "commands/ScoringActionLowHub.h"
 #include "commands/ScoringStop.h"
 #include "frc2135/RobotConfig.h"
 
@@ -39,7 +39,7 @@ AutoShoot::AutoShoot(
     AddCommands( // Sequential command
         frc2::ParallelRaceGroup{ IntakeDeploy(true), AutoStop(drivetrain) },
         AutoWait(drivetrain),
-        frc2::ParallelRaceGroup{ ScoringAction(5_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
+        frc2::ParallelRaceGroup{ ScoringActionLowHub(5_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
         ScoringStop(intake, fConv, vConv, shooter));
 }
 

@@ -16,7 +16,7 @@
 #include "commands/AutoWait.h"
 #include "commands/DriveLimelight.h"
 #include "commands/IntakeDeploy.h"
-#include "commands/ScoringAction.h"
+#include "commands/ScoringActionLowHub.h"
 #include "commands/ScoringPrime.h"
 #include "frc2135/RobotConfig.h"
 
@@ -50,7 +50,7 @@ AutoDriveLimelightShoot::AutoDriveLimelightShoot(
         //drive backwards until target is valid
         frc2::ParallelCommandGroup{ DriveLimelight(true, drivetrain, vision), ScoringPrime(shooter) },
         frc2::ParallelCommandGroup{ DriveLimelight(false, drivetrain, vision),
-                                    ScoringAction(10_s, intake, fConv, vConv, shooter) }
+                                    ScoringActionLowHub(10_s, intake, fConv, vConv, shooter) }
         // drive limelight servo instead of drive limelight in parallel with scoringaction
     );
 }
