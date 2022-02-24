@@ -199,11 +199,6 @@ void RobotContainer::ConfigureButtonBindings()
     frc2::JoystickButton m_intakingOp{ &m_operatorController, (int)frc::XboxController::Button::kLeftBumper };
     frc2::JoystickButton m_scoringPrimeOp{ &m_operatorController, (int)frc::XboxController::Button::kRightBumper };
 
-    frc2::POVButton m_climber0StowOp{ &m_operatorController, 180, 0 };
-    frc2::POVButton m_climber1DeployOp{ &m_operatorController, 0, 0 };
-    frc2::POVButton m_climber3RotateL3Op{ &m_operatorController, 270, 0 };
-    frc2::POVButton m_climber4ExtendL3Op{ &m_operatorController, 90, 0 };
-
     // Operator - A, B, X, Y
     m_inDeployOp.WhenPressed(IntakeDeploy(true), true);
     m_inStowOp.WhenPressed(IntakeDeploy(false), true);
