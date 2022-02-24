@@ -11,7 +11,6 @@
 #include "commands/AutoDriveLimelightShoot.h"
 
 #include "commands/AutoDrivePath.h"
-#include "commands/AutoPathSequence.h"
 #include "commands/AutoStop.h"
 #include "commands/AutoWait.h"
 #include "commands/DriveLimelight.h"
@@ -77,8 +76,8 @@ AutoDriveLimelightShoot::AutoDriveLimelightShoot(
                 AutoDrivePath(m_pathname2.c_str(), false, drivetrain) },
             ScoringPrime(shooter) },
         frc2::ParallelRaceGroup{
-            DriveLimelightShoot(drivetrain, intake, fConv, vConv, shooter, vision)
-                .WithInterrupt([drivetrain] { return !drivetrain->LimelightSanityCheck(); }),
+            DriveLimelightShoot(drivetrain, intake, fConv, vConv, shooter, vision),
+            //    .WithInterrupt([drivetrain] { return !drivetrain->LimelightSanityCheck(); }),
             // frc2::SelectCommand{
             //     [drivetrain] { return drivetrain->LimelightSanityCheck(); },
             //     std::pair{ LIMELIGHT, DriveLimelightShoot(drivetrain, intake, fConv, vConv, shooter, vision) },
