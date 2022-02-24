@@ -29,11 +29,10 @@ ScoringAction::ScoringAction(
 
     // Add your commands here, e.g.
     // AddCommands(FooCommand(), BarCommand());
-    // Need to add if Shooter is at speed part, turning on flashlight part
 
     AddCommands(
-        frc2::ParallelDeadlineGroup{ frc2::WaitUntilCommand([shooter] { return shooter->AtDesiredRPM(); }),
-                                     ShooterRun(Shooter::SHOOTERSPEED_FORWARD, shooter) },
+        frc2::ParallelDeadlineGroup{ frc2::WaitUntilCommand([shooter] { return shooter->IsAtDesiredRPM(); }),
+                                     ShooterRun(Shooter::SHOOTERSPEED_LOWHUB, shooter) },
         frc2::ParallelDeadlineGroup{ frc2::WaitCommand(waitTime),
                                      VerticalConveyorRun(VerticalConveyor::VCONVEYOR_ACQUIRE, vConv),
                                      FloorConveyorRun(FloorConveyor::FCONVEYOR_ACQUIRE, fConv),
