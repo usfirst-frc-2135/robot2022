@@ -28,14 +28,12 @@ ClimberSetGateHook::ClimberSetGateHook(bool climberSetGateHook) : m_climberGateH
 void ClimberSetGateHook::Initialize()
 {
     spdlog::info("ClimberSetGateHook - Init");
-}
-
-// Called repeatedly when this Command is scheduled to run
-void ClimberSetGateHook::Execute()
-{
     RobotContainer *robotContainer = RobotContainer::GetInstance();
     robotContainer->m_climber.SetGateHook(m_climberGateHookClosed);
 }
+
+// Called repeatedly when this Command is scheduled to run
+void ClimberSetGateHook::Execute() {}
 
 // Make this return true when this Command no longer needs to run execute()
 bool ClimberSetGateHook::IsFinished()
