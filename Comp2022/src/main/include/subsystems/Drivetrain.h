@@ -244,6 +244,8 @@ public:
     bool MoveWithLimelightIsFinished(double tx, bool tv);
     void MoveWithLimelightEnd();
 
+    bool LimelightSanityCheck();
+
     // Autonomous - Ramsete follower command
     void RamseteFollowerInit(string pathName, bool resetOdometry);
     void RamseteFollowerExecute(void);

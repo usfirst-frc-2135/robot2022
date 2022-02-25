@@ -54,6 +54,7 @@
   FC_ExpelSpeedFast = -1.0
 # Vert Conveyor settings
   VC_AcquireSpeed = 1.0
+  VC_AcquireSpeedSlow = 0.2
   VC_ExpelSpeed = -0.2
   VC_ExpelSpeedFast = -1.0
 # Shooter settings
@@ -62,7 +63,8 @@
   SH_FlywheelPidKi = 0.000
   SH_FlywheelPidKd = 0.000
   SH_FlywheelNeutralDeadband = 0.004
-  SH_FlywheelTargetRPM = 1450.0
+  SH_FlywheelLowerHubTargetRPM = 1450.0
+  SH_FlywheelUpperHubTargetRPM = 3000.0
   SH_ToleranceRPM = 200.0
 # Climber settings
   CL_PeakOut = 1.0
@@ -83,7 +85,7 @@
   CL_ExtendL2 = 29.0
   CL_RotateL3 = 31.25
   CL_ExtendL3 = 31.5
-  CL_LowerL3 = 0.35
+  CL_GatehookRestHeight = 0.35
   CL_RaiseL4 = 25.25
 # Auto Settings
   AutoDrive_path = forward79
@@ -94,5 +96,6 @@
   path2 = left79
   path3 = rightAngleTurn
   AUTO_WaitTime = 0.0
-  AutoDriveLimelightShoot_path = forward79
+  AutoDriveLimelightShoot_path1 = forward79
+  AutoDriveLimelightShoot_path2 = backward79
   AutoDriveShoot_path = forward79

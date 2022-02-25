@@ -27,7 +27,9 @@ IntakingAction::IntakingAction(Intake *intake, FloorConveyor *fConv, VerticalCon
         IntakeDeploy(true),
         IntakeRun(Intake::INTAKE_ACQUIRE, intake),
         FloorConveyorRun(FloorConveyor::FCONVEYOR_EXPEL, fConv),
-        VerticalConveyorRun(VerticalConveyor::VCONVEYOR_EXPEL, vConv));
+        frc2::SequentialCommandGroup{ VerticalConveyorRun(VerticalConveyor::VCONVEYOR_ACQUIRE_SLOW, vConv),
+                                      frc2::WaitUntilCommand([vConv] { return vConv->IsCargoDetected(); }),
+                                      VerticalConveyorRun(VerticalConveyor::VCONVEYOR_STOP, vConv) });
 }
 
 bool IntakingAction::RunsWhenDisabled() const
