@@ -42,7 +42,8 @@ Shooter::Shooter()
     config->GetValueAsDouble("SH_FlywheelPidKi", m_flywheelPidKi, 0.0);
     config->GetValueAsDouble("SH_FlywheelPidKd", m_flywheelPidKd, 0.0);
     config->GetValueAsDouble("SH_FlywheelNeutralDeadband", m_flywheelNeutralDeadband, 0.004);
-    config->GetValueAsDouble("SH_FlywheelTargetRPM", m_flywheelTargetRPM, 3000.0);
+    config->GetValueAsDouble("SH_FlywheelLowerHubTargetRPM", m_flywheelLowerHubTargetRPM, 1450.0);
+    config->GetValueAsDouble("SH_FlywheelUpperHubTargetRPM", m_flywheelUpperHubTargetRPM, 3000.0);
 
     config->GetValueAsDouble("SH_ToleranceRPM", m_toleranceRPM, 200.0);
 
@@ -50,7 +51,8 @@ Shooter::Shooter()
     frc::SmartDashboard::PutNumber("SH_FlywheelPidKp", m_flywheelPidKp);
     frc::SmartDashboard::PutNumber("SH_FlywheelPidKi", m_flywheelPidKi);
     frc::SmartDashboard::PutNumber("SH_FlywheelPidKd", m_flywheelPidKd);
-    frc::SmartDashboard::PutNumber("SH_FlywheelTargetRPM", m_flywheelTargetRPM);
+    frc::SmartDashboard::PutNumber("SH_FlywheelLowerHubTargetRPM", m_flywheelLowerHubTargetRPM);
+    frc::SmartDashboard::PutNumber("SH_FlywheelUpperHubTargetRPM", m_flywheelUpperHubTargetRPM);
 
     frc::SmartDashboard::PutNumber("SH_ToleranceRPM", m_toleranceRPM);
 
@@ -64,7 +66,7 @@ Shooter::Shooter()
     {
         // Set motor directions
         // Turn on Coast mode
-        m_motorSH11.SetInverted(false);
+        m_motorSH11.SetInverted(true);
         m_motorSH11.SetNeutralMode(NeutralMode::Coast);
         m_motorSH11.SetSafetyEnabled(false);
 
@@ -108,9 +110,9 @@ void Shooter::Periodic()
 
     frc::SmartDashboard::PutNumber("SH_FlywheelRPM", m_flywheelCurrentRPM);
 
-    if (m_state == SHOOTERSPEED_FORWARD)
+    if (m_state == SHOOTERSPEED_LOWHUB)
     {
-        if (!AtDesiredRPM())
+        if (!IsAtDesiredRPM())
         {
             robotContainer->m_led.SetColor(LED::LEDCOLOR_BLUE);
             spdlog::info("SH m_flywheelCurrentRPM {:.1f}", m_flywheelCurrentRPM);
@@ -182,13 +184,24 @@ double Shooter::NativeToFlywheelRPM(double native)
     return (native * 60.0 * 10.0) / kFlywheelCPR;
 }
 
-bool Shooter::AtDesiredRPM()
+bool Shooter::IsAtDesiredRPM()
 {
-    bool atDesiredSpeed = (fabs(m_flywheelTargetRPM - m_flywheelCurrentRPM) < m_toleranceRPM);
+    bool atDesiredSpeed;
+    static bool previousAtDesiredSpeed = true;
 
-    if (atDesiredSpeed)
+    if (m_state == SHOOTERSPEED_LOWHUB)
+    {
+        atDesiredSpeed = (fabs(m_flywheelLowerHubTargetRPM - m_flywheelCurrentRPM) < m_toleranceRPM);
+    }
+    else
+    {
+        atDesiredSpeed = (fabs(m_flywheelUpperHubTargetRPM - m_flywheelCurrentRPM) < m_toleranceRPM);
+    }
+
+    if (atDesiredSpeed != previousAtDesiredSpeed)
     {
         spdlog::info("SH RPM at Speed {}", (atDesiredSpeed) ? "TRUE" : "FALSE");
+        previousAtDesiredSpeed = atDesiredSpeed;
     }
 
     return atDesiredSpeed;
@@ -206,7 +219,10 @@ void Shooter::SetShooterSpeed(int state)
     m_flywheelPidKp = frc::SmartDashboard::GetNumber("SH_FlywheelPidKp", m_flywheelPidKp);
     m_flywheelPidKi = frc::SmartDashboard::GetNumber("SH_FlywheelPidKi", m_flywheelPidKi);
     m_flywheelPidKd = frc::SmartDashboard::GetNumber("SH_FlywheelPidKd", m_flywheelPidKd);
-    m_flywheelTargetRPM = frc::SmartDashboard::GetNumber("SH_FlywheelTargetRPM", m_flywheelTargetRPM);
+    m_flywheelLowerHubTargetRPM =
+        frc::SmartDashboard::GetNumber("SH_FlywheelLowerHubTargetRPM", m_flywheelLowerHubTargetRPM);
+    m_flywheelUpperHubTargetRPM =
+        frc::SmartDashboard::GetNumber("SH_FlywheelUpperHubTargetRPM", m_flywheelUpperHubTargetRPM);
 
     m_toleranceRPM = frc::SmartDashboard::GetNumber("SH_ToleranceRPM", m_toleranceRPM);
 
@@ -218,10 +234,15 @@ void Shooter::SetShooterSpeed(int state)
         m_motorSH11.Config_kD(kSlotIndex, m_flywheelPidKd, 0);
         m_motorSH11.SelectProfileSlot(kSlotIndex, kPidIndex);
 
-        spdlog::info("Flywheel PidkF {}", m_flywheelPidKf);
-        spdlog::info("Flywheel PidkP {}", m_flywheelPidKp);
-        spdlog::info("Flywheel PidkI {}", m_flywheelPidKi);
-        spdlog::info("Flywheel PidKD {}", m_flywheelPidKd);
+        spdlog::info(
+            "Flywheel PidkF {}",
+            m_flywheelPidKf,
+            "Flywheel PidkP {}",
+            m_flywheelPidKp,
+            "Flywheel PidkI {}",
+            m_flywheelPidKi,
+            "Flywheel PidKD {}",
+            m_flywheelPidKd);
     }
 
     // // Validate and set the requested position to move
@@ -230,8 +251,11 @@ void Shooter::SetShooterSpeed(int state)
         case SHOOTERSPEED_STOP:
             flywheelRPM = 0.0;
             break;
-        case SHOOTERSPEED_FORWARD:
-            flywheelRPM = m_flywheelTargetRPM;
+        case SHOOTERSPEED_LOWHUB:
+            flywheelRPM = m_flywheelLowerHubTargetRPM;
+            break;
+        case SHOOTERSPEED_HIGHHUB:
+            flywheelRPM = m_flywheelUpperHubTargetRPM;
             break;
         default:
             spdlog::warn("SH invalid velocity requested - {}", state);
@@ -246,12 +270,4 @@ void Shooter::SetShooterSpeed(int state)
     }
 
     spdlog::info("SH Set shooter speed -  flywheel {:.1f}", flywheelRPM);
-}
-
-void Shooter::FlashlightOn(bool onState)
-{
-    spdlog::info("SH Flashlight {}", (onState) ? "ON" : "OFF");
-    frc::SmartDashboard::PutBoolean("SH_Flashlight", onState);
-
-    m_flashlight.Set(onState);
 }
