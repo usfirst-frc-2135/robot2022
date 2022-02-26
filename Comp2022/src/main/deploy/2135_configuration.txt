@@ -89,7 +89,7 @@
   CL_RaiseL4 = 25.25
 # Auto Settings
   AutoDrive_path = forward79
-  AutoShootDrive_path = forward79
+  AutoDriveShoot_path = forward79
   AutoShootDriveShoot_path1 = forward79
   AutoShootDriveShoot_path2 = backward79
   path1 = forward39
