@@ -60,6 +60,7 @@ VerticalConveyor::VerticalConveyor()
 
 void VerticalConveyor::Periodic()
 {
+#if 0
     static int periodicInterval = 0;
     // Put code here to be run every 20 ms loop
     // Only update indicators every 100 ms to cut down on network traffic
@@ -78,6 +79,7 @@ void VerticalConveyor::Periodic()
             frc::SmartDashboard::PutNumber("VC_Current_VC9", currentVC9);
         }
     }
+#endif
 }
 
 void VerticalConveyor::SimulationPeriodic()
