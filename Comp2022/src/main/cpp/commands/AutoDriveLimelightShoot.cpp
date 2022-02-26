@@ -83,7 +83,7 @@ AutoDriveLimelightShoot::AutoDriveLimelightShoot(
         //     //     std::pair{ LIMELIGHT, DriveLimelightShoot(drivetrain, intake, fConv, vConv, shooter, vision) },
         //     //     std::pair{ NO_LIMELIGHT, ScoringAction(5_s, intake, fConv, vConv, shooter) }},
         //     AutoStop(drivetrain) },
-        frc2::ParallelRaceGroup{ ScoringAction(5_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
+        frc2::ParallelRaceGroup{ ScoringActionLowHub(5_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
         ScoringStop(intake, fConv, vConv, shooter));
 }
 
