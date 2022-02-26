@@ -39,7 +39,7 @@ namespace frc2135
         if ((error = talon.GetLastError()) != OKAY)
         {
             spdlog::error("{} Motor {} GetDeviceID error - {}", subsystem, name, error);
-            return error;
+            return (error == OKAY);
         }
 
         std::this_thread::sleep_for(std::chrono::milliseconds(250));
@@ -50,7 +50,7 @@ namespace frc2135
             if ((error = talon.GetLastError()) != OKAY)
             {
                 spdlog::error("{} Motor {} ID {} GetFirmwareVersion error - {}", subsystem, name, deviceID, error);
-                return error;
+                return (error == OKAY);
             }
             if (fwVersion >= m_reqVersion)
             {
@@ -184,11 +184,9 @@ namespace frc2135
         char subsystem[] = "DT";
         char name[] = "Pigeon IMU";
 
-        spdlog::info("TalonFX Subsystem {} Name {}", subsystem, name);
-
         // Display Pigeon IMU firmware versions
         deviceID = pigeonPtr.GetDeviceNumber();
-        if ((error = pigeonPtr.GetLastError()) != OKAY)
+        if (!frc::RobotBase::IsSimulation() && ((error = pigeonPtr.GetLastError()) != OKAY))
         {
             spdlog::error("{} {} GetDeviceNumber error - {}", subsystem, name, error);
             return (error == OKAY);
@@ -197,7 +195,7 @@ namespace frc2135
         for (i = 0; i < retries; i++)
         {
             pigeonVersion = pigeonPtr.GetFirmwareVersion();
-            if ((error = pigeonPtr.GetLastError()) != OKAY)
+            if (!frc::RobotBase::IsSimulation() && ((error = pigeonPtr.GetLastError()) != OKAY))
             {
                 spdlog::error("{} {} ID {} GetFirmwareVersion error - {}", subsystem, name, deviceID, error);
                 return (error == OKAY);
