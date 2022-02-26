@@ -17,7 +17,8 @@
 #include "commands/IntakingStop.h"
 #include "commands/LEDSet.h"
 #include "commands/RobotInitialize.h"
-#include "commands/ScoringAction.h"
+#include "commands/ScoringActionHighHub.h"
+#include "commands/ScoringActionLowHub.h"
 #include "commands/ScoringStop.h"
 #include "commands/SimulateLimelight.h"
 
