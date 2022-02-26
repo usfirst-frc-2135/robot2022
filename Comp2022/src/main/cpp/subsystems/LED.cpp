@@ -31,7 +31,7 @@ LED::LED()
     m_candle.ConfigBrightnessScalar(0.5, 0);
 
     // Add options for colors in SmartDashboard
-    m_ledChooser.AddDefault("LED_Off", LEDCOLOR_OFF);
+    m_ledChooser.SetDefaultOption("LED_Off", LEDCOLOR_OFF);
     m_ledChooser.AddOption("LED_White", LEDCOLOR_WHITE);
     m_ledChooser.AddOption("LED_Red", LEDCOLOR_RED);
     m_ledChooser.AddOption("LED_Orange", LEDCOLOR_ORANGE);
