@@ -32,7 +32,9 @@ ClimberExtendToL3::ClimberExtendToL3(Climber *climber)
     // Gate hook activated (extended) still
 
     AddCommands( // Sequential command
-        ClimberMoveHeight(Climber::EXTEND_L3_HEIGHT, climber),
+        frc2::ParallelDeadlineGroup{
+            frc2::WaitUntilCommand([climber] { return climber->MoveClimberDistanceIsFinished(); }),
+            ClimberMoveHeight(Climber::EXTEND_L3_HEIGHT, climber) },
         ClimberSetGateHook(true));
 }
 

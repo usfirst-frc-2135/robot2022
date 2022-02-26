@@ -75,14 +75,14 @@ AutoDriveLimelightShoot::AutoDriveLimelightShoot(
                 frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
                 AutoDrivePath(m_pathname2.c_str(), false, drivetrain) },
             ScoringPrime(shooter) },
-        frc2::ParallelRaceGroup{
-            DriveLimelightShoot(drivetrain, intake, fConv, vConv, shooter, vision),
-            //    .WithInterrupt([drivetrain] { return !drivetrain->LimelightSanityCheck(); }),
-            // frc2::SelectCommand{
-            //     [drivetrain] { return drivetrain->LimelightSanityCheck(); },
-            //     std::pair{ LIMELIGHT, DriveLimelightShoot(drivetrain, intake, fConv, vConv, shooter, vision) },
-            //     std::pair{ NO_LIMELIGHT, ScoringAction(5_s, intake, fConv, vConv, shooter) }},
-            AutoStop(drivetrain) },
+        // frc2::ParallelRaceGroup{
+        //     DriveLimelightShoot(drivetrain, intake, fConv, vConv, shooter, vision),
+        //     //    .WithInterrupt([drivetrain] { return !drivetrain->LimelightSanityCheck(); }),
+        //     // frc2::SelectCommand{
+        //     //     [drivetrain] { return drivetrain->LimelightSanityCheck(); },
+        //     //     std::pair{ LIMELIGHT, DriveLimelightShoot(drivetrain, intake, fConv, vConv, shooter, vision) },
+        //     //     std::pair{ NO_LIMELIGHT, ScoringAction(5_s, intake, fConv, vConv, shooter) }},
+        //     AutoStop(drivetrain) },
         frc2::ParallelRaceGroup{ ScoringActionLowHub(5_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
         ScoringStop(intake, fConv, vConv, shooter));
 }
