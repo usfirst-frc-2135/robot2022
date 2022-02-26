@@ -63,8 +63,11 @@ RobotContainer::RobotContainer() :
     frc::SmartDashboard::PutData("Exhausting Action", new ExhaustingAction(&m_intake, &m_floorConv, &m_vertConv));
     frc::SmartDashboard::PutData("Exhausting Stop", new ExhaustingStop(&m_intake, &m_floorConv, &m_vertConv));
     frc::SmartDashboard::PutData(
-        "Scoring Action",
-        new ScoringAction(10_s, &m_intake, &m_floorConv, &m_vertConv, &m_shooter));
+        "Scoring Action Low Hub",
+        new ScoringActionLowHub(10_s, &m_intake, &m_floorConv, &m_vertConv, &m_shooter));
+    frc::SmartDashboard::PutData(
+        "Scoring Action High Hub",
+        new ScoringActionHighHub(10_s, &m_intake, &m_floorConv, &m_vertConv, &m_shooter));
     frc::SmartDashboard::PutData("Scoring Stop", new ScoringStop(&m_intake, &m_floorConv, &m_vertConv, &m_shooter));
     frc::SmartDashboard::PutData("Full Climb", new ClimberFullClimb(&m_climber));
 
@@ -168,14 +171,17 @@ void RobotContainer::ConfigureButtonBindings()
     // Driver - Bumpers
     m_intakingDr.WhenPressed(IntakingAction(&m_intake, &m_floorConv, &m_vertConv), true);
     m_intakingDr.WhenReleased(IntakingStop(&m_intake, &m_floorConv, &m_vertConv), true);
-    m_shootingDr.WhenPressed(ScoringAction(10_s, &m_intake, &m_floorConv, &m_vertConv, &m_shooter), true);
+
+    m_shootingDr.WhenPressed(ScoringActionLowHub(10_s, &m_intake, &m_floorConv, &m_vertConv, &m_shooter), true);
     m_shootingDr.WhenReleased(ScoringStop(&m_intake, &m_floorConv, &m_vertConv, &m_shooter), true);
 
     // Driver - Triggers
     m_leftTriggerDr.WhenPressed(ShooterAim(true), true);
     m_leftTriggerDr.WhenReleased(ShooterAim(false), true);
-    m_rightTriggerDr.WhileHeld(
-        DriveLimelightShoot(&m_drivetrain, &m_intake, &m_floorConv, &m_vertConv, &m_shooter, &m_vision));
+
+    // Driver Trigger for Limelight Mode
+    m_rightTriggerDr.WhileHeld(ScoringActionHighHub(10_s, &m_intake, &m_floorConv, &m_vertConv, &m_shooter), true);
+    //DriveLimelightShoot(&m_drivetrain, &m_intake, &m_floorConv, &m_vertConv, &m_shooter, &m_vision));
     m_rightTriggerDr.WhenReleased(ScoringStop(&m_intake, &m_floorConv, &m_vertConv, &m_shooter), true);
 
     // Driver - Start/back

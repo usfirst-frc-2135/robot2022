@@ -32,7 +32,9 @@ ClimberRotateIntoL3::ClimberRotateIntoL3(Climber *climber)
     // Gate hook move to default position (closed)
 
     AddCommands( // Sequential command
-        ClimberMoveHeight(Climber::NOCHANGE_HEIGHT, climber),
+        frc2::ParallelDeadlineGroup{
+            frc2::WaitUntilCommand([climber] { return climber->MoveClimberDistanceIsFinished(); }),
+            ClimberMoveHeight(Climber::NOCHANGE_HEIGHT, climber) },
         ClimberSetGateHook(false));
 }
 
