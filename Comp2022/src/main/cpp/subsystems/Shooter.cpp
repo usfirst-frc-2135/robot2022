@@ -71,8 +71,8 @@ Shooter::Shooter()
         m_motorSH11.SetSafetyEnabled(false);
 
         // Enable voltage compensation
-        m_motorSH11.ConfigVoltageCompSaturation(12.0, kCANTimeout);
-        m_motorSH11.EnableVoltageCompensation(true);
+        //m_motorSH11.ConfigVoltageCompSaturation(12.0, kCANTimeout);
+        //m_motorSH11.EnableVoltageCompensation(true);
         m_motorSH11.ConfigNeutralDeadband(m_flywheelNeutralDeadband, kCANTimeout);
         m_motorSH11.ConfigPeakOutputReverse(0.0, kCANTimeout);
 
