@@ -55,9 +55,6 @@ Intake::Intake()
         m_motorIN6.SetNeutralMode(NeutralMode::Coast);
         m_motorIN6.SetSafetyEnabled(false);
 
-        //m_motorIN6.ConfigVoltageCompSaturation(12.0, 0);
-        //m_motorIN6.EnableVoltageCompensation(true);
-
         SupplyCurrentLimitConfiguration supplyCurrentLimits;
         supplyCurrentLimits = { true, 45.0, 45.0, 0.001 };
         m_motorIN6.ConfigSupplyCurrentLimit(supplyCurrentLimits);
