@@ -492,19 +492,19 @@ void Drivetrain::SyncTalonPIDFromDashboard(void)
 
     if (m_talonValidL1)
     {
-        m_motorL1.Config_kF(kSlotIndex, m_ramsetePidKf, 0);
-        m_motorL1.Config_kP(kSlotIndex, m_ramsetePidKp, 0);
-        m_motorL1.Config_kI(kSlotIndex, m_ramsetePidKi, 0);
-        m_motorL1.Config_kD(kSlotIndex, m_ramsetePidKd, 0);
+        m_motorL1.Config_kF(kSlotIndex, m_ramsetePidKf);
+        m_motorL1.Config_kP(kSlotIndex, m_ramsetePidKp);
+        m_motorL1.Config_kI(kSlotIndex, m_ramsetePidKi);
+        m_motorL1.Config_kD(kSlotIndex, m_ramsetePidKd);
         m_motorL1.SelectProfileSlot(kSlotIndex, kPidIndex);
     }
 
     if (m_talonValidR3)
     {
-        m_motorR3.Config_kF(kSlotIndex, m_ramsetePidKf, 0);
-        m_motorR3.Config_kP(kSlotIndex, m_ramsetePidKp, 0);
-        m_motorR3.Config_kI(kSlotIndex, m_ramsetePidKi, 0);
-        m_motorR3.Config_kD(kSlotIndex, m_ramsetePidKd, 0);
+        m_motorR3.Config_kF(kSlotIndex, m_ramsetePidKf);
+        m_motorR3.Config_kP(kSlotIndex, m_ramsetePidKp);
+        m_motorR3.Config_kI(kSlotIndex, m_ramsetePidKi);
+        m_motorR3.Config_kD(kSlotIndex, m_ramsetePidKd);
         m_motorR3.SelectProfileSlot(kSlotIndex, kPidIndex);
     }
 }
@@ -570,10 +570,8 @@ void Drivetrain::MoveStop()
 void Drivetrain::MoveWithJoysticksInit(void)
 {
     SetBrakeMode(true);
-    m_motorL1.ConfigOpenloopRamp(m_openLoopRampRate, 0);
-    m_motorL2.ConfigOpenloopRamp(m_openLoopRampRate, 0);
-    m_motorR3.ConfigOpenloopRamp(m_openLoopRampRate, 0);
-    m_motorR4.ConfigOpenloopRamp(m_openLoopRampRate, 0);
+    m_motorL1.ConfigOpenloopRamp(m_openLoopRampRate);
+    m_motorR3.ConfigOpenloopRamp(m_openLoopRampRate);
 }
 
 void Drivetrain::MoveWithJoysticks(frc::XboxController *throttleJstick)
@@ -609,10 +607,8 @@ void Drivetrain::MoveWithJoysticks(frc::XboxController *throttleJstick)
 void Drivetrain::MoveWithJoysticksEnd(void)
 {
     SetBrakeMode(false);
-    m_motorL1.ConfigOpenloopRamp(0.0, 0);
-    m_motorL2.ConfigOpenloopRamp(0.0, 0);
-    m_motorR3.ConfigOpenloopRamp(0.0, 0);
-    m_motorR4.ConfigOpenloopRamp(0.0, 0);
+    m_motorL1.ConfigOpenloopRamp(0.0);
+    m_motorR3.ConfigOpenloopRamp(0.0);
 }
 
 // Movement during limelight shooting phase
