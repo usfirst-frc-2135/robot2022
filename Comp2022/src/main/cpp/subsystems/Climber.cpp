@@ -418,7 +418,10 @@ bool Climber::MoveClimberDistanceIsFinished()
         if (++withinTolerance >= 5)
         {
             isFinished = true;
-            spdlog::info("Climber move finished - Time: {:.5f}  |  Current inches: {:.4f}", m_safetyTimer.Get(), m_curInches);
+            spdlog::info(
+                "Climber move finished - Time: {:.5f}  |  Cur inches: {:.4f}",
+                m_safetyTimer.Get(),
+                m_curInches);
         }
     }
     else
