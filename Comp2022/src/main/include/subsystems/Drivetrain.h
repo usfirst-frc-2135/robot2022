@@ -208,8 +208,6 @@ private:
 public:
     Drivetrain();
 
-    void SimulationInit();
-
     void Periodic() override;
     void SimulationPeriodic() override;
 
