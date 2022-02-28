@@ -8,11 +8,11 @@
 // update. Deleting the comments indicating the section will prevent
 // it from being updated in the future.
 
-#include "commands/ScoringAction.h"
+#include "commands/ScoringActionLowHub.h"
 
 #include <spdlog/spdlog.h>
 
-ScoringAction::ScoringAction(
+ScoringActionLowHub::ScoringActionLowHub(
     second_t waitTime,
     Intake *intake,
     FloorConveyor *fConv,
@@ -21,9 +21,9 @@ ScoringAction::ScoringAction(
 {
     // Use AddRequirements() here to declare subsystem dependencies
     // eg. AddRequirements(m_Subsystem);
-    SetName("ScoringAction");
+    SetName("ScoringActionLowHub");
 
-    spdlog::info("ScoringAction");
+    spdlog::info("ScoringActionLowHub");
 
     // get wait time parameter
 
@@ -39,7 +39,7 @@ ScoringAction::ScoringAction(
                                      IntakeRun(Intake::INTAKE_ACQUIRE, intake) });
 }
 
-bool ScoringAction::RunsWhenDisabled() const
+bool ScoringActionLowHub::RunsWhenDisabled() const
 {
     return false;
 }

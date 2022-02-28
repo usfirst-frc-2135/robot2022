@@ -32,7 +32,9 @@ ClimberDeploy::ClimberDeploy(Climber *climber)
     // Driver needs to drive away manually from the hanger toward the rung it wants to hook on
 
     AddCommands( // Sequential command
-        ClimberMoveHeight(Climber::EXTEND_L2_HEIGHT, climber),
+        frc2::ParallelDeadlineGroup{
+            frc2::WaitUntilCommand([climber] { return climber->MoveClimberDistanceIsFinished(); }),
+            ClimberMoveHeight(Climber::EXTEND_L2_HEIGHT, climber) },
         ClimberSetGateHook(false));
 }
 

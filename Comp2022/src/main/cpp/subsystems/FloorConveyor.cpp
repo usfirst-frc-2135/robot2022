@@ -59,6 +59,7 @@ FloorConveyor::FloorConveyor()
 
 void FloorConveyor::Periodic()
 {
+#if 0
     static int periodicInterval = 0;
 
     // Put code here to be run every 20 ms loop
@@ -79,6 +80,7 @@ void FloorConveyor::Periodic()
             frc::SmartDashboard::PutNumber("FC_Current_FC8", currentFC8);
         }
     }
+#endif
 }
 
 void FloorConveyor::SimulationPeriodic()

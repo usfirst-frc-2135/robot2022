@@ -32,7 +32,9 @@ ClimberClimbToL4::ClimberClimbToL4(Climber *climber)
     // Gate hook is at default position
 
     AddCommands( // Sequential command
-        ClimberMoveHeight(Climber::RAISE_L4_HEIGHT, climber),
+        frc2::ParallelDeadlineGroup{
+            frc2::WaitUntilCommand([climber] { return climber->MoveClimberDistanceIsFinished(); }),
+            ClimberMoveHeight(Climber::RAISE_L4_HEIGHT, climber) },
         ClimberSetGateHook(false));
 }
 

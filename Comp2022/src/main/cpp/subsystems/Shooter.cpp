@@ -71,8 +71,6 @@ Shooter::Shooter()
         m_motorSH11.SetSafetyEnabled(false);
 
         // Enable voltage compensation
-        m_motorSH11.ConfigVoltageCompSaturation(12.0, kCANTimeout);
-        m_motorSH11.EnableVoltageCompensation(true);
         m_motorSH11.ConfigNeutralDeadband(m_flywheelNeutralDeadband, kCANTimeout);
         m_motorSH11.ConfigPeakOutputReverse(0.0, kCANTimeout);
 
@@ -110,12 +108,11 @@ void Shooter::Periodic()
 
     frc::SmartDashboard::PutNumber("SH_FlywheelRPM", m_flywheelCurrentRPM);
 
-    if (m_state == SHOOTERSPEED_LOWHUB)
+    if (m_state != SHOOTERSPEED_STOP)
     {
         if (!IsAtDesiredRPM())
         {
             robotContainer->m_led.SetColor(LED::LEDCOLOR_BLUE);
-            spdlog::info("SH m_flywheelCurrentRPM {:.1f}", m_flywheelCurrentRPM);
         }
         else
         {
@@ -198,6 +195,9 @@ bool Shooter::IsAtDesiredRPM()
         atDesiredSpeed = (fabs(m_flywheelUpperHubTargetRPM - m_flywheelCurrentRPM) < m_toleranceRPM);
     }
 
+    if ((m_state != SHOOTERSPEED_STOP) and !atDesiredSpeed)
+        spdlog::info("SH m_flywheelCurrentRPM {:.1f}", m_flywheelCurrentRPM);
+
     if (atDesiredSpeed != previousAtDesiredSpeed)
     {
         spdlog::info("SH RPM at Speed {}", (atDesiredSpeed) ? "TRUE" : "FALSE");
@@ -235,13 +235,10 @@ void Shooter::SetShooterSpeed(int state)
         m_motorSH11.SelectProfileSlot(kSlotIndex, kPidIndex);
 
         spdlog::info(
-            "Flywheel PidkF {}",
+            "Flywheel Pid kF {:.4f} kP {:.4f} kI {:.4f} kD {:.4f}",
             m_flywheelPidKf,
-            "Flywheel PidkP {}",
             m_flywheelPidKp,
-            "Flywheel PidkI {}",
             m_flywheelPidKi,
-            "Flywheel PidKD {}",
             m_flywheelPidKd);
     }
 

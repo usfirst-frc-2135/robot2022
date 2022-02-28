@@ -31,12 +31,16 @@ ClimberClimbToL2::ClimberClimbToL2(Climber *climber)
     // Climber lower to 0.25 inches
     // Gate hook is at default position (closed)
     // Climber raise to 0.35 inches (so hooks can rest)
-    // Wait 0.5 second
 
     AddCommands( // Sequential command
-        ClimberMoveHeight(Climber::STOW_HEIGHT, climber),
+        frc2::ParallelDeadlineGroup{
+            frc2::WaitUntilCommand([climber] { return climber->MoveClimberDistanceIsFinished(); }),
+            ClimberMoveHeight(Climber::STOW_HEIGHT, climber) },
         ClimberSetGateHook(false),
-        ClimberMoveHeight(Climber::GATEHOOK_REST_HEIGHT, climber));
+        frc2::WaitCommand(0.5_s), // see if necessary
+        frc2::ParallelDeadlineGroup{
+            frc2::WaitUntilCommand([climber] { return climber->MoveClimberDistanceIsFinished(); }),
+            ClimberMoveHeight(Climber::GATEHOOK_REST_HEIGHT, climber) });
 }
 
 bool ClimberClimbToL2::RunsWhenDisabled() const
