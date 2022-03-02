@@ -48,6 +48,10 @@ private:
     double m_expelSpeed;
     double m_expelSpeedFast;
 
+    // Current limit settings
+    SupplyCurrentLimitConfiguration m_supplyCurrentLimits = { true, 45.0, 45.0, 0.001 };
+    StatorCurrentLimitConfiguration m_statorCurrentLimits = { true, 80.0, 80.0, 0.001 };
+
 public:
     VerticalConveyor();
 

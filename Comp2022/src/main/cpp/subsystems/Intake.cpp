@@ -55,9 +55,11 @@ Intake::Intake()
         m_motorIN6.SetNeutralMode(NeutralMode::Coast);
         m_motorIN6.SetSafetyEnabled(false);
 
-        SupplyCurrentLimitConfiguration supplyCurrentLimits;
-        supplyCurrentLimits = { true, 45.0, 45.0, 0.001 };
-        m_motorIN6.ConfigSupplyCurrentLimit(supplyCurrentLimits);
+        //m_motorIN6.ConfigVoltageCompSaturation(12.0, 0);
+        //m_motorIN6.EnableVoltageCompensation(true);
+
+        m_motorIN6.ConfigSupplyCurrentLimit(m_supplyCurrentLimits);
+        m_motorIN6.ConfigStatorCurrentLimit(m_statorCurrentLimits);
 
         m_motorIN6.SetStatusFramePeriod(Status_1_General_, 255, kCANTimeout);
         m_motorIN6.SetStatusFramePeriod(Status_2_Feedback0_, 255, kCANTimeout);
