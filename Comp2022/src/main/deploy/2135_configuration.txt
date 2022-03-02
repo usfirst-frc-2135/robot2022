@@ -58,8 +58,8 @@
   VC_ExpelSpeed = -0.2
   VC_ExpelSpeedFast = -1.0
 # Shooter settings
-  SH_FlywheelPidKf = 0.0475
-  SH_FlywheelPidKp = 0.05
+  SH_FlywheelPidKf = 0.04775
+  SH_FlywheelPidKp = 1.0
   SH_FlywheelPidKi = 0.000
   SH_FlywheelPidKd = 0.000
   SH_FlywheelNeutralDeadband = 0.004
