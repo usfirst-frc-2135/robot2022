@@ -40,7 +40,7 @@ AutoDriveShoot::AutoDriveShoot(
     // Add your commands here, e.g.
     // AddCommands(FooCommand(), BarCommand());
     frc2135::RobotConfig *config = frc2135::RobotConfig::GetInstance();
-    config->GetValueAsString("AutoDriveShoot_path", m_pathname, "forward79");
+    config->GetValueAsString("AutoDriveShoot_path", m_pathname, "tarmacToBall");
     spdlog::info("AutoDriveShoot pathname {}", m_pathname.c_str());
 
     AddCommands( // Sequential command
@@ -52,7 +52,11 @@ AutoDriveShoot::AutoDriveShoot(
                 AutoDrivePath(m_pathname.c_str(), true, drivetrain) },
             ScoringPrime(shooter) },
         frc2::ParallelRaceGroup{ ScoringActionLowHub(5_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
-        ScoringStop(intake, fConv, vConv, shooter));
+        frc2::ParallelRaceGroup{ IntakeDeploy(true), AutoStop(drivetrain) },
+        ScoringStop(intake, fConv, vConv, shooter),
+        frc2::ParallelRaceGroup{
+            frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
+            AutoDrivePath(m_pathname.c_str(), true, drivetrain) });
 }
 
 bool AutoDriveShoot::RunsWhenDisabled() const
