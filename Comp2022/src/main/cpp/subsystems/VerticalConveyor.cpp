@@ -47,9 +47,8 @@ VerticalConveyor::VerticalConveyor()
         m_motorVC9.SetNeutralMode(NeutralMode::Coast);
         m_motorVC9.Set(ControlMode::PercentOutput, 0.0);
 
-        SupplyCurrentLimitConfiguration supplyCurrentLimits;
-        supplyCurrentLimits = { true, 45.0, 45.0, 0.001 };
-        m_motorVC9.ConfigSupplyCurrentLimit(supplyCurrentLimits);
+        m_motorVC9.ConfigSupplyCurrentLimit(m_supplyCurrentLimits);
+        m_motorVC9.ConfigStatorCurrentLimit(m_statorCurrentLimits);
 
         m_motorVC9.SetStatusFramePeriod(Status_1_General_, 255, kCANTimeout);
         m_motorVC9.SetStatusFramePeriod(Status_2_Feedback0_, 255, kCANTimeout);

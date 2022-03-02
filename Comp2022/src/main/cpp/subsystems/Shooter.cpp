@@ -56,12 +56,6 @@ Shooter::Shooter()
 
     frc::SmartDashboard::PutNumber("SH_ToleranceRPM", m_toleranceRPM);
 
-    SupplyCurrentLimitConfiguration supplyCurrentLimits;
-    supplyCurrentLimits = { true, 45.0, 45.0, 0.001 };
-
-    StatorCurrentLimitConfiguration statorCurrentLimits;
-    statorCurrentLimits = { true, 80.0, 80.0, 0.001 };
-
     if (m_talonValidSH11)
     {
         // Set motor directions
@@ -74,8 +68,8 @@ Shooter::Shooter()
         m_motorSH11.ConfigNeutralDeadband(m_flywheelNeutralDeadband, kCANTimeout);
         m_motorSH11.ConfigPeakOutputReverse(0.0, kCANTimeout);
 
-        m_motorSH11.ConfigSupplyCurrentLimit(supplyCurrentLimits);
-        m_motorSH11.ConfigStatorCurrentLimit(statorCurrentLimits);
+        m_motorSH11.ConfigSupplyCurrentLimit(m_supplyCurrentLimits);
+        m_motorSH11.ConfigStatorCurrentLimit(m_statorCurrentLimits);
 
         // Configure sensor settings
         m_motorSH11.ConfigSelectedFeedbackSensor(FeedbackDevice::IntegratedSensor, kPidIndex, kCANTimeout);

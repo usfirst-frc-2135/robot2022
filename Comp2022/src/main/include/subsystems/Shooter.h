@@ -81,6 +81,10 @@ private:
     double m_toleranceRPM; // Allowed variation from target RPM
     int m_state;           // Saved shooter state
 
+    //Current limit settings
+    SupplyCurrentLimitConfiguration m_supplyCurrentLimits = { true, 45.0, 45.0, 0.001 };
+    StatorCurrentLimitConfiguration m_statorCurrentLimits = { true, 80.0, 80.0, 0.001 };
+
     // Conversion functions between RPM and Output and CTRE Native Units / 100ms
     double FlywheelRPMToNative(double rpm);
     double NativeToFlywheelRPM(double native);
