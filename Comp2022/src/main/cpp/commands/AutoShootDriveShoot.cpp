@@ -15,6 +15,7 @@
 #include "commands/AutoWait.h"
 #include "commands/IntakeDeploy.h"
 #include "commands/IntakingAction.h"
+#include "commands/IntakingStop.h"
 #include "commands/ScoringActionHighHub.h"
 #include "commands/ScoringPrime.h"
 #include "commands/ScoringStop.h"
@@ -41,28 +42,39 @@ AutoShootDriveShoot::AutoShootDriveShoot(
     // Add your commands here, e.g.
     // AddCommands(FooCommand(), BarCommand());
     frc2135::RobotConfig *config = frc2135::RobotConfig::GetInstance();
-    config->GetValueAsString("AutoShootDriveShoot_path1", m_pathname1, "forward79");
-    config->GetValueAsString("AutoShootDriveShoot_path2", m_pathname2, "backward79");
+    config->GetValueAsString("AutoShootDriveShoot_path1", m_pathname1, "startToShootingPos");
+    config->GetValueAsString("AutoShootDriveShoot_path2", m_pathname2, "shootingPosToBall");
+    config->GetValueAsString("AutoShootDriveShoot_path3", m_pathname3, "ballToShootingPos");
+    config->GetValueAsString("AutoShootDriveShoot_path4", m_pathname4, "shootingPosToOffTarmac");
     spdlog::info("AutoShootDriveShoot pathname 1 {}", m_pathname1.c_str());
     spdlog::info("AutoShootDriveShoot pathname 2 {}", m_pathname2.c_str());
+    spdlog::info("AutoShootDriveShoot pathname 3 {}", m_pathname3.c_str());
+    spdlog::info("AutoShootDriveShoot pathname 4 {}", m_pathname4.c_str());
 
     AddCommands( // Sequential command
         frc2::ParallelRaceGroup{ IntakeDeploy(true), AutoStop(drivetrain) },
         AutoWait(drivetrain),
+        frc2::ParallelRaceGroup{
+            frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
+            AutoDrivePath(m_pathname1.c_str(), true, drivetrain) },
         frc2::ParallelRaceGroup{ ScoringActionHighHub(5_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
         frc2::ParallelCommandGroup{
             frc2::ParallelRaceGroup{
                 frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
-                AutoDrivePath(m_pathname1.c_str(), true, drivetrain) },
+                AutoDrivePath(m_pathname2.c_str(), true, drivetrain) },
             IntakingAction(intake, fConv, vConv),
-            ShooterRun(Shooter::SHOOTERSPEED_HIGHHUB, shooter) },
+            ScoringPrime(shooter) },
         frc2::ParallelCommandGroup{
             frc2::ParallelRaceGroup{
                 frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
-                AutoDrivePath(m_pathname2.c_str(), false, drivetrain) },
-            ScoringPrime(shooter) },
+                AutoDrivePath(m_pathname3.c_str(), true, drivetrain) },
+            IntakingStop(intake, fConv, vConv) },
         frc2::ParallelRaceGroup{ ScoringActionHighHub(5_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
-        ScoringStop(intake, fConv, vConv, shooter));
+        frc2::ParallelCommandGroup{
+            frc2::ParallelRaceGroup{
+                frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
+                AutoDrivePath(m_pathname3.c_str(), true, drivetrain) },
+            ScoringStop(intake, fConv, vConv, shooter) });
 }
 
 bool AutoShootDriveShoot::RunsWhenDisabled() const
