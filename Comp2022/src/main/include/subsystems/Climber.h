@@ -92,6 +92,10 @@ private:
     double m_pitch;
     double m_roll;
 
+    //Current Limit Settings
+    SupplyCurrentLimitConfiguration m_supplyCurrentLimits = { true, 45.0, 45.0, 0.001 };
+    StatorCurrentLimitConfiguration m_statorCurrentLimits = { true, 80.0, 80.0, 0.001 };
+
 public:
     Climber();
 
