@@ -29,7 +29,7 @@ AutoPathSequence::AutoPathSequence(Drivetrain *drivetrain)
     // AddCommands(FooCommand(), BarCommand());
     frc2135::RobotConfig *config = frc2135::RobotConfig::GetInstance();
     config->GetValueAsString("path1", path1, "forward39");
-    config->GetValueAsString("path2", path2, "right79");
+    config->GetValueAsString("path2", path2, "backward39");
     config->GetValueAsString("path3", path3, "left79");
 
     spdlog::info("AutoPathSequence: path1 name: {}", path1);

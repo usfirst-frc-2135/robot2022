@@ -50,8 +50,8 @@ RobotContainer::RobotContainer() :
     frc::SmartDashboard::PutData("LED Set", new LEDSet(LED::LEDCOLOR_DASH, &m_led));
     frc::SmartDashboard::PutData("Robot Initialize", new RobotInitialize());
 
-    frc::SmartDashboard::PutData("Auto Drive Path: forward79", new AutoDrivePath("forward79", true, &m_drivetrain));
-    frc::SmartDashboard::PutData("Auto Drive Path: backward79", new AutoDrivePath("backward79", true, &m_drivetrain));
+    frc::SmartDashboard::PutData("Auto Drive Path: forward39", new AutoDrivePath("forward39", true, &m_drivetrain));
+    frc::SmartDashboard::PutData("Auto Drive Path: backward39", new AutoDrivePath("backward39", true, &m_drivetrain));
     frc::SmartDashboard::PutData("Limelight Drive", new DriveLimelight(false, &m_drivetrain, &m_vision));
 
     frc::SmartDashboard::PutData("LEFT Drivetrain Motor Testing", new DrivetrainMotorTesting(true, &m_drivetrain));

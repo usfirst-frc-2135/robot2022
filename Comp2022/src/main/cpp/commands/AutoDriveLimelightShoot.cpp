@@ -44,8 +44,8 @@ AutoDriveLimelightShoot::AutoDriveLimelightShoot(
     // Add your commands here, e.g.
     // AddCommands(FooCommand(), BarCommand());
     frc2135::RobotConfig *config = frc2135::RobotConfig::GetInstance();
-    config->GetValueAsString("AutoDriveLimelightShoot_path1", m_pathname1, "forward79");
-    config->GetValueAsString("AutoDriveLimelightShoot_path2", m_pathname2, "backward79");
+    config->GetValueAsString("AutoDriveLimelightShoot_path1", m_pathname1, "forward39");
+    config->GetValueAsString("AutoDriveLimelightShoot_path2", m_pathname2, "backward39");
     spdlog::info("AutoDriveLimelightShoot pathname 1 {}", m_pathname1.c_str());
     spdlog::info("AutoDriveLimelightShoot pathname 2 {}", m_pathname2.c_str());
 
