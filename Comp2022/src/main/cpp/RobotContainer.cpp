@@ -176,10 +176,9 @@ void RobotContainer::ConfigureButtonBindings()
     m_shootingDr.WhenReleased(ScoringStop(&m_intake, &m_floorConv, &m_vertConv, &m_shooter), true);
 
     // Driver - Triggers
-
-    // Driver Trigger for Limelight Mode
-    m_rightTriggerDr.WhileHeld(ScoringActionHighHub(10_s, &m_intake, &m_floorConv, &m_vertConv, &m_shooter), true);
-    //DriveLimelightShoot(&m_drivetrain, &m_intake, &m_floorConv, &m_vertConv, &m_shooter, &m_vision));
+    // m_rightTriggerDr.WhileHeld(ScoringActionHighHub(10_s, &m_intake, &m_floorConv, &m_vertConv, &m_shooter), true);
+    m_rightTriggerDr.WhileHeld(
+        DriveLimelightShoot(&m_drivetrain, &m_intake, &m_floorConv, &m_vertConv, &m_shooter, &m_vision));
     m_rightTriggerDr.WhenReleased(ScoringStop(&m_intake, &m_floorConv, &m_vertConv, &m_shooter), true);
 
     // Driver - Start/back
