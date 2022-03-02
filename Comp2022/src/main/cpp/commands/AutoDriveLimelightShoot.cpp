@@ -63,13 +63,13 @@ AutoDriveLimelightShoot::AutoDriveLimelightShoot(
     AddCommands( // Sequential command
         frc2::ParallelRaceGroup{ IntakeDeploy(true), AutoStop(drivetrain) },
         AutoWait(drivetrain),
-        frc2::ParallelRaceGroup{ ScoringActionLowHub(5_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
+        frc2::ParallelRaceGroup{ ScoringActionHighHub(5_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
         frc2::ParallelCommandGroup{
             frc2::ParallelRaceGroup{
                 frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
                 AutoDrivePath(m_pathname1.c_str(), true, drivetrain) },
             IntakingAction(intake, fConv, vConv),
-            ShooterRun(Shooter::SHOOTERSPEED_LOWHUB, shooter) },
+            ShooterRun(Shooter::SHOOTERSPEED_HIGHHUB, shooter) },
         frc2::ParallelCommandGroup{
             frc2::ParallelRaceGroup{
                 frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),

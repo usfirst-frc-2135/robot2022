@@ -32,7 +32,7 @@ DriveLimelight::DriveLimelight(bool endAtTarget, Drivetrain *m_drivetrain, Visio
 // Called just before this Command runs the first time
 void DriveLimelight::Initialize()
 {
-    spdlog::info("DriveLimelight - Init");
+    spdlog::info("DriveLimelight - Init HERE");
     m_vision->SetLEDMode(Vision::LED_ON);
     m_drivetrain->MoveWithLimelightInit(m_endAtTarget);
 }
@@ -50,6 +50,7 @@ void DriveLimelight::Execute()
 // Make this return true when this Command no longer needs to run execute()
 bool DriveLimelight::IsFinished()
 {
+    //spdlog::info("DTL m_endAtTarget {}", m_endAtTarget);
     RobotContainer *robotContainer = RobotContainer::GetInstance();
     double tx = robotContainer->m_vision.GetHorizOffsetDeg();
     bool tv = robotContainer->m_vision.GetTargetValid();

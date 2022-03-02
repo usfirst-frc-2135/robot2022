@@ -160,10 +160,10 @@ void RobotContainer::ConfigureButtonBindings()
     frc2::JoystickButton m_quickturn{ &m_driverController, (int)frc::XboxController::Button::kA };
     frc2::JoystickButton m_intakingDr{ &m_driverController, (int)frc::XboxController::Button::kLeftBumper };
     frc2::JoystickButton m_shootingDr{ &m_driverController, (int)frc::XboxController::Button::kRightBumper };
-    frc2135::AxisButton m_leftTriggerDr(&m_driverController, (int)frc::XboxController::Axis::kLeftTrigger);
+    //frc2135::AxisButton m_leftTriggerDr(&m_driverController, (int)frc::XboxController::Axis::kLeftTrigger);
     frc2135::AxisButton m_rightTriggerDr(&m_driverController, (int)frc::XboxController::Axis::kRightTrigger);
     frc2::JoystickButton m_shooterAimOnDr{ &m_driverController, (int)frc::XboxController::Button::kStart };
-    frc2::JoystickButton m_shooterAimOffDr{ &m_driverController, (int)frc::XboxController::Button::kBack };
+    //frc2::JoystickButton m_shooterAimOffDr{ &m_driverController, (int)frc::XboxController::Button::kBack };
 
     // Driver - A, B, X, Y
     m_quickturn.WhileHeld(DriveQuickturn(), true);
@@ -176,17 +176,13 @@ void RobotContainer::ConfigureButtonBindings()
     m_shootingDr.WhenReleased(ScoringStop(&m_intake, &m_floorConv, &m_vertConv, &m_shooter), true);
 
     // Driver - Triggers
-    m_leftTriggerDr.WhenPressed(ShooterAim(true), true);
-    m_leftTriggerDr.WhenReleased(ShooterAim(false), true);
-
-    // Driver Trigger for Limelight Mode
-    m_rightTriggerDr.WhileHeld(ScoringActionHighHub(10_s, &m_intake, &m_floorConv, &m_vertConv, &m_shooter), true);
-    //DriveLimelightShoot(&m_drivetrain, &m_intake, &m_floorConv, &m_vertConv, &m_shooter, &m_vision));
+    // m_rightTriggerDr.WhileHeld(ScoringActionHighHub(10_s, &m_intake, &m_floorConv, &m_vertConv, &m_shooter), true);
+    m_rightTriggerDr.WhileHeld(
+        DriveLimelightShoot(&m_drivetrain, &m_intake, &m_floorConv, &m_vertConv, &m_shooter, &m_vision));
     m_rightTriggerDr.WhenReleased(ScoringStop(&m_intake, &m_floorConv, &m_vertConv, &m_shooter), true);
 
     // Driver - Start/back
-    m_shooterAimOnDr.WhenPressed(ShooterAim(true), true);
-    m_shooterAimOffDr.WhenPressed(ShooterAim(false), true);
+    m_shooterAimOnDr.ToggleWhenPressed(ShooterAim(true));
 
     // Operator Controller Assignments
     frc2::JoystickButton m_inStowOp{ &m_operatorController, (int)frc::XboxController::Button::kA };

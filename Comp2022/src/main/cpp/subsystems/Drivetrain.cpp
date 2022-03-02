@@ -630,10 +630,6 @@ void Drivetrain::MoveWithLimelightInit(bool m_endAtTarget)
     m_angleThreshold = frc::SmartDashboard::GetNumber("DTL_AngleThreshold", m_angleThreshold);
     m_distThreshold = frc::SmartDashboard::GetNumber("DTL_DistThreshold", m_distThreshold);
     m_throttleShape = frc::SmartDashboard::GetNumber("DTL_ThrottleShape", m_throttleShape);
-    m_vertOffset1 = frc::SmartDashboard::GetNumber("DTL_VertOffset1", m_vertOffset1);
-    m_vertOffset2 = frc::SmartDashboard::GetNumber("DTL_VertOffset2", m_vertOffset2);
-    m_distance1 = frc::SmartDashboard::GetNumber("DTL_Distance1", m_distance1);
-    m_distance2 = frc::SmartDashboard::GetNumber("DTL_Distance2", m_distance2);
 
     // load in Pid constants to controller
     m_turnPid = frc2::PIDController(m_turnPidKp, m_turnPidKi, m_turnPidKd);
@@ -668,6 +664,17 @@ void Drivetrain::MoveWithLimelightExecute(double tx, double ty, bool tv)
 
     if (m_talonValidL1 || m_talonValidR3)
         VelocityArcadeDrive(throttleOutput, turnOutput);
+
+    spdlog::info(
+        "DTL tv {} tx {:.1f} ty{:.1f} distError {:.f} lldistance {:.1f} stopped {} tOutput {:.2f} thrOutput {:.2f} ",
+        tv,
+        tx,
+        ty,
+        fabs(m_setPointDistance - m_limelightDistance),
+        m_limelightDistance,
+        MoveIsStopped(),
+        turnOutput,
+        throttleOutput);
 }
 
 bool Drivetrain::MoveWithLimelightIsFinished(double tx, bool tv)

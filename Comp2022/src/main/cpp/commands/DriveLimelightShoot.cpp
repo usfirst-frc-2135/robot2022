@@ -11,7 +11,7 @@
 #include "commands/DriveLimelightShoot.h"
 
 #include "commands/DriveLimelight.h"
-#include "commands/ScoringActionLowHub.h"
+#include "commands/ScoringActionHighHub.h"
 #include "commands/ScoringPrime.h"
 
 #include <frc/smartdashboard/SmartDashboard.h>
@@ -33,8 +33,8 @@ DriveLimelightShoot::DriveLimelightShoot(
     // AddCommands(FooCommand(), BarCommand());
     AddCommands(
         //drive backwards until target is valid
-        frc2::ParallelCommandGroup{ DriveLimelight(true, drivetrain, vision), ScoringPrime(shooter) },
-        frc2::ParallelCommandGroup{ AutoStop(drivetrain), ScoringActionLowHub(10_s, intake, fConv, vConv, shooter) });
+        frc2::ParallelCommandGroup{ DriveLimelight(true, drivetrain, vision) /*, ScoringPrime(shooter)*/ },
+        frc2::ParallelCommandGroup{ AutoStop(drivetrain), ScoringActionHighHub(10_s, intake, fConv, vConv, shooter) });
 }
 
 bool DriveLimelightShoot::RunsWhenDisabled() const
