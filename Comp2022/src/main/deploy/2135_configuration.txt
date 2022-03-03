@@ -81,12 +81,12 @@
   CL_MaxHeight = 85.0
   CL_MinHeight = 0.0
   CL_TargetHeight = 0.0
-  CL_StowHeight = 0.25
+  CL_StowHeight = 0.10
   CL_ExtendL2 = 29.0
   CL_RotateL3 = 31.25
   CL_ExtendL3 = 31.5
   CL_GatehookRestHeight = 1.85
-  CL_RaiseL4 = 25.25
+  CL_RaiseL4 = 20.25
 # Auto Settings
   AutoDrive_path = forward79
   AutoShootDrive_path = forward79

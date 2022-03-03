@@ -37,7 +37,7 @@ ClimberClimbToL2::ClimberClimbToL2(Climber *climber)
             frc2::WaitUntilCommand([climber] { return climber->MoveClimberDistanceIsFinished(); }),
             ClimberMoveHeight(Climber::STOW_HEIGHT, climber) },
         ClimberSetGateHook(false),
-        frc2::WaitCommand(0.5_s), // see if necessary
+        frc2::WaitCommand(1.0_s), // see if necessary
         frc2::ParallelDeadlineGroup{
             frc2::WaitUntilCommand([climber] { return climber->MoveClimberDistanceIsFinished(); }),
             ClimberMoveHeight(Climber::GATEHOOK_REST_HEIGHT, climber) });

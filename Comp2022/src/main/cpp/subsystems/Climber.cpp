@@ -256,7 +256,7 @@ void Climber::MoveClimberWithJoysticks(frc::XboxController *joystick)
 
             yCLValue -= m_deadband;
             yCLValue *= (1.0 / (1.0 - m_deadband));
-            motorOutput = yCLValue * abs(yCLValue);
+            motorOutput = (0.3) * (yCLValue * abs(yCLValue));
         }
         // If joystick is below a value, climber will move down
         else if (yCLValue < -m_deadband)
@@ -267,7 +267,7 @@ void Climber::MoveClimberWithJoysticks(frc::XboxController *joystick)
 
             yCLValue += m_deadband;
             yCLValue *= (1.0 / (1.0 - m_deadband));
-            motorOutput = yCLValue * abs(yCLValue);
+            motorOutput = (0.3) * (yCLValue * abs(yCLValue));
         }
     }
 
