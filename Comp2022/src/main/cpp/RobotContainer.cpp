@@ -209,7 +209,7 @@ void RobotContainer::ConfigureButtonBindings()
     m_exhaustingOp.WhenReleased(ExhaustingStop(&m_intake, &m_floorConv, &m_vertConv), true);
 
     // Operator - POV buttons
-    m_climber0StowOp.WhenPressed(ClimberStow(&m_climber, &m_intake, &m_floorConv, &m_vertConv, &m_shooter), true);
+    m_climber0StowOp.WhenPressed(ClimberClimbToL2(&m_climber), true);
     m_climber1DeployOp.WhenPressed(ClimberDeploy(&m_climber), true);
     m_climber3RotateL3Op.WhenPressed(ClimberRotateToL3(&m_climber), true);
     m_climber5RotateInL3Op.WhenPressed(ClimberRotateIntoL3(&m_climber), true);

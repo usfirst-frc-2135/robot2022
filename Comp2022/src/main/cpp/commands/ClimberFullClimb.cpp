@@ -70,19 +70,17 @@ ClimberFullClimb::ClimberFullClimb(Climber *climber)
         ClimberClimbToL2(climber),
         frc2::WaitCommand(0.5_s), // check to see if timer is necessary here
         ClimberRotateToL3(climber),
-        frc2::WaitCommand(1.0_s),
+        frc2::WaitCommand(0.5_s),
         ClimberRotateIntoL3(climber),
-        frc2::WaitCommand(1.0_s),
+        frc2::WaitCommand(2.0_s),
         ClimberClimbToL3(climber),
         frc2::WaitCommand(0.5_s),
         // next rung climb!
         ClimberRotateToL3(climber),
-        frc2::WaitCommand(1.0_s),
+        frc2::WaitCommand(0.5_s),
         ClimberRotateIntoL3(climber),
-        frc2::WaitCommand(1.0_s),
-        ClimberClimbToL4(climber),
-        frc2::WaitCommand(3.0_s),
-        ClimberSettleToL4(climber));
+        frc2::WaitCommand(2.5_s),
+        ClimberClimbToL4(climber));
 }
 
 bool ClimberFullClimb::RunsWhenDisabled() const
