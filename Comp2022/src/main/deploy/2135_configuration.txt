@@ -74,7 +74,7 @@
   CL_PidKf = 0.0496
   CL_PidKp = 0.50
   CL_PidKi = 0.000
-  CL_PidKd = 0.000
+  CL_PidKd = 0.025
   CL_CLRampRate = 0.000
   CL_CLAllowedError = 0
   CL_ToleranceInches = 0.75
