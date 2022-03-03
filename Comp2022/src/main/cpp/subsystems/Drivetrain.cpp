@@ -78,11 +78,6 @@ Drivetrain::Drivetrain()
     Initialize();
 }
 
-void Drivetrain::SimulationInit()
-{
-    m_pigeonValid = true;
-}
-
 void Drivetrain::Periodic()
 {
     // Put code here to be run every loop
@@ -492,19 +487,19 @@ void Drivetrain::SyncTalonPIDFromDashboard(void)
 
     if (m_talonValidL1)
     {
-        m_motorL1.Config_kF(kSlotIndex, m_ramsetePidKf, 0);
-        m_motorL1.Config_kP(kSlotIndex, m_ramsetePidKp, 0);
-        m_motorL1.Config_kI(kSlotIndex, m_ramsetePidKi, 0);
-        m_motorL1.Config_kD(kSlotIndex, m_ramsetePidKd, 0);
+        m_motorL1.Config_kF(kSlotIndex, m_ramsetePidKf);
+        m_motorL1.Config_kP(kSlotIndex, m_ramsetePidKp);
+        m_motorL1.Config_kI(kSlotIndex, m_ramsetePidKi);
+        m_motorL1.Config_kD(kSlotIndex, m_ramsetePidKd);
         m_motorL1.SelectProfileSlot(kSlotIndex, kPidIndex);
     }
 
     if (m_talonValidR3)
     {
-        m_motorR3.Config_kF(kSlotIndex, m_ramsetePidKf, 0);
-        m_motorR3.Config_kP(kSlotIndex, m_ramsetePidKp, 0);
-        m_motorR3.Config_kI(kSlotIndex, m_ramsetePidKi, 0);
-        m_motorR3.Config_kD(kSlotIndex, m_ramsetePidKd, 0);
+        m_motorR3.Config_kF(kSlotIndex, m_ramsetePidKf);
+        m_motorR3.Config_kP(kSlotIndex, m_ramsetePidKp);
+        m_motorR3.Config_kI(kSlotIndex, m_ramsetePidKi);
+        m_motorR3.Config_kD(kSlotIndex, m_ramsetePidKd);
         m_motorR3.SelectProfileSlot(kSlotIndex, kPidIndex);
     }
 }
@@ -570,10 +565,8 @@ void Drivetrain::MoveStop()
 void Drivetrain::MoveWithJoysticksInit(void)
 {
     SetBrakeMode(true);
-    m_motorL1.ConfigOpenloopRamp(m_openLoopRampRate, 0);
-    m_motorL2.ConfigOpenloopRamp(m_openLoopRampRate, 0);
-    m_motorR3.ConfigOpenloopRamp(m_openLoopRampRate, 0);
-    m_motorR4.ConfigOpenloopRamp(m_openLoopRampRate, 0);
+    m_motorL1.ConfigOpenloopRamp(m_openLoopRampRate);
+    m_motorR3.ConfigOpenloopRamp(m_openLoopRampRate);
 }
 
 void Drivetrain::MoveWithJoysticks(frc::XboxController *throttleJstick)
@@ -609,10 +602,8 @@ void Drivetrain::MoveWithJoysticks(frc::XboxController *throttleJstick)
 void Drivetrain::MoveWithJoysticksEnd(void)
 {
     SetBrakeMode(false);
-    m_motorL1.ConfigOpenloopRamp(0.0, 0);
-    m_motorL2.ConfigOpenloopRamp(0.0, 0);
-    m_motorR3.ConfigOpenloopRamp(0.0, 0);
-    m_motorR4.ConfigOpenloopRamp(0.0, 0);
+    m_motorL1.ConfigOpenloopRamp(0.0);
+    m_motorR3.ConfigOpenloopRamp(0.0);
 }
 
 // Movement during limelight shooting phase
@@ -634,10 +625,6 @@ void Drivetrain::MoveWithLimelightInit(bool m_endAtTarget)
     m_angleThreshold = frc::SmartDashboard::GetNumber("DTL_AngleThreshold", m_angleThreshold);
     m_distThreshold = frc::SmartDashboard::GetNumber("DTL_DistThreshold", m_distThreshold);
     m_throttleShape = frc::SmartDashboard::GetNumber("DTL_ThrottleShape", m_throttleShape);
-    m_vertOffset1 = frc::SmartDashboard::GetNumber("DTL_VertOffset1", m_vertOffset1);
-    m_vertOffset2 = frc::SmartDashboard::GetNumber("DTL_VertOffset2", m_vertOffset2);
-    m_distance1 = frc::SmartDashboard::GetNumber("DTL_Distance1", m_distance1);
-    m_distance2 = frc::SmartDashboard::GetNumber("DTL_Distance2", m_distance2);
 
     // load in Pid constants to controller
     m_turnPid = frc2::PIDController(m_turnPidKp, m_turnPidKi, m_turnPidKd);
@@ -672,6 +659,17 @@ void Drivetrain::MoveWithLimelightExecute(double tx, double ty, bool tv)
 
     if (m_talonValidL1 || m_talonValidR3)
         VelocityArcadeDrive(throttleOutput, turnOutput);
+
+    spdlog::info(
+        "DTL tv {} tx {:.1f} ty{:.1f} distError {:.f} lldistance {:.1f} stopped {} tOutput {:.2f} thrOutput {:.2f} ",
+        tv,
+        tx,
+        ty,
+        fabs(m_setPointDistance - m_limelightDistance),
+        m_limelightDistance,
+        MoveIsStopped(),
+        turnOutput,
+        throttleOutput);
 }
 
 bool Drivetrain::MoveWithLimelightIsFinished(double tx, bool tv)

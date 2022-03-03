@@ -90,12 +90,6 @@ Climber::Climber()
     frc::SmartDashboard::PutNumber("CL Setpoint", 0.0);
     frc::SmartDashboard::PutBoolean("CL Calibrated", m_calibrated);
 
-    SupplyCurrentLimitConfiguration supplyCurrentLimits;
-    supplyCurrentLimits = { true, 45.0, 45.0, 0.001 };
-
-    StatorCurrentLimitConfiguration statorCurrentLimits;
-    statorCurrentLimits = { true, 80.0, 80.0, 0.001 };
-
     // Set motor directions
     // Turn on Coast mode (not brake)
     // Set motor peak outputs
@@ -105,8 +99,8 @@ Climber::Climber()
         m_motorCL14.SetNeutralMode(NeutralMode::Brake);
         m_motorCL14.SetSafetyEnabled(false);
 
-        m_motorCL14.ConfigSupplyCurrentLimit(supplyCurrentLimits);
-        m_motorCL14.ConfigStatorCurrentLimit(statorCurrentLimits);
+        m_motorCL14.ConfigSupplyCurrentLimit(m_supplyCurrentLimits);
+        m_motorCL14.ConfigStatorCurrentLimit(m_statorCurrentLimits);
 
         // Configure sensor settings
         m_motorCL14.SetSelectedSensorPosition(0, 0, kCANTimeout);
@@ -138,7 +132,8 @@ Climber::Climber()
         m_motorCL15.Set(ControlMode::Follower, 14);
         m_motorCL15.SetInverted(InvertType::OpposeMaster);
         m_motorCL15.SetNeutralMode(NeutralMode::Brake);
-        m_motorCL15.ConfigSupplyCurrentLimit(supplyCurrentLimits);
+        m_motorCL15.ConfigSupplyCurrentLimit(m_supplyCurrentLimits);
+        m_motorCL15.ConfigStatorCurrentLimit(m_statorCurrentLimits);
         m_motorCL15.SetStatusFramePeriod(Status_1_General_, 255, kCANTimeout);
         m_motorCL15.SetStatusFramePeriod(Status_2_Feedback0_, 255, kCANTimeout);
     }
@@ -418,7 +413,10 @@ bool Climber::MoveClimberDistanceIsFinished()
         if (++withinTolerance >= 5)
         {
             isFinished = true;
-            spdlog::info("Climber move finished - Time: {:.5f}  |  Current inches: {:.4f}", m_safetyTimer.Get(), m_curInches);
+            spdlog::info(
+                "Climber move finished - Time: {:.5f}  |  Cur inches: {:.4f}",
+                m_safetyTimer.Get(),
+                m_curInches);
         }
     }
     else

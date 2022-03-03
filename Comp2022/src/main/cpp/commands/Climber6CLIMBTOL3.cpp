@@ -32,9 +32,18 @@ ClimberClimbToL3::ClimberClimbToL3(Climber *climber)
     // Gate hook is at default position
 
     AddCommands( // Sequential command
-        ClimberMoveHeight(Climber::STOW_HEIGHT, climber),
+        frc2::ParallelDeadlineGroup{
+            frc2::WaitUntilCommand([climber] { return climber->MoveClimberDistanceIsFinished(); }),
+            ClimberMoveHeight(Climber::RAISE_L4_HEIGHT, climber) },
+        frc2::WaitCommand(0.5_s),
         ClimberSetGateHook(false),
-        ClimberMoveHeight(Climber::GATEHOOK_REST_HEIGHT, climber));
+        frc2::ParallelDeadlineGroup{
+            frc2::WaitUntilCommand([climber] { return climber->MoveClimberDistanceIsFinished(); }),
+            ClimberMoveHeight(Climber::STOW_HEIGHT, climber) },
+        frc2::WaitCommand(0.5_s),
+        frc2::ParallelDeadlineGroup{
+            frc2::WaitUntilCommand([climber] { return climber->MoveClimberDistanceIsFinished(); }),
+            ClimberMoveHeight(Climber::GATEHOOK_REST_HEIGHT, climber) });
 }
 
 bool ClimberClimbToL3::RunsWhenDisabled() const
