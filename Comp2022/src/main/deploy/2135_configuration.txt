@@ -61,7 +61,7 @@
   SH_FlywheelPidKf = 0.04775
   SH_FlywheelPidKp = 1.0
   SH_FlywheelPidKi = 0.000
-  SH_FlywheelPidKd = 0.000
+  SH_FlywheelPidKd = 0.025
   SH_FlywheelNeutralDeadband = 0.004
   SH_FlywheelLowerHubTargetRPM = 1000.0
   SH_FlywheelUpperHubTargetRPM = 2200.0
