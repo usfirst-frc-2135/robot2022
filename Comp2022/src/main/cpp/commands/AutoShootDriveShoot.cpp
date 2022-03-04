@@ -74,7 +74,7 @@ AutoShootDriveShoot::AutoShootDriveShoot(
             IntakingStop(intake, fConv, vConv) },
         frc2::ParallelDeadlineGroup{ ScoringActionHighHub(2_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
         IntakeDeploy(false),
-        frc2::WaitCommand(2_s),
+        frc2::WaitCommand(1_s),
         frc2::ParallelCommandGroup{
             frc2::ParallelDeadlineGroup{
                 frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
