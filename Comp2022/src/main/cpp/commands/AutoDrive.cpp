@@ -31,11 +31,11 @@ AutoDrive::AutoDrive(Drivetrain *drivetrain, Intake *intake)
     // Add your commands here, e.g.
     // AddCommands(FooCommand(), BarCommand());
     frc2135::RobotConfig *config = frc2135::RobotConfig::GetInstance();
-    config->GetValueAsString("AutoDrive_path", m_pathname, "forward39");
+    config->GetValueAsString("AutoDrive_path", m_pathname, "startToOffTarmac");
     spdlog::info("AutoDrive pathname {}", m_pathname.c_str());
 
     AddCommands( // Sequential command
-        frc2::ParallelRaceGroup{ IntakeDeploy(true), AutoStop(drivetrain) },
+        // frc2::ParallelRaceGroup{ IntakeDeploy(true), AutoStop(drivetrain) },
         AutoWait(drivetrain),
         frc2::ParallelRaceGroup{
             frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
