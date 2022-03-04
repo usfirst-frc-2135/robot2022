@@ -165,7 +165,6 @@ void RobotContainer::ConfigureButtonBindings()
     frc2::JoystickButton m_driverLeftBumper{ &m_driverController, (int)frc::XboxController::Button::kLeftBumper };
     m_driverLeftBumper.WhenPressed(IntakingAction(&m_intake, &m_floorConv, &m_vertConv), true);
     m_driverLeftBumper.WhenReleased(IntakingStop(&m_intake, &m_floorConv, &m_vertConv), true);
-
     frc2::JoystickButton m_driverRightBumper{ &m_driverController, (int)frc::XboxController::Button::kRightBumper };
     m_driverRightBumper.WhenPressed(ScoringActionLowHub(10_s, &m_intake, &m_floorConv, &m_vertConv, &m_shooter), true);
     m_driverRightBumper.WhenReleased(ScoringStop(&m_intake, &m_floorConv, &m_vertConv, &m_shooter), true);
