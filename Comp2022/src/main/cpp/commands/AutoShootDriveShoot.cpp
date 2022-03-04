@@ -23,7 +23,7 @@
 
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/ParallelCommandGroup.h>
-#include <frc2/command/ParallelRaceGroup.h>
+#include <frc2/command/ParallelDeadlineGroup.h>
 #include <frc2/command/WaitCommand.h>
 #include <frc2/command/WaitUntilCommand.h>
 #include <spdlog/spdlog.h>
@@ -53,30 +53,30 @@ AutoShootDriveShoot::AutoShootDriveShoot(
     spdlog::info("AutoShootDriveShoot pathname 4 {}", m_pathname4.c_str());
 
     AddCommands( // Sequential command
-        frc2::ParallelRaceGroup{ IntakeDeploy(true), AutoStop(drivetrain) },
+        frc2::ParallelDeadlineGroup{ IntakeDeploy(true), AutoStop(drivetrain) },
         AutoWait(drivetrain),
         frc2::ParallelCommandGroup{
-            frc2::ParallelRaceGroup{
+            frc2::ParallelDeadlineGroup{
                 frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
                 AutoDrivePath(m_pathname1.c_str(), true, drivetrain) },
             ScoringPrime(shooter) },
-        frc2::ParallelRaceGroup{ ScoringActionHighHub(1_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
-        frc2::ParallelCommandGroup{
-            frc2::ParallelRaceGroup{
+        frc2::ParallelDeadlineGroup{ ScoringActionHighHub(1_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
+        frc2::ParallelDeadlineGroup{
+            frc2::ParallelDeadlineGroup{
                 frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
                 AutoDrivePath(m_pathname2.c_str(), false, drivetrain) },
             IntakingAction(intake, fConv, vConv),
             ScoringPrime(shooter) },
         frc2::ParallelCommandGroup{
-            frc2::ParallelRaceGroup{
+            frc2::ParallelDeadlineGroup{
                 frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
                 AutoDrivePath(m_pathname3.c_str(), false, drivetrain) },
             IntakingStop(intake, fConv, vConv) },
-        frc2::ParallelRaceGroup{ ScoringActionHighHub(2_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
+        frc2::ParallelDeadlineGroup{ ScoringActionHighHub(2_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
         IntakeDeploy(false),
-        frc2::WaitCommand(1_s),
+        frc2::WaitCommand(2_s),
         frc2::ParallelCommandGroup{
-            frc2::ParallelRaceGroup{
+            frc2::ParallelDeadlineGroup{
                 frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
                 AutoDrivePath(m_pathname4.c_str(), false, drivetrain) },
             ScoringStop(intake, fConv, vConv, shooter) });

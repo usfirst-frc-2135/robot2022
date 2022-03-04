@@ -12,7 +12,7 @@
 #include "commands/AutoStop.h"
 #include "frc2135/RobotConfig.h"
 
-#include <frc2/command/ParallelRaceGroup.h>
+#include <frc2/command/ParallelDeadlineGroup.h>
 #include <frc2/command/WaitUntilCommand.h>
 #include <spdlog/spdlog.h>
 
@@ -39,10 +39,10 @@ AutoPathSequence::AutoPathSequence(Drivetrain *drivetrain)
     spdlog::info("AutoPathSequence: path3 name: {}", path3);
 
     AddCommands( // Sequential command
-        frc2::ParallelRaceGroup{
+        frc2::ParallelDeadlineGroup{
             frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
             AutoDrivePath(path1.c_str(), true, drivetrain) },
-        frc2::ParallelRaceGroup{
+        frc2::ParallelDeadlineGroup{
             frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
             AutoDrivePath(path2.c_str(), false, drivetrain) }, // AutoDrivePath(path3.c_str(), drivetrain)
         AutoStop(drivetrain));
