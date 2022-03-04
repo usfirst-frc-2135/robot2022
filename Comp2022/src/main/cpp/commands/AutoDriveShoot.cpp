@@ -14,7 +14,7 @@
 #include "commands/AutoStop.h"
 #include "commands/AutoWait.h"
 #include "commands/IntakeDeploy.h"
-#include "commands/ScoringActionLowHub.h"
+#include "commands/ScoringActionHighHub.h"
 #include "commands/ScoringPrime.h"
 #include "commands/ScoringStop.h"
 #include "frc2135/RobotConfig.h"
@@ -40,8 +40,10 @@ AutoDriveShoot::AutoDriveShoot(
     // Add your commands here, e.g.
     // AddCommands(FooCommand(), BarCommand());
     frc2135::RobotConfig *config = frc2135::RobotConfig::GetInstance();
-    config->GetValueAsString("AutoDriveShoot_path", m_pathname, "tarmacToBall");
-    spdlog::info("AutoDriveShoot pathname {}", m_pathname.c_str());
+    config->GetValueAsString("AutoDriveShoot_path1", m_pathname1, "startToShootingPos");
+    config->GetValueAsString("AutoDriveShoot_path2", m_pathname2, "shootingPosToOffTarmac");
+    spdlog::info("AutoDriveShoot pathname 1 {}", m_pathname1.c_str());
+    spdlog::info("AutoDriveShoot pathname 2 {}", m_pathname2.c_str());
 
     AddCommands( // Sequential command
         frc2::ParallelRaceGroup{ IntakeDeploy(true), AutoStop(drivetrain) },
@@ -49,14 +51,14 @@ AutoDriveShoot::AutoDriveShoot(
         frc2::ParallelCommandGroup{
             frc2::ParallelRaceGroup{
                 frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
-                AutoDrivePath(m_pathname.c_str(), true, drivetrain) },
+                AutoDrivePath(m_pathname1.c_str(), true, drivetrain) },
             ScoringPrime(shooter) },
-        frc2::ParallelRaceGroup{ ScoringActionLowHub(5_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
+        frc2::ParallelRaceGroup{ ScoringActionHighHub(1.5_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
         frc2::ParallelRaceGroup{ IntakeDeploy(true), AutoStop(drivetrain) },
         ScoringStop(intake, fConv, vConv, shooter),
         frc2::ParallelRaceGroup{
             frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
-            AutoDrivePath(m_pathname.c_str(), true, drivetrain) });
+            AutoDrivePath(m_pathname2.c_str(), false, drivetrain) });
 }
 
 bool AutoDriveShoot::RunsWhenDisabled() const
