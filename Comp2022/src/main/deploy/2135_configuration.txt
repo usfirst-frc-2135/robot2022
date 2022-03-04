@@ -61,7 +61,7 @@
   SH_FlywheelPidKf = 0.04775
   SH_FlywheelPidKp = 1.0
   SH_FlywheelPidKi = 0.000
-  SH_FlywheelPidKd = 0.000
+  SH_FlywheelPidKd = 0.025
   SH_FlywheelNeutralDeadband = 0.004
   SH_FlywheelLowerHubTargetRPM = 1000.0
   SH_FlywheelUpperHubTargetRPM = 2200.0
@@ -81,12 +81,12 @@
   CL_MaxHeight = 85.0
   CL_MinHeight = 0.0
   CL_TargetHeight = 0.0
-  CL_StowHeight = 0.25
+  CL_StowHeight = 0.10
   CL_ExtendL2 = 29.0
   CL_RotateL3 = 31.25
   CL_ExtendL3 = 31.5
   CL_GatehookRestHeight = 1.85
-  CL_RaiseL4 = 25.25
+  CL_RaiseL4 = 20.25
 # Auto Settings
   AutoDrive_path = forward39
   AutoDriveShoot_path = forward39

@@ -144,5 +144,7 @@ void VerticalConveyor::SetVerticalConveyorSpeed(int mode)
 
 bool VerticalConveyor::IsCargoDetected(void)
 {
-    return m_cargoDetected.Get();
+    bool cargoDetected = m_cargoDetected.Get();
+    frc::SmartDashboard::PutBoolean("VC_cargoDetected", cargoDetected);
+    return cargoDetected;
 }
