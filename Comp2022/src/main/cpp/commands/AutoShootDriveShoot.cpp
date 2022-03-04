@@ -67,11 +67,9 @@ AutoShootDriveShoot::AutoShootDriveShoot(
                 AutoDrivePath(m_pathname2.c_str(), false, drivetrain) },
             IntakingAction(intake, fConv, vConv),
             ScoringPrime(shooter) },
-        frc2::ParallelCommandGroup{
-            frc2::ParallelDeadlineGroup{
-                frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
-                AutoDrivePath(m_pathname3.c_str(), false, drivetrain) },
-            IntakingStop(intake, fConv, vConv) },
+        frc2::ParallelDeadlineGroup{
+            frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
+            AutoDrivePath(m_pathname3.c_str(), false, drivetrain) },
         frc2::ParallelDeadlineGroup{ ScoringActionHighHub(2_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
         IntakeDeploy(false),
         frc2::WaitCommand(1_s),
