@@ -177,9 +177,11 @@ void RobotContainer::ConfigureButtonBindings()
 
     // Driver - Triggers
     // m_rightTriggerDr.WhileHeld(ScoringActionHighHub(10_s, &m_intake, &m_floorConv, &m_vertConv, &m_shooter), true);
-    m_rightTriggerDr.WhileHeld(
+    m_rightTriggerDr.WhenPressed(
         DriveLimelightShoot(&m_drivetrain, &m_intake, &m_floorConv, &m_vertConv, &m_shooter, &m_vision));
-    m_rightTriggerDr.WhenReleased(ScoringStop(&m_intake, &m_floorConv, &m_vertConv, &m_shooter), true);
+    m_rightTriggerDr.WhenReleased(
+        DriveLimelightStop(&m_drivetrain, &m_intake, &m_floorConv, &m_vertConv, &m_shooter),
+        true);
 
     // Driver - Start/back
     m_shooterAimOnDr.ToggleWhenPressed(ShooterAim(true));
