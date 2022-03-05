@@ -173,6 +173,10 @@ void Climber::Periodic()
     m_curInches = CountsToInches(curCounts);
     frc::SmartDashboard::PutNumber("CL_Height", m_curInches);
 
+    // Calibrate climber if hall sensors are activated
+    if (!m_climberDownLeft.Get() || !m_climberDownRight.Get())
+        Calibrate();
+
     // Only update indicators every 100 ms to cut down on network traffic
     if (periodicInterval++ % 5 == 0)
     {
@@ -305,12 +309,18 @@ double Climber::CountsToInches(int counts)
     return counts * kInchesPerCount;
 }
 
+void Climber::MoveToCalibrate(void)
+{
+    if (m_talonValidCL14)
+        m_motorCL14.Set(ControlMode::PercentOutput, -0.1);
+}
 void Climber::Calibrate()
 {
     if (m_talonValidCL14)
     {
         m_motorCL14.SetSelectedSensorPosition(0, 0, kCANTimeout);
-        m_motorCL14.Set(ControlMode::Position, 0.0);
+        // m_motorCL14.Set(ControlMode::Position, 0.0);
+        // m_motorCL14.Set(ControlMode::MotionMagic, 0.0);
     }
     m_calibrated = true;
     frc::SmartDashboard::PutBoolean("CL_Calibrated", m_calibrated);
