@@ -348,6 +348,8 @@ void Climber::MoveClimberDistanceInit(int state)
     {
         case NOCHANGE_HEIGHT: // Do not change from current level!
             m_targetInches = m_curInches;
+            if (m_targetInches < 0.25)
+                m_targetInches = 0.25;
             break;
         case STOW_HEIGHT:
             m_targetInches = frc::SmartDashboard::GetNumber("CL_StowHeight", m_stowHeight);
