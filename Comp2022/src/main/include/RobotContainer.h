@@ -44,6 +44,7 @@
 #include "commands/ClimberSetGateHook.h"
 #include "commands/DriveLimelight.h"
 #include "commands/DriveLimelightShoot.h"
+#include "commands/DriveLimelightStop.h"
 #include "commands/DriveQuickturn.h"
 #include "commands/DriveTeleop.h"
 #include "commands/DrivetrainMotorTesting.h"

@@ -168,9 +168,11 @@ void RobotContainer::ConfigureButtonBindings()
 
     // Driver - Triggers
     frc2135::AxisButton m_driverRightTrigger(&m_driverController, (int)frc::XboxController::Axis::kRightTrigger);
-    m_driverRightTrigger.WhileHeld(
+    m_driverRightTrigger.WhenPressed(
         DriveLimelightShoot(&m_drivetrain, &m_intake, &m_floorConv, &m_vertConv, &m_shooter, &m_vision));
-    m_driverRightTrigger.WhenReleased(ScoringStop(&m_intake, &m_floorConv, &m_vertConv, &m_shooter), true);
+    m_driverRightTrigger.WhenReleased(
+        DriveLimelightStop(&m_drivetrain, &m_intake, &m_floorConv, &m_vertConv, &m_shooter),
+        true);
 
     // Driver - Start/back
     frc2::JoystickButton m_driverStart{ &m_driverController, (int)frc::XboxController::Button::kStart };
