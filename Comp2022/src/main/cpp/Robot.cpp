@@ -138,7 +138,11 @@ void Robot::AutonomousInit()
     }
 }
 
-void Robot::AutonomousPeriodic() {}
+void Robot::AutonomousPeriodic()
+{
+    RobotContainer *robotContainer = RobotContainer::GetInstance();
+    robotContainer->m_drivetrain.m_diffDrive.FeedWatchdog();
+}
 
 void Robot::TeleopInit()
 {

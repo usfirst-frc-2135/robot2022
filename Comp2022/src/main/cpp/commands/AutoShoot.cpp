@@ -18,7 +18,7 @@
 #include "frc2135/RobotConfig.h"
 
 #include <frc/smartdashboard/SmartDashboard.h>
-#include <frc2/command/ParallelRaceGroup.h>
+#include <frc2/command/ParallelDeadlineGroup.h>
 #include <spdlog/spdlog.h>
 #include <wpi/SmallString.h>
 
@@ -36,9 +36,9 @@ AutoShoot::AutoShoot(
     // Add your commands here, e.g.
     // AddCommands(FooCommand(), BarCommand());
     AddCommands( // Sequential command
-        frc2::ParallelRaceGroup{ IntakeDeploy(true), AutoStop(drivetrain) },
+        frc2::ParallelDeadlineGroup{ IntakeDeploy(true), AutoStop(drivetrain) },
         AutoWait(drivetrain),
-        frc2::ParallelRaceGroup{ ScoringActionHighHub(5_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
+        frc2::ParallelDeadlineGroup{ ScoringActionHighHub(5_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
         ScoringStop(intake, fConv, vConv, shooter));
 }
 

@@ -833,10 +833,19 @@ void Drivetrain::RamseteFollowerExecute(void)
 
 bool Drivetrain::RamseteFollowerIsFinished(void)
 {
+    if (m_trajTimer.Get() == 0_s)
+        return false;
+
+    spdlog::info(
+        "time targTime {:.2f} {:.2f} | cur vel LR {:.2f} {:.2f}",
+        m_trajTimer.Get().to<double>(),
+        m_trajectory.TotalTime().to<double>(),
+        m_wheelSpeeds.left.to<double>(),
+        m_wheelSpeeds.right.to<double>());
+
     return (
-        (m_trajTimer.Get() >= m_trajectory.TotalTime())
-        && (abs(m_motorL1.GetSelectedSensorVelocity()) <= 0 + m_tolerance)
-        && (abs(m_motorL1.GetSelectedSensorVelocity()) <= 0 + m_tolerance));
+        (m_trajTimer.Get() >= m_trajectory.TotalTime()) && (abs(m_wheelSpeeds.left.to<double>()) <= 0 + m_tolerance)
+        && (abs(m_wheelSpeeds.right.to<double>()) <= 0 + m_tolerance));
 }
 
 void Drivetrain::RamseteFollowerEnd(void)

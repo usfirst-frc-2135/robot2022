@@ -41,4 +41,6 @@ private:
     // Must be a member variable so commands can use it when they execute
     std::string m_pathname1;
     std::string m_pathname2;
+    std::string m_pathname3;
+    std::string m_pathname4;
 };

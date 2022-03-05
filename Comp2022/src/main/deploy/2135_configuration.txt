@@ -88,14 +88,17 @@
   CL_GatehookRestHeight = 1.85
   CL_RaiseL4 = 20.25
 # Auto Settings
-  AutoDrive_path = forward79
-  AutoShootDrive_path = forward79
-  AutoShootDriveShoot_path1 = forward79
-  AutoShootDriveShoot_path2 = backward79
+  AutoDrive_path = startToOffTarmac
+  AutoDriveShoot_path1 = startToShootingPos
+  AutoDriveShoot_path2 = shootingPosToOffTarmac
+  AutoShootDriveShoot_path1 = startToShootingPos
+  AutoShootDriveShoot_path2 = shootingPosToBall
+  AutoShootDriveShoot_path3 = ballToShootingPos
+  AutoShootDriveShoot_path4 = shootingPosToOffTarmac
   path1 = forward39
-  path2 = left79
+  path2 = backward39
   path3 = rightAngleTurn
   AUTO_WaitTime = 0.0
-  AutoDriveLimelightShoot_path1 = forward79
-  AutoDriveLimelightShoot_path2 = backward79
-  AutoDriveShoot_path = forward79
+  AutoDriveLimelightShoot_path1 = forward39
+  AutoDriveLimelightShoot_path2 = backward39
+  AutoDriveShoot_path = forward39
