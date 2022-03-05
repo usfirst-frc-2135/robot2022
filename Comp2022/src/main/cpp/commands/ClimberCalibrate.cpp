@@ -31,8 +31,9 @@ ClimberCalibrate::ClimberCalibrate(Climber *m_climber) : m_climber(m_climber)
 void ClimberCalibrate::Initialize()
 {
     spdlog::info("ClimberCalibrate - Init");
-    // m_climber->MoveToCalibrate();
-    m_climber->Calibrate();
+    m_calibrateTimer.Reset();
+    m_climber->MoveToCalibrate();
+    m_calibrateTimer.Start();
 }
 
 // Called repeatedly when this Command is scheduled to run
@@ -41,15 +42,15 @@ void ClimberCalibrate::Execute() {}
 // Make this return true when this Command no longer needs to run execute()
 bool ClimberCalibrate::IsFinished()
 {
-    // return false;
-    return true;
+    return m_calibrateTimer.HasElapsed(5.0_s);
 }
 
 // Called once after isFinished returns true
 void ClimberCalibrate::End(bool interrupted)
 {
     spdlog::info("ClimberCalibrate - End");
-    // m_climber->Calibrate();
+    m_calibrateTimer.Stop();
+    m_climber->Calibrate();
 }
 
 bool ClimberCalibrate::RunsWhenDisabled() const
