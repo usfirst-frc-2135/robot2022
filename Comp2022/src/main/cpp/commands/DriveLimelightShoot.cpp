@@ -16,6 +16,7 @@
 
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/ParallelCommandGroup.h>
+#include <frc2/command/ParallelDeadlineGroup.h>
 #include <frc2/command/ParallelRaceGroup.h>
 
 DriveLimelightShoot::DriveLimelightShoot(
@@ -36,11 +37,10 @@ DriveLimelightShoot::DriveLimelightShoot(
     AddCommands(
         //drive backwards until target is valid
         frc2::ParallelCommandGroup{
-            DriveLimelight(true, drivetrain, vision),
+            DriveLimelight(false, drivetrain, vision),
             frc2::SequentialCommandGroup{
-                frc2::ParallelRaceGroup{
+                frc2::ParallelDeadlineGroup{
                     frc2::WaitUntilCommand([drivetrain] { return drivetrain->MoveWithLimelightIsFinished(); }),
-                    //},
                     ScoringPrime(shooter) },
                 ScoringActionHighHub(120_s, intake, fConv, vConv, shooter) }
 
