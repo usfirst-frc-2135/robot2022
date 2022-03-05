@@ -114,9 +114,8 @@ public:
         STOW_HEIGHT = 0,          // Move to stow height
         EXTEND_L2_HEIGHT = 1,     // Move to extend to L2 height
         ROTATE_L3_HEIGHT = 2,     // Move to rotate to L3 height
-        EXTEND_L3_HEIGHT = 3,     // Move to extend to L3 height
-        GATEHOOK_REST_HEIGHT = 4, // Move to lower on L3 height so gate hooks clamp
-        RAISE_L4_HEIGHT = 5       // Move to extend on last rung ~6 inches
+        GATEHOOK_REST_HEIGHT = 3, // Move to lower on L3 height so gate hooks clamp
+        RAISE_L4_HEIGHT = 4       // Move to extend on last rung ~6 inches
     };
 
     void Initialize(void);
@@ -124,6 +123,7 @@ public:
     void MoveClimberWithJoysticks(frc::XboxController *operatorController);
     void SetGateHook(bool hookClosed);
     void SetClimberStopped(void);
+    void MoveToCalibrate(void);
 
     enum
     {
