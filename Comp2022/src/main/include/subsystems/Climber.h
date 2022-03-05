@@ -117,6 +117,7 @@ public:
         EXTEND_L3_HEIGHT = 3,
         GATEHOOK_REST_HEIGHT = 4, // Move to lower on L3 height so gate hooks clamp
         RAISE_L4_HEIGHT = 5       // Move to extend on last rung ~6 inches
+
     };
 
     void Initialize(void);
