@@ -76,7 +76,7 @@ Climber::Climber()
     frc::SmartDashboard::PutNumber("CL_PidKd", m_pidKd);
     frc::SmartDashboard::PutNumber("CL_StowHeight", m_stowHeight);
     frc::SmartDashboard::PutNumber("CL_ExtendL2", m_extendL2);
-    frc::SmartDashboard::PutNumber("Cl_RotateL3", m_rotateL3);
+    frc::SmartDashboard::PutNumber("CL_RotateL3", m_rotateL3);
     frc::SmartDashboard::PutNumber("CL_ExtendL3", m_extendL3);
     frc::SmartDashboard::PutNumber("CL_GatehookRestHeight", m_gatehookRestHeight);
     frc::SmartDashboard::PutNumber("CL_RaiseL4", m_raiseL4);
@@ -87,8 +87,7 @@ Climber::Climber()
     m_calibrated = false;
 
     // Field for manually progamming climber height
-    frc::SmartDashboard::PutNumber("CL Setpoint", 0.0);
-    frc::SmartDashboard::PutBoolean("CL Calibrated", m_calibrated);
+    frc::SmartDashboard::PutBoolean("CL_Calibrated", m_calibrated);
 
     // Set motor directions
     // Turn on Coast mode (not brake)
@@ -172,7 +171,11 @@ void Climber::Periodic()
     }
 
     m_curInches = CountsToInches(curCounts);
-    frc::SmartDashboard::PutNumber("CL Height", m_curInches);
+    frc::SmartDashboard::PutNumber("CL_Height", m_curInches);
+
+    // Calibrate climber if hall sensors are activated
+    if (!m_climberDownLeft.Get() || !m_climberDownRight.Get())
+        Calibrate();
 
     // Only update indicators every 100 ms to cut down on network traffic
     if (periodicInterval++ % 5 == 0)
@@ -306,15 +309,21 @@ double Climber::CountsToInches(int counts)
     return counts * kInchesPerCount;
 }
 
+void Climber::MoveToCalibrate(void)
+{
+    if (m_talonValidCL14)
+        m_motorCL14.Set(ControlMode::PercentOutput, -0.1);
+}
 void Climber::Calibrate()
 {
     if (m_talonValidCL14)
     {
         m_motorCL14.SetSelectedSensorPosition(0, 0, kCANTimeout);
-        m_motorCL14.Set(ControlMode::Position, 0.0);
+        // m_motorCL14.Set(ControlMode::Position, 0.0);
+        // m_motorCL14.Set(ControlMode::MotionMagic, 0.0);
     }
     m_calibrated = true;
-    frc::SmartDashboard::PutBoolean("CL Calibrated", m_calibrated);
+    frc::SmartDashboard::PutBoolean("CL_Calibrated", m_calibrated);
 }
 
 void Climber::MoveClimberDistanceInit(int state)
@@ -338,6 +347,7 @@ void Climber::MoveClimberDistanceInit(int state)
     switch (state)
     {
         case NOCHANGE_HEIGHT: // Do not change from current level!
+            m_targetInches = frc::SmartDashboard::GetNumber("CL_Height", m_curInches);
             break;
         case STOW_HEIGHT:
             m_targetInches = frc::SmartDashboard::GetNumber("CL_StowHeight", m_stowHeight);
@@ -346,7 +356,7 @@ void Climber::MoveClimberDistanceInit(int state)
             m_targetInches = frc::SmartDashboard::GetNumber("CL_ExtendL2", m_extendL2);
             break;
         case ROTATE_L3_HEIGHT:
-            m_targetInches = frc::SmartDashboard::GetNumber("Cl_RotateL3", m_rotateL3);
+            m_targetInches = frc::SmartDashboard::GetNumber("CL_RotateL3", m_rotateL3);
             break;
         case EXTEND_L3_HEIGHT:
             m_targetInches = frc::SmartDashboard::GetNumber("CL_ExtendL3", m_rotateL3);
@@ -355,7 +365,7 @@ void Climber::MoveClimberDistanceInit(int state)
             m_targetInches = frc::SmartDashboard::GetNumber("CL_GatehookRestHeight", m_gatehookRestHeight);
             break;
         case RAISE_L4_HEIGHT:
-            m_targetInches = frc::SmartDashboard::GetNumber("CL_RaiseL3", m_raiseL4);
+            m_targetInches = frc::SmartDashboard::GetNumber("CL_RaiseL4", m_raiseL4);
             break;
         default:
             spdlog::info("CL requested height is invalid - {}", state);

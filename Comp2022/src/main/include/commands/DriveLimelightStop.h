@@ -18,17 +18,18 @@
 
 #include <frc2/command/CommandBase.h>
 #include <frc2/command/CommandHelper.h>
-#include <frc2/command/SequentialCommandGroup.h>
+#include <frc2/command/ParallelCommandGroup.h>
+#include <frc2/command/ParallelDeadlineGroup.h>
 
 /**
- * https://docs.google.com/presentation/d/1SQlcOZpuv9mqVmsuJRcJQMyKcwuBd6hcQGlkFT-_Odg/edit?pli=1#slide=id.g11030b7b884_1_28
  *
- * @author ngupta-22
+ *
+ * @author ExampleAuthor
  */
-class AutoShootDriveShoot : public frc2::CommandHelper<frc2::SequentialCommandGroup, AutoShootDriveShoot>
+class DriveLimelightStop : public frc2::CommandHelper<frc2::ParallelCommandGroup, DriveLimelightStop>
 {
 public:
-    explicit AutoShootDriveShoot(
+    explicit DriveLimelightStop(
         Drivetrain *m_drivetrain,
         Intake *m_intake,
         FloorConveyor *m_floorConv,
@@ -38,9 +39,5 @@ public:
     bool RunsWhenDisabled() const override;
 
 private:
-    // Must be a member variable so commands can use it when they execute
-    std::string m_pathname1;
-    std::string m_pathname2;
-    std::string m_pathname3;
-    std::string m_pathname4;
+    const char *path;
 };

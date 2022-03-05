@@ -25,10 +25,10 @@
  *
  * @author ngupta-22
  */
-class AutoShootDrive : public frc2::CommandHelper<frc2::SequentialCommandGroup, AutoShootDrive>
+class AutoDriveShoot : public frc2::CommandHelper<frc2::SequentialCommandGroup, AutoDriveShoot>
 {
 public:
-    explicit AutoShootDrive(
+    explicit AutoDriveShoot(
         Drivetrain *m_drivetrain,
         Intake *m_intake,
         FloorConveyor *m_floorConv,
@@ -39,5 +39,6 @@ public:
 
 private:
     // Must be a member variable so commands can use it when they execute
-    std::string m_pathname;
+    std::string m_pathname1;
+    std::string m_pathname2;
 };
