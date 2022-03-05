@@ -182,14 +182,14 @@ void RobotContainer::ConfigureButtonBindings()
     // Operator Controller Assignments
     // Operator - A, B, X, Y
     frc2::JoystickButton m_operA{ &m_operatorController, (int)frc::XboxController::Button::kA };
-    m_operA.WhenPressed(IntakeDeploy(true), true);
+    m_operA.WhenPressed(IntakeDeploy(false), true);
     frc2::JoystickButton m_operB{ &m_operatorController, (int)frc::XboxController::Button::kB };
     m_operB.WhenPressed(ExhaustingAction(&m_intake, &m_floorConv, &m_vertConv), true);
     m_operB.WhenReleased(ExhaustingStop(&m_intake, &m_floorConv, &m_vertConv), true);
     frc2::JoystickButton m_operX{ &m_operatorController, (int)frc::XboxController::Button::kX };
     m_operX.WhenPressed(ScoringStop(&m_intake, &m_floorConv, &m_vertConv, &m_shooter), true);
     frc2::JoystickButton m_operY{ &m_operatorController, (int)frc::XboxController::Button::kY };
-    m_operY.WhenPressed(IntakeDeploy(false), true);
+    m_operY.WhenPressed(IntakeDeploy(true), true);
 
     // Operator - POV buttons
     frc2::POVButton m_operDown{ &m_operatorController, 180, 0 };
@@ -232,4 +232,10 @@ frc2::Command *RobotContainer::GetAutonomousCommand()
 {
     // The selected command will be run in autonomous
     return m_chooser.GetSelected();
+}
+
+frc2::Command *RobotContainer::GetTeleopInitCommand()
+{
+    // The selected command will be run in teleop init
+    return new ClimberCalibrate(&m_climber);
 }
