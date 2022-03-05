@@ -63,7 +63,7 @@ model {
                     srcDir '../third_party/spdlog-1.9.2/include'
                 }
             }
-            
+
             binaries.all {
                 if (targetPlatform.operatingSystem.isWindows()) {
                     cppCompiler.args << '/std:c++17'
@@ -72,6 +72,9 @@ model {
                 }
                 cppCompiler.define 'SPDLOG_COMPILED_LIB'
                 cppCompiler.define 'SPDLOG_FMT_EXTERNAL'
+                cppCompiler.define 'SPDLOG_CLOCK_COARSE'
+                cppCompiler.define 'SPDLOG_NO_THREAD_ID'
+                cppCompiler.define 'SPDLOG_NO_ATOMIC_LEVELS'
             }
 
             binaries.withType(SharedLibraryBinarySpec) {
@@ -100,6 +103,9 @@ model {
             binaries.all {
                 cppCompiler.define 'SPDLOG_COMPILED_LIB'
                 cppCompiler.define 'SPDLOG_FMT_EXTERNAL'
+                cppCompiler.define 'SPDLOG_CLOCK_COARSE'
+                cppCompiler.define 'SPDLOG_NO_THREAD_ID'
+                cppCompiler.define 'SPDLOG_NO_ATOMIC_LEVELS'
             }
 
             // Set deploy task to deploy this component
@@ -136,6 +142,9 @@ model {
             binaries.all {
                 cppCompiler.define 'SPDLOG_COMPILED_LIB'
                 cppCompiler.define 'SPDLOG_FMT_EXTERNAL'
+                cppCompiler.define 'SPDLOG_CLOCK_COARSE'
+                cppCompiler.define 'SPDLOG_NO_THREAD_ID'
+                cppCompiler.define 'SPDLOG_NO_ATOMIC_LEVELS'
             }
         }
     }
