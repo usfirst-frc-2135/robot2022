@@ -197,6 +197,17 @@
               "_source0": "network_table:///SmartDashboard/DT_GyroRoll",
               "_title": "GyroRoll"
             }
+          },
+          "21,0": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DT_getHeadingAngle",
+              "_title": "getHeadingAngle"
+            }
           }
         }
       }
@@ -486,7 +497,7 @@
         "vgap": 16.0,
         "titleType": 0,
         "tiles": {
-          "0,0": {
+          "17,4": {
             "size": [
               3,
               2
@@ -499,7 +510,7 @@
               "Colors/Color when false": "#8B0000FF"
             }
           },
-          "3,0": {
+          "20,4": {
             "size": [
               3,
               2
@@ -510,7 +521,7 @@
               "_title": "Output_CL14"
             }
           },
-          "6,0": {
+          "23,0": {
             "size": [
               2,
               1
@@ -521,7 +532,7 @@
               "_title": "Velocity"
             }
           },
-          "8,0": {
+          "5,0": {
             "size": [
               2,
               1
@@ -532,7 +543,7 @@
               "_title": "ExtendL2"
             }
           },
-          "10,0": {
+          "9,0": {
             "size": [
               2,
               1
@@ -543,7 +554,7 @@
               "_title": "ExtendL3"
             }
           },
-          "12,0": {
+          "0,0": {
             "size": [
               2,
               1
@@ -554,7 +565,7 @@
               "_title": "StowHeight"
             }
           },
-          "14,0": {
+          "23,2": {
             "size": [
               2,
               1
@@ -565,7 +576,7 @@
               "_title": "Acceleration"
             }
           },
-          "16,0": {
+          "25,5": {
             "size": [
               2,
               1
@@ -576,7 +587,7 @@
               "_title": "PidKd"
             }
           },
-          "18,0": {
+          "25,0": {
             "size": [
               2,
               1
@@ -587,7 +598,7 @@
               "_title": "PidKf"
             }
           },
-          "20,0": {
+          "25,4": {
             "size": [
               2,
               1
@@ -598,7 +609,7 @@
               "_title": "PidKi"
             }
           },
-          "22,0": {
+          "25,2": {
             "size": [
               2,
               1
@@ -609,7 +620,7 @@
               "_title": "PidKp"
             }
           },
-          "24,0": {
+          "23,4": {
             "size": [
               2,
               1
@@ -620,10 +631,10 @@
               "_title": "SCurveStrength"
             }
           },
-          "6,1": {
+          "2,0": {
             "size": [
-              2,
-              1
+              3,
+              2
             ],
             "content": {
               "_type": "Text View",
@@ -631,7 +642,7 @@
               "_title": "GatehookRestHeight"
             }
           },
-          "8,1": {
+          "11,0": {
             "size": [
               2,
               1
@@ -640,6 +651,118 @@
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/CL_RaiseL4",
               "_title": "RaiseL4"
+            }
+          },
+          "17,0": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/CL_Calibrated",
+              "_title": "Calibrated",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "7,0": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/CL_RotateL3",
+              "_title": "RotateL3"
+            }
+          },
+          "20,0": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/CL_Height",
+              "_title": "Height"
+            }
+          },
+          "0,5": {
+            "size": [
+              4,
+              2
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Climber 0Stow",
+              "_title": "SmartDashboard/Climber 0Stow"
+            }
+          },
+          "3,3": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Climber 1Deploy",
+              "_title": "SmartDashboard/Climber 1Deploy"
+            }
+          },
+          "6,3": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Climber 2ClimbToL2",
+              "_title": "SmartDashboard/Climber 2ClimbToL2"
+            }
+          },
+          "9,3": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Climber 3RotateToL3",
+              "_title": "SmartDashboard/Climber 3RotateToL3"
+            }
+          },
+          "12,3": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Climber 5RotateIntoL3",
+              "_title": "SmartDashboard/Climber 5RotateIntoL3"
+            }
+          },
+          "0,3": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Climber Calibrate",
+              "_title": "SmartDashboard/Climber Calibrate"
+            }
+          },
+          "4,5": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Full Climb",
+              "_title": "SmartDashboard/Full Climb"
             }
           }
         }
@@ -1935,9 +2058,9 @@
     }
   ],
   "windowGeometry": {
-    "x": -6.666666507720947,
-    "y": 0.0,
-    "width": 1289.3333740234375,
-    "height": 696.0
+    "x": 5.0,
+    "y": 23.0,
+    "width": 1435.0,
+    "height": 803.0
   }
 }

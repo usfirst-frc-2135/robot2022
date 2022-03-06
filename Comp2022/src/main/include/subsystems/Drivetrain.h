@@ -241,8 +241,8 @@ public:
 
     void MoveWithLimelightInit(bool m_endAtTarget);
     double GetLimelightDistance(void);
-    void MoveWithLimelightExecute(double tx, double ty, bool tv);
-    bool MoveWithLimelightIsFinished(double tx, bool tv);
+    void MoveWithLimelightExecute(void);
+    bool MoveWithLimelightIsFinished(void);
     void MoveWithLimelightEnd();
 
     bool LimelightSanityCheck();

@@ -319,8 +319,8 @@ void Climber::Calibrate()
     if (m_talonValidCL14)
     {
         m_motorCL14.SetSelectedSensorPosition(0, 0, kCANTimeout);
-        // m_motorCL14.Set(ControlMode::Position, 0.0);
-        // m_motorCL14.Set(ControlMode::MotionMagic, 0.0);
+        m_targetInches = 0;
+        m_curInches = 0;
     }
     m_calibrated = true;
     frc::SmartDashboard::PutBoolean("CL_Calibrated", m_calibrated);
@@ -347,6 +347,9 @@ void Climber::MoveClimberDistanceInit(int state)
     switch (state)
     {
         case NOCHANGE_HEIGHT: // Do not change from current level!
+            m_targetInches = m_curInches;
+            if (m_targetInches < 0.25)
+                m_targetInches = 0.25;
             break;
         case STOW_HEIGHT:
             m_targetInches = frc::SmartDashboard::GetNumber("CL_StowHeight", m_stowHeight);
