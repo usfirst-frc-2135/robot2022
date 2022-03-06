@@ -62,8 +62,7 @@ Climber::Climber()
     config->GetValueAsDouble("CL_MinHeight", m_climberMinHeight, 0.0);
     config->GetValueAsDouble("CL_StowHeight", m_stowHeight, 0.25);
     config->GetValueAsDouble("CL_ExtendL2", m_extendL2, 29.0);
-    config->GetValueAsDouble("CL_RotateL3", m_rotateL3, 21.0);
-    config->GetValueAsDouble("CL_ExtendL3", m_extendL3, 31.5);
+    config->GetValueAsDouble("CL_RotateL3", m_rotateL3, 31.25);
     config->GetValueAsDouble("CL_GatehookRestHeight", m_gatehookRestHeight, 0.35);
     config->GetValueAsDouble("CL_RaiseL4", m_raiseL4, 25.25);
 
@@ -77,7 +76,6 @@ Climber::Climber()
     frc::SmartDashboard::PutNumber("CL_StowHeight", m_stowHeight);
     frc::SmartDashboard::PutNumber("CL_ExtendL2", m_extendL2);
     frc::SmartDashboard::PutNumber("CL_RotateL3", m_rotateL3);
-    frc::SmartDashboard::PutNumber("CL_ExtendL3", m_extendL3);
     frc::SmartDashboard::PutNumber("CL_GatehookRestHeight", m_gatehookRestHeight);
     frc::SmartDashboard::PutNumber("CL_RaiseL4", m_raiseL4);
 
@@ -359,9 +357,6 @@ void Climber::MoveClimberDistanceInit(int state)
             break;
         case ROTATE_L3_HEIGHT:
             m_targetInches = frc::SmartDashboard::GetNumber("CL_RotateL3", m_rotateL3);
-            break;
-        case EXTEND_L3_HEIGHT:
-            m_targetInches = frc::SmartDashboard::GetNumber("CL_ExtendL3", m_rotateL3);
             break;
         case GATEHOOK_REST_HEIGHT:
             m_targetInches = frc::SmartDashboard::GetNumber("CL_GatehookRestHeight", m_gatehookRestHeight);

@@ -34,4 +34,9 @@ public:
     bool RunsWhenDisabled() const override;
 
 private:
+    double m_climbL2Timer;
+    double m_rotateExtendL3Timer;
+    double m_rotateRetractL3Timer;
+    double m_climbL3Timer;
+    double m_rotateRetractL4Timer;
 };
