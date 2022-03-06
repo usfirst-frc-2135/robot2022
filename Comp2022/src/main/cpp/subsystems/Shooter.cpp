@@ -240,6 +240,9 @@ void Shooter::SetShooterSpeed(int state)
     // // Validate and set the requested position to move
     switch (state)
     {
+        case SHOOTERSPEED_REVERSE:
+            flywheelRPM = -1000;
+            break;
         case SHOOTERSPEED_STOP:
             flywheelRPM = 0.0;
             break;
@@ -262,4 +265,26 @@ void Shooter::SetShooterSpeed(int state)
     }
 
     spdlog::info("SH Set shooter speed -  flywheel {:.1f}", flywheelRPM);
+}
+
+void Shooter::ShooterReverseInit()
+{
+    SetShooterSpeed(0.0);
+}
+
+void Shooter::ShooterReverseExecute()
+{
+    double reverseRPMThreshold = 20;
+
+    if (m_flywheelCurrentRPM < reverseRPMThreshold)
+    {
+        m_motorSH11.ConfigPeakOutputReverse(-1.0, kCANTimeout);
+        spdlog::info("Shooter can now reverse");
+        SetShooterSpeed(SHOOTERSPEED_REVERSE);
+    }
+}
+
+void Shooter::ShooterReverseEnd()
+{
+    m_motorSH11.ConfigPeakOutputReverse(0.0, kCANTimeout);
 }
