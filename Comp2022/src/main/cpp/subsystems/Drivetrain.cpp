@@ -629,6 +629,9 @@ void Drivetrain::MoveWithLimelightInit(bool m_endAtTarget)
     // load in Pid constants to controller
     m_turnPid = frc2::PIDController(m_turnPidKp, m_turnPidKi, m_turnPidKd);
     m_throttlePid = frc2::PIDController(m_throttlePidKp, m_throttlePidKi, m_throttlePidKd);
+
+    RobotContainer *RobotContainer = RobotContainer::GetInstance();
+    RobotContainer->m_vision.m_yfilter.Reset();
 }
 
 void Drivetrain::MoveWithLimelightExecute(void)
@@ -637,6 +640,13 @@ void Drivetrain::MoveWithLimelightExecute(void)
     double tx = robotContainer->m_vision.GetHorizOffsetDeg();
     double ty = robotContainer->m_vision.GetVertOffsetDeg();
     bool tv = robotContainer->m_vision.GetTargetValid();
+
+    if (tv == false)
+    {
+        VelocityArcadeDrive(0, 0);
+        spdlog::info("TV-FALSE SO STILL STILL");
+        return;
+    }
 
     // get turn value - just horizontal offset from target
     double turnOutput = -m_turnPid.Calculate(robotContainer->m_vision.GetHorizOffsetDeg(), m_targetAngle);
