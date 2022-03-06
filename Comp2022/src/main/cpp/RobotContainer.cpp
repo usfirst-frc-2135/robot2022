@@ -64,10 +64,10 @@ RobotContainer::RobotContainer() :
     frc::SmartDashboard::PutData("Exhausting Stop", new ExhaustingStop(&m_intake, &m_floorConv, &m_vertConv));
     frc::SmartDashboard::PutData(
         "Scoring Action Low Hub",
-        new ScoringActionLowHub(10_s, &m_intake, &m_floorConv, &m_vertConv, &m_shooter));
+        new ScoringActionLowHub(2_s, &m_intake, &m_floorConv, &m_vertConv, &m_shooter));
     frc::SmartDashboard::PutData(
         "Scoring Action High Hub",
-        new ScoringActionHighHub(10_s, &m_intake, &m_floorConv, &m_vertConv, &m_shooter));
+        new ScoringActionHighHub(2_s, &m_intake, &m_floorConv, &m_vertConv, &m_shooter));
     frc::SmartDashboard::PutData("Scoring Stop", new ScoringStop(&m_intake, &m_floorConv, &m_vertConv, &m_shooter));
     frc::SmartDashboard::PutData("Full Climb", new ClimberFullClimb(&m_climber));
 
