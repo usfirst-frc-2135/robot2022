@@ -101,4 +101,4 @@
   AUTO_WaitTime = 0.0
   AutoDriveLimelightShoot_path1 = forward39
   AutoDriveLimelightShoot_path2 = backward39
-  AutoDriveShoot_path = forward39
+  AutoShoot_path = startToShootingPos
