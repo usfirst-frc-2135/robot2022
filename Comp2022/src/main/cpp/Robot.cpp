@@ -10,6 +10,7 @@
 
 #include "Robot.h"
 
+#include "commands/ClimberCalibrate.h"
 #include "frc2135/RobotConfig.h"
 #include "frc2135/spdlog.h"
 
@@ -17,6 +18,7 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/CommandScheduler.h>
 #include <spdlog/spdlog.h>
+#include <units/time.h>
 
 std::string MatchTypeToString(const frc::DriverStation::MatchType matchType)
 {
@@ -161,6 +163,9 @@ void Robot::TeleopInit()
         m_autonomousCommand->Cancel();
         m_autonomousCommand = nullptr;
     }
+
+    m_teleopInitCommand = m_container->GetTeleopInitCommand();
+    m_teleopInitCommand->Schedule();
 }
 
 /**

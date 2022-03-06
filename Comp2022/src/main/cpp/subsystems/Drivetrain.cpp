@@ -631,9 +631,12 @@ void Drivetrain::MoveWithLimelightInit(bool m_endAtTarget)
     m_throttlePid = frc2::PIDController(m_throttlePidKp, m_throttlePidKi, m_throttlePidKd);
 }
 
-void Drivetrain::MoveWithLimelightExecute(double tx, double ty, bool tv)
+void Drivetrain::MoveWithLimelightExecute(void)
 {
     RobotContainer *robotContainer = RobotContainer::GetInstance();
+    double tx = robotContainer->m_vision.GetHorizOffsetDeg();
+    double ty = robotContainer->m_vision.GetVertOffsetDeg();
+    bool tv = robotContainer->m_vision.GetTargetValid();
 
     // get turn value - just horizontal offset from target
     double turnOutput = -m_turnPid.Calculate(robotContainer->m_vision.GetHorizOffsetDeg(), m_targetAngle);
@@ -661,7 +664,7 @@ void Drivetrain::MoveWithLimelightExecute(double tx, double ty, bool tv)
         VelocityArcadeDrive(throttleOutput, turnOutput);
 
     spdlog::info(
-        "DTL tv {} tx {:.1f} ty{:.1f} distError {:.f} lldistance {:.1f} stopped {} tOutput {:.2f} thrOutput {:.2f} ",
+        "DTL tv {} tx {:.1f} ty{:.1f} distError {:.1f} lldistance {:.1f} stopped {} tOutput {:.2f} thrOutput {:.2f} ",
         tv,
         tx,
         ty,
@@ -672,8 +675,12 @@ void Drivetrain::MoveWithLimelightExecute(double tx, double ty, bool tv)
         throttleOutput);
 }
 
-bool Drivetrain::MoveWithLimelightIsFinished(double tx, bool tv)
+bool Drivetrain::MoveWithLimelightIsFinished(void)
 {
+    RobotContainer *robotContainer = RobotContainer::GetInstance();
+    double tx = robotContainer->m_vision.GetHorizOffsetDeg();
+    bool tv = robotContainer->m_vision.GetTargetValid();
+
     return (
         tv && (fabs(tx) <= m_angleThreshold) && (fabs(m_setPointDistance - m_limelightDistance) <= m_distThreshold)
         && MoveIsStopped());
