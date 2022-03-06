@@ -15,14 +15,14 @@
   DT_ClosedLoopRampRate = 0.0
   DT_StoppedTolerance = 0.05
 # Limelight settings
-  DTL_TurnPidKp = 0.0025
+  DTL_TurnPidKp = 0.005
   DTL_TurnPidKi = 0.0
   DTL_TurnPidKd = 0.0
-  DTL_ThrottlePidKp = 0.0065
+  DTL_ThrottlePidKp = 0.011
   DTL_ThrottlePidKi = 0.0
   DTL_ThrottlePidKd = 0.0
   DTL_MaxTurn = 0.4
-  DTL_MaxThrottle = 0.4
+  DTL_MaxThrottle = 0.2
   DTL_ThrottleShape = 10.0
   DTL_TargetAngle = 0.0
   DTL_SetPointDistance = 60.0
