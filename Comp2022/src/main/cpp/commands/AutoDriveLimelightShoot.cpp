@@ -63,7 +63,7 @@ AutoDriveLimelightShoot::AutoDriveLimelightShoot(
     AddCommands( // Sequential command
         frc2::ParallelDeadlineGroup{ IntakeDeploy(true), AutoStop(drivetrain) },
         AutoWait(drivetrain),
-        frc2::ParallelDeadlineGroup{ ScoringActionHighHub(5_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
+        frc2::ParallelDeadlineGroup{ ScoringActionHighHub(2_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
         frc2::ParallelDeadlineGroup{
             frc2::ParallelDeadlineGroup{
                 frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),

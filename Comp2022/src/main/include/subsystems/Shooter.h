@@ -96,9 +96,10 @@ public:
 
     typedef enum shooterSpeed_e
     {
-        SHOOTERSPEED_STOP = 0,    // Stop shooter
-        SHOOTERSPEED_LOWHUB = 1,  // Shooter Low Hub velocity
-        SHOOTERSPEED_HIGHHUB = 2, // Shooter High Hub velocity
+        SHOOTERSPEED_REVERSE = -1, // Reverse shooter
+        SHOOTERSPEED_STOP = 0,     // Stop shooter
+        SHOOTERSPEED_LOWHUB = 1,   // Shooter Low Hub velocity
+        SHOOTERSPEED_HIGHHUB = 2,  // Shooter High Hub velocity
     } shooterSpeed_e;
 
     void Initialize(void);
@@ -106,4 +107,8 @@ public:
 
     bool IsAtDesiredRPM();
     void SetShooterSpeed(int state);
+
+    void ShooterReverseInit(void);
+    void ShooterReverseExecute(void);
+    void ShooterReverseEnd(void);
 };

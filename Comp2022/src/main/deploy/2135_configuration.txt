@@ -15,28 +15,28 @@
   DT_ClosedLoopRampRate = 0.0
   DT_StoppedTolerance = 0.05
 # Limelight settings
-  DTL_TurnPidKp = 0.0025
+  DTL_TurnPidKp = 0.005
   DTL_TurnPidKi = 0.0
   DTL_TurnPidKd = 0.0
-  DTL_ThrottlePidKp = 0.0065
+  DTL_ThrottlePidKp = 0.011
   DTL_ThrottlePidKi = 0.0
   DTL_ThrottlePidKd = 0.0
   DTL_MaxTurn = 0.4
-  DTL_MaxThrottle = 0.4
+  DTL_MaxThrottle = 0.2
   DTL_ThrottleShape = 10.0
   DTL_TargetAngle = 0.0
   DTL_SetPointDistance = 60.0
-  DTL_AngleThreshold = 2.0
+  DTL_AngleThreshold = 3.5
   #Keep around 10
   DTL_DistThreshold = 6.0
 
   //this is used to calibrate the distance for Grogu
-  DTL_Distance1 = 60  
-  DTL_Distance2 = 72
+  DTL_Distance1 = 48  
+  DTL_Distance2 = 60
   # DTL_VertOffset1 is typically positive####
-  DTL_VertOffset1 = -10.44
+  DTL_VertOffset1 = -5.76
   # DTL_VertOffset2 is typically negative####
-  DTL_VertOffset2 = -14.60
+  DTL_VertOffset2 = -10.07
 # Path following settings
   DTR_RamsetePidKf = 0.0465
   DTR_RamsetePidKp = 0.1125
@@ -101,4 +101,4 @@
   AUTO_WaitTime = 0.0
   AutoDriveLimelightShoot_path1 = forward39
   AutoDriveLimelightShoot_path2 = backward39
-  AutoDriveShoot_path = forward39
+  AutoShoot_path = startToShootingPos
