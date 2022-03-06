@@ -40,10 +40,6 @@ void DriveLimelight::Initialize()
 // Called repeatedly when this Command is scheduled to run
 void DriveLimelight::Execute()
 {
-    RobotContainer *robotContainer = RobotContainer::GetInstance();
-    double tx = robotContainer->m_vision.GetHorizOffsetDeg();
-    double ty = robotContainer->m_vision.GetVertOffsetDeg();
-    bool tv = robotContainer->m_vision.GetTargetValid();
     m_drivetrain->MoveWithLimelightExecute();
 }
 
