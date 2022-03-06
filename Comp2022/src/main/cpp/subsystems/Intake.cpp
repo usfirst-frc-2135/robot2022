@@ -37,9 +37,9 @@ Intake::Intake()
 
     // Check if solenoids are functional or blacklisted
     if (m_position.IsDisabled())
-        spdlog::error("IN Intake Deployer Solenoid is BLACKLISTED");
+        spdlog::error("IN Intake Deploy Solenoid is BLACKLISTED");
     else
-        spdlog::info("IN Intake Deployer Solenoid is FUNCTIONAL");
+        spdlog::info("IN Intake Deploy Solenoid is FUNCTIONAL");
 
     // Initialize Variables
     frc2135::RobotConfig *config = frc2135::RobotConfig::GetInstance();
@@ -55,12 +55,11 @@ Intake::Intake()
         m_motorIN6.SetNeutralMode(NeutralMode::Coast);
         m_motorIN6.SetSafetyEnabled(false);
 
-        m_motorIN6.ConfigVoltageCompSaturation(12.0, 0);
-        m_motorIN6.EnableVoltageCompensation(true);
+        //m_motorIN6.ConfigVoltageCompSaturation(12.0, 0);
+        //m_motorIN6.EnableVoltageCompensation(true);
 
-        SupplyCurrentLimitConfiguration supplyCurrentLimits;
-        supplyCurrentLimits = { true, 45.0, 45.0, 0.001 };
-        m_motorIN6.ConfigSupplyCurrentLimit(supplyCurrentLimits);
+        m_motorIN6.ConfigSupplyCurrentLimit(m_supplyCurrentLimits);
+        m_motorIN6.ConfigStatorCurrentLimit(m_statorCurrentLimits);
 
         m_motorIN6.SetStatusFramePeriod(Status_1_General_, 255, kCANTimeout);
         m_motorIN6.SetStatusFramePeriod(Status_2_Feedback0_, 255, kCANTimeout);
@@ -71,6 +70,7 @@ Intake::Intake()
 
 void Intake::Periodic()
 {
+#if 0
     static int periodicInterval = 0;
 
     // Put code here to be run every 20 ms loop
@@ -95,6 +95,7 @@ void Intake::Periodic()
             frc::SmartDashboard::PutNumber("IN_Current_IN6", currentIN6);
         }
     }
+#endif
 }
 
 void Intake::SimulationPeriodic()

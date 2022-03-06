@@ -31,7 +31,7 @@ LED::LED()
     m_candle.ConfigBrightnessScalar(0.5, 0);
 
     // Add options for colors in SmartDashboard
-    m_ledChooser.AddDefault("LED_Off", LEDCOLOR_OFF);
+    m_ledChooser.SetDefaultOption("LED_Off", LEDCOLOR_OFF);
     m_ledChooser.AddOption("LED_White", LEDCOLOR_WHITE);
     m_ledChooser.AddOption("LED_Red", LEDCOLOR_RED);
     m_ledChooser.AddOption("LED_Orange", LEDCOLOR_ORANGE);
@@ -67,7 +67,7 @@ void LED::Initialize()
 }
 
 // Send RGB values to change color of each LED in string
-void LED::SendRGBToString(int rgbRed, int rgbGreen, int rgbBlue)
+void LED::SendRGBToLED(int rgbRed, int rgbGreen, int rgbBlue)
 {
     m_candle.SetLEDs(rgbRed, rgbGreen, rgbBlue);
 }
@@ -89,35 +89,35 @@ void LED::SetColor(int color)
             default:
             case LEDCOLOR_OFF:
                 strName = "OFF";
-                SendRGBToString(0, 0, 0); //black
+                SendRGBToLED(0, 0, 0); //black
                 break;
             case LEDCOLOR_WHITE:
                 strName = "WHITE";
-                SendRGBToString(255, 255, 255); //white
+                SendRGBToLED(255, 255, 255); //white
                 break;
             case LEDCOLOR_RED:
                 strName = "RED";
-                SendRGBToString(255, 0, 0); //red
+                SendRGBToLED(255, 0, 0); //red
                 break;
             case LEDCOLOR_ORANGE:
                 strName = "ORANGE";
-                SendRGBToString(255, 80, 0); //orange
+                SendRGBToLED(255, 80, 0); //orange
                 break;
             case LEDCOLOR_YELLOW:
                 strName = "YELLOW";
-                SendRGBToString(255, 255, 0); //yellow
+                SendRGBToLED(255, 255, 0); //yellow
                 break;
             case LEDCOLOR_GREEN:
                 strName = "GREEN";
-                SendRGBToString(0, 255, 0); //green
+                SendRGBToLED(0, 255, 0); //green
                 break;
             case LEDCOLOR_BLUE:
                 strName = "BLUE";
-                SendRGBToString(0, 0, 255); //blue
+                SendRGBToLED(0, 0, 255); //blue
                 break;
             case LEDCOLOR_PURPLE:
                 strName = "PURPLE";
-                SendRGBToString(255, 0, 255); //purple
+                SendRGBToLED(255, 0, 255); //purple
                 break;
         }
 

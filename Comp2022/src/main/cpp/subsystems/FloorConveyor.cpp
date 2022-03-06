@@ -46,9 +46,8 @@ FloorConveyor::FloorConveyor()
         m_motorFC8.SetNeutralMode(NeutralMode::Coast);
         m_motorFC8.Set(ControlMode::PercentOutput, 0.0);
 
-        SupplyCurrentLimitConfiguration supplyCurrentLimits;
-        supplyCurrentLimits = { true, 45.0, 45.0, 0.001 };
-        m_motorFC8.ConfigSupplyCurrentLimit(supplyCurrentLimits);
+        m_motorFC8.ConfigSupplyCurrentLimit(m_supplyCurrentLimits);
+        m_motorFC8.ConfigStatorCurrentLimit(m_statorCurrentLimits);
 
         m_motorFC8.SetStatusFramePeriod(Status_1_General_, 255, kCANTimeout);
         m_motorFC8.SetStatusFramePeriod(Status_2_Feedback0_, 255, kCANTimeout);
@@ -59,6 +58,7 @@ FloorConveyor::FloorConveyor()
 
 void FloorConveyor::Periodic()
 {
+#if 0
     static int periodicInterval = 0;
 
     // Put code here to be run every 20 ms loop
@@ -79,6 +79,7 @@ void FloorConveyor::Periodic()
             frc::SmartDashboard::PutNumber("FC_Current_FC8", currentFC8);
         }
     }
+#endif
 }
 
 void FloorConveyor::SimulationPeriodic()

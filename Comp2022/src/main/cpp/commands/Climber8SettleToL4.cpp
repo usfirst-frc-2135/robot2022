@@ -28,15 +28,18 @@ ClimberSettleToL4::ClimberSettleToL4(Climber *climber)
     // Add your commands here, e.g.
     // AddCommands(FooCommand(), BarCommand());
 
-    // Climber lowers to 25.25 inches
+    // Climber lowers to 0.25 inches
     // Gate hook is at default position
 
-    AddCommands(
-        frc2::WaitCommand(3.0_s),
-        ClimberMoveHeight(Climber::STOW_HEIGHT, climber),
+    AddCommands( // Sequential command
+        frc2::ParallelDeadlineGroup{
+            frc2::WaitUntilCommand([climber] { return climber->MoveClimberDistanceIsFinished(); }),
+            ClimberMoveHeight(Climber::STOW_HEIGHT, climber) },
         ClimberSetGateHook(false),
-        ClimberMoveHeight(Climber::LOWER_L3_HEIGHT, climber),
-        frc2::WaitCommand(0.5_s));
+        frc2::WaitCommand(0.5_s),
+        frc2::ParallelDeadlineGroup{
+            frc2::WaitUntilCommand([climber] { return climber->MoveClimberDistanceIsFinished(); }),
+            ClimberMoveHeight(Climber::GATEHOOK_REST_HEIGHT, climber) });
 }
 
 bool ClimberSettleToL4::RunsWhenDisabled() const
