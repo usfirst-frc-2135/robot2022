@@ -269,7 +269,7 @@ void Shooter::SetShooterSpeed(int state)
 
 void Shooter::ShooterReverseInit()
 {
-    SetShooterSpeed(0.0);
+    SetShooterSpeed(SHOOTERSPEED_STOP);
 }
 
 void Shooter::ShooterReverseExecute()
@@ -278,7 +278,7 @@ void Shooter::ShooterReverseExecute()
 
     if (m_flywheelCurrentRPM < reverseRPMThreshold)
     {
-        m_motorSH11.ConfigPeakOutputReverse(-1.0, kCANTimeout);
+        m_motorSH11.ConfigPeakOutputReverse(-1.0);
         spdlog::info("Shooter can now reverse");
         SetShooterSpeed(SHOOTERSPEED_REVERSE);
     }
@@ -286,5 +286,6 @@ void Shooter::ShooterReverseExecute()
 
 void Shooter::ShooterReverseEnd()
 {
-    m_motorSH11.ConfigPeakOutputReverse(0.0, kCANTimeout);
+    m_motorSH11.ConfigPeakOutputReverse(0.0);
+    SetShooterSpeed(SHOOTERSPEED_STOP);
 }
