@@ -53,6 +53,7 @@
 #include "commands/IntakeRun.h"
 #include "commands/ScoringPrime.h"
 #include "commands/ShooterAim.h"
+#include "commands/ShooterReverse.h"
 #include "commands/ShooterRun.h"
 #include "commands/VerticalConveyorRun.h"
 #include "subsystems/Climber.h"

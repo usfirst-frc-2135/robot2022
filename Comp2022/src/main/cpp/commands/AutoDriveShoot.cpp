@@ -23,6 +23,7 @@
 #include <frc2/command/ParallelCommandGroup.h>
 #include <frc2/command/ParallelDeadlineGroup.h>
 #include <frc2/command/ParallelRaceGroup.h>
+#include <frc2/command/WaitCommand.h>
 #include <frc2/command/WaitUntilCommand.h>
 #include <spdlog/spdlog.h>
 #include <wpi/SmallString.h>
@@ -55,7 +56,8 @@ AutoDriveShoot::AutoDriveShoot(
                 AutoDrivePath(m_pathname1.c_str(), true, drivetrain) },
             ScoringPrime(shooter) },
         frc2::ParallelDeadlineGroup{ ScoringActionHighHub(1.5_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
-        frc2::ParallelDeadlineGroup{ IntakeDeploy(true), AutoStop(drivetrain) },
+        frc2::ParallelDeadlineGroup{ IntakeDeploy(false), AutoStop(drivetrain) },
+        frc2::WaitCommand(1_s),
         ScoringStop(intake, fConv, vConv, shooter),
         frc2::ParallelDeadlineGroup{
             frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
