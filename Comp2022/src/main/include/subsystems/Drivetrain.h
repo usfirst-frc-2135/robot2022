@@ -130,11 +130,6 @@ private:
     double m_angleThreshold;
     double m_distThreshold;
     double m_throttleShape;
-    double m_vertOffset1;
-    double m_vertOffset2;
-    double m_distance1;
-    double m_distance2;
-    double m_slope;
     double m_distOffset;
     double m_limelightDistance;
 
@@ -208,7 +203,7 @@ public:
     frc::DifferentialDrive m_diffDrive{ m_motorL1, m_motorR3 };
     WPI_TalonFX m_motorL2{ 2 }; //3,R3
     WPI_TalonFX m_motorR4{ 4 }; //1,L1
-    
+
     void SimulationInit();
 
     void Periodic() override;
