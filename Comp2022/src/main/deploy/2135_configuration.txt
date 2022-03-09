@@ -31,12 +31,12 @@
   DTL_DistThreshold = 6.0
 
   //this is used to calibrate the distance for Grogu
-  DTL_Distance1 = 48  
-  DTL_Distance2 = 60
-  # DTL_VertOffset1 ####
-  DTL_VertOffset1 = -8.57
-  # DTL_VertOffset2 ##
-  DTL_VertOffset2 = -12.55
+  VI_Distance1 = 48  
+  VI_Distance2 = 60
+  # VI_VertOffset1 ####
+  VI_VertOffset1 = 1.33
+  # VI_VertOffset2 ##
+  VI_VertOffset2 = -3.75
 # Path following settings
   DTR_RamsetePidKf = 0.0465
   DTR_RamsetePidKp = 0.1125
