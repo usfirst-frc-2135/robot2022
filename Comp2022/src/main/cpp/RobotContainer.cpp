@@ -56,6 +56,7 @@ RobotContainer::RobotContainer() :
 
     frc::SmartDashboard::PutData("LEFT Drivetrain Motor Testing", new DrivetrainMotorTesting(true, &m_drivetrain));
     frc::SmartDashboard::PutData("RIGHT Drivetrain Motor Testing", new DrivetrainMotorTesting(false, &m_drivetrain));
+    frc::SmartDashboard::PutData("Reset Drive Sensors", new ResetDriveSensors(&m_drivetrain));
 
     // Group commands
     frc::SmartDashboard::PutData("Intaking Action", new IntakingAction(&m_intake, &m_floorConv, &m_vertConv));

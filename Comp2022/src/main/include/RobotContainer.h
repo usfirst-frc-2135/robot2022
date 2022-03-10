@@ -51,6 +51,7 @@
 #include "commands/FloorConveyorRun.h"
 #include "commands/IntakeDeploy.h"
 #include "commands/IntakeRun.h"
+#include "commands/ResetDriveSensors.h"
 #include "commands/ScoringPrime.h"
 #include "commands/ShooterAim.h"
 #include "commands/ShooterReverse.h"
