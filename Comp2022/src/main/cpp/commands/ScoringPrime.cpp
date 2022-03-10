@@ -28,7 +28,7 @@ ScoringPrime::ScoringPrime(Shooter *shooter)
     AddCommands(
 
         ShooterAim(true),
-        ShooterRun(Shooter::SHOOTERSPEED_LOWHUB, shooter));
+        ShooterRun(Shooter::SHOOTERSPEED_HIGHHUB, shooter));
 }
 
 bool ScoringPrime::RunsWhenDisabled() const
