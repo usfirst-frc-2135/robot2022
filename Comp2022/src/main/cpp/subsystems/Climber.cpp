@@ -172,8 +172,8 @@ void Climber::Periodic()
     frc::SmartDashboard::PutNumber("CL_Height", m_curInches);
 
     // Calibrate climber if hall sensors are activated
-    if (!m_climberDownLeft.Get() || !m_climberDownRight.Get())
-        Calibrate();
+    // if (!m_climberDownLeft.Get() || !m_climberDownRight.Get())
+    //     Calibrate();
 
     // Only update indicators every 100 ms to cut down on network traffic
     if (periodicInterval++ % 5 == 0)
