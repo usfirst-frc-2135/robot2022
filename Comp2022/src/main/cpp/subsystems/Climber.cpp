@@ -231,6 +231,7 @@ void Climber::Initialize(void)
 void Climber::FaultDump(void)
 {
     frc2135::TalonUtils::TalonFaultDump("CL 14", m_motorCL14);
+    frc2135::TalonUtils::TalonFaultDump("CL 15", m_motorCL15);
 }
 
 // Raise climber with Joysticks method
