@@ -141,4 +141,6 @@ public:
     // Motion Magic - Moving to a position
     void MoveClimberDistanceInit(int state);
     bool MoveClimberDistanceIsFinished(void);
+
+    void ClimberFollowerInitialize(void);
 };

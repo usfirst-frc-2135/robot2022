@@ -124,16 +124,7 @@ Climber::Climber()
         m_motorCL14.Set(ControlMode::PercentOutput, 0.0);
     }
 
-    if (m_talonValidCL15)
-    {
-        m_motorCL15.Set(ControlMode::Follower, 14);
-        m_motorCL15.SetInverted(InvertType::OpposeMaster);
-        m_motorCL15.SetNeutralMode(NeutralMode::Brake);
-        m_motorCL15.ConfigSupplyCurrentLimit(m_supplyCurrentLimits);
-        m_motorCL15.ConfigStatorCurrentLimit(m_statorCurrentLimits);
-        m_motorCL15.SetStatusFramePeriod(Status_1_General_, 255, kCANTimeout);
-        m_motorCL15.SetStatusFramePeriod(Status_2_Feedback0_, 255, kCANTimeout);
-    }
+    ClimberFollowerInitialize();
 
     Initialize();
 }
@@ -447,4 +438,18 @@ bool Climber::MoveClimberDistanceIsFinished()
     }
 
     return isFinished;
+}
+
+void Climber::ClimberFollowerInitialize()
+{
+    if (m_talonValidCL15)
+    {
+        m_motorCL15.Set(ControlMode::Follower, 14);
+        m_motorCL15.SetInverted(InvertType::OpposeMaster);
+        m_motorCL15.SetNeutralMode(NeutralMode::Brake);
+        m_motorCL15.ConfigSupplyCurrentLimit(m_supplyCurrentLimits);
+        m_motorCL15.ConfigStatorCurrentLimit(m_statorCurrentLimits);
+        m_motorCL15.SetStatusFramePeriod(Status_1_General_, 255, kCANTimeout);
+        m_motorCL15.SetStatusFramePeriod(Status_2_Feedback0_, 255, kCANTimeout);
+    }
 }

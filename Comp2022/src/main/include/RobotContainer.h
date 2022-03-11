@@ -38,6 +38,7 @@
 #include "commands/Climber6ClimbToL3.h"
 #include "commands/Climber7ClimbToL4.h"
 #include "commands/ClimberCalibrate.h"
+#include "commands/ClimberFollowerInitialize.h"
 #include "commands/ClimberFullClimb.h"
 #include "commands/ClimberMoveHeight.h"
 #include "commands/ClimberRun.h"
