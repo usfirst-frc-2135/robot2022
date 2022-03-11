@@ -159,6 +159,11 @@ void Climber::Periodic()
         curCounts = m_motorCL14.GetSelectedSensorPosition(0);
     }
 
+    bool CL15FollowerMode = (m_motorCL15.GetControlMode() == ControlMode::Follower);
+    frc::SmartDashboard::PutBoolean("CL_CL15FollowerMode", CL15FollowerMode);
+    if (!CL15FollowerMode)
+        spdlog::error("CL15 is not in Follower Mode");
+
     m_curInches = CountsToInches(curCounts);
     frc::SmartDashboard::PutNumber("CL_Height", m_curInches);
 
@@ -214,6 +219,12 @@ void Climber::Initialize(void)
     m_targetInches = m_curInches;
     m_isMoving = false;
     spdlog::info("CL Init Target Inches: {}", m_targetInches);
+
+    frc::SmartDashboard::PutBoolean("CL_CL14Valid", m_talonValidCL14);
+    frc::SmartDashboard::PutBoolean("CL_CL15Valid", m_talonValidCL15);
+
+    spdlog::info("CL 14 motor valid: {}", m_talonValidCL14);
+    spdlog::info("CL 15 motor valid: {}", m_talonValidCL15);
 }
 
 // Dump all Talon faults
