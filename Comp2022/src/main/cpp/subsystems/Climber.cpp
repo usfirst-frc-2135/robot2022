@@ -96,14 +96,22 @@ Climber::Climber()
         m_motorCL14.SetNeutralMode(NeutralMode::Brake);
         m_motorCL14.SetSafetyEnabled(false);
 
-        m_motorCL14.ConfigSupplyCurrentLimit(m_supplyCurrentLimits);
-        m_motorCL14.ConfigStatorCurrentLimit(m_statorCurrentLimits);
+        frc2135::TalonUtils::CheckError(
+            m_motorCL14.ConfigSupplyCurrentLimit(m_supplyCurrentLimits),
+            "CL14 ConfigSupplyCurrentLimits");
+        frc2135::TalonUtils::CheckError(
+            m_motorCL14.ConfigStatorCurrentLimit(m_statorCurrentLimits),
+            "CL14 ConfigStatorCurrentLimits");
 
         // Configure sensor settings
-        m_motorCL14.SetSelectedSensorPosition(0, 0, kCANTimeout);
+        frc2135::TalonUtils::CheckError(
+            m_motorCL14.SetSelectedSensorPosition(0, 0, kCANTimeout),
+            "CL14 SetSelectedSensorPosition");
 
         // Set allowable closed loop error
-        m_motorCL14.ConfigAllowableClosedloopError(0, m_CLAllowedError, kCANTimeout);
+        frc2135::TalonUtils::CheckError(
+            m_motorCL14.ConfigAllowableClosedloopError(0, m_CLAllowedError, kCANTimeout),
+            "CL14 ConfigAllowableClosedloopError");
 
         // Set soft limits for climber height
         //m_motorCL14.ConfigForwardSoftLimitThreshold(InchesToCounts(m_climberMaxHeight), kCANTimeout);
@@ -112,14 +120,21 @@ Climber::Climber()
         // m_motorCL14.ConfigReverseSoftLimitEnable(true, kCANTimeout);
 
         // Configure Magic Motion settings
-        m_motorCL14.SelectProfileSlot(0, 0);
-        m_motorCL14.ConfigMotionCruiseVelocity(m_velocity, kCANTimeout);
-        m_motorCL14.ConfigMotionAcceleration(m_acceleration, kCANTimeout);
-        m_motorCL14.ConfigMotionSCurveStrength(m_sCurveStrength, kCANTimeout);
-        m_motorCL14.Config_kF(0, m_pidKf, kCANTimeout);
-        m_motorCL14.Config_kP(0, m_pidKp, kCANTimeout);
-        m_motorCL14.Config_kI(0, m_pidKi, kCANTimeout);
-        m_motorCL14.Config_kD(0, m_pidKd, kCANTimeout);
+        frc2135::TalonUtils::CheckError(m_motorCL14.SelectProfileSlot(0, 0), "CL14 SelectProfileSlot");
+
+        frc2135::TalonUtils::CheckError(
+            m_motorCL14.ConfigMotionCruiseVelocity(m_velocity, kCANTimeout),
+            "CL14 ConfigMotionCruiseVelocity");
+        frc2135::TalonUtils::CheckError(
+            m_motorCL14.ConfigMotionAcceleration(m_acceleration, kCANTimeout),
+            "CL14 ConfigMotionAcceleration");
+        frc2135::TalonUtils::CheckError(
+            m_motorCL14.ConfigMotionSCurveStrength(m_sCurveStrength, kCANTimeout),
+            "CL14 ConfigMotionSCurveStrength");
+        frc2135::TalonUtils::CheckError(m_motorCL14.Config_kF(0, m_pidKf, kCANTimeout), "CL14 Config_kF");
+        frc2135::TalonUtils::CheckError(m_motorCL14.Config_kP(0, m_pidKp, kCANTimeout), "CL14 Config_kP");
+        frc2135::TalonUtils::CheckError(m_motorCL14.Config_kI(0, m_pidKi, kCANTimeout), "CL14 Config_kI");
+        frc2135::TalonUtils::CheckError(m_motorCL14.Config_kD(0, m_pidKd, kCANTimeout), "CL14 Config_KD");
 
         m_motorCL14.Set(ControlMode::PercentOutput, 0.0);
     }
@@ -345,6 +360,8 @@ void Climber::MoveClimberDistanceInit(int state)
     m_motorCL14.Config_kI(0, m_pidKi, 0);
     m_motorCL14.Config_kD(0, m_pidKd, 0);
 
+    ClimberFollowerInitialize();
+
     switch (state)
     {
         case NOCHANGE_HEIGHT: // Do not change from current level!
@@ -459,9 +476,18 @@ void Climber::ClimberFollowerInitialize()
         m_motorCL15.Set(ControlMode::Follower, 14);
         m_motorCL15.SetInverted(InvertType::OpposeMaster);
         m_motorCL15.SetNeutralMode(NeutralMode::Brake);
-        m_motorCL15.ConfigSupplyCurrentLimit(m_supplyCurrentLimits);
-        m_motorCL15.ConfigStatorCurrentLimit(m_statorCurrentLimits);
-        m_motorCL15.SetStatusFramePeriod(Status_1_General_, 255, kCANTimeout);
-        m_motorCL15.SetStatusFramePeriod(Status_2_Feedback0_, 255, kCANTimeout);
+
+        frc2135::TalonUtils::CheckError(
+            m_motorCL15.ConfigSupplyCurrentLimit(m_supplyCurrentLimits),
+            "CL15 ConfigSupplyCurrentLimit");
+        frc2135::TalonUtils::CheckError(
+            m_motorCL15.ConfigStatorCurrentLimit(m_statorCurrentLimits),
+            "CL15 ConfigStatorCurrentLimit");
+        frc2135::TalonUtils::CheckError(
+            m_motorCL15.SetStatusFramePeriod(Status_1_General_, 255, kCANTimeout),
+            "CL15 SetStatusFramePeriod: Status_1");
+        frc2135::TalonUtils::CheckError(
+            m_motorCL15.SetStatusFramePeriod(Status_2_Feedback0_, 255, kCANTimeout),
+            "CL15 SetStatusFramePeriod: Status_2");
     }
 }
