@@ -21,7 +21,7 @@ cross_a_y:0
 cross_b_a:0.002809
 cross_b_x:-0.050000
 cross_b_y:0
-desc:3x4x22
+desc:4414_hueneme
 desired_contour_region:0
 dilation_steps:1
 direction_filter:0
