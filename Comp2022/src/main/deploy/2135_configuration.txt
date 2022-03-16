@@ -15,28 +15,28 @@
   DT_ClosedLoopRampRate = 0.0
   DT_StoppedTolerance = 0.05
 # Limelight settings
-  DTL_TurnPidKp = 0.0025
+  DTL_TurnPidKp = 0.005
   DTL_TurnPidKi = 0.0
   DTL_TurnPidKd = 0.0
-  DTL_ThrottlePidKp = 0.0065
+  DTL_ThrottlePidKp = 0.011
   DTL_ThrottlePidKi = 0.0
   DTL_ThrottlePidKd = 0.0
   DTL_MaxTurn = 0.4
-  DTL_MaxThrottle = 0.4
+  DTL_MaxThrottle = 0.2
   DTL_ThrottleShape = 10.0
   DTL_TargetAngle = 0.0
   DTL_SetPointDistance = 60.0
-  DTL_AngleThreshold = 2.0
+  DTL_AngleThreshold = 3.5
   #Keep around 10
   DTL_DistThreshold = 6.0
 
   //this is used to calibrate the distance for Grogu
-  DTL_Distance1 = 60  
-  DTL_Distance2 = 72
-  # DTL_VertOffset1 is typically positive####
-  DTL_VertOffset1 = -10.44
-  # DTL_VertOffset2 is typically negative####
-  DTL_VertOffset2 = -14.60
+  VI_Distance1 = 48  
+  VI_Distance2 = 60
+  # VI_VertOffset1 ####
+  VI_VertOffset1 = 0.51
+  # VI_VertOffset2 ##
+  VI_VertOffset2 = -4.61
 # Path following settings
   DTR_RamsetePidKf = 0.0465
   DTR_RamsetePidKp = 0.1125
@@ -81,21 +81,28 @@
   CL_MaxHeight = 85.0
   CL_MinHeight = 0.0
   CL_TargetHeight = 0.0
-  CL_StowHeight = 0.25
+  CL_StowHeight = 0.10
   CL_ExtendL2 = 29.0
   CL_RotateL3 = 31.25
-  CL_ExtendL3 = 31.5
   CL_GatehookRestHeight = 1.85
-  CL_RaiseL4 = 25.25
+  CL_RaiseL4 = 20.25
+  CL_ClimbL2Timer = 0.5
+  CL_RotateExtendL3Timer = 0.5
+  CL_RotateRetractL3Timer = 2.0
+  CL_ClimbL3Timer = 0.5
+  CL_RotateRetractL4Timer = 2.5
 # Auto Settings
-  AutoDrive_path = forward79
-  AutoShootDrive_path = forward79
-  AutoShootDriveShoot_path1 = forward79
-  AutoShootDriveShoot_path2 = backward79
+  AutoDrive_path = startToOffTarmac
+  AutoDriveShoot_path1 = startToShootingPos
+  AutoDriveShoot_path2 = shootingPosToOffTarmac
+  AutoShootDriveShoot_path1 = startToShootingPos
+  AutoShootDriveShoot_path2 = shootingPosToBall
+  AutoShootDriveShoot_path3 = ballToShootingPos
+  AutoShootDriveShoot_path4 = shootingPosToOffTarmac
   path1 = forward39
-  path2 = left79
+  path2 = backward39
   path3 = rightAngleTurn
   AUTO_WaitTime = 0.0
-  AutoDriveLimelightShoot_path1 = forward79
-  AutoDriveLimelightShoot_path2 = backward79
-  AutoDriveShoot_path = forward79
+  AutoDriveLimelightShoot_path1 = forward39
+  AutoDriveLimelightShoot_path2 = backward39
+  AutoShoot_path = startToShootingPos

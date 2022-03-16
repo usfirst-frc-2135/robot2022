@@ -9,6 +9,8 @@
 
 #include <ctre/Phoenix.h>
 
+using namespace std;
+
 namespace frc2135
 {
     class TalonUtils
@@ -27,6 +29,7 @@ namespace frc2135
         static void TalonFaultDump(const char *talonName, WPI_BaseMotorController &talonPtr);
         static bool PigeonIMUInitialize(PigeonIMU &pigeonPtr);
         static void PigeonIMUFaultDump(const char *pigeonName, PigeonIMU &pigeonPtr);
+        static void CheckError(ErrorCode errorCode, std::string message);
     };
 
 } /* namespace frc2135 */

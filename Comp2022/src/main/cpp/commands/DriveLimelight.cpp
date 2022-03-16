@@ -40,22 +40,15 @@ void DriveLimelight::Initialize()
 // Called repeatedly when this Command is scheduled to run
 void DriveLimelight::Execute()
 {
-    RobotContainer *robotContainer = RobotContainer::GetInstance();
-    double tx = robotContainer->m_vision.GetHorizOffsetDeg();
-    double ty = robotContainer->m_vision.GetVertOffsetDeg();
-    bool tv = robotContainer->m_vision.GetTargetValid();
-    m_drivetrain->MoveWithLimelightExecute(tx, ty, tv);
+    m_drivetrain->MoveWithLimelightExecute();
 }
 
 // Make this return true when this Command no longer needs to run execute()
 bool DriveLimelight::IsFinished()
 {
     //spdlog::info("DTL m_endAtTarget {}", m_endAtTarget);
-    RobotContainer *robotContainer = RobotContainer::GetInstance();
-    double tx = robotContainer->m_vision.GetHorizOffsetDeg();
-    bool tv = robotContainer->m_vision.GetTargetValid();
     if (m_endAtTarget)
-        return m_drivetrain->MoveWithLimelightIsFinished(tx, tv);
+        return m_drivetrain->MoveWithLimelightIsFinished();
     return false;
 }
 

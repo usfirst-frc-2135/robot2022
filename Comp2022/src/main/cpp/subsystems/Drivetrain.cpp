@@ -197,13 +197,9 @@ void Drivetrain::ConfigFileLoad(void)
     config->GetValueAsDouble("DTL_MaxThrottle", m_maxThrottle, 0.2);
     config->GetValueAsDouble("DTL_ThrottleShape", m_throttleShape, 10.0);
     config->GetValueAsDouble("DTL_TargetAngle", m_targetAngle, 0.0);
-    config->GetValueAsDouble("DTL_SetPointDistance", m_setPointDistance, 12.0);
+    config->GetValueAsDouble("DTL_SetPointDistance", m_setPointDistance, 60.0);
     config->GetValueAsDouble("DTL_AngleThreshold", m_angleThreshold, 3.0);
     config->GetValueAsDouble("DTL_DistThreshold", m_distThreshold, 6.0);
-    config->GetValueAsDouble("DTL_Distance1", m_distance1, 0.0);
-    config->GetValueAsDouble("DTL_Distance2", m_distance2, 0.0);
-    config->GetValueAsDouble("DTL_VertOffset1", m_vertOffset1, 0.0);
-    config->GetValueAsDouble("DTL_VertOffset2", m_vertOffset2, 0.0);
 
     // Ramsete follower settings
     config->GetValueAsDouble("DTR_RamsetePidKf", m_ramsetePidKf, 0.0);
@@ -233,11 +229,6 @@ void Drivetrain::ConfigFileLoad(void)
     frc::SmartDashboard::PutNumber("DTL_SetPointDistance", m_setPointDistance);
     frc::SmartDashboard::PutNumber("DTL_AngleThreshold", m_angleThreshold);
     frc::SmartDashboard::PutNumber("DTL_DistThreshold", m_distThreshold);
-    frc::SmartDashboard::PutNumber("DTL_Distance1", m_distance1);
-    frc::SmartDashboard::PutNumber("DTL_Distance2", m_distance2);
-    frc::SmartDashboard::PutNumber("DTL_VertOffset1", m_vertOffset1);
-    frc::SmartDashboard::PutNumber("DTL_VertOffset2", m_vertOffset2);
-
     frc::SmartDashboard::PutNumber("DTR_ramsetePidKf", m_ramsetePidKf);
     frc::SmartDashboard::PutNumber("DTR_ramsetePidKp", m_ramsetePidKp);
     frc::SmartDashboard::PutNumber("DTR_ramsetePidKi", m_ramsetePidKi);
@@ -625,15 +616,29 @@ void Drivetrain::MoveWithLimelightInit(bool m_endAtTarget)
     m_angleThreshold = frc::SmartDashboard::GetNumber("DTL_AngleThreshold", m_angleThreshold);
     m_distThreshold = frc::SmartDashboard::GetNumber("DTL_DistThreshold", m_distThreshold);
     m_throttleShape = frc::SmartDashboard::GetNumber("DTL_ThrottleShape", m_throttleShape);
+    m_setPointDistance = frc::SmartDashboard::GetNumber("DTL_SetPointDistance", m_setPointDistance);
 
     // load in Pid constants to controller
     m_turnPid = frc2::PIDController(m_turnPidKp, m_turnPidKi, m_turnPidKd);
     m_throttlePid = frc2::PIDController(m_throttlePidKp, m_throttlePidKi, m_throttlePidKd);
+
+    RobotContainer *RobotContainer = RobotContainer::GetInstance();
+    RobotContainer->m_vision.m_yfilter.Reset();
 }
 
-void Drivetrain::MoveWithLimelightExecute(double tx, double ty, bool tv)
+void Drivetrain::MoveWithLimelightExecute(void)
 {
     RobotContainer *robotContainer = RobotContainer::GetInstance();
+    double tx = robotContainer->m_vision.GetHorizOffsetDeg();
+    double ty = robotContainer->m_vision.GetVertOffsetDeg();
+    bool tv = robotContainer->m_vision.GetTargetValid();
+
+    if (tv == false)
+    {
+        VelocityArcadeDrive(0, 0);
+        spdlog::info("TV-FALSE SO STILL STILL");
+        return;
+    }
 
     // get turn value - just horizontal offset from target
     double turnOutput = -m_turnPid.Calculate(robotContainer->m_vision.GetHorizOffsetDeg(), m_targetAngle);
@@ -661,7 +666,7 @@ void Drivetrain::MoveWithLimelightExecute(double tx, double ty, bool tv)
         VelocityArcadeDrive(throttleOutput, turnOutput);
 
     spdlog::info(
-        "DTL tv {} tx {:.1f} ty{:.1f} distError {:.f} lldistance {:.1f} stopped {} tOutput {:.2f} thrOutput {:.2f} ",
+        "DTL tv {} tx {:.1f} ty{:.1f} distError {:.1f} lldistance {:.1f} stopped {} tOutput {:.2f} thrOutput {:.2f} ",
         tv,
         tx,
         ty,
@@ -672,8 +677,12 @@ void Drivetrain::MoveWithLimelightExecute(double tx, double ty, bool tv)
         throttleOutput);
 }
 
-bool Drivetrain::MoveWithLimelightIsFinished(double tx, bool tv)
+bool Drivetrain::MoveWithLimelightIsFinished(void)
 {
+    RobotContainer *robotContainer = RobotContainer::GetInstance();
+    double tx = robotContainer->m_vision.GetHorizOffsetDeg();
+    bool tv = robotContainer->m_vision.GetTargetValid();
+
     return (
         tv && (fabs(tx) <= m_angleThreshold) && (fabs(m_setPointDistance - m_limelightDistance) <= m_distThreshold)
         && MoveIsStopped());
@@ -833,10 +842,19 @@ void Drivetrain::RamseteFollowerExecute(void)
 
 bool Drivetrain::RamseteFollowerIsFinished(void)
 {
+    if (m_trajTimer.Get() == 0_s)
+        return false;
+
+    spdlog::info(
+        "time targTime {:.2f} {:.2f} | cur vel LR {:.2f} {:.2f}",
+        m_trajTimer.Get().to<double>(),
+        m_trajectory.TotalTime().to<double>(),
+        m_wheelSpeeds.left.to<double>(),
+        m_wheelSpeeds.right.to<double>());
+
     return (
-        (m_trajTimer.Get() >= m_trajectory.TotalTime())
-        && (abs(m_motorL1.GetSelectedSensorVelocity()) <= 0 + m_tolerance)
-        && (abs(m_motorL1.GetSelectedSensorVelocity()) <= 0 + m_tolerance));
+        (m_trajTimer.Get() >= m_trajectory.TotalTime()) && (abs(m_wheelSpeeds.left.to<double>()) <= 0 + m_tolerance)
+        && (abs(m_wheelSpeeds.right.to<double>()) <= 0 + m_tolerance));
 }
 
 void Drivetrain::RamseteFollowerEnd(void)

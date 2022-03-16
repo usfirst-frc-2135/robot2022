@@ -21,14 +21,14 @@
 #include <frc2/command/SequentialCommandGroup.h>
 
 /**
- * https://docs.google.com/presentation/d/1SQlcOZpuv9mqVmsuJRcJQMyKcwuBd6hcQGlkFT-_Odg/edit?pli=1#slide=id.g11030b7b884_1_28
+ *         - [ ] https://docs.google.com/presentation/d/1SQlcOZpuv9mqVmsuJRcJQMyKcwuBd6hcQGlkFT-_Odg/edit?pli=1#slide=id.g10f6810cd96_0_22
  *
  * @author ngupta-22
  */
-class AutoShootDriveShoot : public frc2::CommandHelper<frc2::SequentialCommandGroup, AutoShootDriveShoot>
+class AutoDriveShoot : public frc2::CommandHelper<frc2::SequentialCommandGroup, AutoDriveShoot>
 {
 public:
-    explicit AutoShootDriveShoot(
+    explicit AutoDriveShoot(
         Drivetrain *m_drivetrain,
         Intake *m_intake,
         FloorConveyor *m_floorConv,
@@ -41,6 +41,4 @@ private:
     // Must be a member variable so commands can use it when they execute
     std::string m_pathname1;
     std::string m_pathname2;
-    std::string m_pathname3;
-    std::string m_pathname4;
 };

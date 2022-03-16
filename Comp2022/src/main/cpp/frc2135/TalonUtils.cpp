@@ -333,4 +333,10 @@ namespace frc2135
         }
     }
 
+    void TalonUtils::CheckError(ErrorCode errorCode, std::string message)
+    {
+        if (errorCode != OK)
+            spdlog::error("Error code: {} Message: {}", errorCode, message);
+    }
+
 } /* namespace frc2135 */

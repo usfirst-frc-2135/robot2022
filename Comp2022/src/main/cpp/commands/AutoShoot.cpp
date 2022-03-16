@@ -10,15 +10,17 @@
 
 #include "commands/AutoShoot.h"
 
+#include "commands/AutoDrivePath.h"
 #include "commands/AutoStop.h"
 #include "commands/AutoWait.h"
 #include "commands/IntakeDeploy.h"
 #include "commands/ScoringActionHighHub.h"
+#include "commands/ScoringPrime.h"
 #include "commands/ScoringStop.h"
 #include "frc2135/RobotConfig.h"
 
 #include <frc/smartdashboard/SmartDashboard.h>
-#include <frc2/command/ParallelRaceGroup.h>
+#include <frc2/command/ParallelDeadlineGroup.h>
 #include <spdlog/spdlog.h>
 #include <wpi/SmallString.h>
 
@@ -33,12 +35,21 @@ AutoShoot::AutoShoot(
     // eg. AddRequirements(m_Subsystem);
     SetName("AutoShoot");
 
+    frc2135::RobotConfig *config = frc2135::RobotConfig::GetInstance();
+    config->GetValueAsString("AutoShoot_path", m_pathname, "startToShootingPos");
+    spdlog::info("AutoDriveShoot pathname {}", m_pathname.c_str());
+
     // Add your commands here, e.g.
     // AddCommands(FooCommand(), BarCommand());
     AddCommands( // Sequential command
-        frc2::ParallelRaceGroup{ IntakeDeploy(true), AutoStop(drivetrain) },
+        frc2::ParallelDeadlineGroup{ IntakeDeploy(true), AutoStop(drivetrain) },
         AutoWait(drivetrain),
-        frc2::ParallelRaceGroup{ ScoringActionHighHub(5_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
+        frc2::ParallelCommandGroup{
+            frc2::ParallelDeadlineGroup{
+                frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
+                AutoDrivePath(m_pathname.c_str(), true, drivetrain) },
+            ScoringPrime(shooter) },
+        frc2::ParallelDeadlineGroup{ ScoringActionHighHub(5_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
         ScoringStop(intake, fConv, vConv, shooter));
 }
 
