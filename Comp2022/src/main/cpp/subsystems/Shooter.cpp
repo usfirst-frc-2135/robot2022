@@ -252,6 +252,9 @@ void Shooter::SetShooterSpeed(int state)
         case SHOOTERSPEED_HIGHHUB:
             flywheelRPM = m_flywheelUpperHubTargetRPM;
             break;
+        case SHOOTERSPEED_PRIME:
+            flywheelRPM = 200;
+            break;
         default:
             spdlog::warn("SH invalid velocity requested - {}", state);
             break;

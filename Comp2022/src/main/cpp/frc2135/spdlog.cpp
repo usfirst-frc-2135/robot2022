@@ -26,16 +26,16 @@ namespace frc2135
 
             // Rotate logs between ten 1mb files
             // This conservative limit should keep the roboRIO from running out of storage space
-            auto rotating_file_logger = std::make_shared<spdlog::sinks::rotating_file_sink_mt>(
-                fmt::format("{}/logs/RobotSpdlog.log", operating_directory.c_str()),
-                1024 * 1024,
-                10);
+            // auto rotating_file_logger = std::make_shared<spdlog::sinks::rotating_file_sink_mt>(
+            //     fmt::format("{}/logs/RobotSpdlog.log", operating_directory.c_str()),
+            //     1024 * 1024,
+            //     10);
             auto stdout_logger = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
 
             auto logger = std::make_shared<spdlog::async_logger>(
                 "2135",
                 spdlog::sinks_init_list{
-                    rotating_file_logger,
+                    // rotating_file_logger,
                     stdout_logger,
                 },
                 spdlog::thread_pool(),
