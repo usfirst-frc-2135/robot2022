@@ -100,6 +100,7 @@ public:
         SHOOTERSPEED_STOP = 0,     // Stop shooter
         SHOOTERSPEED_LOWHUB = 1,   // Shooter Low Hub velocity
         SHOOTERSPEED_HIGHHUB = 2,  // Shooter High Hub velocity
+        SHOOTERSPEED_PRIME = 3     // Shooter Priming velocity
     } shooterSpeed_e;
 
     void Initialize(void);
