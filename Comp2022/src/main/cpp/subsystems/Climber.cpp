@@ -203,6 +203,19 @@ void Climber::Periodic()
             frc::SmartDashboard::PutNumber("CL_Current_CL15", currentCL15);
         }
     }
+
+    if (m_motorCL14.HasResetOccurred())
+    {
+        int countCL14 = 0;
+        countCL14 += 1;
+        frc::SmartDashboard::PutNumber("HL_Resets_CL14", countCL14);
+    }
+    if (m_motorCL15.HasResetOccurred())
+    {
+        int countCL15 = 0;
+        countCL15 += 1;
+        frc::SmartDashboard::PutNumber("HL_Resets_CL15", countCL15);
+    }
 }
 
 void Climber::SimulationPeriodic()

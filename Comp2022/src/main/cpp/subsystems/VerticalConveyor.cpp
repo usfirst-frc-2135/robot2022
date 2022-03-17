@@ -79,6 +79,13 @@ void VerticalConveyor::Periodic()
         }
     }
 #endif
+
+    if (m_motorVC9.HasResetOccurred())
+    {
+        int countVC9 = 0;
+        countVC9 += 1;
+        frc::SmartDashboard::PutNumber("HL_Resets_VC9", countVC9);
+    }
 }
 
 void VerticalConveyor::SimulationPeriodic()
