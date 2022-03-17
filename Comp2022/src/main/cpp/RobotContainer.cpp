@@ -182,7 +182,7 @@ void RobotContainer::ConfigureButtonBindings()
 
     // Driver - Start/back
     frc2::JoystickButton m_driverStart{ &m_driverController, (int)frc::XboxController::Button::kStart };
-    m_driverStart.ToggleWhenPressed(ShooterAim(true));
+    m_driverStart.ToggleWhenPressed(ShooterAimToggle());
 
     // Operator Controller Assignments
     // Operator - A, B, X, Y

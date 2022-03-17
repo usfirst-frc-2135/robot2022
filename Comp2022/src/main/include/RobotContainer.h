@@ -55,6 +55,7 @@
 #include "commands/ResetDriveSensors.h"
 #include "commands/ScoringPrime.h"
 #include "commands/ShooterAim.h"
+#include "commands/ShooterAimToggle.h"
 #include "commands/ShooterReverse.h"
 #include "commands/ShooterRun.h"
 #include "commands/VerticalConveyorRun.h"
