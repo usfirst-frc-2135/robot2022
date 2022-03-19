@@ -119,6 +119,9 @@ Climber::Climber()
         // m_motorCL14.ConfigForwardSoftLimitEnable(true, kCANTimeout);
         // m_motorCL14.ConfigReverseSoftLimitEnable(true, kCANTimeout);
 
+        m_motorCL14.ConfigVoltageCompSaturation(12.0, 0);
+        m_motorCL14.EnableVoltageCompensation(true);
+
         // Configure Magic Motion settings
         frc2135::TalonUtils::CheckError(m_motorCL14.SelectProfileSlot(0, 0), "CL14 SelectProfileSlot");
 
@@ -476,6 +479,9 @@ void Climber::ClimberFollowerInitialize()
         m_motorCL15.Set(ControlMode::Follower, 14);
         m_motorCL15.SetInverted(InvertType::OpposeMaster);
         m_motorCL15.SetNeutralMode(NeutralMode::Brake);
+
+        m_motorCL15.ConfigVoltageCompSaturation(12.0, 0);
+        m_motorCL15.EnableVoltageCompensation(true);
 
         frc2135::TalonUtils::CheckError(
             m_motorCL15.ConfigSupplyCurrentLimit(m_supplyCurrentLimits),
