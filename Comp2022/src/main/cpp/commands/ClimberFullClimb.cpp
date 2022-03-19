@@ -37,7 +37,7 @@ ClimberFullClimb::ClimberFullClimb(Climber *climber)
     config->GetValueAsDouble("CL_ClimbL3Timer", m_climbL3Timer, 0.5);
     config->GetValueAsDouble("CL_RotateRetractL4Timer", m_rotateRetractL4Timer, 2.5);
 
-    frc::SmartDashboard::PutNumber("CL_ClimbL2Timer)", m_climbL2Timer);
+    frc::SmartDashboard::PutNumber("CL_ClimbL2Timer", m_climbL2Timer);
     frc::SmartDashboard::PutNumber("CL_RotateExtendL3Timer", m_rotateExtendL3Timer);
     frc::SmartDashboard::PutNumber("CL_RotateRetractL3Timer", m_rotateRetractL3Timer);
     frc::SmartDashboard::PutNumber("CL_ClimbL3Timer", m_climbL3Timer);
