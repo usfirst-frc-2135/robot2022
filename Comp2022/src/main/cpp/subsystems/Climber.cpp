@@ -57,7 +57,7 @@ Climber::Climber()
     config->GetValueAsDouble("CL_PidKd", m_pidKd, 0.000);
     config->GetValueAsDouble("CL_CLRampRate", m_CLRampRate, 0.000);
     config->GetValueAsInt("CL_CLAllowedError", m_CLAllowedError, 0);
-    config->GetValueAsDouble("CL_ToleranceInches", m_toleranceInches, 0.75);
+    config->GetValueAsDouble("CL_ToleranceInches", m_toleranceInches, 0.25);
     config->GetValueAsDouble("CL_MaxHeight", m_climberMaxHeight, 85.0);
     config->GetValueAsDouble("CL_MinHeight", m_climberMinHeight, 0.0);
     config->GetValueAsDouble("CL_StowHeight", m_stowHeight, 0.25);
@@ -118,6 +118,9 @@ Climber::Climber()
         //m_motorCL14.ConfigReverseSoftLimitThreshold(InchesToCounts(m_climberMinHeight), kCANTimeout);
         // m_motorCL14.ConfigForwardSoftLimitEnable(true, kCANTimeout);
         // m_motorCL14.ConfigReverseSoftLimitEnable(true, kCANTimeout);
+
+        m_motorCL14.ConfigVoltageCompSaturation(12.0, 0);
+        m_motorCL14.EnableVoltageCompensation(true);
 
         // Configure Magic Motion settings
         frc2135::TalonUtils::CheckError(m_motorCL14.SelectProfileSlot(0, 0), "CL14 SelectProfileSlot");
@@ -416,7 +419,7 @@ void Climber::MoveClimberDistanceInit(int state)
         }
 
         // Start the safety timer
-        m_safetyTimeout = 4.0_s;
+        m_safetyTimeout = 1.8_s;
         m_safetyTimer.Reset();
         m_safetyTimer.Start();
 
@@ -487,6 +490,9 @@ void Climber::ClimberFollowerInitialize()
         m_motorCL15.Set(ControlMode::Follower, 14);
         m_motorCL15.SetInverted(InvertType::OpposeMaster);
         m_motorCL15.SetNeutralMode(NeutralMode::Brake);
+
+        m_motorCL15.ConfigVoltageCompSaturation(12.0, 0);
+        m_motorCL15.EnableVoltageCompensation(true);
 
         frc2135::TalonUtils::CheckError(
             m_motorCL15.ConfigSupplyCurrentLimit(m_supplyCurrentLimits),
