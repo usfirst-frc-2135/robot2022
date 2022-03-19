@@ -101,6 +101,18 @@ RobotContainer::RobotContainer() :
     frc::SmartDashboard::PutData(
         "Auto Drive Path: simCurvePath",
         new AutoDrivePath("simCurvePath", true, &m_drivetrain));
+    frc::SmartDashboard::PutData(
+        "Auto Drive Path: leftBallToLeftShootingPos",
+        new AutoDrivePath("leftBallToLeftShootingPos", true, &m_drivetrain));
+    frc::SmartDashboard::PutData(
+        "Auto Drive Path: rightBallToRightShootingPos",
+        new AutoDrivePath("rightBallToRightShootingPos", true, &m_drivetrain));
+    frc::SmartDashboard::PutData(
+        "Auto Drive Path: shootingPosToLeftBall",
+        new AutoDrivePath("shootingPosToLeftBall", true, &m_drivetrain));
+    frc::SmartDashboard::PutData(
+        "Auto Drive Path: shootingPosToRightBall",
+        new AutoDrivePath("shootingPosToRightBall", true, &m_drivetrain));
 
     ConfigureButtonBindings();
 
