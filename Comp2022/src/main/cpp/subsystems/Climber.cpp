@@ -142,7 +142,7 @@ Climber::Climber()
         m_motorCL14.Set(ControlMode::PercentOutput, 0.0);
     }
 
-    ClimberFollowerInitialize();
+    FollowerInitialize();
 
     Initialize();
 }
@@ -347,23 +347,26 @@ void Climber::Calibrate()
 
 void Climber::MoveClimberDistanceInit(int state)
 {
-    m_pidKf = frc::SmartDashboard::GetNumber("CL_PidKf", m_pidKf);
-    m_velocity = frc::SmartDashboard::GetNumber("CL_Velocity", m_velocity);
-    m_acceleration = frc::SmartDashboard::GetNumber("CL_Acceleration", m_acceleration);
-    m_sCurveStrength = frc::SmartDashboard::GetNumber("CL_SCurveStrength", m_sCurveStrength);
-    m_pidKp = frc::SmartDashboard::GetNumber("CL_PidKp", m_pidKp);
-    m_pidKi = frc::SmartDashboard::GetNumber("CL_PidKi", m_pidKi);
-    m_pidKd = frc::SmartDashboard::GetNumber("CL_PidKd", m_pidKd);
+    if (m_climberDebug)
+    {
+        m_pidKf = frc::SmartDashboard::GetNumber("CL_PidKf", m_pidKf);
+        m_velocity = frc::SmartDashboard::GetNumber("CL_Velocity", m_velocity);
+        m_acceleration = frc::SmartDashboard::GetNumber("CL_Acceleration", m_acceleration);
+        m_sCurveStrength = frc::SmartDashboard::GetNumber("CL_SCurveStrength", m_sCurveStrength);
+        m_pidKp = frc::SmartDashboard::GetNumber("CL_PidKp", m_pidKp);
+        m_pidKi = frc::SmartDashboard::GetNumber("CL_PidKi", m_pidKi);
+        m_pidKd = frc::SmartDashboard::GetNumber("CL_PidKd", m_pidKd);
 
-    m_motorCL14.Config_kF(0, m_pidKf, 0);
-    m_motorCL14.ConfigMotionCruiseVelocity(m_velocity, 0);
-    m_motorCL14.ConfigMotionAcceleration(m_acceleration, 0);
-    m_motorCL14.ConfigMotionSCurveStrength(m_sCurveStrength, 0);
-    m_motorCL14.Config_kP(0, m_pidKp, 0);
-    m_motorCL14.Config_kI(0, m_pidKi, 0);
-    m_motorCL14.Config_kD(0, m_pidKd, 0);
+        m_motorCL14.Config_kF(0, m_pidKf, 0);
+        m_motorCL14.ConfigMotionCruiseVelocity(m_velocity, 0);
+        m_motorCL14.ConfigMotionAcceleration(m_acceleration, 0);
+        m_motorCL14.ConfigMotionSCurveStrength(m_sCurveStrength, 0);
+        m_motorCL14.Config_kP(0, m_pidKp, 0);
+        m_motorCL14.Config_kI(0, m_pidKi, 0);
+        m_motorCL14.Config_kD(0, m_pidKd, 0);
+    }
 
-    ClimberFollowerInitialize();
+    FollowerInitialize();
 
     switch (state)
     {
@@ -472,7 +475,7 @@ bool Climber::MoveClimberDistanceIsFinished()
     return isFinished;
 }
 
-void Climber::ClimberFollowerInitialize()
+void Climber::FollowerInitialize()
 {
     if (m_talonValidCL15)
     {

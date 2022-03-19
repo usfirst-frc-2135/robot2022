@@ -142,5 +142,5 @@ public:
     void MoveClimberDistanceInit(int state);
     bool MoveClimberDistanceIsFinished(void);
 
-    void ClimberFollowerInitialize(void);
+    void FollowerInitialize(void);
 };
