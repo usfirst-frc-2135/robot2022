@@ -206,15 +206,13 @@ void Climber::Periodic()
 
     if (m_motorCL14.HasResetOccurred())
     {
-        int countCL14 = 0;
-        countCL14 += 1;
-        frc::SmartDashboard::PutNumber("HL_Resets_CL14", countCL14);
+        m_countCL14 += 1;
+        frc::SmartDashboard::PutNumber("HL_Resets_CL14", m_countCL14);
     }
     if (m_motorCL15.HasResetOccurred())
     {
-        int countCL15 = 0;
-        countCL15 += 1;
-        frc::SmartDashboard::PutNumber("HL_Resets_CL15", countCL15);
+        m_countCL15 += 1;
+        frc::SmartDashboard::PutNumber("HL_Resets_CL15", m_countCL15);
     }
 }
 

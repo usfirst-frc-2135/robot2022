@@ -98,9 +98,8 @@ void Intake::Periodic()
 #endif
     if (m_motorIN6.HasResetOccurred())
     {
-        int countIN6 = 0;
-        countIN6 += 1;
-        frc::SmartDashboard::PutNumber("HL_Resets_IN6", countIN6);
+        m_countIN6 += 1;
+        frc::SmartDashboard::PutNumber("HL_Resets_IN6", m_countIN6);
     }
 }
 
