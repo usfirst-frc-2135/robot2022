@@ -126,6 +126,12 @@ void Shooter::Periodic()
     }
 
     frc::SmartDashboard::PutNumber("SH_Current_SH11", currentSH11);
+
+    if (m_motorSH11.HasResetOccurred())
+    {
+        m_countSH11 += 1;
+        frc::SmartDashboard::PutNumber("HL_Reset_SH11", m_countSH11);
+    }
 }
 
 void Shooter::SimulationPeriodic()

@@ -42,6 +42,7 @@ private:
 
     // Declare module variables
     bool m_talonValidFC8; // Health indicator for floor conveyor talon
+    int m_countFC8;       //reset counter for motor
     double m_acquireSpeed;
     double m_expelSpeed;
     double m_expelSpeedFast;
