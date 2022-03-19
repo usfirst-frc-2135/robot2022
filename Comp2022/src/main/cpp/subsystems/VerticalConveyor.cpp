@@ -34,6 +34,7 @@ VerticalConveyor::VerticalConveyor()
     // Initialize Variables
     frc2135::RobotConfig *config = frc2135::RobotConfig::GetInstance();
     config->GetValueAsDouble("VC_AcquireSpeed", m_acquireSpeed, 1.0);
+    config->GetValueAsDouble("VC_AcquireSpeedSlow", m_acquireSpeedSlow, 0.2);
     config->GetValueAsDouble("VC_ExpelSpeed", m_expelSpeed, -0.2);
     config->GetValueAsDouble("VC_ExpelSpeedFast", m_expelSpeedFast, -1.0);
 
@@ -42,13 +43,12 @@ VerticalConveyor::VerticalConveyor()
     // Initialize modes and set power to off
     if (m_talonValidVC9)
     {
-        m_motorVC9.SetInverted(true);
+        m_motorVC9.SetInverted(false);
         m_motorVC9.SetNeutralMode(NeutralMode::Coast);
         m_motorVC9.Set(ControlMode::PercentOutput, 0.0);
 
-        SupplyCurrentLimitConfiguration supplyCurrentLimits;
-        supplyCurrentLimits = { true, 45.0, 45.0, 0.001 };
-        m_motorVC9.ConfigSupplyCurrentLimit(supplyCurrentLimits);
+        m_motorVC9.ConfigSupplyCurrentLimit(m_supplyCurrentLimits);
+        m_motorVC9.ConfigStatorCurrentLimit(m_statorCurrentLimits);
 
         m_motorVC9.SetStatusFramePeriod(Status_1_General_, 255, kCANTimeout);
         m_motorVC9.SetStatusFramePeriod(Status_2_Feedback0_, 255, kCANTimeout);
@@ -59,6 +59,7 @@ VerticalConveyor::VerticalConveyor()
 
 void VerticalConveyor::Periodic()
 {
+#if 0
     static int periodicInterval = 0;
     // Put code here to be run every 20 ms loop
     // Only update indicators every 100 ms to cut down on network traffic
@@ -77,6 +78,7 @@ void VerticalConveyor::Periodic()
             frc::SmartDashboard::PutNumber("VC_Current_VC9", currentVC9);
         }
     }
+#endif
 }
 
 void VerticalConveyor::SimulationPeriodic()
@@ -120,6 +122,10 @@ void VerticalConveyor::SetVerticalConveyorSpeed(int mode)
             strName = "ACQUIRE";
             outputVC = m_acquireSpeed;
             break;
+        case VCONVEYOR_ACQUIRE_SLOW:
+            strName = "ACQUIRE_SLOW";
+            outputVC = m_acquireSpeedSlow;
+            break;
         case VCONVEYOR_EXPEL:
             strName = "EXPEL";
             outputVC = m_expelSpeed;
@@ -134,4 +140,11 @@ void VerticalConveyor::SetVerticalConveyorSpeed(int mode)
 
     if (m_talonValidVC9)
         m_motorVC9.Set(ControlMode::PercentOutput, outputVC);
+}
+
+bool VerticalConveyor::IsCargoDetected(void)
+{
+    bool cargoDetected = m_cargoDetected.Get();
+    frc::SmartDashboard::PutBoolean("VC_cargoDetected", cargoDetected);
+    return cargoDetected;
 }
