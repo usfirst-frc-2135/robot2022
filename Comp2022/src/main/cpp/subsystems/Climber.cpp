@@ -57,7 +57,7 @@ Climber::Climber()
     config->GetValueAsDouble("CL_PidKd", m_pidKd, 0.000);
     config->GetValueAsDouble("CL_CLRampRate", m_CLRampRate, 0.000);
     config->GetValueAsInt("CL_CLAllowedError", m_CLAllowedError, 0);
-    config->GetValueAsDouble("CL_ToleranceInches", m_toleranceInches, 0.75);
+    config->GetValueAsDouble("CL_ToleranceInches", m_toleranceInches, 0.25);
     config->GetValueAsDouble("CL_MaxHeight", m_climberMaxHeight, 85.0);
     config->GetValueAsDouble("CL_MinHeight", m_climberMinHeight, 0.0);
     config->GetValueAsDouble("CL_StowHeight", m_stowHeight, 0.25);
@@ -405,7 +405,7 @@ void Climber::MoveClimberDistanceInit(int state)
         }
 
         // Start the safety timer
-        m_safetyTimeout = 4.0_s;
+        m_safetyTimeout = 1.8_s;
         m_safetyTimer.Reset();
         m_safetyTimer.Start();
 
