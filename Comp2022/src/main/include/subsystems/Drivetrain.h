@@ -94,6 +94,7 @@ private:
     double m_driveXScaling;  // Scaling applied to Joystick
     double m_driveYScaling;  // Scaling applied to Joystick
     double m_driveQTScaling; // Scaling applied to Joystick when QuickTurn enabled
+    double m_driveCLScaling; // Scaling applied to Joystick when slow drive mode for climb enabled
     bool m_throttleZeroed;   // Throttle joystick zeroed check for safety
 
     // Talon input filter settings
@@ -101,8 +102,9 @@ private:
     double m_closedLoopRampRate;
 
     // Drive modes
-    bool m_brakeMode;   // Brake or Coast Mode for Talons
-    bool m_isQuickTurn; // Setting for quickturn in curvature drive
+    bool m_brakeMode;       // Brake or Coast Mode for Talons
+    bool m_isQuickTurn;     // Setting for quickturn in curvature drive
+    bool m_isDriveSlowMode; // Setting for slow drive mode before climbing
 
     // Odometry and telemetry
     meter_t m_distanceLeft;
@@ -223,6 +225,7 @@ public:
     void GetYawPitchRoll(void);
     void SetBrakeMode(bool brakeMode);
     void MoveSetQuickTurn(bool quickTurn);
+    void SetDriveSlowMode(bool slowClimbMode);
     void MoveStop(void);
     bool MoveIsStopped(void);
 

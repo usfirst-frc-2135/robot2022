@@ -37,6 +37,7 @@ ClimberStow::ClimberStow(
     // Gate hook is at default position (closed)
 
     AddCommands( // Sequential command
+        DriveSlowMode(false),
         IntakeDeploy(false),
         IntakeRun(Intake::INTAKE_STOP, intake),
         FloorConveyorRun(FloorConveyor::FCONVEYOR_STOP, fConv),

@@ -182,6 +182,7 @@ void Drivetrain::ConfigFileLoad(void)
     config->GetValueAsDouble("DT_DriveXScaling", m_driveXScaling, 0.75);
     config->GetValueAsDouble("DT_DriveYScaling", m_driveYScaling, 0.75);
     config->GetValueAsDouble("DT_QuickTurnScaling", m_driveQTScaling, 0.5);
+    config->GetValueAsDouble("DT_SlowClimbModeScaling", m_driveCLScaling, 0.3);
     config->GetValueAsDouble("DT_OpenLoopRampRate", m_openLoopRampRate, 0.5);
     config->GetValueAsDouble("DT_ClosedLoopRampRate", m_closedLoopRampRate, 0.0);
     config->GetValueAsDouble("DT_StoppedTolerance", m_tolerance, 0.05);
@@ -541,6 +542,14 @@ void Drivetrain::MoveSetQuickTurn(bool quickTurn)
 }
 
 //
+//  Set slow drive mode before climbing
+//
+void Drivetrain::SetDriveSlowMode(bool driveSlowMode)
+{
+    m_isDriveSlowMode = driveSlowMode;
+}
+
+//
 //  Drive stop - used to feed the motors when stopped
 //
 void Drivetrain::MoveStop()
@@ -578,6 +587,11 @@ void Drivetrain::MoveWithJoysticks(frc::XboxController *throttleJstick)
         {
             xOutput = m_driveQTScaling * (xValue * abs(xValue));
             yOutput = m_driveQTScaling * (yValue * abs(yValue));
+        }
+        else if (m_isDriveSlowMode)
+        {
+            xOutput = m_driveCLScaling * (xValue * abs(xValue));
+            yOutput = m_driveCLScaling * (yValue * abs(yValue));
         }
         else
         {
