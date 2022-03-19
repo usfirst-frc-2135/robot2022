@@ -225,7 +225,7 @@ public:
     void GetYawPitchRoll(void);
     void SetBrakeMode(bool brakeMode);
     void MoveSetQuickTurn(bool quickTurn);
-    void SetDriveSlowMode(bool slowClimbMode);
+    void SetDriveSlowMode(bool driveSlowMode);
     void MoveStop(void);
     bool MoveIsStopped(void);
 
