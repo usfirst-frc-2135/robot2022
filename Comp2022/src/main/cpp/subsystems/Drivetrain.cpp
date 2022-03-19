@@ -265,17 +265,17 @@ void Drivetrain::TalonMasterInitialize(WPI_TalonFX &motor, bool inverted)
     motor.SetSensorPhase(false);
     motor.SetSelectedSensorPosition(0, kPidIndex, kCANTimeout);
 
-    frc2135::TalonUtils::CheckError(motor.ConfigOpenloopRamp(m_openLoopRampRate, kCANTimeout), "HL ConfigOpenloopRamp");
+    frc2135::TalonUtils::CheckError(motor.ConfigOpenloopRamp(m_openLoopRampRate, kCANTimeout), "HL_ConfigOpenloopRamp");
     frc2135::TalonUtils::CheckError(
         motor.ConfigClosedloopRamp(m_closedLoopRampRate, kCANTimeout),
-        "HL ConfigClosedloopRamp");
+        "HL_ConfigClosedloopRamp");
 
     frc2135::TalonUtils::CheckError(
         motor.ConfigSupplyCurrentLimit(m_supplyCurrentLimits),
-        "HL ConfigSupplyCurrentLimit");
+        "HL_ConfigSupplyCurrentLimit");
     frc2135::TalonUtils::CheckError(
         motor.ConfigStatorCurrentLimit(m_statorCurrentLimits),
-        "HL ConfigStatorCurrentLimit");
+        "HL_ConfigStatorCurrentLimit");
 }
 
 void Drivetrain::TalonFollowerInitialize(WPI_TalonFX &motor, int master)
@@ -285,17 +285,17 @@ void Drivetrain::TalonFollowerInitialize(WPI_TalonFX &motor, int master)
     motor.SetNeutralMode(NeutralMode::Coast);
     frc2135::TalonUtils::CheckError(
         motor.SetStatusFramePeriod(Status_1_General_, 255, kCANTimeout),
-        "HL SetStatusFramePeriod Status 1");
+        "HL_SetStatusFramePeriod_Status1");
     frc2135::TalonUtils::CheckError(
         motor.SetStatusFramePeriod(Status_2_Feedback0_, 255, kCANTimeout),
-        "HL SetStatusFramePeriod Status 2");
+        "HL_SetStatusFramePeriod_Status2");
 
     frc2135::TalonUtils::CheckError(
         motor.ConfigSupplyCurrentLimit(m_supplyCurrentLimits),
-        "HL ConfigSupplyCurrentLimit");
+        "HL_ConfigSupplyCurrentLimit");
     frc2135::TalonUtils::CheckError(
         motor.ConfigStatorCurrentLimit(m_statorCurrentLimits),
-        "HL ConfigStatorCurrentLimit");
+        "HL_ConfigStatorCurrentLimit");
 }
 
 ///////////////////////////////////////////////////////////////////////////////
