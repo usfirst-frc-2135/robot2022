@@ -35,7 +35,7 @@ void DriveLimelight::Initialize()
 {
     spdlog::info("DriveLimelight - Init HERE");
     m_vision->SetLEDMode(Vision::LED_ON);
-    m_vision->SetCamDisplay(Vision::PIP_MAIN);
+    m_vision->SetCameraDisplay(Vision::PIP_MAIN);
     m_drivetrain->MoveWithLimelightInit(m_endAtTarget);
 }
 
@@ -59,7 +59,7 @@ void DriveLimelight::End(bool interrupted)
 {
     spdlog::info("DriveLimelight - End");
     m_vision->SetLEDMode(Vision::LED_OFF);
-    m_vision->SetCamDisplay(Vision::PIP_SECONDARY);
+    m_vision->SetCameraDisplay(Vision::PIP_SECONDARY);
     m_drivetrain->MoveWithLimelightEnd();
 }
 
