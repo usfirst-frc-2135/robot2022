@@ -32,7 +32,7 @@ Vision::Vision() : m_yfilter(5)
 
     table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
     table->PutNumber("ledMode", LED_ON);
-    table->PutNumber("stream", PIP_SECONDARY);
+    //table->PutNumber("stream", PIP_SECONDARY);
 
     frc::SmartDashboard::SetDefaultBoolean("VI_SM_OVERRIDE_ENABLED", false);
 
@@ -159,4 +159,10 @@ Vision::ledMode_e Vision::GetLEDMode(void)
 
     spdlog::info("VI GetLedMode : {}", mode);
     return mode;
+}
+
+void Vision::SetCamDisplay(camStream_e stream)
+{
+    table->PutNumber("stream", stream);
+    spdlog::info("VI SetLedDisplay : {}", stream);
 }
