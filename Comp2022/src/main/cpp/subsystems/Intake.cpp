@@ -96,6 +96,11 @@ void Intake::Periodic()
         }
     }
 #endif
+    if (m_motorIN6.HasResetOccurred())
+    {
+        m_countIN6 += 1;
+        frc::SmartDashboard::PutNumber("HL_Resets_IN6", m_countIN6);
+    }
 }
 
 void Intake::SimulationPeriodic()

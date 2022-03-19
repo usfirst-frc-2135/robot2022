@@ -42,6 +42,8 @@
 #include "commands/ClimberCalibrate.h"
 #include "commands/ClimberFollowerInitialize.h"
 #include "commands/ClimberFullClimb.h"
+#include "commands/ClimberL2ToL3.h"
+#include "commands/ClimberL3ToL4.h"
 #include "commands/ClimberMoveHeight.h"
 #include "commands/ClimberRun.h"
 #include "commands/ClimberSetGateHook.h"
