@@ -265,11 +265,17 @@ void Drivetrain::TalonMasterInitialize(WPI_TalonFX &motor, bool inverted)
     motor.SetSensorPhase(false);
     motor.SetSelectedSensorPosition(0, kPidIndex, kCANTimeout);
 
-    motor.ConfigOpenloopRamp(m_openLoopRampRate, kCANTimeout);
-    motor.ConfigClosedloopRamp(m_closedLoopRampRate, kCANTimeout);
+    frc2135::TalonUtils::CheckError(motor.ConfigOpenloopRamp(m_openLoopRampRate, kCANTimeout), "HL_ConfigOpenloopRamp");
+    frc2135::TalonUtils::CheckError(
+        motor.ConfigClosedloopRamp(m_closedLoopRampRate, kCANTimeout),
+        "HL_ConfigClosedloopRamp");
 
-    motor.ConfigSupplyCurrentLimit(m_supplyCurrentLimits);
-    motor.ConfigStatorCurrentLimit(m_statorCurrentLimits);
+    frc2135::TalonUtils::CheckError(
+        motor.ConfigSupplyCurrentLimit(m_supplyCurrentLimits),
+        "HL_ConfigSupplyCurrentLimit");
+    frc2135::TalonUtils::CheckError(
+        motor.ConfigStatorCurrentLimit(m_statorCurrentLimits),
+        "HL_ConfigStatorCurrentLimit");
 }
 
 void Drivetrain::TalonFollowerInitialize(WPI_TalonFX &motor, int master)
@@ -277,11 +283,19 @@ void Drivetrain::TalonFollowerInitialize(WPI_TalonFX &motor, int master)
     motor.Set(ControlMode::Follower, master);
     motor.SetInverted(InvertType::FollowMaster);
     motor.SetNeutralMode(NeutralMode::Coast);
-    motor.SetStatusFramePeriod(Status_1_General_, 255, kCANTimeout);
-    motor.SetStatusFramePeriod(Status_2_Feedback0_, 255, kCANTimeout);
+    frc2135::TalonUtils::CheckError(
+        motor.SetStatusFramePeriod(Status_1_General_, 255, kCANTimeout),
+        "HL_SetStatusFramePeriod_Status1");
+    frc2135::TalonUtils::CheckError(
+        motor.SetStatusFramePeriod(Status_2_Feedback0_, 255, kCANTimeout),
+        "HL_SetStatusFramePeriod_Status2");
 
-    motor.ConfigSupplyCurrentLimit(m_supplyCurrentLimits);
-    motor.ConfigStatorCurrentLimit(m_statorCurrentLimits);
+    frc2135::TalonUtils::CheckError(
+        motor.ConfigSupplyCurrentLimit(m_supplyCurrentLimits),
+        "HL_ConfigSupplyCurrentLimit");
+    frc2135::TalonUtils::CheckError(
+        motor.ConfigStatorCurrentLimit(m_statorCurrentLimits),
+        "HL_ConfigStatorCurrentLimit");
 }
 
 ///////////////////////////////////////////////////////////////////////////////
