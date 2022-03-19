@@ -46,8 +46,8 @@ Auto3BallLeft::Auto3BallLeft(
     config->GetValueAsString("Auto3BallLeft_path1", m_pathname1, "startToShootingPos");
     config->GetValueAsString("Auto3BallLeft_path2", m_pathname2, "shootingPosToBall");
     config->GetValueAsString("Auto3BallLeft_path3", m_pathname3, "ballToShootingPos");
-    config->GetValueAsString("Auto3BallLeft_path4", m_pathname4, "shootingPosToBall");
-    config->GetValueAsString("Auto3BallLeft_path5", m_pathname5, "ballToShootingPos");
+    config->GetValueAsString("Auto3BallLeft_path4", m_pathname4, "shootingPosToLeftBall");
+    config->GetValueAsString("Auto3BallLeft_path5", m_pathname5, "leftBallToLeftShootingPos");
     spdlog::info("Auto3BallLeft pathname 1 {}", m_pathname1.c_str());
     spdlog::info("Auto3BallLeft pathname 2 {}", m_pathname2.c_str());
     spdlog::info("Auto3BallLeft pathname 3 {}", m_pathname3.c_str());
@@ -79,14 +79,14 @@ Auto3BallLeft::Auto3BallLeft(
             AutoDrivePath(m_pathname3.c_str(), false, drivetrain) },
         // Shoot 2nd ball
         frc2::ParallelDeadlineGroup{ ScoringActionHighHub(2_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
-        // Drive to 3rd ball and intake
+        // Drive to opppnent's ball and intake
         frc2::ParallelCommandGroup{
             frc2::ParallelDeadlineGroup{
                 frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
                 AutoDrivePath(m_pathname4.c_str(), false, drivetrain) },
             ScoringPrime(shooter),
             IntakingAction(intake, fConv, vConv) },
-        // Drive to a shooting position
+        // Turn and drive to a shooting position
         frc2::ParallelCommandGroup{
             frc2::ParallelDeadlineGroup{
                 frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
@@ -95,7 +95,7 @@ Auto3BallLeft::Auto3BallLeft(
         // Should we add a wait time here?
         // Stow intake
         frc2::ParallelDeadlineGroup{ IntakeDeploy(false), AutoStop(drivetrain) },
-        // Shoot second ball
+        // Shoot opponent's ball
         frc2::ParallelDeadlineGroup{ ScoringActionHighHub(2_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
         ScoringStop(intake, fConv, vConv, shooter));
 }

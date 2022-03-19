@@ -48,8 +48,8 @@ Auto3BallRight::Auto3BallRight(
     config->GetValueAsString("Auto3BallRight_path1", m_pathname1, "startToShootingPos");
     config->GetValueAsString("Auto3BallRight_path2", m_pathname2, "shootingPosToBall");
     config->GetValueAsString("Auto3BallRight_path3", m_pathname3, "ballToShootingPos");
-    config->GetValueAsString("Auto3BallRight_path4", m_pathname4, "shootingPosToOffTarmac");
-    config->GetValueAsString("Auto3BallRight_path5", m_pathname5, "shootingPosToOffTarmac");
+    config->GetValueAsString("Auto3BallRight_path4", m_pathname4, "shootingPosToRightBall");
+    config->GetValueAsString("Auto3BallRight_path5", m_pathname5, "rightBallToRightShootingPos");
     config->GetValueAsString("Auto3BallRight_path6", m_pathname6, "shootingPosToOffTarmac");
     spdlog::info("Auto3BallRight pathname 1 {}", m_pathname1.c_str());
     spdlog::info("Auto3BallRight pathname 2 {}", m_pathname2.c_str());
@@ -81,7 +81,7 @@ Auto3BallRight::Auto3BallRight(
         frc2::ParallelDeadlineGroup{
             frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
             AutoDrivePath(m_pathname3.c_str(), false, drivetrain) },
-        // Shoot 3nd ball
+        // Shoot 2nd ball
         frc2::ParallelDeadlineGroup{ ScoringActionHighHub(2_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
         // Drive to 3rd ball
         frc2::ParallelCommandGroup{
@@ -102,14 +102,15 @@ Auto3BallRight::Auto3BallRight(
                 frc2::ParallelDeadlineGroup{
                     frc2::WaitUntilCommand([drivetrain] { return drivetrain->MoveWithLimelightIsFinished(); }),
                     ScoringPrime(shooter) },
-                ScoringActionHighHub(2_s, intake, fConv, vConv, shooter) },
+                ScoringActionHighHub(3_s, intake, fConv, vConv, shooter) },
             DriveLimelight(false, drivetrain, vision) },
         // Drive towards human player/terminal
-        frc2::ParallelCommandGroup{
-            frc2::ParallelDeadlineGroup{
-                frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
-                AutoDrivePath(m_pathname6.c_str(), false, drivetrain) },
-            ScoringStop(intake, fConv, vConv, shooter) });
+        // frc2::ParallelCommandGroup{
+        //     frc2::ParallelDeadlineGroup{
+        //         frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
+        //         AutoDrivePath(m_pathname6.c_str(), false, drivetrain) },
+        //     ScoringStop(intake, fConv, vConv, shooter) });
+        ScoringStop(intake, fConv, vConv, shooter));
 }
 
 bool Auto3BallRight::RunsWhenDisabled() const
