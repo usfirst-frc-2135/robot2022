@@ -53,7 +53,7 @@ private:
     // Declare module variables
     bool m_talonValidCL14; // Health indicator for climber Talon 14
     bool m_talonValidCL15; // Health indicator for climber Talon 15
-    double m_deadband = 0.2;
+    double m_stickDeadband = 0.2;
 
     double m_targetInches;   // Target inches of height that are requested of the climber
     double m_curInches;      // Current elevator height in inches
@@ -64,7 +64,6 @@ private:
     second_t m_safetyTimeout; // Seconds that the timer ran before stopping
 
     // Config file parameters
-    double m_peakOut;         // Climber maximum speed during movement
     int m_velocity;           // Climber motion velocity
     int m_acceleration;       // Climber motion acceleration
     int m_sCurveStrength;     // Climber motion S curve smoothing strength
@@ -72,7 +71,6 @@ private:
     double m_pidKp;           // Climber PID proportional constant
     double m_pidKi;           // Climber PID integral constant
     double m_pidKd;           // Climber PID derivative constant
-    double m_CLRampRate;      // Climber PID ramp rate
     int m_CLAllowedError;     // Climber PID allowable closed loop error in counts
     double m_toleranceInches; // Climber PID tolerance in inches
 

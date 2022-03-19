@@ -2,6 +2,7 @@
   RB_Name = 2135-Grogu
 # DriveTrain settings
   DT_QuickTurnScaling = 0.5
+  DT_SlowClimbModeScaling = 0.3
 # Competition mode
   DT_DriveXScaling = 1.0
   DT_DriveYScaling = 1.0
@@ -78,7 +79,7 @@
   CL_CLRampRate = 0.000
   CL_CLAllowedError = 0
   CL_ToleranceInches = 0.25
-  CL_MaxHeight = 85.0
+  CL_MaxHeight = 36.0
   CL_MinHeight = 0.0
   CL_TargetHeight = 0.0
   CL_StowHeight = 0.10
