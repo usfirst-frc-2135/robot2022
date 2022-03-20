@@ -746,9 +746,8 @@ bool Drivetrain::LimelightSanityCheck()
     double vertAngleRange = 10;
     double distRange = 5;
 
-    return (
-        tv && (fabs(tx) <= horizAngleRange) && (fabs(ty) <= vertAngleRange)
-        && (fabs(m_setPointDistance - m_limelightDistance) <= distRange));
+    return (tv && (fabs(tx) <= horizAngleRange) && (fabs(ty) <= vertAngleRange));
+    // && (fabs(m_setPointDistance - m_limelightDistance) <= distRange)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
