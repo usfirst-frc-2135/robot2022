@@ -375,7 +375,7 @@ void Climber::MoveClimberDistanceInit(int state)
         m_motorCL14.Config_kD(0, m_pidKd, 0);
     }
 
-    FollowerInitialize();
+    // FollowerInitialize();
 
     switch (state)
     {
