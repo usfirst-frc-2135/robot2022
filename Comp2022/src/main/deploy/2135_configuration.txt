@@ -35,9 +35,9 @@
   VI_Distance1 = 48  
   VI_Distance2 = 60
   # VI_VertOffset1 ####
-  VI_VertOffset1 = 3.69
+  VI_VertOffset1 = 0.51
   # VI_VertOffset2 ##
-  VI_VertOffset2 = -0.25
+  VI_VertOffset2 = -4.61
 # Path following settings
   DTR_RamsetePidKf = 0.0465
   DTR_RamsetePidKp = 0.1125
