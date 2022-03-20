@@ -96,13 +96,12 @@ Auto3BallLeft::Auto3BallLeft(
             ScoringPrime(shooter),
             IntakingAction(intake, fConv, vConv) },
         // Turn and drive to a shooting position
-        frc2::PrintCommand("Turn and drive to a shooting position"),
-        frc2::ParallelCommandGroup{
-            frc2::ParallelDeadlineGroup{
-                frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
-                AutoDrivePath(m_pathname5.c_str(), false, drivetrain) },
-            ScoringPrime(shooter) },
-        // Should we add a wait time here?
+        // frc2::PrintCommand("Turn and drive to a shooting position"),
+        // frc2::ParallelCommandGroup{
+        //     frc2::ParallelDeadlineGroup{
+        //         frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
+        //         AutoDrivePath(m_pathname5.c_str(), false, drivetrain) },
+        //     ScoringPrime(shooter) },
         // Stow intake
         frc2::PrintCommand("Stow intake"),
         frc2::ParallelDeadlineGroup{ IntakeDeploy(false), AutoStop(drivetrain) },
