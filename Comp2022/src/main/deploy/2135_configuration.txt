@@ -83,13 +83,13 @@
   CL_StowHeight = 0.10
   CL_ExtendL2 = 29.0
   CL_RotateL3 = 31.25
-  CL_GatehookRestHeight = 1.85
+  CL_GatehookRestHeight = 4.0
   CL_RaiseL4 = 20.25
   CL_ClimbL2Timer = 0.5
-  CL_RotateExtendL3Timer = 0.5
+  CL_RotateExtendL3Timer = 1.5
   CL_RotateRetractL3Timer = 2.0
   CL_ClimbL3Timer = 0.5
-  CL_RotateRetractL4Timer = 2.5
+  CL_RotateRetractL4Timer = 1.5
 # Auto Settings
   AutoDrive_path = startToOffTarmac
   AutoDriveShoot_path1 = startToShootingPos

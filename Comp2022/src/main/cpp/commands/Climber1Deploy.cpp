@@ -18,7 +18,6 @@
 #include "commands/Climber1Deploy.h"
 
 ClimberDeploy::ClimberDeploy(
-    Drivetrain *drivetrain,
     Climber *climber,
     Intake *intake,
     FloorConveyor *fConv,

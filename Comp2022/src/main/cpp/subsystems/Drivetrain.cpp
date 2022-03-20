@@ -148,6 +148,8 @@ void Drivetrain::Initialize(void)
     // When disabled, set low gear and coast mode to allow easier pushing
     m_brakeMode = false;
     m_throttleZeroed = false;
+    m_isQuickTurn = false;
+    m_isDriveSlowMode = false;
     MoveSetQuickTurn(false);
 
     SetBrakeMode(m_brakeMode);

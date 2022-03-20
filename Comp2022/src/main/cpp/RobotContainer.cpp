@@ -111,7 +111,7 @@ RobotContainer::RobotContainer() :
         new ClimberStow(&m_climber, &m_intake, &m_floorConv, &m_vertConv, &m_shooter));
     frc::SmartDashboard::PutData(
         "Climber 1Deploy",
-        new ClimberDeploy(&m_drivetrain, &m_climber, &m_intake, &m_floorConv, &m_vertConv, &m_shooter));
+        new ClimberDeploy(&m_climber, &m_intake, &m_floorConv, &m_vertConv, &m_shooter));
     frc::SmartDashboard::PutData("Climber 2ClimbToL2", new ClimberClimbToL2(&m_climber));
     frc::SmartDashboard::PutData("Climber 3RotateToL3", new ClimberRotateToL3(&m_climber));
     frc::SmartDashboard::PutData("Climber 5RotateIntoL3", new ClimberRotateIntoL3(&m_climber));
@@ -202,7 +202,7 @@ void RobotContainer::ConfigureButtonBindings()
     frc2::POVButton m_operDown{ &m_operatorController, 180, 0 };
     m_operDown.WhenPressed(ClimberClimbToL2(&m_climber), true);
     frc2::POVButton m_operUp{ &m_operatorController, 0, 0 };
-    m_operUp.WhenPressed(ClimberDeploy(&m_drivetrain, &m_climber, &m_intake, &m_floorConv, &m_vertConv, &m_shooter), true);
+    m_operUp.WhenPressed(ClimberDeploy(&m_climber, &m_intake, &m_floorConv, &m_vertConv, &m_shooter), true);
     frc2::POVButton m_operLeft{ &m_operatorController, 270, 0 };
     m_operLeft.WhenPressed(ClimberL2ToL3(&m_climber), true);
     frc2::POVButton m_operRight{ &m_operatorController, 90, 0 };
