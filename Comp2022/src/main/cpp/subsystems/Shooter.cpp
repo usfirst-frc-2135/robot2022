@@ -161,6 +161,7 @@ void Shooter::Initialize(void)
 {
     spdlog::info("SH Init");
     SetShooterSpeed(SHOOTERSPEED_STOP);
+    frc::SmartDashboard::PutBoolean("HL_SH11Valid", m_talonValidSH11);
 }
 
 void Shooter::FaultDump(void)
