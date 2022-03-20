@@ -87,19 +87,19 @@ void Drivetrain::Periodic()
 
     if (m_motorL1.HasResetOccurred())
     {
-        m_countL1 += 1;
+        m_resetCountL1 += 1;
     }
     if (m_motorL2.HasResetOccurred())
     {
-        m_countL2 += 1;
+        m_resetCountL2 += 1;
     }
     if (m_motorR3.HasResetOccurred())
     {
-        m_countR3 += 1;
+        m_resetCountR3 += 1;
     }
     if (m_motorR4.HasResetOccurred())
     {
-        m_countR4 += 1;
+        m_resetCountR4 += 1;
     }
 }
 
@@ -346,10 +346,10 @@ void Drivetrain::UpdateDashboardValues(void)
     frc::SmartDashboard::PutNumber("DT_Current_R3", m_currentR3);
     frc::SmartDashboard::PutNumber("DT_Current_R4", m_currentR4);
 
-    frc::SmartDashboard::PutNumber("HL_Resets_L1", m_countL1);
-    frc::SmartDashboard::PutNumber("HL_Resets_L2", m_countL2);
-    frc::SmartDashboard::PutNumber("HL_Resets_R3", m_countR3);
-    frc::SmartDashboard::PutNumber("HL_Resets_R4", m_countR4);
+    frc::SmartDashboard::PutNumber("HL_Resets_L1", m_resetCountL1);
+    frc::SmartDashboard::PutNumber("HL_Resets_L2", m_resetCountL2);
+    frc::SmartDashboard::PutNumber("HL_Resets_R3", m_resetCountR3);
+    frc::SmartDashboard::PutNumber("HL_Resets_R4", m_resetCountR4);
 
     // Only update indicators every 100 ms to cut down on network traffic
     if ((periodicInterval++ % 5 == 0) && (m_driveDebug > 1))

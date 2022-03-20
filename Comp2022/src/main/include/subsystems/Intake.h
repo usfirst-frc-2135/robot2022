@@ -45,7 +45,7 @@ private:
 
     // Declare module variables
     bool m_talonValidIN6; // Health indicator for intake Talon 6
-    int m_countIN6;       //reset count checker for motor
+    int m_resetCountIN6;  //reset count checker for motor
 
     double m_acquireSpeed;
     double m_expelSpeed;

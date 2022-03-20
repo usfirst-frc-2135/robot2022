@@ -43,7 +43,7 @@ private:
 
     // Declare module variables
     bool m_talonValidVC9; // Health indicator for vertical conveyor talon
-    int m_countVC9; //reset counter for motor
+    int m_resetCountVC9;  //reset counter for motor
     double m_acquireSpeed;
     double m_acquireSpeedSlow;
     double m_expelSpeed;

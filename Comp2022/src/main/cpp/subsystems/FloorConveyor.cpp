@@ -83,8 +83,8 @@ void FloorConveyor::Periodic()
 
     if (m_motorFC8.HasResetOccurred())
     {
-        m_countFC8 += 1;
-        frc::SmartDashboard::PutNumber("HL_Resets_FC8", m_countFC8);
+        m_resetCountFC8 += 1;
+        frc::SmartDashboard::PutNumber("HL_Resets_FC8", m_resetCountFC8);
     }
 }
 
