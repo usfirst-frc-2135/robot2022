@@ -763,13 +763,28 @@ bool Drivetrain::LimelightSanityCheck()
     double tx = robotContainer->m_vision.GetHorizOffsetDeg();
     double ty = robotContainer->m_vision.GetVertOffsetDeg();
     bool tv = robotContainer->m_vision.GetTargetValid();
+    m_limelightDistance = robotContainer->m_vision.CalculateDist();
 
     double horizAngleRange = 10;
-    double vertAngleRange = 10;
-    double distRange = 5;
+    // double vertAngleRange = 10;
+    double distRange = 15;
 
-    return (tv && (fabs(tx) <= horizAngleRange) && (fabs(ty) <= vertAngleRange));
-    // && (fabs(m_setPointDistance - m_limelightDistance) <= distRange)
+    spdlog::info(
+        "DTL tv {} tx {:.1f} ty{:.1f} distError {:.1f} lldistance {:.1f}",
+        tv,
+        tx,
+        ty,
+        fabs(m_setPointDistance - m_limelightDistance),
+        m_limelightDistance);
+
+    if (tv && (fabs(tx) <= horizAngleRange) && (fabs(m_setPointDistance - m_limelightDistance) <= distRange))
+    {
+        spdlog::info("Limelight Sanity Check passed");
+        return true;
+    }
+    spdlog::info("Limelight Sanity Check failed");
+    return false;
+    // && (fabs(ty) <= vertAngleRange)
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -107,12 +107,17 @@ Auto3BallRight::Auto3BallRight(
             frc2::ParallelDeadlineGroup{
                 frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
                 AutoDrivePath(m_pathname5.c_str(), false, drivetrain) },
-            ScoringPrime(shooter) },
+            ScoringPrime(shooter),
+            frc2::PrintCommand("Driving to shooting position group") },
         // Run limelight shooting routine for 3rd ball
         frc2::PrintCommand("Run limelight shooting routine for 3rd ball"),
         frc2::ConditionalCommand{ AutoDriveLimelightShoot(drivetrain, intake, fConv, vConv, shooter, vision),
-                                  ScoringStop(intake, fConv, vConv, shooter),
-                                  [drivetrain] { return drivetrain->LimelightSanityCheck(); } },
+                                  ScoringActionHighHub(2_s, intake, fConv, vConv, shooter),
+                                  [drivetrain]
+                                  {
+                                      spdlog::info("Going to check limelight sanity");
+                                      return drivetrain->LimelightSanityCheck();
+                                  } },
         // Drive towards human player/terminal
         // frc2::ParallelCommandGroup{
         //     frc2::ParallelDeadlineGroup{
