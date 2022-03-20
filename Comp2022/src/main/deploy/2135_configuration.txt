@@ -2,6 +2,7 @@
   RB_Name = 2135-Grogu
 # DriveTrain settings
   DT_QuickTurnScaling = 0.5
+  DT_SlowClimbModeScaling = 0.3
 # Competition mode
   DT_DriveXScaling = 1.0
   DT_DriveYScaling = 1.0
@@ -67,7 +68,6 @@
   SH_FlywheelUpperHubTargetRPM = 2200.0
   SH_ToleranceRPM = 200.0
 # Climber settings
-  CL_PeakOut = 1.0
   CL_Velocity = 21776
   CL_Acceleration = 43552
   CL_SCurveStrength = 0
@@ -75,22 +75,21 @@
   CL_PidKp = 0.50
   CL_PidKi = 0.000
   CL_PidKd = 0.000
-  CL_CLRampRate = 0.000
   CL_CLAllowedError = 0
   CL_ToleranceInches = 0.25
-  CL_MaxHeight = 85.0
+  CL_MaxHeight = 36.0
   CL_MinHeight = 0.0
   CL_TargetHeight = 0.0
   CL_StowHeight = 0.10
   CL_ExtendL2 = 29.0
   CL_RotateL3 = 31.25
-  CL_GatehookRestHeight = 1.85
+  CL_GatehookRestHeight = 4.0
   CL_RaiseL4 = 20.25
   CL_ClimbL2Timer = 0.5
-  CL_RotateExtendL3Timer = 0.5
+  CL_RotateExtendL3Timer = 1.5
   CL_RotateRetractL3Timer = 2.0
   CL_ClimbL3Timer = 0.5
-  CL_RotateRetractL4Timer = 2.5
+  CL_RotateRetractL4Timer = 1.5
 # Auto Settings
   AutoDrive_path = startToOffTarmac
   AutoDriveShoot_path1 = startToShootingPos
