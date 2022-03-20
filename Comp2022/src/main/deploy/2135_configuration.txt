@@ -1,5 +1,5 @@
 # Comment lines start with '#'
-  RB_Name = 2135-Grogu
+  RB_Name = 2135-Festus
 # DriveTrain settings
   DT_QuickTurnScaling = 0.5
   DT_SlowClimbModeScaling = 0.3
@@ -28,16 +28,16 @@
   DTL_TargetAngle = 0.0
   DTL_SetPointDistance = 60.0
   DTL_AngleThreshold = 3.5
-  #Keep around 10
+  # Keep around 10
   DTL_DistThreshold = 6.0
 
-  //this is used to calibrate the distance for Grogu
+# These points are used to calibrate the limelight distance
   VI_Distance1 = 48  
   VI_Distance2 = 60
   # VI_VertOffset1 ####
-  VI_VertOffset1 = 0.51
+  VI_VertOffset1 = 3.69
   # VI_VertOffset2 ##
-  VI_VertOffset2 = -4.61
+  VI_VertOffset2 = -0.25
 # Path following settings
   DTR_RamsetePidKf = 0.0465
   DTR_RamsetePidKp = 0.1125
