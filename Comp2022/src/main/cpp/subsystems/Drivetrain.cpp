@@ -84,6 +84,23 @@ void Drivetrain::Periodic()
     UpdateOdometry();
     UpdateDashboardValues();
     m_field.SetRobotPose(GetPose());
+
+    if (m_motorL1.HasResetOccurred())
+    {
+        m_countL1 += 1;
+    }
+    if (m_motorL2.HasResetOccurred())
+    {
+        m_countL2 += 1;
+    }
+    if (m_motorR3.HasResetOccurred())
+    {
+        m_countR3 += 1;
+    }
+    if (m_motorR4.HasResetOccurred())
+    {
+        m_countR4 += 1;
+    }
 }
 
 void Drivetrain::SimulationPeriodic()
@@ -160,6 +177,11 @@ void Drivetrain::Initialize(void)
 
     // Initialize PID values for velocity control
     SyncTalonPIDFromDashboard();
+
+    frc::SmartDashboard::PutBoolean("HL_L1Valid", m_talonValidL1);
+    frc::SmartDashboard::PutBoolean("HL_L2Valid", m_talonValidL2);
+    frc::SmartDashboard::PutBoolean("HL_R3Valid", m_talonValidR3);
+    frc::SmartDashboard::PutBoolean("HL_R4Valid", m_talonValidR4);
 }
 
 void Drivetrain::FaultDump(void)
@@ -248,11 +270,17 @@ void Drivetrain::TalonMasterInitialize(WPI_TalonFX &motor, bool inverted)
     motor.SetSensorPhase(false);
     motor.SetSelectedSensorPosition(0, kPidIndex, kCANTimeout);
 
-    motor.ConfigOpenloopRamp(m_openLoopRampRate, kCANTimeout);
-    motor.ConfigClosedloopRamp(m_closedLoopRampRate, kCANTimeout);
+    frc2135::TalonUtils::CheckError(motor.ConfigOpenloopRamp(m_openLoopRampRate, kCANTimeout), "HL_ConfigOpenloopRamp");
+    frc2135::TalonUtils::CheckError(
+        motor.ConfigClosedloopRamp(m_closedLoopRampRate, kCANTimeout),
+        "HL_ConfigClosedloopRamp");
 
-    motor.ConfigSupplyCurrentLimit(m_supplyCurrentLimits);
-    motor.ConfigStatorCurrentLimit(m_statorCurrentLimits);
+    frc2135::TalonUtils::CheckError(
+        motor.ConfigSupplyCurrentLimit(m_supplyCurrentLimits),
+        "HL_ConfigSupplyCurrentLimit");
+    frc2135::TalonUtils::CheckError(
+        motor.ConfigStatorCurrentLimit(m_statorCurrentLimits),
+        "HL_ConfigStatorCurrentLimit");
 }
 
 void Drivetrain::TalonFollowerInitialize(WPI_TalonFX &motor, int master)
@@ -260,11 +288,19 @@ void Drivetrain::TalonFollowerInitialize(WPI_TalonFX &motor, int master)
     motor.Set(ControlMode::Follower, master);
     motor.SetInverted(InvertType::FollowMaster);
     motor.SetNeutralMode(NeutralMode::Coast);
-    motor.SetStatusFramePeriod(Status_1_General_, 255, kCANTimeout);
-    motor.SetStatusFramePeriod(Status_2_Feedback0_, 255, kCANTimeout);
+    frc2135::TalonUtils::CheckError(
+        motor.SetStatusFramePeriod(Status_1_General_, 255, kCANTimeout),
+        "HL_SetStatusFramePeriod_Status1");
+    frc2135::TalonUtils::CheckError(
+        motor.SetStatusFramePeriod(Status_2_Feedback0_, 255, kCANTimeout),
+        "HL_SetStatusFramePeriod_Status2");
 
-    motor.ConfigSupplyCurrentLimit(m_supplyCurrentLimits);
-    motor.ConfigStatorCurrentLimit(m_statorCurrentLimits);
+    frc2135::TalonUtils::CheckError(
+        motor.ConfigSupplyCurrentLimit(m_supplyCurrentLimits),
+        "HL_ConfigSupplyCurrentLimit");
+    frc2135::TalonUtils::CheckError(
+        motor.ConfigStatorCurrentLimit(m_statorCurrentLimits),
+        "HL_ConfigStatorCurrentLimit");
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -309,6 +345,11 @@ void Drivetrain::UpdateDashboardValues(void)
     frc::SmartDashboard::PutNumber("DT_Current_L2", m_currentL2);
     frc::SmartDashboard::PutNumber("DT_Current_R3", m_currentR3);
     frc::SmartDashboard::PutNumber("DT_Current_R4", m_currentR4);
+
+    frc::SmartDashboard::PutNumber("HL_Resets_L1", m_countL1);
+    frc::SmartDashboard::PutNumber("HL_Resets_L2", m_countL2);
+    frc::SmartDashboard::PutNumber("HL_Resets_R3", m_countR3);
+    frc::SmartDashboard::PutNumber("HL_Resets_R4", m_countR4);
 
     // Only update indicators every 100 ms to cut down on network traffic
     if ((periodicInterval++ % 5 == 0) && (m_driveDebug > 1))

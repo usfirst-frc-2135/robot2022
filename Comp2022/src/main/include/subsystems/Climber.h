@@ -53,6 +53,8 @@ private:
     // Declare module variables
     bool m_talonValidCL14; // Health indicator for climber Talon 14
     bool m_talonValidCL15; // Health indicator for climber Talon 15
+    int m_countCL14;       //reset counter for motor
+    int m_countCL15;       //reset counter for motor
     double m_deadband = 0.2;
 
     double m_targetInches;   // Target inches of height that are requested of the climber

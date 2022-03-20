@@ -151,3 +151,12 @@ void Vision::SetLEDMode(ledMode_e mode)
     table->PutNumber("ledMode", mode);
     spdlog::info("VI SetLedMode : {}", mode);
 }
+
+Vision::ledMode_e Vision::GetLEDMode(void)
+{
+    ledMode_e mode = LED_CUR_MODE;
+    mode = (ledMode_e)table->GetNumber("ledMode", mode);
+
+    spdlog::info("VI GetLedMode : {}", mode);
+    return mode;
+}

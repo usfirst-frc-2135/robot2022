@@ -80,6 +80,12 @@ void FloorConveyor::Periodic()
         }
     }
 #endif
+
+    if (m_motorFC8.HasResetOccurred())
+    {
+        m_countFC8 += 1;
+        frc::SmartDashboard::PutNumber("HL_Resets_FC8", m_countFC8);
+    }
 }
 
 void FloorConveyor::SimulationPeriodic()
@@ -98,6 +104,7 @@ void FloorConveyor::Initialize(void)
 {
     spdlog::info("FC Init");
     SetFloorConveyorSpeed(FCONVEYOR_STOP);
+    frc::SmartDashboard::PutBoolean("HL_FC8Valid", m_talonValidFC8);
 }
 
 //    Dump all Talon faults

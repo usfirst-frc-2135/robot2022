@@ -548,9 +548,9 @@
         "vgap": 16.0,
         "titleType": 0,
         "tiles": {
-          "16,4": {
+          "17,2": {
             "size": [
-              3,
+              2,
               2
             ],
             "content": {
@@ -561,7 +561,7 @@
               "Colors/Color when false": "#8B0000FF"
             }
           },
-          "19,4": {
+          "21,6": {
             "size": [
               3,
               2
@@ -594,21 +594,10 @@
               "_title": "ExtendL2"
             }
           },
-          "9,0": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/CL_ExtendL3",
-              "_title": "ExtendL3"
-            }
-          },
           "0,0": {
             "size": [
               2,
-              1
+              2
             ],
             "content": {
               "_type": "Text View",
@@ -693,10 +682,10 @@
               "_title": "GatehookRestHeight"
             }
           },
-          "11,0": {
+          "9,0": {
             "size": [
               2,
-              1
+              2
             ],
             "content": {
               "_type": "Text View",
@@ -704,9 +693,9 @@
               "_title": "RaiseL4"
             }
           },
-          "16,0": {
+          "17,0": {
             "size": [
-              3,
+              2,
               2
             ],
             "content": {
@@ -739,18 +728,7 @@
               "_title": "Height"
             }
           },
-          "0,5": {
-            "size": [
-              4,
-              2
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/Climber 0Stow",
-              "_title": "SmartDashboard/Climber 0Stow"
-            }
-          },
-          "3,3": {
+          "0,4": {
             "size": [
               3,
               2
@@ -761,7 +739,7 @@
               "_title": "SmartDashboard/Climber 1Deploy"
             }
           },
-          "6,3": {
+          "3,4": {
             "size": [
               3,
               2
@@ -772,7 +750,7 @@
               "_title": "SmartDashboard/Climber 2ClimbToL2"
             }
           },
-          "9,3": {
+          "6,4": {
             "size": [
               3,
               2
@@ -783,7 +761,7 @@
               "_title": "SmartDashboard/Climber 3RotateToL3"
             }
           },
-          "12,3": {
+          "9,4": {
             "size": [
               3,
               2
@@ -794,10 +772,10 @@
               "_title": "SmartDashboard/Climber 5RotateIntoL3"
             }
           },
-          "0,3": {
+          "0,6": {
             "size": [
               3,
-              2
+              3
             ],
             "content": {
               "_type": "Command",
@@ -805,15 +783,199 @@
               "_title": "SmartDashboard/Climber Calibrate"
             }
           },
-          "4,5": {
+          "3,6": {
+            "size": [
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Full Climb",
+              "_title": "SmartDashboard/Full Climb"
+            }
+          },
+          "0,2": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/CL_ClimbL2Timer)",
+              "_title": "ClimbL2Timer)"
+            }
+          },
+          "6,2": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/CL_ClimbL3Timer",
+              "_title": "ClimbL3Timer"
+            }
+          },
+          "15,0": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/CL_CL14Valid",
+              "_title": "CL14Valid",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "3,2": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/CL_RotateExtendL3Timer",
+              "_title": "RotateExtendL3Timer"
+            }
+          },
+          "15,2": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/CL_CL15Valid",
+              "_title": "CL15Valid",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "9,2": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/CL_RotateRetractL3Timer",
+              "_title": "RotateRetractL3Timer"
+            }
+          },
+          "6,6": {
+            "size": [
+              5,
+              2
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/CL_CL15FollowerMode",
+              "_title": "CL15FollowerMode",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "12,2": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/CL_RotateRetractL4Timer",
+              "_title": "RotateRetractL4Timer"
+            }
+          },
+          "19,2": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/CL_Hook_Closed",
+              "_title": "Hook_Closed",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "12,4": {
             "size": [
               3,
               2
             ],
             "content": {
               "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/Full Climb",
-              "_title": "SmartDashboard/Full Climb"
+              "_source0": "network_table:///SmartDashboard/Climber 7ClimbToL4",
+              "_title": "SmartDashboard/Climber 7ClimbToL4"
+            }
+          },
+          "12,6": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/CL_IsFollowerModeCL15",
+              "_title": "IsFollowerModeCL15"
+            }
+          },
+          "15,6": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/CL_Current_CL14",
+              "_title": "Current_CL14"
+            }
+          },
+          "18,6": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/CL_Current_CL15",
+              "_title": "Current_CL15"
+            }
+          },
+          "15,4": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/CL_HasResetOccurredCL14",
+              "_title": "HasResetOccurredCL14"
+            }
+          },
+          "18,4": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/CL_HasResetOccurredCL15",
+              "_title": "HasResetOccurredCL15"
+            }
+          },
+          "11,0": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/CL_ClimbL2Timer",
+              "_title": "ClimbL2Timer"
             }
           }
         }
@@ -951,6 +1113,50 @@
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/VI_DistanceLimeLight",
               "_title": "DistanceLimeLight"
+            }
+          },
+          "21,1": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/VI_VertOffset1",
+              "_title": "VertOffset1"
+            }
+          },
+          "23,1": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/VI_VertOffset2",
+              "_title": "VertOffset2"
+            }
+          },
+          "0,2": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/VI_Distance1",
+              "_title": "Distance1"
+            }
+          },
+          "2,2": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/VI_Distance2",
+              "_title": "Distance2"
             }
           }
         }
@@ -1684,6 +1890,17 @@
               "_source0": "network_table:///SmartDashboard/DTL_SetPointDistance",
               "_title": "SetPointDistance"
             }
+          },
+          "19,4": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DTL_LimeLightDist",
+              "_title": "LimeLightDist"
+            }
           }
         }
       }
@@ -2147,15 +2364,344 @@
               "_source0": "network_table:///SmartDashboard/AUTO_WaitTime",
               "_title": "/SmartDashboard/AUTO_WaitTime"
             }
+          },
+          "14,2": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/CL_CL15FollowerMode",
+              "_title": "/SmartDashboard/CL_CL15FollowerMode",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "14,0": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Climber Follower Initialize",
+              "_title": "/SmartDashboard/Climber Follower Initialize"
+            }
+          },
+          "5,2": {
+            "size": [
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Simple Dial",
+              "_source0": "network_table:///SmartDashboard/DT_heading",
+              "_title": "SmartDashboard/DT_heading",
+              "Range/Min": -180.0,
+              "Range/Max": 180.0,
+              "Visuals/Show value": true
+            }
+          },
+          "8,2": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/CL_CL14Valid",
+              "_title": "/SmartDashboard/CL_CL14Valid",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "11,2": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/CL_CL15Valid",
+              "_title": "/SmartDashboard/CL_CL15Valid",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "2,5": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Climber 1Deploy",
+              "_title": "SmartDashboard/Climber 1Deploy"
+            }
+          },
+          "5,5": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Climber 2ClimbToL2",
+              "_title": "SmartDashboard/Climber 2ClimbToL2"
+            }
+          },
+          "8,5": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Climber 3RotateToL3",
+              "_title": "SmartDashboard/Climber 3RotateToL3"
+            }
+          },
+          "11,5": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Climber 5RotateIntoL3",
+              "_title": "SmartDashboard/Climber 5RotateIntoL3"
+            }
+          },
+          "14,5": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Climber 7ClimbToL4",
+              "_title": "SmartDashboard/Climber 7ClimbToL4"
+            }
+          },
+          "0,5": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Climber Calibrate",
+              "_title": "SmartDashboard/Climber Calibrate"
+            }
+          },
+          "8,0": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Command",
+              "_source0": "network_table:///SmartDashboard/Reset Drive Sensors",
+              "_title": "SmartDashboard/Reset Drive Sensors"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Health",
+      "autoPopulate": true,
+      "autoPopulatePrefix": "SmartDashboard/HL_",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {
+          "0,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/HL_Resets_L1",
+              "_title": "Resets_L1"
+            }
+          },
+          "1,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/HL_Resets_L2",
+              "_title": "Resets_L2"
+            }
+          },
+          "2,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/HL_Resets_R3",
+              "_title": "Resets_R3"
+            }
+          },
+          "3,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/HL_Resets_R4",
+              "_title": "Resets_R4"
+            }
+          },
+          "4,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/CL_CL14Valid",
+              "_title": "SmartDashboard/CL_CL14Valid",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "5,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/CL_CL15Valid",
+              "_title": "SmartDashboard/CL_CL15Valid",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "4,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/HL_L1Valid",
+              "_title": "L1Valid",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "5,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/HL_L2Valid",
+              "_title": "L2Valid",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "6,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/HL_R3Valid",
+              "_title": "R3Valid",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "7,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/HL_R4Valid",
+              "_title": "R4Valid",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "0,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/HL_IN6Valid",
+              "_title": "IN6Valid",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "1,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/HL_FC8Valid",
+              "_title": "FC8Valid",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "2,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/HL_VC9Valid",
+              "_title": "VC9Valid",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "3,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/HL_SH11Valid",
+              "_title": "SH11Valid",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
           }
         }
       }
     }
   ],
   "windowGeometry": {
-    "x": -4.666666507720947,
-    "y": 0.0,
-    "width": 1284.6666259765625,
-    "height": 726.0
+    "x": 36.0,
+    "y": 1.0,
+    "width": 1268.0,
+    "height": 480.0
   }
 }
