@@ -674,10 +674,11 @@ void Drivetrain::MoveWithLimelightExecute(void)
     double ty = robotContainer->m_vision.GetVertOffsetDeg();
     bool tv = robotContainer->m_vision.GetTargetValid();
 
-    if (tv == false && m_limelightDebug >= 1)
+    if (tv == false)
     {
         VelocityArcadeDrive(0, 0);
-        spdlog::info("TV-FALSE SO STILL STILL");
+        if (m_limelightDebug >= 1)
+            spdlog::info("TV-FALSE SO STILL STILL");
         return;
     }
 
