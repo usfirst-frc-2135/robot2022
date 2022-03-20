@@ -34,10 +34,12 @@ void ShooterAimToggle::Initialize()
     if (robotContainer->m_vision.GetLEDMode() == Vision::LED_ON)
     {
         robotContainer->m_vision.SetLEDMode(Vision::LED_OFF);
+        robotContainer->m_vision.SetCameraDisplay(Vision::PIP_SECONDARY);
     }
     else
     {
         robotContainer->m_vision.SetLEDMode(Vision::LED_ON);
+        robotContainer->m_vision.SetCameraDisplay(Vision::PIP_MAIN);
     }
 }
 
