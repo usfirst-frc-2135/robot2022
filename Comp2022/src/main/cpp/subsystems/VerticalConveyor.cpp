@@ -79,6 +79,12 @@ void VerticalConveyor::Periodic()
         }
     }
 #endif
+
+    if (m_motorVC9.HasResetOccurred())
+    {
+        m_countVC9 += 1;
+        frc::SmartDashboard::PutNumber("HL_Resets_VC9", m_countVC9);
+    }
 }
 
 void VerticalConveyor::SimulationPeriodic()
@@ -97,6 +103,7 @@ void VerticalConveyor::Initialize(void)
 {
     spdlog::info("VC Init");
     SetVerticalConveyorSpeed(VCONVEYOR_STOP);
+    frc::SmartDashboard::PutBoolean("HL_VC9Valid", m_talonValidVC9);
 }
 
 //    Dump all Talon faults

@@ -84,6 +84,23 @@ void Drivetrain::Periodic()
     UpdateOdometry();
     UpdateDashboardValues();
     m_field.SetRobotPose(GetPose());
+
+    if (m_motorL1.HasResetOccurred())
+    {
+        m_countL1 += 1;
+    }
+    if (m_motorL2.HasResetOccurred())
+    {
+        m_countL2 += 1;
+    }
+    if (m_motorR3.HasResetOccurred())
+    {
+        m_countR3 += 1;
+    }
+    if (m_motorR4.HasResetOccurred())
+    {
+        m_countR4 += 1;
+    }
 }
 
 void Drivetrain::SimulationPeriodic()
@@ -162,6 +179,11 @@ void Drivetrain::Initialize(void)
 
     // Initialize PID values for velocity control
     SyncTalonPIDFromDashboard();
+
+    frc::SmartDashboard::PutBoolean("HL_L1Valid", m_talonValidL1);
+    frc::SmartDashboard::PutBoolean("HL_L2Valid", m_talonValidL2);
+    frc::SmartDashboard::PutBoolean("HL_R3Valid", m_talonValidR3);
+    frc::SmartDashboard::PutBoolean("HL_R4Valid", m_talonValidR4);
 }
 
 void Drivetrain::FaultDump(void)
@@ -251,11 +273,17 @@ void Drivetrain::TalonMasterInitialize(WPI_TalonFX &motor, bool inverted)
     motor.SetSensorPhase(false);
     motor.SetSelectedSensorPosition(0, kPidIndex, kCANTimeout);
 
-    motor.ConfigOpenloopRamp(m_openLoopRampRate, kCANTimeout);
-    motor.ConfigClosedloopRamp(m_closedLoopRampRate, kCANTimeout);
+    frc2135::TalonUtils::CheckError(motor.ConfigOpenloopRamp(m_openLoopRampRate, kCANTimeout), "HL_ConfigOpenloopRamp");
+    frc2135::TalonUtils::CheckError(
+        motor.ConfigClosedloopRamp(m_closedLoopRampRate, kCANTimeout),
+        "HL_ConfigClosedloopRamp");
 
-    motor.ConfigSupplyCurrentLimit(m_supplyCurrentLimits);
-    motor.ConfigStatorCurrentLimit(m_statorCurrentLimits);
+    frc2135::TalonUtils::CheckError(
+        motor.ConfigSupplyCurrentLimit(m_supplyCurrentLimits),
+        "HL_ConfigSupplyCurrentLimit");
+    frc2135::TalonUtils::CheckError(
+        motor.ConfigStatorCurrentLimit(m_statorCurrentLimits),
+        "HL_ConfigStatorCurrentLimit");
 }
 
 void Drivetrain::TalonFollowerInitialize(WPI_TalonFX &motor, int master)
@@ -263,11 +291,19 @@ void Drivetrain::TalonFollowerInitialize(WPI_TalonFX &motor, int master)
     motor.Set(ControlMode::Follower, master);
     motor.SetInverted(InvertType::FollowMaster);
     motor.SetNeutralMode(NeutralMode::Coast);
-    motor.SetStatusFramePeriod(Status_1_General_, 255, kCANTimeout);
-    motor.SetStatusFramePeriod(Status_2_Feedback0_, 255, kCANTimeout);
+    frc2135::TalonUtils::CheckError(
+        motor.SetStatusFramePeriod(Status_1_General_, 255, kCANTimeout),
+        "HL_SetStatusFramePeriod_Status1");
+    frc2135::TalonUtils::CheckError(
+        motor.SetStatusFramePeriod(Status_2_Feedback0_, 255, kCANTimeout),
+        "HL_SetStatusFramePeriod_Status2");
 
-    motor.ConfigSupplyCurrentLimit(m_supplyCurrentLimits);
-    motor.ConfigStatorCurrentLimit(m_statorCurrentLimits);
+    frc2135::TalonUtils::CheckError(
+        motor.ConfigSupplyCurrentLimit(m_supplyCurrentLimits),
+        "HL_ConfigSupplyCurrentLimit");
+    frc2135::TalonUtils::CheckError(
+        motor.ConfigStatorCurrentLimit(m_statorCurrentLimits),
+        "HL_ConfigStatorCurrentLimit");
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -312,6 +348,11 @@ void Drivetrain::UpdateDashboardValues(void)
     frc::SmartDashboard::PutNumber("DT_Current_L2", m_currentL2);
     frc::SmartDashboard::PutNumber("DT_Current_R3", m_currentR3);
     frc::SmartDashboard::PutNumber("DT_Current_R4", m_currentR4);
+
+    frc::SmartDashboard::PutNumber("HL_Resets_L1", m_countL1);
+    frc::SmartDashboard::PutNumber("HL_Resets_L2", m_countL2);
+    frc::SmartDashboard::PutNumber("HL_Resets_R3", m_countR3);
+    frc::SmartDashboard::PutNumber("HL_Resets_R4", m_countR4);
 
     // Only update indicators every 100 ms to cut down on network traffic
     if ((periodicInterval++ % 5 == 0) && (m_driveDebug > 1))
@@ -652,7 +693,8 @@ void Drivetrain::MoveWithLimelightExecute(void)
     if (tv == false)
     {
         VelocityArcadeDrive(0, 0);
-        spdlog::info("TV-FALSE SO STILL STILL");
+        if (m_limelightDebug >= 1)
+            spdlog::info("TV-FALSE SO STILL STILL");
         return;
     }
 
@@ -681,16 +723,17 @@ void Drivetrain::MoveWithLimelightExecute(void)
     if (m_talonValidL1 || m_talonValidR3)
         VelocityArcadeDrive(throttleOutput, turnOutput);
 
-    spdlog::info(
-        "DTL tv {} tx {:.1f} ty{:.1f} distError {:.1f} lldistance {:.1f} stopped {} tOutput {:.2f} thrOutput {:.2f} ",
-        tv,
-        tx,
-        ty,
-        fabs(m_setPointDistance - m_limelightDistance),
-        m_limelightDistance,
-        MoveIsStopped(),
-        turnOutput,
-        throttleOutput);
+    if (m_limelightDebug >= 1)
+        spdlog::info(
+            "DTL tv {} tx {:.1f} ty{:.1f} distError {:.1f} lldistance {:.1f} stopped {} tOutput {:.2f} thrOutput {:.2f} ",
+            tv,
+            tx,
+            ty,
+            fabs(m_setPointDistance - m_limelightDistance),
+            m_limelightDistance,
+            MoveIsStopped(),
+            turnOutput,
+            throttleOutput);
 }
 
 bool Drivetrain::MoveWithLimelightIsFinished(void)
@@ -725,9 +768,8 @@ bool Drivetrain::LimelightSanityCheck()
     double vertAngleRange = 10;
     double distRange = 5;
 
-    return (
-        tv && (fabs(tx) <= horizAngleRange) && (fabs(ty) <= vertAngleRange)
-        && (fabs(m_setPointDistance - m_limelightDistance) <= distRange));
+    return (tv && (fabs(tx) <= horizAngleRange) && (fabs(ty) <= vertAngleRange));
+    // && (fabs(m_setPointDistance - m_limelightDistance) <= distRange)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -767,12 +809,13 @@ void Drivetrain::RamseteFollowerInit(string pathName, bool resetOdometry)
     for (unsigned int i = 0; i < trajectoryStates.size(); i++)
     {
         frc::Trajectory::State curState = trajectoryStates[i];
-        spdlog::info(
-            "DTR state time {} Velocity {} Accleration {} Rotation {}",
-            curState.t,
-            curState.velocity,
-            curState.acceleration,
-            curState.pose.Rotation().Degrees());
+        if (m_ramseteDebug >= 1)
+            spdlog::info(
+                "DTR state time {} Velocity {} Accleration {} Rotation {}",
+                curState.t,
+                curState.velocity,
+                curState.acceleration,
+                curState.pose.Rotation().Degrees());
     }
 
     // This initializes the odometry (where we are)
@@ -809,7 +852,7 @@ void Drivetrain::RamseteFollowerExecute(void)
     if (m_talonValidR3)
         m_motorR3.Set(TalonFXControlMode::Velocity, velRightTarget);
 
-    if (m_ramseteTuningMode)
+    if (m_ramseteDebug == 2)
     {
         // target velocity and its error
         frc::SmartDashboard::PutNumber("DTR_velLeftTarget", velLeftTarget);
@@ -838,22 +881,22 @@ void Drivetrain::RamseteFollowerExecute(void)
     }
 
     m_diffDrive.FeedWatchdog();
-
-    spdlog::info(
-        "DTR cur XYR {:.2f} {:.2f} {:.1f} | targ XYR {:.2f} {:.2f} {:.1f} | chas XYO {:.2f} {:.2f} {:.1f} | targ vel LR {:.2f} {:.2f} | cur vel LR {:.2f} {:.2f}",
-        xTrajCurrent,
-        yTrajCurrent,
-        headingCurrent,
-        xTrajTarget,
-        yTrajTarget,
-        headingTarget,
-        targetChassisSpeeds.vx.to<double>(),
-        targetChassisSpeeds.vy.to<double>(),
-        targetChassisSpeeds.omega.to<double>(),
-        velLeftTarget,
-        velRightTarget,
-        velLeftCurrent,
-        velRightCurrent);
+    if (m_ramseteDebug >= 1)
+        spdlog::info(
+            "DTR cur XYR {:.2f} {:.2f} {:.1f} | targ XYR {:.2f} {:.2f} {:.1f} | chas XYO {:.2f} {:.2f} {:.1f} | targ vel LR {:.2f} {:.2f} | cur vel LR {:.2f} {:.2f}",
+            xTrajCurrent,
+            yTrajCurrent,
+            headingCurrent,
+            xTrajTarget,
+            yTrajTarget,
+            headingTarget,
+            targetChassisSpeeds.vx.to<double>(),
+            targetChassisSpeeds.vy.to<double>(),
+            targetChassisSpeeds.omega.to<double>(),
+            velLeftTarget,
+            velRightTarget,
+            velLeftCurrent,
+            velRightCurrent);
 }
 
 bool Drivetrain::RamseteFollowerIsFinished(void)
@@ -861,12 +904,13 @@ bool Drivetrain::RamseteFollowerIsFinished(void)
     if (m_trajTimer.Get() == 0_s)
         return false;
 
-    spdlog::info(
-        "time targTime {:.2f} {:.2f} | cur vel LR {:.2f} {:.2f}",
-        m_trajTimer.Get().to<double>(),
-        m_trajectory.TotalTime().to<double>(),
-        m_wheelSpeeds.left.to<double>(),
-        m_wheelSpeeds.right.to<double>());
+    if (m_ramseteDebug >= 1)
+        spdlog::info(
+            "time targTime {:.2f} {:.2f} | cur vel LR {:.2f} {:.2f}",
+            m_trajTimer.Get().to<double>(),
+            m_trajectory.TotalTime().to<double>(),
+            m_wheelSpeeds.left.to<double>(),
+            m_wheelSpeeds.right.to<double>());
 
     return (
         (m_trajTimer.Get() >= m_trajectory.TotalTime()) && (abs(m_wheelSpeeds.left.to<double>()) <= 0 + m_tolerance)

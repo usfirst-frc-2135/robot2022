@@ -67,10 +67,12 @@ private:
     PigeonIMU m_gyro{ 0 };
 
     //    Declare constants
-    const int m_driveDebug = 0; // Debug flag to disable extra logging calls
-    const int kSlotIndex = 0;   // PID slot index for sensors
-    const int kPidIndex = 0;    // PID index for primary sensor
-    const int kCANTimeout = 10; // CAN timeout in msec to wait for response
+    const int m_driveDebug = 0;     // Debug flag to disable extra drive logging calls
+    const int m_ramseteDebug = 1;   // Debug flag to disable extra ramsete logging calls
+    const int m_limelightDebug = 0; // Debug flag to disable extra limelight logging calls
+    const int kSlotIndex = 0;       // PID slot index for sensors
+    const int kPidIndex = 0;        // PID index for primary sensor
+    const int kCANTimeout = 10;     // CAN timeout in msec to wait for response
 
     // TODO: adjust kV and kA angular from robot characterization
     frc::sim::DifferentialDrivetrainSim m_driveSim{ frc::LinearSystemId::IdentifyDrivetrainSystem(
@@ -176,6 +178,10 @@ private:
     // Periodic update methods
     void UpdateOdometry(void);
     void UpdateDashboardValues(void);
+    int m_countL1; //motor reset count storer
+    int m_countL2; //motor reset count storer
+    int m_countR3; //motor reset count storer
+    int m_countR4; //motor reset count storer
 
     // Encoders
     void ResetEncoders(void);
