@@ -677,7 +677,8 @@ void Drivetrain::MoveWithLimelightExecute(void)
     if (tv == false)
     {
         VelocityArcadeDrive(0, 0);
-        spdlog::info("TV-FALSE SO STILL STILL");
+        if (m_limelightDebug >= 1)
+            spdlog::info("TV-FALSE SO STILL STILL");
         return;
     }
 
@@ -706,16 +707,17 @@ void Drivetrain::MoveWithLimelightExecute(void)
     if (m_talonValidL1 || m_talonValidR3)
         VelocityArcadeDrive(throttleOutput, turnOutput);
 
-    spdlog::info(
-        "DTL tv {} tx {:.1f} ty{:.1f} distError {:.1f} lldistance {:.1f} stopped {} tOutput {:.2f} thrOutput {:.2f} ",
-        tv,
-        tx,
-        ty,
-        fabs(m_setPointDistance - m_limelightDistance),
-        m_limelightDistance,
-        MoveIsStopped(),
-        turnOutput,
-        throttleOutput);
+    if (m_limelightDebug >= 1)
+        spdlog::info(
+            "DTL tv {} tx {:.1f} ty{:.1f} distError {:.1f} lldistance {:.1f} stopped {} tOutput {:.2f} thrOutput {:.2f} ",
+            tv,
+            tx,
+            ty,
+            fabs(m_setPointDistance - m_limelightDistance),
+            m_limelightDistance,
+            MoveIsStopped(),
+            turnOutput,
+            throttleOutput);
 }
 
 bool Drivetrain::MoveWithLimelightIsFinished(void)
@@ -750,9 +752,8 @@ bool Drivetrain::LimelightSanityCheck()
     double vertAngleRange = 10;
     double distRange = 5;
 
-    return (
-        tv && (fabs(tx) <= horizAngleRange) && (fabs(ty) <= vertAngleRange)
-        && (fabs(m_setPointDistance - m_limelightDistance) <= distRange));
+    return (tv && (fabs(tx) <= horizAngleRange) && (fabs(ty) <= vertAngleRange));
+    // && (fabs(m_setPointDistance - m_limelightDistance) <= distRange)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -792,12 +793,13 @@ void Drivetrain::RamseteFollowerInit(string pathName, bool resetOdometry)
     for (unsigned int i = 0; i < trajectoryStates.size(); i++)
     {
         frc::Trajectory::State curState = trajectoryStates[i];
-        spdlog::info(
-            "DTR state time {} Velocity {} Accleration {} Rotation {}",
-            curState.t,
-            curState.velocity,
-            curState.acceleration,
-            curState.pose.Rotation().Degrees());
+        if (m_ramseteDebug >= 1)
+            spdlog::info(
+                "DTR state time {} Velocity {} Accleration {} Rotation {}",
+                curState.t,
+                curState.velocity,
+                curState.acceleration,
+                curState.pose.Rotation().Degrees());
     }
 
     // This initializes the odometry (where we are)
@@ -834,7 +836,7 @@ void Drivetrain::RamseteFollowerExecute(void)
     if (m_talonValidR3)
         m_motorR3.Set(TalonFXControlMode::Velocity, velRightTarget);
 
-    if (m_ramseteTuningMode)
+    if (m_ramseteDebug == 2)
     {
         // target velocity and its error
         frc::SmartDashboard::PutNumber("DTR_velLeftTarget", velLeftTarget);
@@ -863,22 +865,22 @@ void Drivetrain::RamseteFollowerExecute(void)
     }
 
     m_diffDrive.FeedWatchdog();
-
-    spdlog::info(
-        "DTR cur XYR {:.2f} {:.2f} {:.1f} | targ XYR {:.2f} {:.2f} {:.1f} | chas XYO {:.2f} {:.2f} {:.1f} | targ vel LR {:.2f} {:.2f} | cur vel LR {:.2f} {:.2f}",
-        xTrajCurrent,
-        yTrajCurrent,
-        headingCurrent,
-        xTrajTarget,
-        yTrajTarget,
-        headingTarget,
-        targetChassisSpeeds.vx.to<double>(),
-        targetChassisSpeeds.vy.to<double>(),
-        targetChassisSpeeds.omega.to<double>(),
-        velLeftTarget,
-        velRightTarget,
-        velLeftCurrent,
-        velRightCurrent);
+    if (m_ramseteDebug >= 1)
+        spdlog::info(
+            "DTR cur XYR {:.2f} {:.2f} {:.1f} | targ XYR {:.2f} {:.2f} {:.1f} | chas XYO {:.2f} {:.2f} {:.1f} | targ vel LR {:.2f} {:.2f} | cur vel LR {:.2f} {:.2f}",
+            xTrajCurrent,
+            yTrajCurrent,
+            headingCurrent,
+            xTrajTarget,
+            yTrajTarget,
+            headingTarget,
+            targetChassisSpeeds.vx.to<double>(),
+            targetChassisSpeeds.vy.to<double>(),
+            targetChassisSpeeds.omega.to<double>(),
+            velLeftTarget,
+            velRightTarget,
+            velLeftCurrent,
+            velRightCurrent);
 }
 
 bool Drivetrain::RamseteFollowerIsFinished(void)
@@ -886,12 +888,13 @@ bool Drivetrain::RamseteFollowerIsFinished(void)
     if (m_trajTimer.Get() == 0_s)
         return false;
 
-    spdlog::info(
-        "time targTime {:.2f} {:.2f} | cur vel LR {:.2f} {:.2f}",
-        m_trajTimer.Get().to<double>(),
-        m_trajectory.TotalTime().to<double>(),
-        m_wheelSpeeds.left.to<double>(),
-        m_wheelSpeeds.right.to<double>());
+    if (m_ramseteDebug >= 1)
+        spdlog::info(
+            "time targTime {:.2f} {:.2f} | cur vel LR {:.2f} {:.2f}",
+            m_trajTimer.Get().to<double>(),
+            m_trajectory.TotalTime().to<double>(),
+            m_wheelSpeeds.left.to<double>(),
+            m_wheelSpeeds.right.to<double>());
 
     return (
         (m_trajTimer.Get() >= m_trajectory.TotalTime()) && (abs(m_wheelSpeeds.left.to<double>()) <= 0 + m_tolerance)

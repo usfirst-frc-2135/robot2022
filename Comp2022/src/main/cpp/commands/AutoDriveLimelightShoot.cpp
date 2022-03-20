@@ -43,46 +43,15 @@ AutoDriveLimelightShoot::AutoDriveLimelightShoot(
 
     // Add your commands here, e.g.
     // AddCommands(FooCommand(), BarCommand());
-    frc2135::RobotConfig *config = frc2135::RobotConfig::GetInstance();
-    config->GetValueAsString("AutoDriveLimelightShoot_path1", m_pathname1, "forward39");
-    config->GetValueAsString("AutoDriveLimelightShoot_path2", m_pathname2, "backward39");
-    spdlog::info("AutoDriveLimelightShoot pathname 1 {}", m_pathname1.c_str());
-    spdlog::info("AutoDriveLimelightShoot pathname 2 {}", m_pathname2.c_str());
-
-    // AddCommands(
-    //     IntakeDeploy(true),
-    //     AutoWait(drivetrain),
-    //     AutoDrivePath(m_pathname1.c_str(), true, drivetrain),
-    //     //drive backwards until target is valid
-    //     frc2::ParallelCommandGroup{ DriveLimelight(true, drivetrain, vision), ScoringPrime(shooter) },
-    //     frc2::ParallelCommandGroup{ DriveLimelight(false, drivetrain, vision),
-    //                                 ScoringAction(10_s, intake, fConv, vConv, shooter) }
-    //     // drive limelight servo instead of drive limelight in parallel with scoringaction
-    // );
 
     AddCommands( // Sequential command
-        frc2::ParallelDeadlineGroup{ IntakeDeploy(true), AutoStop(drivetrain) },
-        AutoWait(drivetrain),
-        frc2::ParallelDeadlineGroup{ ScoringActionHighHub(2_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
         frc2::ParallelDeadlineGroup{
-            frc2::ParallelDeadlineGroup{
-                frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
-                AutoDrivePath(m_pathname1.c_str(), true, drivetrain) },
-            IntakingAction(intake, fConv, vConv),
-            ShooterRun(Shooter::SHOOTERSPEED_HIGHHUB, shooter) },
-        frc2::ParallelDeadlineGroup{
-            frc2::ParallelDeadlineGroup{
-                frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
-                AutoDrivePath(m_pathname2.c_str(), false, drivetrain) },
-            ScoringPrime(shooter) },
-        DriveLimelight(true, drivetrain, vision),
-        //    .WithInterrupt([drivetrain] { return !drivetrain->LimelightSanityCheck(); }),
-        // frc2::SelectCommand{
-        //     [drivetrain] { return drivetrain->LimelightSanityCheck(); },
-        //     std::pair{ LIMELIGHT, DriveLimelightShoot(drivetrain, intake, fConv, vConv, shooter, vision) },
-        //     std::pair{ NO_LIMELIGHT, ScoringAction(5_s, intake, fConv, vConv, shooter) }},
-        frc2::ParallelDeadlineGroup{ ScoringActionLowHub(5_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
-        ScoringStop(intake, fConv, vConv, shooter));
+            frc2::SequentialCommandGroup{
+                frc2::ParallelDeadlineGroup{
+                    frc2::WaitUntilCommand([drivetrain] { return drivetrain->MoveWithLimelightIsFinished(); }),
+                    ScoringPrime(shooter) },
+                ScoringActionHighHub(3_s, intake, fConv, vConv, shooter) },
+            DriveLimelight(false, drivetrain, vision) });
 }
 
 bool AutoDriveLimelightShoot::RunsWhenDisabled() const

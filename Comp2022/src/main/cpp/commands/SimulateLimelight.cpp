@@ -42,10 +42,10 @@ void SimulateLimelight::Execute()
     units::degree_t ty =
         units::math::atan2(cameraRelativeGoalHeight, cameraRelativeGoalTranslation.Norm()) - m_cameraPitch;
 
-    auto table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
-    table->PutNumber("tx", tx.value());
-    table->PutNumber("ty", ty.value());
-    table->PutBoolean(
+    auto m_table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
+    m_table->PutNumber("tx", tx.value());
+    m_table->PutNumber("ty", ty.value());
+    m_table->PutBoolean(
         "tv",
         (tx >= -LIMELIGHT2_HORIZONTAL_HALF_FOV && tx <= LIMELIGHT2_HORIZONTAL_HALF_FOV)
             && (ty >= -LIMELIGHT2_VERTICAL_HALF_FOV && ty <= LIMELIGHT2_VERTICAL_HALF_FOV));
