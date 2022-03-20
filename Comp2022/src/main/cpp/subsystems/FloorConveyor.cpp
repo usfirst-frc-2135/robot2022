@@ -104,6 +104,7 @@ void FloorConveyor::Initialize(void)
 {
     spdlog::info("FC Init");
     SetFloorConveyorSpeed(FCONVEYOR_STOP);
+    frc::SmartDashboard::PutBoolean("HL_FC8Valid", m_talonValidFC8);
 }
 
 //    Dump all Talon faults

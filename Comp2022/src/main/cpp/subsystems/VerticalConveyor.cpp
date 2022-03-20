@@ -103,6 +103,7 @@ void VerticalConveyor::Initialize(void)
 {
     spdlog::info("VC Init");
     SetVerticalConveyorSpeed(VCONVEYOR_STOP);
+    frc::SmartDashboard::PutBoolean("HL_VC9Valid", m_talonValidVC9);
 }
 
 //    Dump all Talon faults
