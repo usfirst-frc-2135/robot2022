@@ -57,7 +57,6 @@ Climber::Climber()
 
     // Initialize Variables
     frc2135::RobotConfig *config = frc2135::RobotConfig::GetInstance();
-    config->GetValueAsDouble("CL_PeakOut", m_peakOut, 1.0);
     config->GetValueAsInt("CL_Velocity", m_velocity, 21776);
     config->GetValueAsInt("CL_Acceleration", m_acceleration, 43552);
     config->GetValueAsInt("CL_SCurveStrength", m_sCurveStrength, 0);
@@ -65,10 +64,9 @@ Climber::Climber()
     config->GetValueAsDouble("CL_PidKp", m_pidKp, 0.0);
     config->GetValueAsDouble("CL_PidKi", m_pidKi, 0.000);
     config->GetValueAsDouble("CL_PidKd", m_pidKd, 0.000);
-    config->GetValueAsDouble("CL_CLRampRate", m_CLRampRate, 0.000);
     config->GetValueAsInt("CL_CLAllowedError", m_CLAllowedError, 0);
     config->GetValueAsDouble("CL_ToleranceInches", m_toleranceInches, 0.25);
-    config->GetValueAsDouble("CL_MaxHeight", m_climberMaxHeight, 85.0);
+    config->GetValueAsDouble("CL_MaxHeight", m_climberMaxHeight, 36.0);
     config->GetValueAsDouble("CL_MinHeight", m_climberMinHeight, 0.0);
     config->GetValueAsDouble("CL_StowHeight", m_stowHeight, 0.25);
     config->GetValueAsDouble("CL_ExtendL2", m_extendL2, 29.0);
@@ -76,10 +74,10 @@ Climber::Climber()
     config->GetValueAsDouble("CL_GatehookRestHeight", m_gatehookRestHeight, 0.35);
     config->GetValueAsDouble("CL_RaiseL4", m_raiseL4, 25.25);
 
-    frc::SmartDashboard::PutNumber("CL_PidKf", m_pidKf);
     frc::SmartDashboard::PutNumber("CL_Velocity", m_velocity);
     frc::SmartDashboard::PutNumber("CL_Acceleration", m_acceleration);
     frc::SmartDashboard::PutNumber("CL_SCurveStrength", m_sCurveStrength);
+    frc::SmartDashboard::PutNumber("CL_PidKf", m_pidKf);
     frc::SmartDashboard::PutNumber("CL_PidKp", m_pidKp);
     frc::SmartDashboard::PutNumber("CL_PidKi", m_pidKi);
     frc::SmartDashboard::PutNumber("CL_PidKd", m_pidKd);
@@ -152,7 +150,7 @@ Climber::Climber()
         m_motorCL14.Set(ControlMode::PercentOutput, 0.0);
     }
 
-    ClimberFollowerInitialize();
+    FollowerInitialize();
 
     Initialize();
 }
@@ -283,25 +281,25 @@ void Climber::MoveClimberWithJoysticks(frc::XboxController *joystick)
     else
     {
         // If joystick is above a value, climber will move up
-        if (yCLValue > m_deadband)
-        {
-            if (state != CLIMBER_DOWN)
-                spdlog::info("CL Climber Down");
-            state = CLIMBER_DOWN;
-
-            yCLValue -= m_deadband;
-            yCLValue *= (1.0 / (1.0 - m_deadband));
-            motorOutput = (0.3) * (yCLValue * abs(yCLValue));
-        }
-        // If joystick is below a value, climber will move down
-        else if (yCLValue < -m_deadband)
+        if (yCLValue > m_stickDeadband)
         {
             if (state != CLIMBER_UP)
                 spdlog::info("CL Climber Up");
             state = CLIMBER_UP;
 
-            yCLValue += m_deadband;
-            yCLValue *= (1.0 / (1.0 - m_deadband));
+            yCLValue -= m_stickDeadband;
+            yCLValue *= (1.0 / (1.0 - m_stickDeadband));
+            motorOutput = (0.3) * (yCLValue * abs(yCLValue));
+        }
+        // If joystick is below a value, climber will move down
+        else if (yCLValue < -m_stickDeadband)
+        {
+            if (state != CLIMBER_DOWN)
+                spdlog::info("CL Climber Down");
+            state = CLIMBER_DOWN;
+
+            yCLValue += m_stickDeadband;
+            yCLValue *= (1.0 / (1.0 - m_stickDeadband));
             motorOutput = (0.3) * (yCLValue * abs(yCLValue));
         }
     }
@@ -360,23 +358,26 @@ void Climber::Calibrate()
 
 void Climber::MoveClimberDistanceInit(int state)
 {
-    m_pidKf = frc::SmartDashboard::GetNumber("CL_PidKf", m_pidKf);
-    m_velocity = frc::SmartDashboard::GetNumber("CL_Velocity", m_velocity);
-    m_acceleration = frc::SmartDashboard::GetNumber("CL_Acceleration", m_acceleration);
-    m_sCurveStrength = frc::SmartDashboard::GetNumber("CL_SCurveStrength", m_sCurveStrength);
-    m_pidKp = frc::SmartDashboard::GetNumber("CL_PidKp", m_pidKp);
-    m_pidKi = frc::SmartDashboard::GetNumber("CL_PidKi", m_pidKi);
-    m_pidKd = frc::SmartDashboard::GetNumber("CL_PidKd", m_pidKd);
+    if (m_climberDebug)
+    {
+        m_pidKf = frc::SmartDashboard::GetNumber("CL_PidKf", m_pidKf);
+        m_velocity = frc::SmartDashboard::GetNumber("CL_Velocity", m_velocity);
+        m_acceleration = frc::SmartDashboard::GetNumber("CL_Acceleration", m_acceleration);
+        m_sCurveStrength = frc::SmartDashboard::GetNumber("CL_SCurveStrength", m_sCurveStrength);
+        m_pidKp = frc::SmartDashboard::GetNumber("CL_PidKp", m_pidKp);
+        m_pidKi = frc::SmartDashboard::GetNumber("CL_PidKi", m_pidKi);
+        m_pidKd = frc::SmartDashboard::GetNumber("CL_PidKd", m_pidKd);
 
-    m_motorCL14.Config_kF(0, m_pidKf, 0);
-    m_motorCL14.ConfigMotionCruiseVelocity(m_velocity, 0);
-    m_motorCL14.ConfigMotionAcceleration(m_acceleration, 0);
-    m_motorCL14.ConfigMotionSCurveStrength(m_sCurveStrength, 0);
-    m_motorCL14.Config_kP(0, m_pidKp, 0);
-    m_motorCL14.Config_kI(0, m_pidKi, 0);
-    m_motorCL14.Config_kD(0, m_pidKd, 0);
+        m_motorCL14.Config_kF(0, m_pidKf, 0);
+        m_motorCL14.ConfigMotionCruiseVelocity(m_velocity, 0);
+        m_motorCL14.ConfigMotionAcceleration(m_acceleration, 0);
+        m_motorCL14.ConfigMotionSCurveStrength(m_sCurveStrength, 0);
+        m_motorCL14.Config_kP(0, m_pidKp, 0);
+        m_motorCL14.Config_kI(0, m_pidKi, 0);
+        m_motorCL14.Config_kD(0, m_pidKd, 0);
+    }
 
-    ClimberFollowerInitialize();
+    // FollowerInitialize();
 
     switch (state)
     {
@@ -485,7 +486,7 @@ bool Climber::MoveClimberDistanceIsFinished()
     return isFinished;
 }
 
-void Climber::ClimberFollowerInitialize()
+void Climber::FollowerInitialize()
 {
     if (m_talonValidCL15)
     {
