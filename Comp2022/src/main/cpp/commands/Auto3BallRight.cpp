@@ -95,7 +95,7 @@ Auto3BallRight::Auto3BallRight(
         frc2::ParallelDeadlineGroup{ ScoringActionHighHub(2_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
         // Drive to 3rd ball
         frc2::PrintCommand("Drive to 3rd ball"),
-        frc2::ParallelCommandGroup{
+        frc2::ParallelDeadlineGroup{
             frc2::ParallelDeadlineGroup{
                 frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
                 AutoDrivePath(m_pathname4.c_str(), false, drivetrain) },
