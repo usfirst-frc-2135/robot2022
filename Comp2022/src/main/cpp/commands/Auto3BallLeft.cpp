@@ -89,7 +89,7 @@ Auto3BallLeft::Auto3BallLeft(
         frc2::ParallelDeadlineGroup{ ScoringActionHighHub(2_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
         // Drive to opponent's ball and intake
         frc2::PrintCommand("Drive to opponent's ball and intake"),
-        frc2::ParallelCommandGroup{
+        frc2::ParallelDeadlineGroup{
             frc2::ParallelDeadlineGroup{
                 frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
                 AutoDrivePath(m_pathname4.c_str(), false, drivetrain) },
