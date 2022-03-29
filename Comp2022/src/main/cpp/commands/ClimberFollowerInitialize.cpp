@@ -30,7 +30,7 @@ ClimberFollowerInitialize::ClimberFollowerInitialize(Climber *m_climber) : m_cli
 void ClimberFollowerInitialize::Initialize()
 {
     spdlog::info("ClimberFollowerInitialize - Init");
-    m_climber->ClimberFollowerInitialize();
+    m_climber->FollowerInitialize();
 }
 
 // Called repeatedly when this Command is scheduled to run

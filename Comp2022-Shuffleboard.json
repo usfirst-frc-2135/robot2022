@@ -548,9 +548,9 @@
         "vgap": 16.0,
         "titleType": 0,
         "tiles": {
-          "16,4": {
+          "17,2": {
             "size": [
-              3,
+              2,
               2
             ],
             "content": {
@@ -561,7 +561,7 @@
               "Colors/Color when false": "#8B0000FF"
             }
           },
-          "19,4": {
+          "21,6": {
             "size": [
               3,
               2
@@ -583,7 +583,7 @@
               "_title": "Velocity"
             }
           },
-          "6,0": {
+          "5,0": {
             "size": [
               2,
               1
@@ -596,7 +596,7 @@
           },
           "0,0": {
             "size": [
-              3,
+              2,
               2
             ],
             "content": {
@@ -671,7 +671,7 @@
               "_title": "SCurveStrength"
             }
           },
-          "3,0": {
+          "2,0": {
             "size": [
               3,
               2
@@ -682,10 +682,10 @@
               "_title": "GatehookRestHeight"
             }
           },
-          "10,0": {
+          "9,0": {
             "size": [
               2,
-              1
+              2
             ],
             "content": {
               "_type": "Text View",
@@ -693,9 +693,9 @@
               "_title": "RaiseL4"
             }
           },
-          "16,0": {
+          "17,0": {
             "size": [
-              3,
+              2,
               2
             ],
             "content": {
@@ -706,7 +706,7 @@
               "Colors/Color when false": "#8B0000FF"
             }
           },
-          "8,0": {
+          "7,0": {
             "size": [
               2,
               2
@@ -775,7 +775,7 @@
           "0,6": {
             "size": [
               3,
-              2
+              3
             ],
             "content": {
               "_type": "Command",
@@ -783,10 +783,10 @@
               "_title": "SmartDashboard/Climber Calibrate"
             }
           },
-          "4,6": {
+          "3,6": {
             "size": [
               3,
-              2
+              3
             ],
             "content": {
               "_type": "Command",
@@ -816,9 +816,9 @@
               "_title": "ClimbL3Timer"
             }
           },
-          "7,6": {
+          "15,0": {
             "size": [
-              3,
+              2,
               2
             ],
             "content": {
@@ -840,9 +840,9 @@
               "_title": "RotateExtendL3Timer"
             }
           },
-          "10,6": {
+          "15,2": {
             "size": [
-              3,
+              2,
               2
             ],
             "content": {
@@ -864,9 +864,9 @@
               "_title": "RotateRetractL3Timer"
             }
           },
-          "13,6": {
+          "6,6": {
             "size": [
-              3,
+              5,
               2
             ],
             "content": {
@@ -888,7 +888,7 @@
               "_title": "RotateRetractL4Timer"
             }
           },
-          "16,6": {
+          "19,2": {
             "size": [
               3,
               2
@@ -911,6 +911,72 @@
               "_source0": "network_table:///SmartDashboard/Climber 7ClimbToL4",
               "_title": "SmartDashboard/Climber 7ClimbToL4"
             }
+          },
+          "12,6": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/CL_IsFollowerModeCL15",
+              "_title": "IsFollowerModeCL15"
+            }
+          },
+          "15,6": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/CL_Current_CL14",
+              "_title": "Current_CL14"
+            }
+          },
+          "18,6": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/CL_Current_CL15",
+              "_title": "Current_CL15"
+            }
+          },
+          "15,4": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/CL_HasResetOccurredCL14",
+              "_title": "HasResetOccurredCL14"
+            }
+          },
+          "18,4": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/CL_HasResetOccurredCL15",
+              "_title": "HasResetOccurredCL15"
+            }
+          },
+          "11,0": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/CL_ClimbL2Timer",
+              "_title": "ClimbL2Timer"
+            }
           }
         }
       }
@@ -926,7 +992,7 @@
         "vgap": 16.0,
         "titleType": 0,
         "tiles": {
-          "3,0": {
+          "0,4": {
             "size": [
               3,
               2
@@ -937,7 +1003,7 @@
               "_title": "HORIZ_ANGLE"
             }
           },
-          "6,0": {
+          "0,2": {
             "size": [
               3,
               2
@@ -948,7 +1014,7 @@
               "_title": "VERT_ANGLE"
             }
           },
-          "9,0": {
+          "3,0": {
             "size": [
               3,
               2
@@ -959,7 +1025,7 @@
               "_title": "TARGET_AREA"
             }
           },
-          "12,0": {
+          "3,2": {
             "size": [
               3,
               2
@@ -981,7 +1047,7 @@
               "_title": "TARGET_VALID"
             }
           },
-          "15,0": {
+          "18,0": {
             "size": [
               3,
               2
@@ -992,7 +1058,7 @@
               "_title": "/SmartDashboard/limelight_PipelineName"
             }
           },
-          "15,2": {
+          "18,2": {
             "size": [
               3,
               2
@@ -1003,7 +1069,7 @@
               "_title": "limelight/stream"
             }
           },
-          "12,2": {
+          "18,4": {
             "size": [
               3,
               2
@@ -1014,9 +1080,9 @@
               "_title": "limelight/camMode"
             }
           },
-          "18,0": {
+          "21,0": {
             "size": [
-              3,
+              4,
               3
             ],
             "content": {
@@ -1027,7 +1093,7 @@
               "Colors/Color when false": "#8B0000FF"
             }
           },
-          "21,0": {
+          "15,0": {
             "size": [
               2,
               1
@@ -1038,10 +1104,10 @@
               "_title": "Slope"
             }
           },
-          "23,0": {
+          "6,0": {
             "size": [
-              2,
-              1
+              4,
+              2
             ],
             "content": {
               "_type": "Text View",
@@ -1049,10 +1115,10 @@
               "_title": "DistanceLimeLight"
             }
           },
-          "21,1": {
+          "12,0": {
             "size": [
-              2,
-              1
+              3,
+              2
             ],
             "content": {
               "_type": "Text View",
@@ -1060,10 +1126,10 @@
               "_title": "VertOffset1"
             }
           },
-          "23,1": {
+          "12,2": {
             "size": [
-              2,
-              1
+              3,
+              2
             ],
             "content": {
               "_type": "Text View",
@@ -1071,10 +1137,10 @@
               "_title": "VertOffset2"
             }
           },
-          "0,2": {
+          "10,0": {
             "size": [
               2,
-              1
+              2
             ],
             "content": {
               "_type": "Text View",
@@ -1082,10 +1148,10 @@
               "_title": "Distance1"
             }
           },
-          "2,2": {
+          "10,2": {
             "size": [
               2,
-              1
+              2
             ],
             "content": {
               "_type": "Text View",
@@ -1451,73 +1517,7 @@
         "vgap": 16.0,
         "titleType": 0,
         "tiles": {
-          "3,0": {
-            "size": [
-              3,
-              2
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/DTL_TurnPIDKp",
-              "_title": "TurnPIDKp"
-            }
-          },
-          "6,0": {
-            "size": [
-              3,
-              2
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/DTL_TurnPIDKi",
-              "_title": "TurnPIDKi"
-            }
-          },
-          "9,0": {
-            "size": [
-              3,
-              2
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/DTL_TurnPIDKd",
-              "_title": "TurnPIDKd"
-            }
-          },
-          "3,2": {
-            "size": [
-              3,
-              2
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/DTL_ThrottlePIDKp",
-              "_title": "ThrottlePIDKp"
-            }
-          },
-          "6,2": {
-            "size": [
-              3,
-              2
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/DTL_ThrottlePIDKi",
-              "_title": "ThrottlePIDKi"
-            }
-          },
-          "9,2": {
-            "size": [
-              3,
-              2
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/DTL_ThrottlePIDKd",
-              "_title": "ThrottlePIDKd"
-            }
-          },
-          "15,0": {
+          "22,0": {
             "size": [
               3,
               2
@@ -1528,7 +1528,7 @@
               "_title": "MaxTurn"
             }
           },
-          "15,2": {
+          "22,2": {
             "size": [
               3,
               2
@@ -1539,18 +1539,7 @@
               "_title": "MaxThrottle"
             }
           },
-          "11,6": {
-            "size": [
-              3,
-              2
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/DTL_TargetDistance",
-              "_title": "TargetDistance"
-            }
-          },
-          "21,0": {
+          "3,4": {
             "size": [
               3,
               2
@@ -1561,7 +1550,7 @@
               "_title": "AngleThreshold"
             }
           },
-          "21,2": {
+          "0,4": {
             "size": [
               3,
               2
@@ -1572,7 +1561,7 @@
               "_title": "DistThreshold"
             }
           },
-          "21,5": {
+          "13,4": {
             "size": [
               3,
               2
@@ -1583,51 +1572,7 @@
               "_title": "ThrottleShape"
             }
           },
-          "0,4": {
-            "size": [
-              3,
-              2
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/DTL_Dist1",
-              "_title": "Dist1"
-            }
-          },
-          "3,4": {
-            "size": [
-              3,
-              2
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/DTL_Dist2",
-              "_title": "Dist2"
-            }
-          },
-          "6,4": {
-            "size": [
-              3,
-              2
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/DTL_Slope",
-              "_title": "Slope"
-            }
-          },
-          "6,6": {
-            "size": [
-              3,
-              2
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/DTL_Offset",
-              "_title": "Offset"
-            }
-          },
-          "12,0": {
+          "6,0": {
             "size": [
               3,
               2
@@ -1638,7 +1583,7 @@
               "_title": "TurnOutput"
             }
           },
-          "12,2": {
+          "6,2": {
             "size": [
               3,
               2
@@ -1649,9 +1594,9 @@
               "_title": "ThrottleOutput"
             }
           },
-          "18,0": {
+          "9,0": {
             "size": [
-              3,
+              4,
               2
             ],
             "content": {
@@ -1660,9 +1605,9 @@
               "_title": "TurnOutputClamped"
             }
           },
-          "18,2": {
+          "9,2": {
             "size": [
-              3,
+              4,
               2
             ],
             "content": {
@@ -1671,15 +1616,37 @@
               "_title": "ThrottleOutputClamped"
             }
           },
-          "0,0": {
+          "19,2": {
             "size": [
               3,
               2
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/VI_HORIZ_ANGLE",
-              "_title": "/SmartDashboard/VI_HORIZ_ANGLE"
+              "_source0": "network_table:///SmartDashboard/DTL_ThrottlePidKd",
+              "_title": "ThrottlePidKd"
+            }
+          },
+          "16,2": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DTL_ThrottlePidKi",
+              "_title": "ThrottlePidKi"
+            }
+          },
+          "13,0": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DTL_TurnPidKp",
+              "_title": "TurnPidKp"
             }
           },
           "0,2": {
@@ -1689,33 +1656,55 @@
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/VI_TARGET_AREA",
-              "_title": "/SmartDashboard/VI_TARGET_AREA"
+              "_source0": "network_table:///SmartDashboard/DTL_SetPointDistance",
+              "_title": "SetPointDistance"
             }
           },
-          "0,6": {
+          "0,0": {
             "size": [
               3,
               2
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/DTL_VertOffset1",
-              "_title": "VertOffset1"
+              "_source0": "network_table:///SmartDashboard/DTL_LimeLightDist",
+              "_title": "LimeLightDist"
             }
           },
-          "3,6": {
+          "13,2": {
             "size": [
               3,
               2
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/DTL_VertOffset2",
-              "_title": "VertOffset2"
+              "_source0": "network_table:///SmartDashboard/DTL_ThrottlePidKp",
+              "_title": "ThrottlePidKp"
             }
           },
-          "14,6": {
+          "19,0": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DTL_TurnPidKd",
+              "_title": "TurnPidKd"
+            }
+          },
+          "16,0": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/DTL_TurnPidKi",
+              "_title": "TurnPidKi"
+            }
+          },
+          "3,2": {
             "size": [
               3,
               2
@@ -1726,114 +1715,15 @@
               "_title": "TargetAngle"
             }
           },
-          "24,0": {
+          "3,0": {
             "size": [
-              2,
-              1
+              3,
+              2
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/DTL_ThrottlePidKd",
-              "_title": "ThrottlePidKd"
-            }
-          },
-          "24,1": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/DTL_ThrottlePidKi",
-              "_title": "ThrottlePidKi"
-            }
-          },
-          "24,2": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/DTL_ThrottlePidKp",
-              "_title": "ThrottlePidKp"
-            }
-          },
-          "24,3": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/DTL_Distance1",
-              "_title": "Distance1"
-            }
-          },
-          "9,4": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/DTL_Distance2",
-              "_title": "Distance2"
-            }
-          },
-          "11,4": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/DTL_TurnPidKd",
-              "_title": "TurnPidKd"
-            }
-          },
-          "13,4": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/DTL_TurnPidKi",
-              "_title": "TurnPidKi"
-            }
-          },
-          "15,4": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/DTL_TurnPidKp",
-              "_title": "TurnPidKp"
-            }
-          },
-          "17,4": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/DTL_SetPointDistance",
-              "_title": "SetPointDistance"
-            }
-          },
-          "19,4": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/DTL_LimeLightDist",
-              "_title": "LimeLightDist"
+              "_source0": "network_table:///limelight/tx",
+              "_title": "limelight/tx"
             }
           }
         }
@@ -2442,12 +2332,200 @@
           }
         }
       }
+    },
+    {
+      "title": "Health",
+      "autoPopulate": true,
+      "autoPopulatePrefix": "SmartDashboard/HL_",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {
+          "0,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/HL_Resets_L1",
+              "_title": "Resets_L1"
+            }
+          },
+          "1,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/HL_Resets_L2",
+              "_title": "Resets_L2"
+            }
+          },
+          "2,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/HL_Resets_R3",
+              "_title": "Resets_R3"
+            }
+          },
+          "3,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/HL_Resets_R4",
+              "_title": "Resets_R4"
+            }
+          },
+          "4,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/CL_CL14Valid",
+              "_title": "SmartDashboard/CL_CL14Valid",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "5,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/CL_CL15Valid",
+              "_title": "SmartDashboard/CL_CL15Valid",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "4,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/HL_L1Valid",
+              "_title": "L1Valid",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "5,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/HL_L2Valid",
+              "_title": "L2Valid",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "6,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/HL_R3Valid",
+              "_title": "R3Valid",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "7,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/HL_R4Valid",
+              "_title": "R4Valid",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "0,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/HL_IN6Valid",
+              "_title": "IN6Valid",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "1,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/HL_FC8Valid",
+              "_title": "FC8Valid",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "2,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/HL_VC9Valid",
+              "_title": "VC9Valid",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "3,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/HL_SH11Valid",
+              "_title": "SH11Valid",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          }
+        }
+      }
     }
   ],
   "windowGeometry": {
-    "x": -4.666666507720947,
-    "y": 0.0,
-    "width": 1284.6666259765625,
-    "height": 726.0
+    "x": -6.0,
+    "y": 4.666666507720947,
+    "width": 1287.3333740234375,
+    "height": 494.0
   }
 }

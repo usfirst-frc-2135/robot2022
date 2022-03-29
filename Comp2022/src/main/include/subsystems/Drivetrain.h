@@ -67,10 +67,12 @@ private:
     PigeonIMU m_gyro{ 0 };
 
     //    Declare constants
-    const int m_driveDebug = 0; // Debug flag to disable extra logging calls
-    const int kSlotIndex = 0;   // PID slot index for sensors
-    const int kPidIndex = 0;    // PID index for primary sensor
-    const int kCANTimeout = 10; // CAN timeout in msec to wait for response
+    const int m_driveDebug = 0;     // Debug flag to disable extra drive logging calls
+    const int m_ramseteDebug = 1;   // Debug flag to disable extra ramsete logging calls
+    const int m_limelightDebug = 0; // Debug flag to disable extra limelight logging calls
+    const int kSlotIndex = 0;       // PID slot index for sensors
+    const int kPidIndex = 0;        // PID index for primary sensor
+    const int kCANTimeout = 10;     // CAN timeout in msec to wait for response
 
     // TODO: adjust kV and kA angular from robot characterization
     frc::sim::DifferentialDrivetrainSim m_driveSim{ frc::LinearSystemId::IdentifyDrivetrainSystem(
@@ -94,6 +96,7 @@ private:
     double m_driveXScaling;  // Scaling applied to Joystick
     double m_driveYScaling;  // Scaling applied to Joystick
     double m_driveQTScaling; // Scaling applied to Joystick when QuickTurn enabled
+    double m_driveCLScaling; // Scaling applied to Joystick when slow drive mode for climb enabled
     bool m_throttleZeroed;   // Throttle joystick zeroed check for safety
 
     // Talon input filter settings
@@ -101,8 +104,9 @@ private:
     double m_closedLoopRampRate;
 
     // Drive modes
-    bool m_brakeMode;   // Brake or Coast Mode for Talons
-    bool m_isQuickTurn; // Setting for quickturn in curvature drive
+    bool m_brakeMode;       // Brake or Coast Mode for Talons
+    bool m_isQuickTurn;     // Setting for quickturn in curvature drive
+    bool m_isDriveSlowMode; // Setting for slow drive mode before climbing
 
     // Odometry and telemetry
     meter_t m_distanceLeft;
@@ -227,6 +231,7 @@ public:
     void GetYawPitchRoll(void);
     void SetBrakeMode(bool brakeMode);
     void MoveSetQuickTurn(bool quickTurn);
+    void SetDriveSlowMode(bool driveSlowMode);
     void MoveStop(void);
     bool MoveIsStopped(void);
 
