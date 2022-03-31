@@ -83,13 +83,14 @@ Auto3BallLeft::Auto3BallLeft(
         // Drive to a shooting position
         frc2::ParallelDeadlineGroup{
             frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
-            AutoDrivePath(m_pathname3.c_str(), false, drivetrain) },
+            AutoDrivePath(m_pathname3.c_str(), false, drivetrain),
+            IntakingAction(intake, fConv, vConv) },
         // Shoot 2nd ball
         frc2::PrintCommand("Shoot 2nd ball"),
         frc2::ParallelDeadlineGroup{ ScoringActionHighHub(2_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
         // Drive to opponent's ball and intake
         frc2::PrintCommand("Drive to opponent's ball and intake"),
-        frc2::ParallelCommandGroup{
+        frc2::ParallelDeadlineGroup{
             frc2::ParallelDeadlineGroup{
                 frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
                 AutoDrivePath(m_pathname4.c_str(), false, drivetrain) },
