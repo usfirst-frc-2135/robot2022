@@ -35,9 +35,11 @@
   VI_Distance1 = 48  
   VI_Distance2 = 60
   # VI_VertOffset1 ####
-  VI_VertOffset1 = 0.51
+  VI_VertOffset1 = -0.58
+  #### VI_VertOffset1 = 0.51 ventura
   # VI_VertOffset2 ##
-  VI_VertOffset2 = -4.61
+  VI_VertOffset2 = -4.8
+  #### VI_VertOffset2 = -4.61 ventura
 # Path following settings
   DTR_RamsetePidKf = 0.0465
   DTR_RamsetePidKp = 0.1125
@@ -84,7 +86,7 @@
   CL_ExtendL2 = 29.0
   CL_RotateL3 = 31.25
   CL_GatehookRestHeight = 4.0
-  CL_RaiseL4 = 20.25
+  CL_RaiseL4 = 15.0
   CL_ClimbL2Timer = 0.5
   CL_RotateExtendL3Timer = 1.5
   CL_RotateRetractL3Timer = 2.0
