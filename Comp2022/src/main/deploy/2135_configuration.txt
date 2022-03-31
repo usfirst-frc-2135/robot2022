@@ -92,12 +92,28 @@
   CL_RotateRetractL4Timer = 1.5
 # Auto Settings
   AutoDrive_path = startToOffTarmac
+
   AutoDriveShoot_path1 = startToShootingPos
   AutoDriveShoot_path2 = shootingPosToOffTarmac
+
   AutoShootDriveShoot_path1 = startToShootingPos
   AutoShootDriveShoot_path2 = shootingPosToBall
   AutoShootDriveShoot_path3 = ballToShootingPos
   AutoShootDriveShoot_path4 = shootingPosToOffTarmac
+
+  Auto3BallLeft_path1 = startToShootingPos
+  Auto3BallLeft_path2 = shootingPosToBall
+  Auto3BallLeft_path3 = ballToShootingPos
+  Auto3BallLeft_path4 = shootingPosToLeftBall
+  Auto3BallLeft_path5 = leftBallToLeftShootingPos
+
+  Auto3BallRight_path1 = startToShootingPos
+  Auto3BallRight_path2 = shootingPosToBall
+  Auto3BallRight_path3 = ballToShootingPos
+  Auto3BallRight_path4 = shootingPosToRightBall
+  Auto3BallRight_path5 = rightBallToRightShootingPos
+  Auto3BallRight_path6 = shootingPosToOffTarmac
+
   path1 = forward39
   path2 = backward39
   path3 = rightAngleTurn
