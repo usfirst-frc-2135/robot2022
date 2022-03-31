@@ -168,6 +168,8 @@ private:
     double m_pitch;
     double m_roll;
 
+    double m_gyroOffset;
+
     ///////////////////////////////////////////////////////////////////////////
 
     // Initialization methods
