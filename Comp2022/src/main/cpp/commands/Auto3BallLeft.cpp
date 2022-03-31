@@ -83,26 +83,26 @@ Auto3BallLeft::Auto3BallLeft(
         // Drive to a shooting position
         frc2::ParallelDeadlineGroup{
             frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
-            AutoDrivePath(m_pathname3.c_str(), false, drivetrain) },
+            AutoDrivePath(m_pathname3.c_str(), false, drivetrain),
+            IntakingAction(intake, fConv, vConv) },
         // Shoot 2nd ball
         frc2::PrintCommand("Shoot 2nd ball"),
         frc2::ParallelDeadlineGroup{ ScoringActionHighHub(2_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
         // Drive to opponent's ball and intake
         frc2::PrintCommand("Drive to opponent's ball and intake"),
-        frc2::ParallelCommandGroup{
+        frc2::ParallelDeadlineGroup{
             frc2::ParallelDeadlineGroup{
                 frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
                 AutoDrivePath(m_pathname4.c_str(), false, drivetrain) },
             ScoringPrime(shooter),
             IntakingAction(intake, fConv, vConv) },
         // Turn and drive to a shooting position
-        frc2::PrintCommand("Turn and drive to a shooting position"),
-        frc2::ParallelCommandGroup{
-            frc2::ParallelDeadlineGroup{
-                frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
-                AutoDrivePath(m_pathname5.c_str(), false, drivetrain) },
-            ScoringPrime(shooter) },
-        // Should we add a wait time here?
+        // frc2::PrintCommand("Turn and drive to a shooting position"),
+        // frc2::ParallelCommandGroup{
+        //     frc2::ParallelDeadlineGroup{
+        //         frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
+        //         AutoDrivePath(m_pathname5.c_str(), false, drivetrain) },
+        //     ScoringPrime(shooter) },
         // Stow intake
         frc2::PrintCommand("Stow intake"),
         frc2::ParallelDeadlineGroup{ IntakeDeploy(false), AutoStop(drivetrain) },

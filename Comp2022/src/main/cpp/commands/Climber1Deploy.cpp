@@ -38,6 +38,7 @@ ClimberDeploy::ClimberDeploy(
     // Driver needs to drive away manually from the hanger toward the rung it wants to hook on
 
     AddCommands( // Sequential command
+        DriveSlowMode(true),
         IntakeDeploy(false),
         IntakeRun(Intake::INTAKE_STOP, intake),
         FloorConveyorRun(FloorConveyor::FCONVEYOR_STOP, fConv),

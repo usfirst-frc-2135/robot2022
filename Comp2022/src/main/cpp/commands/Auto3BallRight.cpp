@@ -89,13 +89,14 @@ Auto3BallRight::Auto3BallRight(
         frc2::PrintCommand("Drive to a shooting position"),
         frc2::ParallelDeadlineGroup{
             frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
-            AutoDrivePath(m_pathname3.c_str(), false, drivetrain) },
+            AutoDrivePath(m_pathname3.c_str(), false, drivetrain),
+            IntakingAction(intake, fConv, vConv) },
         // Shoot 2nd ball
         frc2::PrintCommand("Shoot 2nd ball"),
         frc2::ParallelDeadlineGroup{ ScoringActionHighHub(2_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
         // Drive to 3rd ball
         frc2::PrintCommand("Drive to 3rd ball"),
-        frc2::ParallelCommandGroup{
+        frc2::ParallelDeadlineGroup{
             frc2::ParallelDeadlineGroup{
                 frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
                 AutoDrivePath(m_pathname4.c_str(), false, drivetrain) },
@@ -106,13 +107,19 @@ Auto3BallRight::Auto3BallRight(
         frc2::ParallelCommandGroup{
             frc2::ParallelDeadlineGroup{
                 frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
-                AutoDrivePath(m_pathname5.c_str(), false, drivetrain) },
-            ScoringPrime(shooter) },
+                AutoDrivePath(m_pathname5.c_str(), false, drivetrain),
+                IntakingAction(intake, fConv, vConv) },
+            ScoringPrime(shooter),
+            frc2::PrintCommand("Driving to shooting position group") },
         // Run limelight shooting routine for 3rd ball
         frc2::PrintCommand("Run limelight shooting routine for 3rd ball"),
         frc2::ConditionalCommand{ AutoDriveLimelightShoot(drivetrain, intake, fConv, vConv, shooter, vision),
-                                  ScoringStop(intake, fConv, vConv, shooter),
-                                  [drivetrain] { return drivetrain->LimelightSanityCheck(); } },
+                                  ScoringActionHighHub(2_s, intake, fConv, vConv, shooter),
+                                  [drivetrain]
+                                  {
+                                      spdlog::info("Going to check limelight sanity");
+                                      return drivetrain->LimelightSanityCheck();
+                                  } },
         // Drive towards human player/terminal
         // frc2::ParallelCommandGroup{
         //     frc2::ParallelDeadlineGroup{

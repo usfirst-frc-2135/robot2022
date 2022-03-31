@@ -14,6 +14,7 @@
 
 #include "commands/ClimberMoveHeight.h"
 #include "commands/ClimberSetGateHook.h"
+#include "commands/DriveSlowMode.h"
 #include "commands/FloorConveyorRun.h"
 #include "commands/IntakeDeploy.h"
 #include "commands/IntakeRun.h"
