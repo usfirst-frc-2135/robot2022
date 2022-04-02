@@ -82,8 +82,8 @@ void VerticalConveyor::Periodic()
 
     if (m_motorVC9.HasResetOccurred())
     {
-        m_countVC9 += 1;
-        frc::SmartDashboard::PutNumber("HL_Resets_VC9", m_countVC9);
+        m_resetCountVC9 += 1;
+        frc::SmartDashboard::PutNumber("HL_Resets_VC9", m_resetCountVC9);
     }
 }
 
