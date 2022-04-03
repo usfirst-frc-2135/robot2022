@@ -180,10 +180,10 @@ private:
     // Periodic update methods
     void UpdateOdometry(void);
     void UpdateDashboardValues(void);
-    int m_countL1; //motor reset count storer
-    int m_countL2; //motor reset count storer
-    int m_countR3; //motor reset count storer
-    int m_countR4; //motor reset count storer
+    int m_resetCountL1; //motor reset count storer
+    int m_resetCountL2; //motor reset count storer
+    int m_resetCountR3; //motor reset count storer
+    int m_resetCountR4; //motor reset count storer
 
     // Encoders
     void ResetEncoders(void);

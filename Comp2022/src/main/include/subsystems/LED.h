@@ -72,8 +72,12 @@ public:
         LEDCOLOR_DASH = 7
     } LEDColor_e;
 
+    
+
     void Initialize(void);
     void SetColor(int color);
+    void SetShooterColor(int color);
+    void SetLLColor(int color);
 
     frc::SendableChooser<LEDColor_e> m_ledChooser;
 };

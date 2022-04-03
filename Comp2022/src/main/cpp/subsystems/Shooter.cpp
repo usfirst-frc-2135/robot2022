@@ -106,16 +106,16 @@ void Shooter::Periodic()
     {
         if (!IsAtDesiredRPM())
         {
-            robotContainer->m_led.SetColor(LED::LEDCOLOR_BLUE);
+            robotContainer->m_led.SetShooterColor(LED::LEDCOLOR_BLUE);
         }
         else
         {
-            robotContainer->m_led.SetColor(LED::LEDCOLOR_GREEN);
+            robotContainer->m_led.SetShooterColor(LED::LEDCOLOR_GREEN);
         }
     }
     else
     {
-        robotContainer->m_led.SetColor(LED::LEDCOLOR_OFF);
+        robotContainer->m_led.SetShooterColor(LED::LEDCOLOR_OFF);
     }
 
     double currentSH11 = 0.0;
@@ -129,8 +129,8 @@ void Shooter::Periodic()
 
     if (m_motorSH11.HasResetOccurred())
     {
-        m_countSH11 += 1;
-        frc::SmartDashboard::PutNumber("HL_Reset_SH11", m_countSH11);
+        m_resetCountSH11 += 1;
+        frc::SmartDashboard::PutNumber("HL_Reset_SH11", m_resetCountSH11);
     }
 }
 
@@ -217,10 +217,6 @@ void Shooter::SetShooterSpeed(int state)
 
     spdlog::info("SH Set Shooter Speed {}", state);
 
-    m_flywheelPidKf = frc::SmartDashboard::GetNumber("SH_FlywheelPidKf", m_flywheelPidKf);
-    m_flywheelPidKp = frc::SmartDashboard::GetNumber("SH_FlywheelPidKp", m_flywheelPidKp);
-    m_flywheelPidKi = frc::SmartDashboard::GetNumber("SH_FlywheelPidKi", m_flywheelPidKi);
-    m_flywheelPidKd = frc::SmartDashboard::GetNumber("SH_FlywheelPidKd", m_flywheelPidKd);
     m_flywheelLowerHubTargetRPM =
         frc::SmartDashboard::GetNumber("SH_FlywheelLowerHubTargetRPM", m_flywheelLowerHubTargetRPM);
     m_flywheelUpperHubTargetRPM =
@@ -228,8 +224,13 @@ void Shooter::SetShooterSpeed(int state)
 
     m_toleranceRPM = frc::SmartDashboard::GetNumber("SH_ToleranceRPM", m_toleranceRPM);
 
-    if (m_talonValidSH11)
+    if (m_talonValidSH11 && m_ifShooterTest)
     {
+        m_flywheelPidKf = frc::SmartDashboard::GetNumber("SH_FlywheelPidKf", m_flywheelPidKf);
+        m_flywheelPidKp = frc::SmartDashboard::GetNumber("SH_FlywheelPidKp", m_flywheelPidKp);
+        m_flywheelPidKi = frc::SmartDashboard::GetNumber("SH_FlywheelPidKi", m_flywheelPidKi);
+        m_flywheelPidKd = frc::SmartDashboard::GetNumber("SH_FlywheelPidKd", m_flywheelPidKd);
+
         m_motorSH11.Config_kF(kSlotIndex, m_flywheelPidKf, 0);
         m_motorSH11.Config_kP(kSlotIndex, m_flywheelPidKp, 0);
         m_motorSH11.Config_kI(kSlotIndex, m_flywheelPidKi, 0);
