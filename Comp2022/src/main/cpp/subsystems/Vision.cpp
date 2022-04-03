@@ -37,10 +37,10 @@ Vision::Vision() : m_yfilter(5)
     frc::SmartDashboard::SetDefaultBoolean("VI_SM_OVERRIDE_ENABLED", false);
 
     frc2135::RobotConfig *config = frc2135::RobotConfig::GetInstance();
-    config->GetValueAsDouble("VI_Distance1", m_distance1, 0.0);
-    config->GetValueAsDouble("VI_Distance2", m_distance2, 0.0);
-    config->GetValueAsDouble("VI_VertOffset1", m_vertOffset1, 0.0);
-    config->GetValueAsDouble("VI_VertOffset2", m_vertOffset2, 0.0);
+    config->GetValueAsDouble("VI_Distance1", m_distance1, 48);
+    config->GetValueAsDouble("VI_Distance2", m_distance2, 60);
+    config->GetValueAsDouble("VI_VertOffset1", m_vertOffset1, -0.58);
+    config->GetValueAsDouble("VI_VertOffset2", m_vertOffset2, -4.8);
 
     Initialize();
 }
