@@ -55,9 +55,8 @@ private:
     bool m_talonValidCL15; // Health indicator for climber Talon 15
 
     double m_stickDeadband = 0.2;
-    int m_countCL14;       //reset counter for motor
-    int m_countCL15;       //reset counter for motor
-
+    int m_resetCountCL14; // reset counter for motor
+    int m_resetCountCL15; // reset counter for motor
 
     double m_targetInches;   // Target inches of height that are requested of the climber
     double m_curInches;      // Current elevator height in inches
