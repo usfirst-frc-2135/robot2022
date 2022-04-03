@@ -37,6 +37,7 @@ Intake::Intake()
 #ifdef CAN
     m_talonValidIN6 = frc2135::TalonUtils::TalonCheck(m_motorIN6, "IN", "IN6");
 #endif
+    frc::SmartDashboard::PutBoolean("HL_IN6Valid", m_talonValidIN6);
 
     // Check if solenoids are functional or blacklisted
     if (m_position.IsDisabled())
@@ -132,7 +133,6 @@ void Intake::Initialize(void)
     spdlog::info("IN Init");
     SetIntakeSpeed(INTAKE_STOP);
     SetDeployerSolenoid(false);
-    frc::SmartDashboard::PutBoolean("HL_IN6Valid", m_talonValidIN6);
 }
 
 // Dump all Talon faults
