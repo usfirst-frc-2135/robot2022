@@ -77,7 +77,10 @@ Drivetrain::Drivetrain()
 
     // Reset gyro
     if (m_pigeonValid)
+    {
         m_gyro.SetFusedHeading(0.0);
+        ResetGyro();
+    }
 
     Initialize();
 }
@@ -105,6 +108,9 @@ void Drivetrain::Periodic()
     {
         m_countR4 += 1;
     }
+
+    if (frc::RobotState::IsDisabled())
+        ResetGyro();
 }
 
 void Drivetrain::SimulationPeriodic()
@@ -451,7 +457,7 @@ void Drivetrain::VelocityArcadeDrive(double yOutput, double xOutput)
 void Drivetrain::ResetGyro()
 {
     if (m_pigeonValid)
-        m_gyroOffset = m_gyro.GetFusedHeading();
+        m_gyroOffset = -m_gyro.GetFusedHeading();
 }
 
 degree_t Drivetrain::GetHeadingAngle()
