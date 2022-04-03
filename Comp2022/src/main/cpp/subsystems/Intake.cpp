@@ -110,8 +110,8 @@ void Intake::Periodic()
 #ifdef CAN
     if (m_motorIN6.HasResetOccurred())
     {
-        m_countIN6 += 1;
-        frc::SmartDashboard::PutNumber("HL_Resets_IN6", m_countIN6);
+        m_resetCountIN6 += 1;
+        frc::SmartDashboard::PutNumber("HL_Resets_IN6", m_resetCountIN6);
     }
 #endif
 }
