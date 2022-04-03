@@ -30,6 +30,7 @@ FloorConveyor::FloorConveyor()
 
     // Validate Talon FX controllers, initialize and display firmware versions
     m_talonValidFC8 = frc2135::TalonUtils::TalonCheck(m_motorFC8, "FC", "FC8");
+    frc::SmartDashboard::PutBoolean("HL_FC8Valid", m_talonValidFC8);
 
     // Initialize Variables
     frc2135::RobotConfig *config = frc2135::RobotConfig::GetInstance();
@@ -104,7 +105,6 @@ void FloorConveyor::Initialize(void)
 {
     spdlog::info("FC Init");
     SetFloorConveyorSpeed(FCONVEYOR_STOP);
-    frc::SmartDashboard::PutBoolean("HL_FC8Valid", m_talonValidFC8);
 }
 
 //    Dump all Talon faults
