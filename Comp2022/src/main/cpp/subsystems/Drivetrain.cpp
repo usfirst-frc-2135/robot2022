@@ -50,6 +50,11 @@ Drivetrain::Drivetrain()
     m_talonValidR4 = frc2135::TalonUtils::TalonCheck(m_motorR4, "DT", "R4");
     m_pigeonValid = frc2135::TalonUtils::PigeonIMUInitialize(m_gyro);
 
+    frc::SmartDashboard::PutBoolean("HL_L1Valid", m_talonValidL1);
+    frc::SmartDashboard::PutBoolean("HL_L2Valid", m_talonValidL2);
+    frc::SmartDashboard::PutBoolean("HL_R3Valid", m_talonValidR3);
+    frc::SmartDashboard::PutBoolean("HL_R4Valid", m_talonValidR4);
+
     //  Load config file values
     ConfigFileLoad();
 
@@ -190,11 +195,6 @@ void Drivetrain::Initialize(void)
 
     // Initialize PID values for velocity control
     SyncTalonPIDFromDashboard();
-
-    frc::SmartDashboard::PutBoolean("HL_L1Valid", m_talonValidL1);
-    frc::SmartDashboard::PutBoolean("HL_L2Valid", m_talonValidL2);
-    frc::SmartDashboard::PutBoolean("HL_R3Valid", m_talonValidR3);
-    frc::SmartDashboard::PutBoolean("HL_R4Valid", m_talonValidR4);
 }
 
 void Drivetrain::FaultDump(void)
