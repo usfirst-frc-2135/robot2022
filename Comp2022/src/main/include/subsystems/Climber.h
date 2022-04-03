@@ -81,9 +81,6 @@ private:
     double m_climberMaxHeight; // Climber maximum allowable height
     double m_climberMinHeight; // Climber minimum allowable height
 
-    int m_hasResetOccurredCL14 = 0;
-    int m_hasResetOccurredCL15 = 0;
-
     double m_stowHeight;         // 0.25 inches
     double m_extendL2;           // 29 inches
     double m_rotateL3;           // 21 inches
