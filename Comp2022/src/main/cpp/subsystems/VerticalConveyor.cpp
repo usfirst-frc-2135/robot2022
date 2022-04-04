@@ -30,6 +30,7 @@ VerticalConveyor::VerticalConveyor()
 
     // Validate Talon FX controllers, initialize and display firmware versions
     m_talonValidVC9 = frc2135::TalonUtils::TalonCheck(m_motorVC9, "VC", "VC9");
+    frc::SmartDashboard::PutBoolean("HL_VC9Valid", m_talonValidVC9);
 
     // Initialize Variables
     frc2135::RobotConfig *config = frc2135::RobotConfig::GetInstance();
@@ -103,7 +104,6 @@ void VerticalConveyor::Initialize(void)
 {
     spdlog::info("VC Init");
     SetVerticalConveyorSpeed(VCONVEYOR_STOP);
-    frc::SmartDashboard::PutBoolean("HL_VC9Valid", m_talonValidVC9);
 }
 
 //    Dump all Talon faults

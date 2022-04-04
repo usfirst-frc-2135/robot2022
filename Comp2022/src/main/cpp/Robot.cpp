@@ -19,6 +19,7 @@
 #include <frc2/command/CommandScheduler.h>
 #include <spdlog/spdlog.h>
 #include <units/time.h>
+#include <wpi/PortForwarder.h>
 
 std::string MatchTypeToString(const frc::DriverStation::MatchType matchType)
 {
@@ -63,6 +64,10 @@ void Robot::RobotInit()
     double waitTime;
     config->GetValueAsDouble("AUTO_WaitTime", waitTime, 0.0);
     frc::SmartDashboard::PutNumber("AUTO_WaitTime", waitTime);
+
+    wpi::PortForwarder::GetInstance().Add(5800, "limelight.local", 5800);
+    wpi::PortForwarder::GetInstance().Add(5801, "limelight.local", 5801);
+    wpi::PortForwarder::GetInstance().Add(5805, "limelight.local", 5805);
 }
 
 /**
