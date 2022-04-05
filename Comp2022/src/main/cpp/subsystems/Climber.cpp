@@ -140,7 +140,42 @@ Climber::Climber()
         m_motorCL14.Set(ControlMode::PercentOutput, 0.0);
     }
 
-    FollowerInitialize();
+    // FollowerInitialize();
+    if (m_talonValidCL15)
+    {
+        m_motorCL15.SetInverted(false);
+        m_motorCL15.SetNeutralMode(NeutralMode::Brake);
+        m_motorCL14.SetSafetyEnabled(false);
+
+        m_motorCL15.ConfigVoltageCompSaturation(12.0, 0);
+        m_motorCL15.EnableVoltageCompensation(true);
+
+        frc2135::TalonUtils::CheckError(
+            m_motorCL15.ConfigSupplyCurrentLimit(m_supplyCurrentLimits),
+            "CL15 ConfigSupplyCurrentLimit");
+        frc2135::TalonUtils::CheckError(
+            m_motorCL15.ConfigStatorCurrentLimit(m_statorCurrentLimits),
+            "CL15 ConfigStatorCurrentLimit");
+
+        // Configure Magic Motion settings
+        frc2135::TalonUtils::CheckError(m_motorCL15.SelectProfileSlot(0, 0), "CL15 SelectProfileSlot");
+
+        frc2135::TalonUtils::CheckError(
+            m_motorCL15.ConfigMotionCruiseVelocity(m_velocity, kCANTimeout),
+            "CL14 ConfigMotionCruiseVelocity");
+        frc2135::TalonUtils::CheckError(
+            m_motorCL15.ConfigMotionAcceleration(m_acceleration, kCANTimeout),
+            "CL14 ConfigMotionAcceleration");
+        frc2135::TalonUtils::CheckError(
+            m_motorCL15.ConfigMotionSCurveStrength(m_sCurveStrength, kCANTimeout),
+            "CL14 ConfigMotionSCurveStrength");
+        frc2135::TalonUtils::CheckError(m_motorCL15.Config_kF(0, m_pidKf, kCANTimeout), "CL15 Config_kF");
+        frc2135::TalonUtils::CheckError(m_motorCL15.Config_kP(0, m_pidKp, kCANTimeout), "CL15 Config_kP");
+        frc2135::TalonUtils::CheckError(m_motorCL15.Config_kI(0, m_pidKi, kCANTimeout), "CL15 Config_kI");
+        frc2135::TalonUtils::CheckError(m_motorCL15.Config_kD(0, m_pidKd, kCANTimeout), "CL15 Config_KD");
+
+        m_motorCL15.Set(ControlMode::PercentOutput, 0.0);
+    }
 
     Initialize();
 }
@@ -150,6 +185,7 @@ void Climber::Periodic()
     // Put code here to be run every loop
     static int periodicInterval = 0;
     double outputCL14 = 0.0;
+    double outputCL15 = 0.0;
 
     // if disabled
     if (frc::RobotState::IsDisabled())
@@ -169,16 +205,18 @@ void Climber::Periodic()
         outputCL14 = m_motorCL14.GetMotorOutputPercent();
     frc::SmartDashboard::PutNumber("CL_Output_CL14", outputCL14);
 
+    if (m_talonValidCL15)
+        outputCL15 = m_motorCL15.GetMotorOutputPercent();
+    frc::SmartDashboard::PutNumber("CL_Output_CL15", outputCL15);
+
     int curCounts = 0;
     if (m_talonValidCL14)
-    {
         curCounts = m_motorCL14.GetSelectedSensorPosition(0);
-    }
 
-    bool CL15FollowerMode = (m_motorCL15.GetControlMode() == ControlMode::Follower);
-    frc::SmartDashboard::PutBoolean("CL_CL15FollowerMode", CL15FollowerMode);
-    if (!CL15FollowerMode)
-        spdlog::error("CL15 is not in Follower Mode");
+    // bool CL15FollowerMode = (m_motorCL15.GetControlMode() == ControlMode::Follower);
+    // frc::SmartDashboard::PutBoolean("CL_CL15FollowerMode", CL15FollowerMode);
+    // if (!CL15FollowerMode)
+    //     spdlog::error("CL15 is not in Follower Mode");
 
     m_curInches = CountsToInches(curCounts);
     frc::SmartDashboard::PutNumber("CL_Height", m_curInches);
@@ -197,8 +235,15 @@ void Climber::Periodic()
 
             if (m_talonValidCL14)
                 currentCL14 = m_motorCL14.GetOutputCurrent();
+
             if (m_talonValidCL15)
                 currentCL15 = m_motorCL15.GetOutputCurrent();
+
+            frc::SmartDashboard::PutBoolean("CL_CL14Valid", m_talonValidCL14);
+            frc::SmartDashboard::PutBoolean("CL_CL15Valid", m_talonValidCL15);
+
+            spdlog::info("CL 14 motor valid: {}", m_talonValidCL14);
+            spdlog::info("CL 15 motor valid: {}", m_talonValidCL15);
 
             frc::SmartDashboard::PutNumber("CL_Current_CL14", currentCL14);
             frc::SmartDashboard::PutNumber("CL_Current_CL15", currentCL15);
@@ -246,12 +291,6 @@ void Climber::Initialize(void)
     m_targetInches = m_curInches;
     m_isMoving = false;
     spdlog::info("CL Init Target Inches: {}", m_targetInches);
-
-    frc::SmartDashboard::PutBoolean("CL_CL14Valid", m_talonValidCL14);
-    frc::SmartDashboard::PutBoolean("CL_CL15Valid", m_talonValidCL15);
-
-    spdlog::info("CL 14 motor valid: {}", m_talonValidCL14);
-    spdlog::info("CL 15 motor valid: {}", m_talonValidCL15);
 }
 
 // Dump all Talon faults
@@ -304,6 +343,9 @@ void Climber::MoveClimberWithJoysticks(frc::XboxController *joystick)
 
     if (m_talonValidCL14)
         m_motorCL14.Set(ControlMode::PercentOutput, motorOutput);
+
+    if (m_talonValidCL15)
+        m_motorCL15.Set(ControlMode::PercentOutput, motorOutput);
 }
 
 void Climber::SetClimberStopped(void)
@@ -312,6 +354,9 @@ void Climber::SetClimberStopped(void)
 
     if (m_talonValidCL14)
         m_motorCL14.Set(ControlMode::PercentOutput, 0);
+
+    if (m_talonValidCL15)
+        m_motorCL15.Set(ControlMode::PercentOutput, 0);
 }
 
 void Climber::SetGateHook(bool hookClosed)
@@ -341,7 +386,11 @@ void Climber::MoveToCalibrate(void)
 {
     if (m_talonValidCL14)
         m_motorCL14.Set(ControlMode::PercentOutput, -0.1);
+
+    if (m_talonValidCL15)
+        m_motorCL15.Set(ControlMode::PercentOutput, -0.1);
 }
+
 void Climber::Calibrate()
 {
     if (m_talonValidCL14)
@@ -350,6 +399,8 @@ void Climber::Calibrate()
         m_targetInches = 0;
         m_curInches = 0;
     }
+    if (m_talonValidCL15)
+        m_motorCL15.SetSelectedSensorPosition(0, 0, kCANTimeout);
     m_calibrated = true;
     frc::SmartDashboard::PutBoolean("CL_Calibrated", m_calibrated);
 }
@@ -373,9 +424,15 @@ void Climber::MoveClimberDistanceInit(int state)
         m_motorCL14.Config_kP(0, m_pidKp, 0);
         m_motorCL14.Config_kI(0, m_pidKi, 0);
         m_motorCL14.Config_kD(0, m_pidKd, 0);
-    }
 
-    // FollowerInitialize();
+        m_motorCL15.Config_kF(0, m_pidKf, 0);
+        m_motorCL15.ConfigMotionCruiseVelocity(m_velocity, 0);
+        m_motorCL15.ConfigMotionAcceleration(m_acceleration, 0);
+        m_motorCL15.ConfigMotionSCurveStrength(m_sCurveStrength, 0);
+        m_motorCL15.Config_kP(0, m_pidKp, 0);
+        m_motorCL15.Config_kI(0, m_pidKi, 0);
+        m_motorCL15.Config_kD(0, m_pidKd, 0);
+    }
 
     switch (state)
     {
@@ -425,6 +482,7 @@ void Climber::MoveClimberDistanceInit(int state)
         m_safetyTimer.Start();
 
         m_motorCL14.Set(ControlMode::MotionMagic, InchesToCounts(m_targetInches));
+        m_motorCL15.Set(ControlMode::MotionMagic, InchesToCounts(m_targetInches));
 
         spdlog::info(
             "Climber moving: {} -> {} inches  |  counts {:.0f} -> {:.0f}",
@@ -438,6 +496,9 @@ void Climber::MoveClimberDistanceInit(int state)
         spdlog::info("Climber is not calibrated");
         if (m_talonValidCL14)
             m_motorCL14.Set(ControlMode::PercentOutput, 0.0);
+
+        if (m_talonValidCL15)
+            m_motorCL15.Set(ControlMode::PercentOutput, 0.0);
     }
 }
 
