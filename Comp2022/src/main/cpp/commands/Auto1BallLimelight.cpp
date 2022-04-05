@@ -65,7 +65,7 @@ Auto1BallLimelight::Auto1BallLimelight(
                                   [drivetrain]
                                   {
                                       spdlog::info("Going to check limelight sanity");
-                                      return drivetrain->LimelightSanityCheck();
+                                      return drivetrain->LimelightSanityCheck(25, 25);
                                   } });
 }
 

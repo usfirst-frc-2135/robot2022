@@ -791,7 +791,7 @@ void Drivetrain::MoveWithLimelightEnd()
 }
 
 // sanity check for AutoShootDriveLLShoot
-bool Drivetrain::LimelightSanityCheck()
+bool Drivetrain::LimelightSanityCheck(double horizAngleRange, double distRange)
 {
     // check whether target is valid
     // check whether the limelight tx and ty is within a certain tolerance
@@ -801,10 +801,6 @@ bool Drivetrain::LimelightSanityCheck()
     double ty = robotContainer->m_vision.GetVertOffsetDeg();
     bool tv = robotContainer->m_vision.GetTargetValid();
     m_limelightDistance = robotContainer->m_vision.CalculateDist();
-
-    double horizAngleRange = 10;
-    // double vertAngleRange = 10;
-    double distRange = 15;
 
     spdlog::info(
         "DTL tv {} tx {:.1f} ty{:.1f} distError {:.1f} lldistance {:.1f}",

@@ -119,7 +119,7 @@ Auto3BallRight::Auto3BallRight(
                                   [drivetrain]
                                   {
                                       spdlog::info("Going to check limelight sanity");
-                                      return drivetrain->LimelightSanityCheck();
+                                      return drivetrain->LimelightSanityCheck(10, 15);
                                   } },
         // Drive towards human player/terminal
         // frc2::ParallelCommandGroup{
