@@ -46,6 +46,10 @@ Climber0Stow::Climber0Stow(
         frc2::ParallelDeadlineGroup{
             frc2::WaitUntilCommand([climber] { return climber->MoveClimberDistanceIsFinished(); }),
             ClimberMoveHeight(Climber::STOW_HEIGHT, climber) },
+        frc2::WaitCommand(1.5_s),
+        frc2::ParallelDeadlineGroup{
+            frc2::WaitUntilCommand([climber] { return climber->MoveClimberDistanceIsFinished(); }),
+            ClimberMoveHeight(Climber::GATEHOOK_REST_HEIGHT, climber) },
         ClimberSetGateHook(false));
 }
 
