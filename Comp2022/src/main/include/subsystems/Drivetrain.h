@@ -254,7 +254,7 @@ public:
     bool LimelightSanityCheck(double horizAngleRange, double distRange);
 
     // Autonomous - Ramsete follower command
-    void RamseteFollowerInit(string pathName, bool resetOdometry);
+    void RamseteFollowerInit(frc::Trajectory trajectory, bool resetOdometry);
     void RamseteFollowerExecute(void);
     bool RamseteFollowerIsFinished(void);
     void RamseteFollowerEnd(void);

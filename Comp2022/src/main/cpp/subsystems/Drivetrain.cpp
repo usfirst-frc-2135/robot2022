@@ -13,11 +13,9 @@
 #include "frc2135/TalonUtils.h"
 #include "subsystems/LED.h"
 
-#include <frc/Filesystem.h>
 #include <frc/RobotBase.h>
 #include <frc/RobotController.h>
 #include <frc/RobotState.h>
-#include <frc/trajectory/TrajectoryUtil.h>
 #include <fstream>
 #include <spdlog/fmt/ostr.h>
 #include <spdlog/spdlog.h>
@@ -824,27 +822,14 @@ bool Drivetrain::LimelightSanityCheck(double horizAngleRange, double distRange)
 //
 //  Autonomous command - Ramsete follower
 //
-void Drivetrain::RamseteFollowerInit(string pathName, bool resetOdometry)
+void Drivetrain::RamseteFollowerInit(frc::Trajectory trajectory, bool resetOdometry)
 {
-    m_tolerance = frc::SmartDashboard::GetNumber("DT_Tolerance", 0.05);
-
     m_ramseteB = frc::SmartDashboard::GetNumber("DTR_ramseteB", m_ramseteB);
     m_ramseteZeta = frc::SmartDashboard::GetNumber("DTR_ramseteZeta", m_ramseteZeta);
     m_ramseteController = frc::RamseteController{ m_ramseteB * 1_rad * 1_rad / (1_m * 1_m), m_ramseteZeta / 1_rad };
+    m_tolerance = frc::SmartDashboard::GetNumber("DT_Tolerance", 0.05);
+    m_trajectory = trajectory;
 
-    // Get our trajectory
-    // TODO: Move this to be able to load a trajectory while disabled when
-    //          the user changes the chooser selection
-    std::string outputDirectory = frc::filesystem::GetDeployDirectory();
-    outputDirectory.append("/output/" + pathName + ".wpilib.json");
-    spdlog::info("DTR Output Directory is: {}", outputDirectory);
-    std::ifstream pathFile(outputDirectory.c_str());
-    if (pathFile.good())
-        spdlog::info("DTR pathFile is good");
-    else
-        spdlog::error("DTR pathFile not good");
-
-    m_trajectory = frc::TrajectoryUtil::FromPathweaverJson(outputDirectory);
     if (!frc::RobotBase::IsReal())
         PlotTrajectory(m_trajectory);
     std::vector<frc::Trajectory::State> trajectoryStates;
