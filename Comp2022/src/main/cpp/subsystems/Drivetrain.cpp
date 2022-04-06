@@ -700,6 +700,7 @@ void Drivetrain::MoveWithLimelightExecute(void)
     double tx = robotContainer->m_vision.GetHorizOffsetDeg();
     double ty = robotContainer->m_vision.GetVertOffsetDeg();
     bool tv = robotContainer->m_vision.GetTargetValid();
+    int turnConstant = 0;
 
     if (tv == false)
     {
@@ -710,8 +711,15 @@ void Drivetrain::MoveWithLimelightExecute(void)
     }
 
     // get turn value - just horizontal offset from target
-    double turnOutput = -m_turnPid.Calculate(robotContainer->m_vision.GetHorizOffsetDeg(), m_targetAngle);
-
+    double turnOutput = turnOutput = -m_turnPid.Calculate(robotContainer->m_vision.GetHorizOffsetDeg(), m_targetAngle);
+    if (tx > 0)
+    {
+        turnOutput = turnOutput + turnConstant;
+    }
+    else if (tx < 0)
+    {
+        turnOutput = turnOutput - turnConstant;
+    }
     // get throttle value
     m_limelightDistance = robotContainer->m_vision.CalculateDist();
 
