@@ -38,6 +38,12 @@ Climber::Climber()
     // Validate Talon SRX controllers, initialize and display firmware versions
     m_talonValidCL14 = frc2135::TalonUtils::TalonCheck(m_motorCL14, "CL", "CL14");
     m_talonValidCL15 = frc2135::TalonUtils::TalonCheck(m_motorCL15, "CL", "CL15");
+    
+    frc::SmartDashboard::PutBoolean("CL_CL14Valid", m_talonValidCL14);
+    frc::SmartDashboard::PutBoolean("CL_CL15Valid", m_talonValidCL15);
+
+    spdlog::info("CL 14 motor valid: {}", m_talonValidCL14);
+    spdlog::info("CL 15 motor valid: {}", m_talonValidCL15);
 
     // Check if solenoids are functional or blacklisted
     if (m_gatehook.IsDisabled())
@@ -238,12 +244,6 @@ void Climber::Periodic()
 
             if (m_talonValidCL15)
                 currentCL15 = m_motorCL15.GetOutputCurrent();
-
-            frc::SmartDashboard::PutBoolean("CL_CL14Valid", m_talonValidCL14);
-            frc::SmartDashboard::PutBoolean("CL_CL15Valid", m_talonValidCL15);
-
-            spdlog::info("CL 14 motor valid: {}", m_talonValidCL14);
-            spdlog::info("CL 15 motor valid: {}", m_talonValidCL15);
 
             frc::SmartDashboard::PutNumber("CL_Current_CL14", currentCL14);
             frc::SmartDashboard::PutNumber("CL_Current_CL15", currentCL15);
