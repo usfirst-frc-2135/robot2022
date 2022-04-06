@@ -81,6 +81,13 @@ Drivetrain::Drivetrain()
     // Ramsete Controller
     m_ramseteController = frc::RamseteController(m_ramseteB * 1_rad * 1_rad / (1_m * 1_m), m_ramseteZeta / 1_rad);
 
+    // Reset gyro
+    if (m_pigeonValid)
+    {
+        m_gyro.SetFusedHeading(0.0);
+        ResetGyro();
+    }
+
     Initialize();
 }
 
@@ -107,6 +114,9 @@ void Drivetrain::Periodic()
     {
         m_resetCountR4 += 1;
     }
+
+    if (frc::RobotState::IsDisabled())
+        ResetGyro();
 }
 
 void Drivetrain::SimulationPeriodic()
@@ -448,12 +458,12 @@ void Drivetrain::VelocityArcadeDrive(double yOutput, double xOutput)
 void Drivetrain::ResetGyro()
 {
     if (m_pigeonValid)
-        m_gyro.SetFusedHeading(0.0);
+        m_gyroOffset = -m_gyro.GetFusedHeading();
 }
 
 degree_t Drivetrain::GetHeadingAngle()
 {
-    return (m_pigeonValid) ? (m_gyro.GetFusedHeading() * 1_deg) : 0_deg;
+    return (m_pigeonValid) ? (m_gyroOffset + m_gyro.GetFusedHeading()) * 1_deg : 0_deg;
 }
 
 void Drivetrain::GetYawPitchRoll()

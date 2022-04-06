@@ -53,8 +53,9 @@ AutoShootDriveShoot::AutoShootDriveShoot(
     spdlog::info("AutoShootDriveShoot pathname 4 {}", m_pathname4.c_str());
 
     AddCommands( // Sequential command
-        frc2::ParallelDeadlineGroup{ IntakeDeploy(true), AutoStop(drivetrain) },
+        // Wait timer set in SmartDasboard
         AutoWait(drivetrain),
+        frc2::ParallelDeadlineGroup{ IntakeDeploy(true), AutoStop(drivetrain) },
         frc2::ParallelCommandGroup{
             frc2::ParallelDeadlineGroup{
                 frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
