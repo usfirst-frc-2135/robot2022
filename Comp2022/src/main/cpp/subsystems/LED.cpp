@@ -41,6 +41,8 @@ LED::LED()
     m_ledChooser.AddOption("LED_Purple", LEDCOLOR_PURPLE);
 
     frc::SmartDashboard::PutData("LED_Color", &m_ledChooser);
+
+    frc::SmartDashboard::PutBoolean("LED_colormode", false);
 }
 
 void LED::Periodic()
@@ -123,5 +125,23 @@ void LED::SetColor(int color)
 
         spdlog::info("LED Color Set to {}", strName);
         m_previousColor = color;
+    }
+}
+
+void LED::SetShooterColor(int color)
+{
+    bool colormode = frc::SmartDashboard::GetBoolean("LED_colormode", false);
+    if (colormode)
+    {
+        SetColor(color);
+    }
+}
+
+void LED::SetLLColor(int color)
+{
+    bool colormode = frc::SmartDashboard::GetBoolean("LED_colormode", false);
+    if (!colormode)
+    {
+        SetColor(color);
     }
 }

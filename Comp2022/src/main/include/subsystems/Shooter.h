@@ -53,7 +53,9 @@ private:
 
     // Declare module variables
     bool m_talonValidSH11; // Health indicator for shooter talon 11
-    int m_countSH11;       //reset counter for motor
+    int m_resetCountSH11;  //reset counter for motor
+    bool m_ifShooterTest = false;
+    //checks to see if testing the shooter
 
     // Simulated flywheels - MOI is an estimate that seems to work for 2022 (not a calculated value)
     frc::LinearFilter<double> m_flywheelFilter = frc::LinearFilter<double>::SinglePoleIIR(0.1, 0.02_s);

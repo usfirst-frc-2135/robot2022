@@ -11,6 +11,7 @@
 #include "RobotContainer.h"
 #include "frc2135/RobotConfig.h"
 #include "frc2135/TalonUtils.h"
+#include "subsystems/LED.h"
 
 #include <frc/Filesystem.h>
 #include <frc/RobotBase.h>
@@ -48,6 +49,11 @@ Drivetrain::Drivetrain()
     m_talonValidR3 = frc2135::TalonUtils::TalonCheck(m_motorR3, "DT", "R3");
     m_talonValidR4 = frc2135::TalonUtils::TalonCheck(m_motorR4, "DT", "R4");
     m_pigeonValid = frc2135::TalonUtils::PigeonIMUInitialize(m_gyro);
+
+    frc::SmartDashboard::PutBoolean("HL_L1Valid", m_talonValidL1);
+    frc::SmartDashboard::PutBoolean("HL_L2Valid", m_talonValidL2);
+    frc::SmartDashboard::PutBoolean("HL_R3Valid", m_talonValidR3);
+    frc::SmartDashboard::PutBoolean("HL_R4Valid", m_talonValidR4);
 
     //  Load config file values
     ConfigFileLoad();
@@ -87,19 +93,19 @@ void Drivetrain::Periodic()
 
     if (m_motorL1.HasResetOccurred())
     {
-        m_countL1 += 1;
+        m_resetCountL1 += 1;
     }
     if (m_motorL2.HasResetOccurred())
     {
-        m_countL2 += 1;
+        m_resetCountL2 += 1;
     }
     if (m_motorR3.HasResetOccurred())
     {
-        m_countR3 += 1;
+        m_resetCountR3 += 1;
     }
     if (m_motorR4.HasResetOccurred())
     {
-        m_countR4 += 1;
+        m_resetCountR4 += 1;
     }
 }
 
@@ -179,11 +185,6 @@ void Drivetrain::Initialize(void)
 
     // Initialize PID values for velocity control
     SyncTalonPIDFromDashboard();
-
-    frc::SmartDashboard::PutBoolean("HL_L1Valid", m_talonValidL1);
-    frc::SmartDashboard::PutBoolean("HL_L2Valid", m_talonValidL2);
-    frc::SmartDashboard::PutBoolean("HL_R3Valid", m_talonValidR3);
-    frc::SmartDashboard::PutBoolean("HL_R4Valid", m_talonValidR4);
 }
 
 void Drivetrain::FaultDump(void)
@@ -349,10 +350,10 @@ void Drivetrain::UpdateDashboardValues(void)
     frc::SmartDashboard::PutNumber("DT_Current_R3", m_currentR3);
     frc::SmartDashboard::PutNumber("DT_Current_R4", m_currentR4);
 
-    frc::SmartDashboard::PutNumber("HL_Resets_L1", m_countL1);
-    frc::SmartDashboard::PutNumber("HL_Resets_L2", m_countL2);
-    frc::SmartDashboard::PutNumber("HL_Resets_R3", m_countR3);
-    frc::SmartDashboard::PutNumber("HL_Resets_R4", m_countR4);
+    frc::SmartDashboard::PutNumber("HL_Resets_L1", m_resetCountL1);
+    frc::SmartDashboard::PutNumber("HL_Resets_L2", m_resetCountL2);
+    frc::SmartDashboard::PutNumber("HL_Resets_R3", m_resetCountR3);
+    frc::SmartDashboard::PutNumber("HL_Resets_R4", m_resetCountR4);
 
     // Only update indicators every 100 ms to cut down on network traffic
     if ((periodicInterval++ % 5 == 0) && (m_driveDebug > 1))
@@ -742,6 +743,29 @@ bool Drivetrain::MoveWithLimelightIsFinished(void)
     double tx = robotContainer->m_vision.GetHorizOffsetDeg();
     bool tv = robotContainer->m_vision.GetTargetValid();
 
+    if (tv)
+    {
+        if (fabs(tx) <= m_angleThreshold)
+        {
+            robotContainer->m_led.SetLLColor(LED::LEDCOLOR_GREEN);
+        }
+        else
+        {
+            if (tx < -m_angleThreshold)
+            {
+                robotContainer->m_led.SetLLColor(LED::LEDCOLOR_RED);
+            }
+            else if (tx > m_angleThreshold)
+            {
+                robotContainer->m_led.SetLLColor(LED::LEDCOLOR_BLUE);
+            }
+        }
+    }
+    else
+    {
+        robotContainer->m_led.SetLLColor(LED::LEDCOLOR_YELLOW);
+    }
+
     return (
         tv && (fabs(tx) <= m_angleThreshold) && (fabs(m_setPointDistance - m_limelightDistance) <= m_distThreshold)
         && MoveIsStopped());
@@ -749,8 +773,11 @@ bool Drivetrain::MoveWithLimelightIsFinished(void)
 
 void Drivetrain::MoveWithLimelightEnd()
 {
+    RobotContainer *robotContainer = RobotContainer::GetInstance();
     if (m_talonValidL1 || m_talonValidR3)
         VelocityArcadeDrive(0.0, 0.0);
+
+    robotContainer->m_led.SetLLColor(LED::LEDCOLOR_OFF);
 }
 
 // sanity check for AutoShootDriveLLShoot
