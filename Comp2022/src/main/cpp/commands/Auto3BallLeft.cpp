@@ -17,6 +17,7 @@
 #include "commands/IntakingAction.h"
 #include "commands/IntakingStop.h"
 #include "commands/ScoringActionHighHub.h"
+#include "commands/ScoringActionLowHub.h"
 #include "commands/ScoringPrime.h"
 #include "commands/ScoringStop.h"
 #include "frc2135/RobotConfig.h"
@@ -57,10 +58,11 @@ Auto3BallLeft::Auto3BallLeft(
 
     AddCommands( // Sequential command
         frc2::PrintCommand("AUTO 3 BALL LEFT - START"),
+        // Wait timer set in SmartDasboard
+        AutoWait(drivetrain),
         // Deploy intake
         frc2::PrintCommand("Deploy intake"),
         frc2::ParallelDeadlineGroup{ IntakeDeploy(true), AutoStop(drivetrain) },
-        AutoWait(drivetrain),
         // Drive to a shooting position
         frc2::PrintCommand("Drive to a shooting position"),
         frc2::ParallelCommandGroup{
@@ -108,7 +110,7 @@ Auto3BallLeft::Auto3BallLeft(
         frc2::ParallelDeadlineGroup{ IntakeDeploy(false), AutoStop(drivetrain) },
         // Shoot opponent's ball
         frc2::PrintCommand("Shoot opponent's ball"),
-        frc2::ParallelDeadlineGroup{ ScoringActionHighHub(2_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
+        frc2::ParallelDeadlineGroup{ ScoringActionLowHub(2_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
         // Stop shooting and driving
         frc2::PrintCommand("Stop shooting"),
         frc2::ParallelDeadlineGroup{ ScoringStop(intake, fConv, vConv, shooter), AutoStop(drivetrain) },
