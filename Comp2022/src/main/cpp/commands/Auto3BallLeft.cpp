@@ -17,6 +17,7 @@
 #include "commands/IntakingAction.h"
 #include "commands/IntakingStop.h"
 #include "commands/ScoringActionHighHub.h"
+#include "commands/ScoringActionLowHub.h"
 #include "commands/ScoringPrime.h"
 #include "commands/ScoringStop.h"
 #include "frc2135/RobotConfig.h"
@@ -106,7 +107,7 @@ Auto3BallLeft::Auto3BallLeft(
         frc2::ParallelDeadlineGroup{ IntakeDeploy(false), AutoStop(drivetrain) },
         // Shoot opponent's ball
         frc2::PrintCommand("Shoot opponent's ball"),
-        frc2::ParallelDeadlineGroup{ ScoringActionHighHub(2_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
+        frc2::ParallelDeadlineGroup{ ScoringActionLowHub(2_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
         // Stop shooting and driving
         frc2::PrintCommand("Stop shooting"),
         frc2::ParallelDeadlineGroup{ ScoringStop(intake, fConv, vConv, shooter), AutoStop(drivetrain) },
