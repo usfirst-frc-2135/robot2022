@@ -64,10 +64,9 @@ Auto3BallLeft::Auto3BallLeft(
         frc2::ParallelDeadlineGroup{ IntakeDeploy(true), AutoStop(drivetrain) },
         // Drive to a shooting position
         frc2::PrintCommand("Drive to a shooting position"),
-        frc2::ParallelCommandGroup{
-            frc2::ParallelDeadlineGroup{
-                frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
-                AutoDrivePath(m_pathname1.c_str(), true, drivetrain) },
+        frc2::ParallelDeadlineGroup{
+            frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
+            AutoDrivePath(m_pathname1.c_str(), true, drivetrain),
             ScoringPrime(shooter) },
         // Shoot preloaded ball
         frc2::PrintCommand("Shoot preloaded ball"),
@@ -75,9 +74,8 @@ Auto3BallLeft::Auto3BallLeft(
         // Drive to 2nd ball and intake
         frc2::PrintCommand("Drive to 2nd ball and intake"),
         frc2::ParallelDeadlineGroup{
-            frc2::ParallelDeadlineGroup{
-                frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
-                AutoDrivePath(m_pathname2.c_str(), false, drivetrain) },
+            frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
+            AutoDrivePath(m_pathname2.c_str(), false, drivetrain),
             IntakingAction(intake, fConv, vConv),
             ScoringPrime(shooter) },
         frc2::PrintCommand("Drive to a shooting position"),
@@ -92,9 +90,8 @@ Auto3BallLeft::Auto3BallLeft(
         // Drive to opponent's ball and intake
         frc2::PrintCommand("Drive to opponent's ball and intake"),
         frc2::ParallelDeadlineGroup{
-            frc2::ParallelDeadlineGroup{
-                frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
-                AutoDrivePath(m_pathname4.c_str(), false, drivetrain) },
+            frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
+            AutoDrivePath(m_pathname4.c_str(), false, drivetrain),
             ScoringPrime(shooter),
             IntakingAction(intake, fConv, vConv) },
         // Turn and drive to a shooting position
