@@ -30,6 +30,7 @@ ClimberTimerOverride::ClimberTimerOverride(Climber *m_climber) : m_climber(m_cli
 void ClimberTimerOverride::Initialize()
 {
     spdlog::info("ClimberTimerOverride - Init");
+    operatorController = RobotContainer::GetInstance()->getOperatorController();
 }
 
 // Called repeatedly when this Command is scheduled to run
