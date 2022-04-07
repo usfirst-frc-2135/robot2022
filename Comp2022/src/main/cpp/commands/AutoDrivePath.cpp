@@ -10,7 +10,12 @@
 
 #include "commands/AutoDrivePath.h"
 
+#include <frc/Filesystem.h>
+#include <frc/trajectory/TrajectoryUtil.h>
 #include <spdlog/spdlog.h>
+#include <fstream>
+#include <spdlog/fmt/ostr.h>
+#include <wpi/SmallString.h>
 
 AutoDrivePath::AutoDrivePath(const char *pathName, bool resetOdometry, Drivetrain *m_drivetrain) :
     m_pathName(pathName),
@@ -21,13 +26,27 @@ AutoDrivePath::AutoDrivePath(const char *pathName, bool resetOdometry, Drivetrai
     // eg. AddRequirements(m_Subsystem);
     SetName("AutoDrivePath");
     AddRequirements(m_drivetrain);
+
+    // Get our trajectory
+    // TODO: Move this to be able to load a trajectory while disabled when
+    //          the user changes the chooser selection
+    std::string outputDirectory = frc::filesystem::GetDeployDirectory();
+    outputDirectory.append(std::string("/output/") + m_pathName + ".wpilib.json");
+    spdlog::info("DTR Output Directory is: {}", outputDirectory);
+    std::ifstream pathFile(outputDirectory.c_str());
+    if (pathFile.good())
+        spdlog::info("DTR pathFile is good");
+    else
+        spdlog::error("DTR pathFile not good");
+
+    m_trajectory = frc::TrajectoryUtil::FromPathweaverJson(outputDirectory);
 }
 
 // Called just before this Command runs the first time
 void AutoDrivePath::Initialize()
 {
     spdlog::info("AutoDrivePath - Init: pathName: {}", m_pathName);
-    m_drivetrain->RamseteFollowerInit(m_pathName, m_resetOdometry);
+    m_drivetrain->RamseteFollowerInit(m_trajectory, m_resetOdometry);
 }
 
 // Called repeatedly when this Command is scheduled to run

@@ -117,6 +117,8 @@
   Auto3BallRight_path5 = rightBallToRightShootingPos
   Auto3BallRight_path6 = shootingPosToOffTarmac
 
+  Auto1BallLimelight_path1 = fenderToOffTarmac
+
   path1 = forward39
   path2 = backward39
   path3 = rightAngleTurn
