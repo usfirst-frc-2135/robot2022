@@ -15,6 +15,7 @@
 #include "commands/Climber6ClimbToL3.h"
 #include "commands/Climber7ClimbToL4.h"
 #include "commands/Climber8SettleToL4.h"
+#include "commands/ClimberTimerOverride.h"
 #include "frc2135/RobotConfig.h"
 
 #include <frc/smartdashboard/SmartDashboard.h>
@@ -32,7 +33,7 @@ ClimberFullClimb::ClimberFullClimb(Climber *climber)
 
     frc2135::RobotConfig *config = frc2135::RobotConfig::GetInstance();
     config->GetValueAsDouble("CL_ClimbL2Timer", m_climbL2Timer, 0.5);
-    config->GetValueAsDouble("CL_RotateExtendL3Timer", m_rotateExtendL3Timer, 0.5);
+    config->GetValueAsDouble("CL_RotateExtendL3Timer", m_rotateExtendL3Timer, 1.5);
     config->GetValueAsDouble("CL_RotateRetractL3Timer", m_rotateRetractL3Timer, 2.0);
     config->GetValueAsDouble("CL_ClimbL3Timer", m_climbL3Timer, 0.5);
     config->GetValueAsDouble("CL_RotateRetractL4Timer", m_rotateRetractL4Timer, 2.5);
@@ -82,18 +83,18 @@ ClimberFullClimb::ClimberFullClimb(Climber *climber)
 
     AddCommands(
         ClimberClimbToL2(climber),
-        frc2::WaitCommand(m_climbL2Timer * 1.0_s), // check to see if timer is necessary here
+        frc2::ParallelRaceGroup{ frc2::WaitCommand(m_climbL2Timer * 1.0_s), ClimberTimerOverride(climber) },
         ClimberRotateToL3(climber),
-        frc2::WaitCommand(m_rotateExtendL3Timer * 1.0_s),
+        frc2::ParallelRaceGroup{ frc2::WaitCommand(m_rotateExtendL3Timer * 1.0_s), ClimberTimerOverride(climber) },
         ClimberRotateIntoL3(climber),
-        frc2::WaitCommand(m_rotateRetractL3Timer * 1.0_s),
+        frc2::ParallelRaceGroup{ frc2::WaitCommand(m_rotateRetractL3Timer * 1.0_s), ClimberTimerOverride(climber) },
         ClimberClimbToL3(climber),
-        frc2::WaitCommand(m_climbL3Timer * 1.0_s),
+        frc2::ParallelRaceGroup{ frc2::WaitCommand(m_climbL3Timer * 1.0_s), ClimberTimerOverride(climber) },
         // next rung climb!
         ClimberRotateToL3(climber),
-        frc2::WaitCommand(m_rotateExtendL3Timer * 1.0_s),
+        frc2::ParallelRaceGroup{ frc2::WaitCommand(m_rotateExtendL3Timer * 1.0_s), ClimberTimerOverride(climber) },
         ClimberRotateIntoL3(climber),
-        frc2::WaitCommand(m_rotateRetractL4Timer * 1.0_s),
+        frc2::ParallelRaceGroup{ frc2::WaitCommand(m_rotateRetractL4Timer * 1.0_s), ClimberTimerOverride(climber) },
         ClimberClimbToL4(climber));
 }
 
