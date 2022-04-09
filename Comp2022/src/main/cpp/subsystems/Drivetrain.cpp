@@ -704,8 +704,6 @@ void Drivetrain::MoveWithLimelightExecute(void)
     double ty = robotContainer->m_vision.GetVertOffsetDeg();
     bool tv = robotContainer->m_vision.GetTargetValid();
 
-    //put this in config file
-    //frc::MedianFilter<bool> vfilter(5);
     if (tv == false)
     {
         VelocityArcadeDrive(0, 0);
