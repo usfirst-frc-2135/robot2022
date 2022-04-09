@@ -670,6 +670,7 @@ void Drivetrain::MoveWithLimelightInit(bool m_endAtTarget)
 {
     // get pid values from dashboard
 
+    m_turnConstant = frc::SmartDashboard::GetNumber("DTL_TurnConstant", m_turnConstant);
     m_turnPidKp = frc::SmartDashboard::GetNumber("DTL_TurnPidKp", m_turnPidKp);
     m_turnPidKi = frc::SmartDashboard::GetNumber("DTL_TurnPidKi", m_turnPidKi);
     m_turnPidKd = frc::SmartDashboard::GetNumber("DTL_TurnPidKd", m_turnPidKd);
@@ -704,7 +705,7 @@ void Drivetrain::MoveWithLimelightExecute(void)
     bool tv = robotContainer->m_vision.GetTargetValid();
 
     //put this in config file
-    frc::MedianFilter<bool> filter(5);
+    //frc::MedianFilter<bool> vfilter(5);
     if (tv == false)
     {
         VelocityArcadeDrive(0, 0);
