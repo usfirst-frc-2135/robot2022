@@ -150,7 +150,7 @@ RobotContainer::RobotContainer() :
     m_chooser.AddOption(
         "2b: Auto Drive Shoot",
         new AutoDriveShoot(&m_drivetrain, &m_intake, &m_floorConv, &m_vertConv, &m_shooter));
-    frc::SmartDashboard::PutData(
+    m_chooser.AddOption(
         "Auto 1 Ball LL",
         new Auto1BallLimelight(&m_drivetrain, &m_intake, &m_floorConv, &m_vertConv, &m_shooter, &m_vision));
     m_chooser.AddOption(
