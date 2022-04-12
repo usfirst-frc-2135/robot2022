@@ -221,6 +221,7 @@ void Drivetrain::ConfigFileLoad(void)
     config->GetValueAsDouble("DT_StoppedTolerance", m_tolerance, 0.05);
 
     // retrieve limelight values from config file and put on smartdashboard
+    config->GetValueAsDouble("DTL_TurnConstant", m_turnConstant, 0);
     config->GetValueAsDouble("DTL_TurnPidKp", m_turnPidKp, 0.045);
     config->GetValueAsDouble("DTL_TurnPidKi", m_turnPidKi, 0.0);
     config->GetValueAsDouble("DTL_TurnPidKd", m_turnPidKd, 0.0);
@@ -250,6 +251,7 @@ void Drivetrain::ConfigFileLoad(void)
     frc::SmartDashboard::PutNumber("DT_GyroPitch", m_pitch);
     frc::SmartDashboard::PutNumber("DT_GyroRoll", m_roll);
 
+    frc::SmartDashboard::PutNumber("DTL_TurnConstant", m_turnConstant);
     frc::SmartDashboard::PutNumber("DTL_TurnPidKp", m_turnPidKp);
     frc::SmartDashboard::PutNumber("DTL_TurnPidKi", m_turnPidKi);
     frc::SmartDashboard::PutNumber("DTL_TurnPidKd", m_turnPidKd);
@@ -667,6 +669,8 @@ void Drivetrain::MoveWithJoysticksEnd(void)
 void Drivetrain::MoveWithLimelightInit(bool m_endAtTarget)
 {
     // get pid values from dashboard
+
+    m_turnConstant = frc::SmartDashboard::GetNumber("DTL_TurnConstant", m_turnConstant);
     m_turnPidKp = frc::SmartDashboard::GetNumber("DTL_TurnPidKp", m_turnPidKp);
     m_turnPidKi = frc::SmartDashboard::GetNumber("DTL_TurnPidKi", m_turnPidKi);
     m_turnPidKd = frc::SmartDashboard::GetNumber("DTL_TurnPidKd", m_turnPidKd);
@@ -690,6 +694,7 @@ void Drivetrain::MoveWithLimelightInit(bool m_endAtTarget)
 
     RobotContainer *RobotContainer = RobotContainer::GetInstance();
     RobotContainer->m_vision.m_yfilter.Reset();
+    RobotContainer->m_vision.m_vfilter.Reset();
 }
 
 void Drivetrain::MoveWithLimelightExecute(void)
@@ -709,7 +714,14 @@ void Drivetrain::MoveWithLimelightExecute(void)
 
     // get turn value - just horizontal offset from target
     double turnOutput = -m_turnPid.Calculate(robotContainer->m_vision.GetHorizOffsetDeg(), m_targetAngle);
-
+    if (turnOutput > 0)
+    {
+        turnOutput = turnOutput + m_turnConstant;
+    }
+    else if (turnOutput < 0)
+    {
+        turnOutput = turnOutput - m_turnConstant;
+    }
     // get throttle value
     m_limelightDistance = robotContainer->m_vision.CalculateDist();
 
