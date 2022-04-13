@@ -221,6 +221,7 @@ void Drivetrain::ConfigFileLoad(void)
     config->GetValueAsDouble("DT_StoppedTolerance", m_tolerance, 0.05);
 
     // retrieve limelight values from config file and put on smartdashboard
+    config->GetValueAsDouble("DTL_TurnConstant", m_turnConstant, 0);
     config->GetValueAsDouble("DTL_TurnPidKp", m_turnPidKp, 0.045);
     config->GetValueAsDouble("DTL_TurnPidKi", m_turnPidKi, 0.0);
     config->GetValueAsDouble("DTL_TurnPidKd", m_turnPidKd, 0.0);
@@ -250,6 +251,7 @@ void Drivetrain::ConfigFileLoad(void)
     frc::SmartDashboard::PutNumber("DT_GyroPitch", m_pitch);
     frc::SmartDashboard::PutNumber("DT_GyroRoll", m_roll);
 
+    frc::SmartDashboard::PutNumber("DTL_TurnConstant", m_turnConstant);
     frc::SmartDashboard::PutNumber("DTL_TurnPidKp", m_turnPidKp);
     frc::SmartDashboard::PutNumber("DTL_TurnPidKi", m_turnPidKi);
     frc::SmartDashboard::PutNumber("DTL_TurnPidKd", m_turnPidKd);
@@ -427,9 +429,19 @@ int Drivetrain::MetersToNativeUnits(units::meter_t position)
     return position / DriveConstants::kEncoderMetersPerCount;
 }
 
+units::meter_t Drivetrain::NativeUnitsToMeters(int nativeUnits)
+{
+    return nativeUnits * DriveConstants::kEncoderMetersPerCount;
+}
+
 int Drivetrain::MPSToNativeUnits(units::meters_per_second_t velocity)
 {
     return (velocity / DriveConstants::kEncoderMetersPerCount / 10).to<double>();
+}
+
+units::meters_per_second_t Drivetrain::NativeUnitsToMPS(int nativeUnitsVelocity)
+{
+    return nativeUnitsVelocity * DriveConstants::kEncoderMetersPerCount * 10 / 1_s;
 }
 
 double Drivetrain::JoystickOutputToNative(double output)
@@ -667,6 +679,8 @@ void Drivetrain::MoveWithJoysticksEnd(void)
 void Drivetrain::MoveWithLimelightInit(bool m_endAtTarget)
 {
     // get pid values from dashboard
+
+    m_turnConstant = frc::SmartDashboard::GetNumber("DTL_TurnConstant", m_turnConstant);
     m_turnPidKp = frc::SmartDashboard::GetNumber("DTL_TurnPidKp", m_turnPidKp);
     m_turnPidKi = frc::SmartDashboard::GetNumber("DTL_TurnPidKi", m_turnPidKi);
     m_turnPidKd = frc::SmartDashboard::GetNumber("DTL_TurnPidKd", m_turnPidKd);
@@ -690,6 +704,7 @@ void Drivetrain::MoveWithLimelightInit(bool m_endAtTarget)
 
     RobotContainer *RobotContainer = RobotContainer::GetInstance();
     RobotContainer->m_vision.m_yfilter.Reset();
+    RobotContainer->m_vision.m_vfilter.Reset();
 }
 
 void Drivetrain::MoveWithLimelightExecute(void)
@@ -709,7 +724,14 @@ void Drivetrain::MoveWithLimelightExecute(void)
 
     // get turn value - just horizontal offset from target
     double turnOutput = -m_turnPid.Calculate(robotContainer->m_vision.GetHorizOffsetDeg(), m_targetAngle);
-
+    if (turnOutput > 0)
+    {
+        turnOutput = turnOutput + m_turnConstant;
+    }
+    else if (turnOutput < 0)
+    {
+        turnOutput = turnOutput - m_turnConstant;
+    }
     // get throttle value
     m_limelightDistance = robotContainer->m_vision.CalculateDist();
 
@@ -800,22 +822,20 @@ bool Drivetrain::LimelightSanityCheck(double horizAngleRange, double distRange)
     bool tv = robotContainer->m_vision.GetTargetValid();
     m_limelightDistance = robotContainer->m_vision.CalculateDist();
 
+    bool sanityCheck =
+        tv && (fabs(tx) <= horizAngleRange) && (fabs(m_setPointDistance - m_limelightDistance) <= distRange);
+    // && (fabs(ty) <= vertAngleRange)
+
     spdlog::info(
-        "DTL tv {} tx {:.1f} ty{:.1f} distError {:.1f} lldistance {:.1f}",
+        "DTL tv {} tx {:.1f} ty {:.1f} lldistance {:.1f} distError {:.1f} sanity check {}",
         tv,
         tx,
         ty,
+        m_limelightDistance,
         fabs(m_setPointDistance - m_limelightDistance),
-        m_limelightDistance);
+        (sanityCheck) ? "PASSED" : "FAILED");
 
-    if (tv && (fabs(tx) <= horizAngleRange) && (fabs(m_setPointDistance - m_limelightDistance) <= distRange))
-    {
-        spdlog::info("Limelight Sanity Check passed");
-        return true;
-    }
-    spdlog::info("Limelight Sanity Check failed");
-    return false;
-    // && (fabs(ty) <= vertAngleRange)
+    return sanityCheck;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -837,14 +857,17 @@ void Drivetrain::RamseteFollowerInit(frc::Trajectory trajectory, bool resetOdome
     m_trajTimer.Reset();
     m_trajTimer.Start();
 
-    spdlog::info("DTR Size of state table is {}", trajectoryStates.size());
+    spdlog::info(
+        "DTR Size of state table is {} and takes {:.3f} secs",
+        trajectoryStates.size(),
+        m_trajectory.TotalTime().to<double>());
 
     for (unsigned int i = 0; i < trajectoryStates.size(); i++)
     {
         frc::Trajectory::State curState = trajectoryStates[i];
         if (m_ramseteDebug >= 1)
             spdlog::info(
-                "DTR state time {} Velocity {} Accleration {} Rotation {}",
+                "DTR state time {:.3f} Vel {:.2f} Accel {:.2f} Rotation {:.0f}",
                 curState.t,
                 curState.velocity,
                 curState.acceleration,
@@ -869,8 +892,8 @@ void Drivetrain::RamseteFollowerExecute(void)
 
     double velLeftTarget = MPSToNativeUnits(targetSpeed.left);
     double velRightTarget = MPSToNativeUnits(targetSpeed.right);
-    double velLeftCurrent = m_motorL1.GetSelectedSensorVelocity();
-    double velRightCurrent = m_motorR3.GetSelectedSensorVelocity();
+    double velLeftCurrent = MPSToNativeUnits(m_wheelSpeeds.left);
+    double velRightCurrent = MPSToNativeUnits(m_wheelSpeeds.right);
 
     double xTrajTarget = trajState.pose.X().to<double>();
     double yTrajTarget = trajState.pose.Y().to<double>();
@@ -916,7 +939,8 @@ void Drivetrain::RamseteFollowerExecute(void)
     m_diffDrive.FeedWatchdog();
     if (m_ramseteDebug >= 1)
         spdlog::info(
-            "DTR cur XYR {:.2f} {:.2f} {:.1f} | targ XYR {:.2f} {:.2f} {:.1f} | chas XYO {:.2f} {:.2f} {:.1f} | targ vel LR {:.2f} {:.2f} | cur vel LR {:.2f} {:.2f}",
+            "DTR tim {:.2f} curXYR {:.2f} {:.2f} {:.0f} | targXYR {:.2f} {:.2f} {:.0f} | chasXYO {:.2f} {:.2f} {:.0f} | targVelLR {:.2f} {:.2f} | curVelLR {:.2f} {:.2f}",
+            m_trajTimer.Get().to<double>(),
             xTrajCurrent,
             yTrajCurrent,
             headingCurrent,
@@ -926,24 +950,16 @@ void Drivetrain::RamseteFollowerExecute(void)
             targetChassisSpeeds.vx.to<double>(),
             targetChassisSpeeds.vy.to<double>(),
             targetChassisSpeeds.omega.to<double>(),
-            velLeftTarget,
-            velRightTarget,
-            velLeftCurrent,
-            velRightCurrent);
+            targetSpeed.left.to<double>(),
+            targetSpeed.right.to<double>(),
+            NativeUnitsToMPS(velLeftCurrent).to<double>(),
+            NativeUnitsToMPS(velRightCurrent).to<double>());
 }
 
 bool Drivetrain::RamseteFollowerIsFinished(void)
 {
     if (m_trajTimer.Get() == 0_s)
         return false;
-
-    if (m_ramseteDebug >= 1)
-        spdlog::info(
-            "time targTime {:.2f} {:.2f} | cur vel LR {:.2f} {:.2f}",
-            m_trajTimer.Get().to<double>(),
-            m_trajectory.TotalTime().to<double>(),
-            m_wheelSpeeds.left.to<double>(),
-            m_wheelSpeeds.right.to<double>());
 
     return (
         (m_trajTimer.Get() >= m_trajectory.TotalTime()) && (abs(m_wheelSpeeds.left.to<double>()) <= 0 + m_tolerance)

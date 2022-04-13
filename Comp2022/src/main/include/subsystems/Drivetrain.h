@@ -121,6 +121,7 @@ private:
     double m_currentR4 = 0.0; // Motor R4 output current from Falcon
 
     // limelight drive
+    double m_turnConstant = 0;
     double m_turnPidKp = 0.1;
     double m_turnPidKi = 0.0;
     double m_turnPidKd = 0.0;
@@ -192,7 +193,9 @@ private:
     frc::DifferentialDriveWheelSpeeds GetWheelSpeedsMPS(void);
 
     int MetersToNativeUnits(units::meter_t position);
+    units::meter_t NativeUnitsToMeters(int nativeUnits);
     int MPSToNativeUnits(units::meters_per_second_t velocity);
+    units::meters_per_second_t NativeUnitsToMPS(int nativeUnitsVelocity);
 
     double JoystickOutputToNative(double rpm);
 

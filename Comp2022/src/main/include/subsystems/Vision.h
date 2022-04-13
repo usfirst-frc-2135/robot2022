@@ -57,7 +57,8 @@ public:
     void Initialize(void);
     double CalculateDist(void);
     void SyncStateFromDashboard(void);
-    frc::MedianFilter<double> m_yfilter;
+    frc::MedianFilter<double> m_yfilter{ 5 };
+    frc::MedianFilter<bool> m_vfilter{ 5 };
 
     // Limelight LED mode states
     typedef enum ledMode_e
