@@ -23,6 +23,7 @@
 #include "frc2135/RobotConfig.h"
 
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc2/command/ConditionalCommand.h>
 #include <frc2/command/ParallelCommandGroup.h>
 #include <frc2/command/ParallelDeadlineGroup.h>
 #include <frc2/command/PrintCommand.h>
@@ -95,19 +96,15 @@ Auto3BallLeft::Auto3BallLeft(
             AutoDrivePath(m_pathname4.c_str(), false, drivetrain),
             ScoringPrime(shooter),
             IntakingAction(intake, fConv, vConv) },
-        // Turn and drive to a shooting position
-        // frc2::PrintCommand("Turn and drive to a shooting position"),
-        // frc2::ParallelCommandGroup{
-        //     frc2::ParallelDeadlineGroup{
-        //         frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
-        //         AutoDrivePath(m_pathname5.c_str(), false, drivetrain) },
-        //     ScoringPrime(shooter) },
         // Stow intake
         frc2::PrintCommand("Stow intake"),
         frc2::ParallelDeadlineGroup{ IntakeDeploy(false), AutoStop(drivetrain) },
         // Shoot opponent's ball
-        frc2::PrintCommand("Shoot opponent's ball"),
-        frc2::ParallelDeadlineGroup{ ScoringActionLowHub(2_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
+        frc2::ConditionalCommand{ frc2::ParallelDeadlineGroup{ ScoringActionLowHub(2_s, intake, fConv, vConv, shooter),
+                                                               AutoStop(drivetrain),
+                                                               frc2::PrintCommand("Shoot opponent's ball") },
+                                  AutoStop(drivetrain),
+                                  [this] { return frc::SmartDashboard::GetBoolean("AUTO_ShootOppBall", false); } },
         // Stop shooting and driving
         frc2::PrintCommand("Stop shooting"),
         frc2::ParallelDeadlineGroup{ ScoringStop(intake, fConv, vConv, shooter), AutoStop(drivetrain) },

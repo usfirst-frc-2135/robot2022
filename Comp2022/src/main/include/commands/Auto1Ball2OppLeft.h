@@ -43,5 +43,4 @@ private:
     std::string m_pathname2;
     std::string m_pathname3;
     std::string m_pathname4;
-    std::string m_pathname5;
 };

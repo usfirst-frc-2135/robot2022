@@ -118,11 +118,22 @@
   Auto3BallRight_path6 = shootingPosToOffTarmac
 
   Auto1BallLimelight_path1 = fenderToOffTarmac
+  Auto1BallLimelight_path2 = shootingPosToOffTarmac
+
+  Auto1Ball2OppLeft_path1 = startToShootingPos
+  Auto1Ball2OppLeft_path2 = shootingPosToLeftOppBall1
+  Auto1Ball2OppLeft_path3 = leftOppBall1ToBall2
+  Auto1Ball2OppLeft_path4 = leftOppBall2ToShootingPos
+
+  Auto1Ball1OppRight_path1 = startToShootingPos
+  Auto1Ball1OppRight_path2 = shootingPosToRightOppBall
+
+  AUTO_WaitTime = 0.0
+  AUTO_ShootOppBall = true
 
   path1 = forward39
   path2 = backward39
   path3 = rightAngleTurn
-  AUTO_WaitTime = 0.0
   AutoDriveLimelightShoot_path1 = forward39
   AutoDriveLimelightShoot_path2 = backward39
   AutoShoot_path = startToShootingPos

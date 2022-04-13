@@ -65,6 +65,10 @@ void Robot::RobotInit()
     config->GetValueAsDouble("AUTO_WaitTime", waitTime, 0.0);
     frc::SmartDashboard::PutNumber("AUTO_WaitTime", waitTime);
 
+    bool shootOppBall;
+    config->GetValueAsBool("AUTO_ShootOppBall", shootOppBall, false);
+    frc::SmartDashboard::PutBoolean("AUTO_ShootOppBall", shootOppBall);
+
     wpi::PortForwarder::GetInstance().Add(5800, "limelight.local", 5800);
     wpi::PortForwarder::GetInstance().Add(5801, "limelight.local", 5801);
     wpi::PortForwarder::GetInstance().Add(5805, "limelight.local", 5805);
