@@ -38,7 +38,7 @@ Climber::Climber()
     // Validate Talon SRX controllers, initialize and display firmware versions
     m_talonValidCL14 = frc2135::TalonUtils::TalonCheck(m_motorCL14, "CL", "CL14");
     m_talonValidCL15 = frc2135::TalonUtils::TalonCheck(m_motorCL15, "CL", "CL15");
-    
+
     frc::SmartDashboard::PutBoolean("CL_CL14Valid", m_talonValidCL14);
     frc::SmartDashboard::PutBoolean("CL_CL15Valid", m_talonValidCL15);
 
@@ -100,12 +100,18 @@ Climber::Climber()
         m_motorCL14.SetNeutralMode(NeutralMode::Brake);
         m_motorCL14.SetSafetyEnabled(false);
 
+        m_motorCL14.ConfigVoltageCompSaturation(12.0, 0);
+        m_motorCL14.EnableVoltageCompensation(true);
+
         frc2135::TalonUtils::CheckError(
             m_motorCL14.ConfigSupplyCurrentLimit(m_supplyCurrentLimits),
             "CL14 ConfigSupplyCurrentLimits");
         frc2135::TalonUtils::CheckError(
             m_motorCL14.ConfigStatorCurrentLimit(m_statorCurrentLimits),
             "CL14 ConfigStatorCurrentLimits");
+
+        // Configure Magic Motion settings
+        frc2135::TalonUtils::CheckError(m_motorCL14.SelectProfileSlot(0, 0), "CL14 SelectProfileSlot");
 
         // Configure sensor settings
         frc2135::TalonUtils::CheckError(
@@ -116,18 +122,6 @@ Climber::Climber()
         frc2135::TalonUtils::CheckError(
             m_motorCL14.ConfigAllowableClosedloopError(0, m_CLAllowedError, kCANTimeout),
             "CL14 ConfigAllowableClosedloopError");
-
-        // Set soft limits for climber height
-        //m_motorCL14.ConfigForwardSoftLimitThreshold(InchesToCounts(m_climberMaxHeight), kCANTimeout);
-        //m_motorCL14.ConfigReverseSoftLimitThreshold(InchesToCounts(m_climberMinHeight), kCANTimeout);
-        // m_motorCL14.ConfigForwardSoftLimitEnable(true, kCANTimeout);
-        // m_motorCL14.ConfigReverseSoftLimitEnable(true, kCANTimeout);
-
-        m_motorCL14.ConfigVoltageCompSaturation(12.0, 0);
-        m_motorCL14.EnableVoltageCompensation(true);
-
-        // Configure Magic Motion settings
-        frc2135::TalonUtils::CheckError(m_motorCL14.SelectProfileSlot(0, 0), "CL14 SelectProfileSlot");
 
         frc2135::TalonUtils::CheckError(
             m_motorCL14.ConfigMotionCruiseVelocity(m_velocity, kCANTimeout),
@@ -151,7 +145,7 @@ Climber::Climber()
     {
         m_motorCL15.SetInverted(false);
         m_motorCL15.SetNeutralMode(NeutralMode::Brake);
-        m_motorCL14.SetSafetyEnabled(false);
+        m_motorCL15.SetSafetyEnabled(false);
 
         m_motorCL15.ConfigVoltageCompSaturation(12.0, 0);
         m_motorCL15.EnableVoltageCompensation(true);
@@ -165,6 +159,16 @@ Climber::Climber()
 
         // Configure Magic Motion settings
         frc2135::TalonUtils::CheckError(m_motorCL15.SelectProfileSlot(0, 0), "CL15 SelectProfileSlot");
+
+        // Configure sensor settings
+        frc2135::TalonUtils::CheckError(
+            m_motorCL15.SetSelectedSensorPosition(0, 0, kCANTimeout),
+            "CL15 SetSelectedSensorPosition");
+
+        // Set allowable closed loop error
+        frc2135::TalonUtils::CheckError(
+            m_motorCL15.ConfigAllowableClosedloopError(0, m_CLAllowedError, kCANTimeout),
+            "CL15 ConfigAllowableClosedloopError");
 
         frc2135::TalonUtils::CheckError(
             m_motorCL15.ConfigMotionCruiseVelocity(m_velocity, kCANTimeout),
@@ -394,13 +398,13 @@ void Climber::MoveToCalibrate(void)
 void Climber::Calibrate()
 {
     if (m_talonValidCL14)
-    {
         m_motorCL14.SetSelectedSensorPosition(0, 0, kCANTimeout);
-        m_targetInches = 0;
-        m_curInches = 0;
-    }
+
     if (m_talonValidCL15)
         m_motorCL15.SetSelectedSensorPosition(0, 0, kCANTimeout);
+
+    m_targetInches = 0;
+    m_curInches = 0;
     m_calibrated = true;
     frc::SmartDashboard::PutBoolean("CL_Calibrated", m_calibrated);
 }

@@ -198,7 +198,7 @@ bool Shooter::IsAtDesiredRPM()
     }
 
     if ((m_state != SHOOTERSPEED_STOP) and !atDesiredSpeed)
-        spdlog::info("SH m_flywheelCurrentRPM {:.1f}", m_flywheelCurrentRPM);
+        spdlog::info("SH m_flywheelCurrentRPM {:.0f}", m_flywheelCurrentRPM);
 
     if (atDesiredSpeed != previousAtDesiredSpeed)
     {

@@ -193,7 +193,9 @@ private:
     frc::DifferentialDriveWheelSpeeds GetWheelSpeedsMPS(void);
 
     int MetersToNativeUnits(units::meter_t position);
+    units::meter_t NativeUnitsToMeters(int nativeUnits);
     int MPSToNativeUnits(units::meters_per_second_t velocity);
+    units::meters_per_second_t NativeUnitsToMPS(int nativeUnitsVelocity);
 
     double JoystickOutputToNative(double rpm);
 

@@ -47,12 +47,14 @@ Auto1BallLimelight::Auto1BallLimelight(
     // AddCommands(FooCommand(), BarCommand());
     frc2135::RobotConfig *config = frc2135::RobotConfig::GetInstance();
     config->GetValueAsString("Auto1BallLimelight_path1", m_pathname1, "fenderToOffTarmac");
+    config->GetValueAsString("Auto1BallLimelight_path2", m_pathname2, "shootingPosToOffTarmac");
     spdlog::info("Auto1BallLimelight pathname 1 {}", m_pathname1.c_str());
+    spdlog::info("Auto1BallLimelight pathname 2 {}", m_pathname2.c_str());
 
     AddCommands( // Sequential command
         // Wait timer set in SmartDasboard
         AutoWait(drivetrain),
-        frc2::ParallelDeadlineGroup{ IntakeDeploy(true), AutoStop(drivetrain) },
+        //frc2::ParallelDeadlineGroup{ IntakeDeploy(true), AutoStop(drivetrain) },
         frc2::ParallelCommandGroup{
             frc2::ParallelDeadlineGroup{
                 frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
@@ -66,7 +68,11 @@ Auto1BallLimelight::Auto1BallLimelight(
                                   {
                                       spdlog::info("Going to check limelight sanity");
                                       return drivetrain->LimelightSanityCheck(25, 25);
-                                  } });
+                                  } },
+        frc2::ParallelDeadlineGroup{
+            frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
+            AutoDrivePath(m_pathname2.c_str(), false, drivetrain),
+            ScoringStop(intake, fConv, vConv, shooter) });
 }
 
 bool Auto1BallLimelight::RunsWhenDisabled() const
