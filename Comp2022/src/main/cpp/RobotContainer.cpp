@@ -239,7 +239,7 @@ void RobotContainer::ConfigureButtonBindings()
     frc2::JoystickButton m_operX{ &m_operatorController, (int)frc::XboxController::Button::kX };
     m_operX.WhenPressed(ScoringStop(&m_intake, &m_floorConv, &m_vertConv, &m_shooter), true);
     frc2::JoystickButton m_operY{ &m_operatorController, (int)frc::XboxController::Button::kY };
-    m_operY.WhenPressed(IntakeDeploy(true), true);
+    m_operY.WhenPressed(ClimberTimerOverride(&m_climber), true);
 
     // Operator - POV buttons
     frc2::POVButton m_operDown{ &m_operatorController, 180, 0 };

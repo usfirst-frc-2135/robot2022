@@ -64,7 +64,7 @@ Auto1BallLimelight::Auto1BallLimelight(
         frc2::PrintCommand("Run limelight shooting routine for 3rd ball"),
         frc2::ConditionalCommand{
             AutoDriveLimelightShoot(drivetrain, intake, fConv, vConv, shooter, vision),
-            frc2::ParallelDeadlineGroup{ ScoringStop(intake, fConv, vConv, shooter), AutoStop(drivetrain) },
+            frc2::ParallelCommandGroup{ ScoringStop(intake, fConv, vConv, shooter), AutoStop(drivetrain) },
             [drivetrain]
             {
                 spdlog::info("Going to check limelight sanity");
