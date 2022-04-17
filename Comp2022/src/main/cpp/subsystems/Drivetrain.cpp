@@ -702,9 +702,11 @@ void Drivetrain::MoveWithLimelightInit(bool m_endAtTarget)
     m_turnPid = frc2::PIDController(m_turnPidKp, m_turnPidKi, m_turnPidKd);
     m_throttlePid = frc2::PIDController(m_throttlePidKp, m_throttlePidKi, m_throttlePidKd);
 
-    RobotContainer *RobotContainer = RobotContainer::GetInstance();
-    RobotContainer->m_vision.m_yfilter.Reset();
-    RobotContainer->m_vision.m_vfilter.Reset();
+    RobotContainer *robotContainer = RobotContainer::GetInstance();
+    robotContainer->m_vision.m_yfilter.Reset();
+    robotContainer->m_vision.m_vfilter.Reset();
+
+    robotContainer->m_vision.SyncStateFromDashboard();
 }
 
 void Drivetrain::MoveWithLimelightExecute(void)
