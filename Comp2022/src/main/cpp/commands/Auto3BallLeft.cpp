@@ -60,7 +60,7 @@ Auto3BallLeft::Auto3BallLeft(
     AddCommands( // Sequential command
         frc2::PrintCommand("AUTO 3 BALL LEFT - START"),
         // Wait timer set in SmartDasboard
-        AutoWait(drivetrain),
+        AutoWait(drivetrain, 1),
         // Deploy intake
         frc2::PrintCommand("Deploy intake"),
         frc2::ParallelDeadlineGroup{ IntakeDeploy(true), AutoStop(drivetrain) },

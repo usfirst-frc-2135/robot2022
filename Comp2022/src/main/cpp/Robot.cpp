@@ -61,9 +61,13 @@ void Robot::RobotInit()
     spdlog::info("RobotInit: name - {}", robotName);
 
     // Retrieve auto values from config file and put on smartdashboard
-    double waitTime;
-    config->GetValueAsDouble("AUTO_WaitTime", waitTime, 0.0);
-    frc::SmartDashboard::PutNumber("AUTO_WaitTime", waitTime);
+    double waitTime1;
+    config->GetValueAsDouble("AUTO_WaitTime1", waitTime1, 0.0);
+    frc::SmartDashboard::PutNumber("AUTO_WaitTime1", waitTime1);
+
+    double waitTime2;
+    config->GetValueAsDouble("AUTO_WaitTime2", waitTime2, 0.0);
+    frc::SmartDashboard::PutNumber("AUTO_WaitTime2", waitTime2);
 
     bool shootOppBall;
     config->GetValueAsBool("AUTO_ShootOppBall", shootOppBall, false);

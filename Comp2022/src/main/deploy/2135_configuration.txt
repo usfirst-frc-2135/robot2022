@@ -128,8 +128,10 @@
   Auto1Ball1OppRight_path1 = startToShootingPosRight
   Auto1Ball1OppRight_path2 = shootingPosToRightOppBall
 
-  AUTO_WaitTime = 0.0
   AUTO_ShootOppBall = true
+
+  AUTO_WaitTime1 = 0.0
+  AUTO_WaitTime2 = 0.0
 
   path1 = forward39
   path2 = backward39

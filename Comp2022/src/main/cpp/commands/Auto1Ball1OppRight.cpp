@@ -55,7 +55,7 @@ Auto1Ball1OppRight::Auto1Ball1OppRight(
         frc2::PrintCommand("AUTO 1 BALL 1 OPP RIGHT - START"),
         // Wait timer set in SmartDasboard
         frc2::PrintCommand("WAIT"),
-        AutoWait(drivetrain),
+        AutoWait(drivetrain, 1),
         // Deploy intake
         frc2::PrintCommand("Deploy intake"),
         frc2::ParallelDeadlineGroup{ IntakeDeploy(true), AutoStop(drivetrain) },
@@ -68,6 +68,9 @@ Auto1Ball1OppRight::Auto1Ball1OppRight(
         // Shoot preloaded ball
         frc2::PrintCommand("Shoot preloaded ball"),
         frc2::ParallelDeadlineGroup{ ScoringActionHighHub(1_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
+        // Wait timer set in SmartDasboard
+        frc2::PrintCommand("WAIT"),
+        AutoWait(drivetrain, 2),
         // Drive to opponent's ball and intake
         frc2::PrintCommand("Drive to opponent's ball and intake"),
         frc2::ParallelDeadlineGroup{

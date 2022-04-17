@@ -37,7 +37,7 @@ AutoShootLowHub::AutoShootLowHub(
     // AddCommands(FooCommand(), BarCommand());
     AddCommands( // Sequential command
         // Wait timer set in SmartDasboard
-        AutoWait(drivetrain),
+        AutoWait(drivetrain, 1),
         frc2::ParallelDeadlineGroup{ IntakeDeploy(true), AutoStop(drivetrain) },
         frc2::ParallelDeadlineGroup{ ScoringActionLowHub(2_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
         ScoringStop(intake, fConv, vConv, shooter));
