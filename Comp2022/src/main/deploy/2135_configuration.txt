@@ -125,7 +125,7 @@
   Auto1Ball2OppLeft_path3 = leftOppBall1ToBall2
   Auto1Ball2OppLeft_path4 = leftOppBall2ToShootingPos
 
-  Auto1Ball1OppRight_path1 = startToShootingPos
+  Auto1Ball1OppRight_path1 = startToShootingPosRight
   Auto1Ball1OppRight_path2 = shootingPosToRightOppBall
 
   AUTO_WaitTime = 0.0

@@ -46,7 +46,7 @@ Auto1Ball1OppRight::Auto1Ball1OppRight(
     // Add your commands here, e.g.
     // AddCommands(FooCommand(), BarCommand());
     frc2135::RobotConfig *config = frc2135::RobotConfig::GetInstance();
-    config->GetValueAsString("Auto1Ball1OppRight_path1", m_pathname1, "startToShootingPos");
+    config->GetValueAsString("Auto1Ball1OppRight_path1", m_pathname1, "startToShootingPosRight");
     config->GetValueAsString("Auto1Ball1OppRight_path2", m_pathname2, "shootingPosToRightOppBall");
     spdlog::info("Auto1Ball1OppRight pathname 1 {}", m_pathname1.c_str());
     spdlog::info("Auto1Ball1OppRight pathname 2 {}", m_pathname2.c_str());
