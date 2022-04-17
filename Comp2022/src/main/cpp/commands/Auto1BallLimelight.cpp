@@ -53,7 +53,7 @@ Auto1BallLimelight::Auto1BallLimelight(
 
     AddCommands( // Sequential command
         // Wait timer set in SmartDasboard
-        AutoWait(drivetrain),
+        AutoWait(drivetrain, 1),
         //frc2::ParallelDeadlineGroup{ IntakeDeploy(true), AutoStop(drivetrain) },
         frc2::ParallelCommandGroup{
             frc2::ParallelDeadlineGroup{
@@ -62,13 +62,14 @@ Auto1BallLimelight::Auto1BallLimelight(
             ScoringPrime(shooter) },
         // Run limelight shooting routine for 3rd ball
         frc2::PrintCommand("Run limelight shooting routine for 3rd ball"),
-        frc2::ConditionalCommand{ AutoDriveLimelightShoot(drivetrain, intake, fConv, vConv, shooter, vision),
-                                  ScoringActionHighHub(2_s, intake, fConv, vConv, shooter),
-                                  [drivetrain]
-                                  {
-                                      spdlog::info("Going to check limelight sanity");
-                                      return drivetrain->LimelightSanityCheck(25, 25);
-                                  } },
+        frc2::ConditionalCommand{
+            AutoDriveLimelightShoot(drivetrain, intake, fConv, vConv, shooter, vision),
+            frc2::ParallelCommandGroup{ ScoringStop(intake, fConv, vConv, shooter), AutoStop(drivetrain) },
+            [drivetrain]
+            {
+                spdlog::info("Going to check limelight sanity");
+                return drivetrain->LimelightSanityCheck(40, 25);
+            } },
         frc2::ParallelDeadlineGroup{
             frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
             AutoDrivePath(m_pathname2.c_str(), false, drivetrain),

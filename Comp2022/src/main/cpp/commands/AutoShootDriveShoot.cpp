@@ -54,7 +54,7 @@ AutoShootDriveShoot::AutoShootDriveShoot(
 
     AddCommands( // Sequential command
         // Wait timer set in SmartDasboard
-        AutoWait(drivetrain),
+        AutoWait(drivetrain, 1),
         frc2::ParallelDeadlineGroup{ IntakeDeploy(true), AutoStop(drivetrain) },
         frc2::ParallelCommandGroup{
             frc2::ParallelDeadlineGroup{
