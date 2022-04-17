@@ -48,6 +48,7 @@
 #include "commands/ClimberMoveHeight.h"
 #include "commands/ClimberRun.h"
 #include "commands/ClimberSetGateHook.h"
+#include "commands/ClimberTimerOverride.h"
 #include "commands/DriveLimelight.h"
 #include "commands/DriveLimelightShoot.h"
 #include "commands/DriveLimelightStop.h"
