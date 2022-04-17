@@ -41,6 +41,10 @@ Vision::Vision()
     config->GetValueAsDouble("VI_Distance2", m_distance2, 60);
     config->GetValueAsDouble("VI_VertOffset1", m_vertOffset1, -0.58);
     config->GetValueAsDouble("VI_VertOffset2", m_vertOffset2, -4.8);
+    frc::SmartDashboard::PutNumber("VI_Distance1", m_distance1);
+    frc::SmartDashboard::PutNumber("VI_Distance2", m_distance2);
+    frc::SmartDashboard::PutNumber("VI_VertOffset1", m_vertOffset1);
+    frc::SmartDashboard::PutNumber("VI_VertOffset2", m_vertOffset2);
 
     Initialize();
 }
@@ -89,10 +93,6 @@ void Vision::Periodic()
     frc::SmartDashboard::PutNumber("VI_TARGET_VALID", m_targetValid);
     frc::SmartDashboard::PutNumber("VI_Slope", m_slope);
     frc::SmartDashboard::PutNumber("VI_DistanceLimeLight", m_distLight);
-    frc::SmartDashboard::PutNumber("VI_Distance1", m_distance1);
-    frc::SmartDashboard::PutNumber("VI_Distance2", m_distance2);
-    frc::SmartDashboard::PutNumber("VI_VertOffset1", m_vertOffset1);
-    frc::SmartDashboard::PutNumber("VI_VertOffset2", m_vertOffset2);
 }
 
 void Vision::SyncStateFromDashboard(void)
