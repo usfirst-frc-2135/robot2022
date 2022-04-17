@@ -36,10 +36,10 @@
   VI_Distance1 = 48  
   VI_Distance2 = 60
   # VI_VertOffset1 ####
-  VI_VertOffset1 = 7.07
+  VI_VertOffset1 = 3.75
   #### VI_VertOffset1 = 0.51 ventura
   # VI_VertOffset2 ##
-  VI_VertOffset2 = 2.65
+  VI_VertOffset2 = 0.97
   #### VI_VertOffset2 = -4.61 ventura
 # Path following settings
   DTR_RamsetePidKf = 0.0465
@@ -118,11 +118,24 @@
   Auto3BallRight_path6 = shootingPosToOffTarmac
 
   Auto1BallLimelight_path1 = fenderToOffTarmac
+  Auto1BallLimelight_path2 = shootingPosToOffTarmac
+
+  Auto1Ball2OppLeft_path1 = startToShootingPos
+  Auto1Ball2OppLeft_path2 = shootingPosToLeftOppBall1
+  Auto1Ball2OppLeft_path3 = leftOppBall1ToBall2
+  Auto1Ball2OppLeft_path4 = leftOppBall2ToShootingPos
+
+  Auto1Ball1OppRight_path1 = startToShootingPosRight
+  Auto1Ball1OppRight_path2 = shootingPosToRightOppBall
+
+  AUTO_ShootOppBall = true
+
+  AUTO_WaitTime1 = 0.0
+  AUTO_WaitTime2 = 0.0
 
   path1 = forward39
   path2 = backward39
   path3 = rightAngleTurn
-  AUTO_WaitTime = 0.0
   AutoDriveLimelightShoot_path1 = forward39
   AutoDriveLimelightShoot_path2 = backward39
   AutoShoot_path = startToShootingPos
