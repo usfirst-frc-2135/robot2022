@@ -15,7 +15,7 @@
 
 #include "commands/AutoWait.h"
 
-AutoWait::AutoWait(Drivetrain *m_drivetrain) : m_drivetrain(m_drivetrain)
+AutoWait::AutoWait(Drivetrain *m_drivetrain, int timerNum) : m_drivetrain(m_drivetrain), m_timerNum(timerNum)
 {
     // Use AddRequirements() here to declare subsystem dependencies
     // eg. AddRequirements(m_Subsystem);
@@ -30,7 +30,12 @@ void AutoWait::Initialize()
 {
     spdlog::info("AutoWait - Init");
 
-    m_waitTime = frc::SmartDashboard::GetNumber("AUTO_WaitTime", 0.0);
+    if (m_timerNum == 1)
+        m_waitTime = frc::SmartDashboard::GetNumber("AUTO_WaitTime1", 0.0);
+
+    if (m_timerNum == 2)
+        m_waitTime = frc::SmartDashboard::GetNumber("AUTO_WaitTime2", 0.0);
+
     spdlog::info("AutoWait - Waiting {} seconds", m_waitTime);
 
     m_timer.Reset();
