@@ -859,10 +859,10 @@ void Drivetrain::RamseteFollowerInit(frc::Trajectory trajectory, bool resetOdome
     m_trajTimer.Reset();
     m_trajTimer.Start();
 
-    spdlog::info(
-        "DTR Size of state table is {} and takes {:.3f} secs",
-        trajectoryStates.size(),
-        m_trajectory.TotalTime().to<double>());
+    // spdlog::info(
+    //     "DTR Size of state table is {} and takes {:.3f} secs",
+    //     trajectoryStates.size(),
+    //     m_trajectory.TotalTime().to<double>());
 
     for (unsigned int i = 0; i < trajectoryStates.size(); i++)
     {
