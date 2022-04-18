@@ -44,7 +44,7 @@ private:
 
     const int kPidIndex = 0;    // PID index for primary sensor
     const int kSlotIndex = 0;   // PID slot index for sensors
-    const int kCANTimeout = 10; // CAN timeout in msec to wait for response
+    const int kCANTimeout = 30; // CAN timeout in msec to wait for response
 
     const double kFalconEncoderCPR = 2048; // CPR is 2048 from Falcon 500 Manual
 
@@ -63,13 +63,14 @@ private:
 
     // Configuration file parameters
 
-    double m_flywheelPidKf;             // Flywheel PID force constant
-    double m_flywheelPidKp;             // Flywheel PID proportional constant
-    double m_flywheelPidKi;             // Flywheel PID integral constant
-    double m_flywheelPidKd;             // Flywheel PID derivative constant
-    double m_flywheelNeutralDeadband;   // Flywheel PID neutral deadband in percent
-    double m_flywheelLowerHubTargetRPM; // Target flywheel RPM for shooting lower hub
-    double m_flywheelUpperHubTargetRPM; // Target flywheel RPM for shooting upper hub
+    double m_flywheelPidKf;                  // Flywheel PID force constant
+    double m_flywheelPidKp;                  // Flywheel PID proportional constant
+    double m_flywheelPidKi;                  // Flywheel PID integral constant
+    double m_flywheelPidKd;                  // Flywheel PID derivative constant
+    double m_flywheelNeutralDeadband;        // Flywheel PID neutral deadband in percent
+    double m_flywheelLowerHubTargetRPM;      // Target flywheel RPM for shooting lower hub
+    double m_flywheelUpperHubTargetRPM;      // Target flywheel RPM for shooting upper hub
+    const double m_flywheelPrimeRPM = 200.0; // Target priming RPM
 
     // Measured RPM
     double m_flywheelCurrentRPM; // Current flywheel RPM
