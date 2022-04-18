@@ -48,8 +48,7 @@ void Power::SimulationPeriodic()
 
 void Power::Initialize(void)
 {
-    spdlog::info("PDP Init");
-    spdlog::info("PDP Voltage {:.1f}", m_pdp.GetVoltage());
+    spdlog::info("PDP Init - Voltage {:.1f}", m_pdp.GetVoltage());
 }
 
 void Power::FaultDump(void)

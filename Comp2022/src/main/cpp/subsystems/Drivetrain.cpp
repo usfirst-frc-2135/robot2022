@@ -758,7 +758,7 @@ void Drivetrain::MoveWithLimelightExecute(void)
 
     if (m_limelightDebug >= 1)
         spdlog::info(
-            "DTL tv {} tx {:.1f} ty{:.1f} distError {:.1f} lldistance {:.1f} stopped {} tOutput {:.2f} thrOutput {:.2f} ",
+            "DTL tv {} tx {:.1f} ty {:.1f} distError {:.1f} lldistance {:.1f} stopped {} tOutput {:.2f} thrOutput {:.2f} ",
             tv,
             tx,
             ty,
