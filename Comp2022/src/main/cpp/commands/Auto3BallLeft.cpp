@@ -17,11 +17,13 @@
 #include "commands/IntakingAction.h"
 #include "commands/IntakingStop.h"
 #include "commands/ScoringActionHighHub.h"
+#include "commands/ScoringActionLowHub.h"
 #include "commands/ScoringPrime.h"
 #include "commands/ScoringStop.h"
 #include "frc2135/RobotConfig.h"
 
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc2/command/ConditionalCommand.h>
 #include <frc2/command/ParallelCommandGroup.h>
 #include <frc2/command/ParallelDeadlineGroup.h>
 #include <frc2/command/PrintCommand.h>
@@ -57,16 +59,16 @@ Auto3BallLeft::Auto3BallLeft(
 
     AddCommands( // Sequential command
         frc2::PrintCommand("AUTO 3 BALL LEFT - START"),
+        // Wait timer set in SmartDasboard
+        AutoWait(drivetrain, 1),
         // Deploy intake
         frc2::PrintCommand("Deploy intake"),
         frc2::ParallelDeadlineGroup{ IntakeDeploy(true), AutoStop(drivetrain) },
-        AutoWait(drivetrain),
         // Drive to a shooting position
         frc2::PrintCommand("Drive to a shooting position"),
-        frc2::ParallelCommandGroup{
-            frc2::ParallelDeadlineGroup{
-                frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
-                AutoDrivePath(m_pathname1.c_str(), true, drivetrain) },
+        frc2::ParallelDeadlineGroup{
+            frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
+            AutoDrivePath(m_pathname1.c_str(), true, drivetrain),
             ScoringPrime(shooter) },
         // Shoot preloaded ball
         frc2::PrintCommand("Shoot preloaded ball"),
@@ -74,9 +76,8 @@ Auto3BallLeft::Auto3BallLeft(
         // Drive to 2nd ball and intake
         frc2::PrintCommand("Drive to 2nd ball and intake"),
         frc2::ParallelDeadlineGroup{
-            frc2::ParallelDeadlineGroup{
-                frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
-                AutoDrivePath(m_pathname2.c_str(), false, drivetrain) },
+            frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
+            AutoDrivePath(m_pathname2.c_str(), false, drivetrain),
             IntakingAction(intake, fConv, vConv),
             ScoringPrime(shooter) },
         frc2::PrintCommand("Drive to a shooting position"),
@@ -91,24 +92,19 @@ Auto3BallLeft::Auto3BallLeft(
         // Drive to opponent's ball and intake
         frc2::PrintCommand("Drive to opponent's ball and intake"),
         frc2::ParallelDeadlineGroup{
-            frc2::ParallelDeadlineGroup{
-                frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
-                AutoDrivePath(m_pathname4.c_str(), false, drivetrain) },
+            frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
+            AutoDrivePath(m_pathname4.c_str(), false, drivetrain),
             ScoringPrime(shooter),
             IntakingAction(intake, fConv, vConv) },
-        // Turn and drive to a shooting position
-        // frc2::PrintCommand("Turn and drive to a shooting position"),
-        // frc2::ParallelCommandGroup{
-        //     frc2::ParallelDeadlineGroup{
-        //         frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),
-        //         AutoDrivePath(m_pathname5.c_str(), false, drivetrain) },
-        //     ScoringPrime(shooter) },
         // Stow intake
         frc2::PrintCommand("Stow intake"),
         frc2::ParallelDeadlineGroup{ IntakeDeploy(false), AutoStop(drivetrain) },
         // Shoot opponent's ball
-        frc2::PrintCommand("Shoot opponent's ball"),
-        frc2::ParallelDeadlineGroup{ ScoringActionHighHub(2_s, intake, fConv, vConv, shooter), AutoStop(drivetrain) },
+        frc2::ConditionalCommand{ frc2::ParallelDeadlineGroup{ ScoringActionLowHub(2_s, intake, fConv, vConv, shooter),
+                                                               AutoStop(drivetrain),
+                                                               frc2::PrintCommand("Shoot opponent's ball") },
+                                  AutoStop(drivetrain),
+                                  [this] { return frc::SmartDashboard::GetBoolean("AUTO_ShootOppBall", false); } },
         // Stop shooting and driving
         frc2::PrintCommand("Stop shooting"),
         frc2::ParallelDeadlineGroup{ ScoringStop(intake, fConv, vConv, shooter), AutoStop(drivetrain) },

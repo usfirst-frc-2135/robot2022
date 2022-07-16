@@ -72,7 +72,7 @@ private:
     const int m_limelightDebug = 0; // Debug flag to disable extra limelight logging calls
     const int kSlotIndex = 0;       // PID slot index for sensors
     const int kPidIndex = 0;        // PID index for primary sensor
-    const int kCANTimeout = 10;     // CAN timeout in msec to wait for response
+    const int kCANTimeout = 30;     // CAN timeout in msec to wait for response
 
     // TODO: adjust kV and kA angular from robot characterization
     frc::sim::DifferentialDrivetrainSim m_driveSim{ frc::LinearSystemId::IdentifyDrivetrainSystem(
@@ -121,6 +121,7 @@ private:
     double m_currentR4 = 0.0; // Motor R4 output current from Falcon
 
     // limelight drive
+    double m_turnConstant = 0;
     double m_turnPidKp = 0.1;
     double m_turnPidKi = 0.0;
     double m_turnPidKd = 0.0;
@@ -168,6 +169,8 @@ private:
     double m_pitch;
     double m_roll;
 
+    double m_gyroOffset;
+
     ///////////////////////////////////////////////////////////////////////////
 
     // Initialization methods
@@ -190,7 +193,9 @@ private:
     frc::DifferentialDriveWheelSpeeds GetWheelSpeedsMPS(void);
 
     int MetersToNativeUnits(units::meter_t position);
+    units::meter_t NativeUnitsToMeters(int nativeUnits);
     int MPSToNativeUnits(units::meters_per_second_t velocity);
+    units::meters_per_second_t NativeUnitsToMPS(int nativeUnitsVelocity);
 
     double JoystickOutputToNative(double rpm);
 
@@ -249,10 +254,10 @@ public:
     bool MoveWithLimelightIsFinished(void);
     void MoveWithLimelightEnd();
 
-    bool LimelightSanityCheck();
+    bool LimelightSanityCheck(double horizAngleRange, double distRange);
 
     // Autonomous - Ramsete follower command
-    void RamseteFollowerInit(string pathName, bool resetOdometry);
+    void RamseteFollowerInit(frc::Trajectory trajectory, bool resetOdometry);
     void RamseteFollowerExecute(void);
     bool RamseteFollowerIsFinished(void);
     void RamseteFollowerEnd(void);

@@ -42,8 +42,9 @@ AutoShoot::AutoShoot(
     // Add your commands here, e.g.
     // AddCommands(FooCommand(), BarCommand());
     AddCommands( // Sequential command
+        // Wait timer set in SmartDasboard
+        AutoWait(drivetrain, 1),
         frc2::ParallelDeadlineGroup{ IntakeDeploy(true), AutoStop(drivetrain) },
-        AutoWait(drivetrain),
         frc2::ParallelCommandGroup{
             frc2::ParallelDeadlineGroup{
                 frc2::WaitUntilCommand([drivetrain] { return drivetrain->RamseteFollowerIsFinished(); }),

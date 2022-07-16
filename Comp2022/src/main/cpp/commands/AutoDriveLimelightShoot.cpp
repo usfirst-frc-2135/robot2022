@@ -12,7 +12,6 @@
 
 #include "commands/AutoDrivePath.h"
 #include "commands/AutoStop.h"
-#include "commands/AutoWait.h"
 #include "commands/DriveLimelight.h"
 #include "commands/IntakeDeploy.h"
 #include "commands/IntakingAction.h"
