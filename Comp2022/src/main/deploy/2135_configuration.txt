@@ -36,10 +36,10 @@
   VI_Distance1 = 48  
   VI_Distance2 = 60
   # VI_VertOffset1 ####
-  VI_VertOffset1 = 3.75
+  VI_VertOffset1 = 0.42
   #### VI_VertOffset1 = 0.51 ventura
   # VI_VertOffset2 ##
-  VI_VertOffset2 = 0.97
+  VI_VertOffset2 = -4.85
   #### VI_VertOffset2 = -4.61 ventura
 # Path following settings
   DTR_RamsetePidKf = 0.0465
@@ -125,8 +125,8 @@
   Auto1Ball2OppLeft_path3 = leftOppBall1ToBall2
   Auto1Ball2OppLeft_path4 = leftOppBall2ToShootingPos
 
-  Auto1Ball1OppRight_path1 = startToShootingPosRight
-  Auto1Ball1OppRight_path2 = shootingPosToRightOppBall
+  Auto1Ball1OppRight_path1 = rightstarttoSP
+  Auto1Ball1OppRight_path2 = rightSPtoball
 
   AUTO_ShootOppBall = true
 
