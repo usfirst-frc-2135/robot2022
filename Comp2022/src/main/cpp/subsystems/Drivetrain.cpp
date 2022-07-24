@@ -734,6 +734,7 @@ void Drivetrain::MoveWithLimelightExecute(void)
     {
         turnOutput = turnOutput - m_turnConstant;
     }
+
     // get throttle value
     m_limelightDistance = robotContainer->m_vision.CalculateDist();
 
@@ -758,7 +759,7 @@ void Drivetrain::MoveWithLimelightExecute(void)
 
     if (m_limelightDebug >= 1)
         spdlog::info(
-            "DTL tv {} tx {:.1f} ty{:.1f} distError {:.1f} lldistance {:.1f} stopped {} tOutput {:.2f} thrOutput {:.2f} ",
+            "DTL tv {} tx {:.1f} ty {:.1f} distError {:.1f} lldistance {:.1f} stopped {} tOutput {:.2f} thrOutput {:.2f} ",
             tv,
             tx,
             ty,
@@ -864,17 +865,17 @@ void Drivetrain::RamseteFollowerInit(frc::Trajectory trajectory, bool resetOdome
         trajectoryStates.size(),
         m_trajectory.TotalTime().to<double>());
 
-    for (unsigned int i = 0; i < trajectoryStates.size(); i++)
-    {
-        frc::Trajectory::State curState = trajectoryStates[i];
-        if (m_ramseteDebug >= 1)
+    if (m_ramseteDebug == 2)
+        for (unsigned int i = 0; i < trajectoryStates.size(); i++)
+        {
+            frc::Trajectory::State curState = trajectoryStates[i];
             spdlog::info(
                 "DTR state time {:.3f} Vel {:.2f} Accel {:.2f} Rotation {:.0f}",
                 curState.t,
                 curState.velocity,
                 curState.acceleration,
                 curState.pose.Rotation().Degrees());
-    }
+        }
 
     // This initializes the odometry (where we are)
     if (resetOdometry)

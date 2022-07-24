@@ -1,0 +1,71 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>Wiring</title>
+    <style type="text/css" media="screen">
+      table {
+          text-align: left;
+          width: 480px;
+
+          border-top: 2px solid black;
+          border-bottom: 2px solid black;
+          border-collapse:collapse;
+          border-spacing:0px;
+      }
+      th {
+          border-top: 2px solid black;
+          border-bottom: 2px solid black;
+      }
+      .pound {
+          width: 30px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Wiring</h1>
+        <h2>DIO</h2>
+        <table><tr>
+            <th class="pound">#</th>
+            <th>Subsystem</th>
+            <th>Sensor</th></tr>
+  <tr><td>0</td><td>Tower Conveyor </td><td>CargoDetect</td><td></td></tr>
+  <tr><td>1</td><td>Climber </td><td>DownLimitLeft</td><td></td></tr>
+  <tr><td>2</td><td>Climber </td><td>DownLimitRight</td><td></td></tr>
+         </table>
+
+        <h2>CAN IDs</h2>
+    <table><tr>
+    <th class="pound">ID</th>
+    <th>Subsystem</th>
+    <th>Device</th>
+    <th>Type</th></tr>
+  <tr><td>0</td><td>Power </td><td>PowerDistribution</td><td>PowerDistribution</td></tr>
+  <tr><td>1</td><td>Drivetrain </td><td>DriveLF1</td><td>Talon FX</td></tr>
+  <tr><td>2</td><td>Drivetrain </td><td>SteerLF2</td><td>Talon FX</td></tr>
+  <tr><td>3</td><td>Drivetrain </td><td>DriveRF3</td><td>Talon FX</td></tr>
+  <tr><td>4</td><td>Drivetrain </td><td>SteerRF4</td><td>Talon FX</td></tr>
+  <tr><td>5</td><td>Drivetrain </td><td>DriveLR5</td><td>Talon FX</td></tr>
+  <tr><td>6</td><td>Drivetrain </td><td>SteerLR6</td><td>Talon FX</td></tr>
+  <tr><td>7</td><td>Drivetrain </td><td>DriveRR7</td><td>Talon FX</td></tr>
+  <tr><td>8</td><td>Drivetrain </td><td>SteerRR8</td><td>Talon FX</td></tr>
+  <tr><td>12</td><td>Intake </td><td>MotorIN12</td><td>Talon FX</td></tr>
+  <tr><td>13</td><td>Floor Conveyor </td><td>MotorFC13</td><td>Talon FX</td></tr>
+  <tr><td>14</td><td>Tower Conveyor </td><td>MotorTC14</td><td>Talon FX</td></tr>
+  <tr><td>16</td><td>Shooter </td><td>MotorSH16</td><td>Talon FX</td></tr>
+  <tr><td>18</td><td>Climber </td><td>MotorCL18</td><td>Talon FX</td></tr>
+  <tr><td>19</td><td>Climber </td><td>MotorCL19</td><td>Talon FX</td></tr>
+  <tr><td>20</td><td>Climber </td><td>GateHookAngle</td><td>CANCoder</td></tr>
+     </table>
+
+
+
+        <h2>PCM 0</h2>
+        <table><tr>
+            <th class="pound">#</th>
+            <th>Subsystem</th>
+            <th>Solenoid</th></tr>
+  <tr><td>0</td><td>Intake </td><td>Arm Output </td><td></td></tr>
+  <tr><td>1</td><td>Climber </td><td>GateHook Output </td><td></td></tr>
+         </table>
+
+  </body>
+</html>

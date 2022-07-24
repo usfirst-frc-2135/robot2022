@@ -46,7 +46,7 @@ Shooter::Shooter()
     config->GetValueAsDouble("SH_FlywheelLowerHubTargetRPM", m_flywheelLowerHubTargetRPM, 1450.0);
     config->GetValueAsDouble("SH_FlywheelUpperHubTargetRPM", m_flywheelUpperHubTargetRPM, 3000.0);
 
-    config->GetValueAsDouble("SH_ToleranceRPM", m_toleranceRPM, 200.0);
+    config->GetValueAsDouble("SH_ToleranceRPM", m_toleranceRPM, m_flywheelPrimeRPM);
 
     frc::SmartDashboard::PutNumber("SH_FlywheelPidKf", m_flywheelPidKf);
     frc::SmartDashboard::PutNumber("SH_FlywheelPidKp", m_flywheelPidKp);
@@ -108,6 +108,7 @@ void Shooter::Periodic()
         if (!IsAtDesiredRPM())
         {
             robotContainer->m_led.SetShooterColor(LED::LEDCOLOR_BLUE);
+            spdlog::info("SH m_flywheelCurrentRPM {:.0f}", m_flywheelCurrentRPM);
         }
         else
         {
@@ -185,20 +186,28 @@ double Shooter::NativeToFlywheelRPM(double native)
 
 bool Shooter::IsAtDesiredRPM()
 {
-    bool atDesiredSpeed;
+    double desiredSpeed;
     static bool previousAtDesiredSpeed = true;
+    bool atDesiredSpeed;
 
-    if (m_state == SHOOTERSPEED_LOWHUB)
+    switch (m_state)
     {
-        atDesiredSpeed = (fabs(m_flywheelLowerHubTargetRPM - m_flywheelCurrentRPM) < m_toleranceRPM);
-    }
-    else
-    {
-        atDesiredSpeed = (fabs(m_flywheelUpperHubTargetRPM - m_flywheelCurrentRPM) < m_toleranceRPM);
+        default:
+        case SHOOTERSPEED_STOP:
+            desiredSpeed = 0;
+            break;
+        case SHOOTERSPEED_LOWHUB:
+            desiredSpeed = m_flywheelLowerHubTargetRPM;
+            break;
+        case SHOOTERSPEED_HIGHHUB:
+            desiredSpeed = m_flywheelUpperHubTargetRPM;
+            break;
+        case SHOOTERSPEED_PRIME:
+            desiredSpeed = m_flywheelPrimeRPM;
+            break;
     }
 
-    if ((m_state != SHOOTERSPEED_STOP) and !atDesiredSpeed)
-        spdlog::info("SH m_flywheelCurrentRPM {:.0f}", m_flywheelCurrentRPM);
+    atDesiredSpeed = (fabs(desiredSpeed - m_flywheelCurrentRPM) < m_toleranceRPM);
 
     if (atDesiredSpeed != previousAtDesiredSpeed)
     {
@@ -261,7 +270,7 @@ void Shooter::SetShooterSpeed(int state)
             flywheelRPM = m_flywheelUpperHubTargetRPM;
             break;
         case SHOOTERSPEED_PRIME:
-            flywheelRPM = 200;
+            flywheelRPM = m_flywheelPrimeRPM;
             break;
         default:
             spdlog::warn("SH invalid velocity requested - {}", state);
@@ -275,7 +284,7 @@ void Shooter::SetShooterSpeed(int state)
         m_motorSH11.Set(ControlMode::Velocity, FlywheelRPMToNative(flywheelRPM));
     }
 
-    spdlog::info("SH Set shooter speed -  flywheel {:.1f}", flywheelRPM);
+    spdlog::info("SH Set shooter speed - flywheel {:.0f}", flywheelRPM);
 }
 
 void Shooter::ShooterReverseInit()
