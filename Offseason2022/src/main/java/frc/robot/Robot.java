@@ -6,7 +6,10 @@ package frc.robot;
 import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.shuffleboard.EventImportance;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -53,6 +56,10 @@ public class Robot extends TimedRobot
     // finished or interrupted commands, and running subsystem periodic()
     // methods. This must be called from the robot's periodic block in order
     // for anything in the Command-based framework to work.
+    // CommandScheduler.getInstance( ).onCommandInitialize(cmd -> DataLogManager.log(cmd.getName( ) + " - Init"));
+    // CommandScheduler.getInstance( ).onCommandInterrupt(cmd -> DataLogManager.log(cmd.getName( ) + " - Interrupted"));
+    // CommandScheduler.getInstance( ).onCommandExecute(cmd -> DataLogManager.log(cmd.getName( ) + " - Execute"));
+    // CommandScheduler.getInstance( ).onCommandFinish(cmd -> DataLogManager.log(cmd.getName( ) + " - End"));
     CommandScheduler.getInstance( ).run( );
   }
 

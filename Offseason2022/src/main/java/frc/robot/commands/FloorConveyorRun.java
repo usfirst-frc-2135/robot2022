@@ -11,18 +11,14 @@ import frc.robot.subsystems.FloorConveyor;
  */
 public class FloorConveyorRun extends CommandBase
 {
+  private final FloorConveyor m_floorConveyor;
   private int                 m_direction;
 
-  
-  
-  public FloorConveyorRun(int direction) {
-
+  public FloorConveyorRun(int direction, FloorConveyor subsystem)
+  {
+    m_floorConveyor = subsystem;
     m_direction = direction;
-
-        
-    // m_subsystem = subsystem;
-    // addRequirements(m_subsystem);
-
+    addRequirements(m_floorConveyor);
   }
 
   // Called when the command is initially scheduled.
