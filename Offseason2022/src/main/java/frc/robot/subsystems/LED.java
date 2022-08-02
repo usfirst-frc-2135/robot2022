@@ -3,33 +3,30 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.commands.*;
-
 
 /**
  *
  */
-public class LED extends SubsystemBase {
-  
-  
-  
-  
+public class LED extends SubsystemBase
+{
   /**
    *
    */
-  public LED() {
-    
-      }
+  public LED( )
+  {
+
+  }
 
   @Override
-  public void periodic() {
+  public void periodic( )
+  {
     // This method will be called once per scheduler run
   }
 
   @Override
-  public void simulationPeriodic() {
+  public void simulationPeriodic( )
+  {
     // This method will be called once per scheduler run when in simulation
   }
 
