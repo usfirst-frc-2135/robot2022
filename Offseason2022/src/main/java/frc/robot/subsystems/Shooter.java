@@ -39,7 +39,7 @@ public class Shooter extends SubsystemBase
   private WPI_TalonFX          motorSH11      = new WPI_TalonFX(11);
   private TalonFXSimCollection motorSim       = new TalonFXSimCollection(motorSH11);
   private FlywheelSim          flywheelSim    = new FlywheelSim(DCMotor.getFalcon500(1),
-      Constants.Shooter.kFlywheelGearRatio, 0.02);
+      Constants.Shooter.kFlywheelGearRatio, 0.01);
   private LinearFilter         flywheelFilter = LinearFilter.singlePoleIIR(0.1, 0.02);
 
   // Configuration file parameters
