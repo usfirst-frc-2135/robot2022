@@ -37,6 +37,10 @@ public class Robot extends TimedRobot
     m_robotContainer = RobotContainer.getInstance( );
     HAL.report(tResourceType.kResourceType_Framework,
         tInstances.kFramework_RobotBuilder);
+
+    CommandScheduler.getInstance( ).onCommandInitialize(cmd -> DataLogManager.log(cmd.getName( ) + ": Init"));
+    CommandScheduler.getInstance( ).onCommandInterrupt(cmd -> DataLogManager.log(cmd.getName( ) + ": Interrupted"));
+    CommandScheduler.getInstance( ).onCommandFinish(cmd -> DataLogManager.log(cmd.getName( ) + ": End"));
   }
 
   /**
@@ -56,10 +60,6 @@ public class Robot extends TimedRobot
     // finished or interrupted commands, and running subsystem periodic()
     // methods. This must be called from the robot's periodic block in order
     // for anything in the Command-based framework to work.
-    // CommandScheduler.getInstance( ).onCommandInitialize(cmd -> DataLogManager.log(cmd.getName( ) + " - Init"));
-    // CommandScheduler.getInstance( ).onCommandInterrupt(cmd -> DataLogManager.log(cmd.getName( ) + " - Interrupted"));
-    // CommandScheduler.getInstance( ).onCommandExecute(cmd -> DataLogManager.log(cmd.getName( ) + " - Execute"));
-    // CommandScheduler.getInstance( ).onCommandFinish(cmd -> DataLogManager.log(cmd.getName( ) + " - End"));
     CommandScheduler.getInstance( ).run( );
   }
 
