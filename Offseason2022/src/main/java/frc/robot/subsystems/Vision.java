@@ -7,6 +7,7 @@ import edu.wpi.first.math.filter.MedianFilter;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -15,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  */
 public class Vision extends SubsystemBase
 {
+
   private double            targetHorizAngle;                   // Horizontal Offset from Crosshair to Target (-27
                                                                 // degrees to 27 degrees)
   private double            targetVertAngle;                    // Vertical Offset from Crosshair to Target (-20.5
@@ -25,6 +27,7 @@ public class Vision extends SubsystemBase
 
   private NetworkTableEntry modeEntry;
   private NetworkTableEntry streamEntry;
+  private NetworkTableEntry initEntry;
   private NetworkTable      table;
 
   // variables in inches to calculate limelight distance
@@ -63,33 +66,34 @@ public class Vision extends SubsystemBase
     NetworkTableInstance inst = NetworkTableInstance.getDefault( );
 
     table = inst.getTable("limelight");
+
     setLEDMode(LED_ON);
     setCameraDisplay(PIP_SECONDARY);
     // Set camera and LED display
 
-    SmartDashboard.setDefaultBoolean("VI_OVERRIDE", false);
-
+    // TODO: read these values from config file
     SmartDashboard.putNumber("VI_Distance1", distance1);
     SmartDashboard.putNumber("VI_Distance2", distance2);
     SmartDashboard.putNumber("VI_VertOffset1", vertOffset1);
     SmartDashboard.putNumber("VI_VertOffset2", vertOffset2);
-  }
 
-  double calculateDist( )
-  {
-    slope = (distance2 - distance1) / (vertOffset2 - vertOffset1);
-    distOffset = distance1 - slope * vertOffset1;
-    distLight = (slope * targetVertAngle) + distOffset;
+    SmartDashboard.putNumber("VI_OVERRIDE_TX", 0.0);
+    SmartDashboard.putNumber("VI_OVERRIDE_TY", 0.0);
+    SmartDashboard.putNumber("VI_OVERRIDE_TA", 0.0);
+    SmartDashboard.putNumber("VI_OVERRIDE_TS", 0.0);
+    SmartDashboard.putBoolean("VI_OVERRIDE_TV", false);
 
-    return distLight;
+    SmartDashboard.setDefaultBoolean("VI_OVERRIDE", false);
+
+    initialize( );
+
   }
 
   @Override
   public void periodic( )
   {
     // This method will be called once per scheduler run
-    boolean smOverrideEnabled = SmartDashboard.getBoolean("VI_SOVERRIDE_ENABLED", false);
-    if (smOverrideEnabled)
+    if (SmartDashboard.getBoolean("VI_OVERRIDE", false))
     {
       // During daytime hours we can use smartdashboard to bipass the limelight.
       // This will allow us to calibrate the shooter distance without relying
@@ -97,7 +101,7 @@ public class Vision extends SubsystemBase
       targetHorizAngle = SmartDashboard.getNumber("VI_OVERRIDE_TX", 0.0);
       targetVertAngle = SmartDashboard.getNumber("VI_OVERRIDE_TY", 0.0);
       targetArea = SmartDashboard.getNumber("VI_OVERRIDE_TA", 0.0);
-      targetSkew = SmartDashboard.getNumber("VI_OVERRIDE_SKEW", 0.0);
+      targetSkew = SmartDashboard.getNumber("VI_OVERRIDE_TS", 0.0);
       targetValid = SmartDashboard.getBoolean("VI_OVERRIDE_TV", true);
     }
     else
@@ -108,19 +112,95 @@ public class Vision extends SubsystemBase
       targetVertAngle = yfilter.calculate(table.getEntry("ty").getDouble(0.0));
       targetArea = table.getEntry("ta").getDouble(0.0);
       targetSkew = table.getEntry("ts").getDouble(0.0);
-      // TODO: remove median filter during port to java
       targetValid = table.getEntry("tv").getBoolean(false);
     }
 
     calculateDist( );
 
-    SmartDashboard.putNumber("VI_HORIZ_ANGLE", targetHorizAngle);
-    SmartDashboard.putNumber("VI_VERT_ANGLE", targetVertAngle);
-    SmartDashboard.putNumber("VI_TARGET_AREA", targetArea);
-    SmartDashboard.putNumber("VI_TARGET_SKEW", targetSkew);
-    SmartDashboard.putBoolean("VI_TARGET_VALID", targetValid);
     SmartDashboard.putNumber("VI_Slope", slope);
     SmartDashboard.putNumber("VI_DistanceLimeLight", distLight);
+
+  }
+
+  @Override
+  public void simulationPeriodic( )
+  {
+    // This method will be called once per scheduler run when in simulation
+  }
+
+  // Put methods for controlling this subsystem
+  // here. Call these from Commands.
+  public double GetHorizOffsetDeg( )
+  {
+    return targetHorizAngle;
+  }
+
+  public double getVertOffsetDeg( )
+  {
+    return targetVertAngle;
+  }
+
+  public double getTargetArea( )
+  {
+    return targetArea;
+  }
+
+  public double getTargetSkew( )
+  {
+    return targetSkew;
+  }
+
+  public boolean getTargetValid( )
+  {
+    return targetValid;
+  }
+
+  public double getLimeLightDist( )
+  {
+    return distLight;
+  }
+
+  public void setLEDMode(int mode)
+  {
+    modeEntry = table.getEntry("ledMode");
+    modeEntry.setValue(mode);
+
+    DataLogManager.log(getSubsystem( ) + "setLedMode: " + mode);
+
+  }
+
+  public int getLEDMode( )
+  {
+    int mode = LED_CUR_MODE;
+    // TODO: find a replacement for getInt for an int
+    mode = (int) table.getEntry("ledMode").getNumber(0.0);
+
+    DataLogManager.log(getSubsystem( ) + "getLedMode :" + mode);
+    return mode;
+  }
+
+  public void setCameraDisplay(int stream)
+  {
+    streamEntry = table.getEntry("stream");
+    streamEntry.setValue(stream);
+
+    DataLogManager.log(getSubsystem( ) + "setCameraDisplay :" + stream);
+  }
+
+  void initialize( )
+  {
+    DataLogManager.log(getSubsystem( ) + ": subsystem initialized!");
+
+    initEntry = table.getEntry("ledMode");
+    initEntry.setValue(LED_OFF);
+    syncStateFromDashboard( );
+  }
+
+  private void calculateDist( )
+  {
+    slope = (distance2 - distance1) / (vertOffset2 - vertOffset1);
+    distOffset = distance1 - slope * vertOffset1;
+    distLight = (slope * targetVertAngle) + distOffset;
 
   }
 
@@ -132,72 +212,4 @@ public class Vision extends SubsystemBase
     vertOffset2 = SmartDashboard.getNumber("VI_VertOffset2", vertOffset2);
   }
 
-  @Override
-  public void simulationPeriodic( )
-  {
-    // This method will be called once per scheduler run when in simulation
-  }
-
-  // Put methods for controlling this subsystem
-  // here. Call these from Commands.
-  double doubleGetHorizOffsetDeg( )
-  {
-    return targetHorizAngle;
-  }
-
-  double getVertOffsetDeg( )
-  {
-    return targetVertAngle;
-  }
-
-  double getTargetArea( )
-  {
-    return targetArea;
-  }
-
-  double getTargetSkew( )
-  {
-    return targetSkew;
-  }
-
-  double getLimeLightDist( )
-  {
-    return distLight;
-  }
-
-  boolean getTargetValid( )
-  {
-    return targetValid;
-  }
-
-  void setLEDMode(int mode)
-  {
-    // TODO: find a putNumber replacer
-    modeEntry = table.getEntry("ledMode");
-    modeEntry.setValue(mode);
-    // table.putNumber("ledMode", mode);
-
-    // TODO: Replace with DataLogs
-    // spdlog::info("VI SetLedMode : {}", mode);
-  }
-
-  int getLEDMode( )
-  {
-    int mode = LED_CUR_MODE;
-    // TODO: find a replacement for getInt for an int
-    mode = (int) table.getEntry("ledMode").getNumber(0.0);
-
-    // TODO: Replace with DataLogs
-    // spdlog::info("VI GetLedMode : {}", mode);
-    return mode;
-  }
-
-  void setCameraDisplay(int stream)
-  {
-    streamEntry = table.getEntry("stream");
-    modeEntry.setValue(stream);
-
-    // TODO: Replace with DataLogs
-    // spdlog::info("VI SetCameraDisplay : {}", stream);
-  }
 }
