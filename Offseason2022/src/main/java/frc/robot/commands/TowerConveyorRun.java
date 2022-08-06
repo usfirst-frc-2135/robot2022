@@ -11,18 +11,14 @@ import frc.robot.subsystems.TowerConveyor;
  */
 public class TowerConveyorRun extends CommandBase
 {
+  private final TowerConveyor m_towerConveyor;
   private int                 m_mode;
 
-  
-  
-  public TowerConveyorRun(int mode) {
-
+  public TowerConveyorRun(int mode, TowerConveyor subsystem)
+  {
+    m_towerConveyor = subsystem;
     m_mode = mode;
-
-        
-    // m_subsystem = subsystem;
-    // addRequirements(m_subsystem);
-
+    addRequirements(m_towerConveyor);
   }
 
   // Called when the command is initially scheduled.

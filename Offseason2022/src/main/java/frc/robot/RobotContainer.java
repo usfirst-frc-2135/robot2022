@@ -3,14 +3,78 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.*;
-import frc.robot.subsystems.*;
+import frc.robot.Constants.Shooter.Mode;
+import frc.robot.commands.Auto1Ball1OppRight;
+import frc.robot.commands.Auto1Ball2OppLeft;
+import frc.robot.commands.Auto1BallLimelight;
+import frc.robot.commands.Auto3BallLeft;
+import frc.robot.commands.Auto3BallRight;
+import frc.robot.commands.AutoDrive;
+import frc.robot.commands.AutoDriveLimelightShoot;
+import frc.robot.commands.AutoDrivePath;
+import frc.robot.commands.AutoDriveShoot;
+import frc.robot.commands.AutoPathSequence;
+import frc.robot.commands.AutoShoot;
+import frc.robot.commands.AutoShootDriveShoot;
+import frc.robot.commands.AutoStop;
+import frc.robot.commands.AutonomousCommand;
+import frc.robot.commands.Climber0Stow;
+import frc.robot.commands.Climber1Deploy;
+import frc.robot.commands.Climber2ClimbToL2;
+import frc.robot.commands.Climber3RotateToL3;
+import frc.robot.commands.Climber5RotateIntoL3;
+import frc.robot.commands.Climber6ClimbToL3;
+import frc.robot.commands.Climber7ClimbToL4;
+import frc.robot.commands.Climber8SettleToL4;
+import frc.robot.commands.ClimberCalibrate;
+import frc.robot.commands.ClimberFullClimb;
+import frc.robot.commands.ClimberL2ToL3;
+import frc.robot.commands.ClimberL3ToL4;
+import frc.robot.commands.ClimberMoveToHeight;
+import frc.robot.commands.ClimberRun;
+import frc.robot.commands.ClimberSetGatehook;
+import frc.robot.commands.ClimberTimerOverride;
+import frc.robot.commands.DriveLimelight;
+import frc.robot.commands.DriveMotorTest;
+import frc.robot.commands.DriveQuickturn;
+import frc.robot.commands.DriveResetSensors;
+import frc.robot.commands.DriveTeleop;
+import frc.robot.commands.Dummy;
+import frc.robot.commands.ExhaustingAction;
+import frc.robot.commands.ExhaustingStop;
+import frc.robot.commands.FloorConveyorRun;
+import frc.robot.commands.IntakeDeploy;
+import frc.robot.commands.IntakeRun;
+import frc.robot.commands.IntakingAction;
+import frc.robot.commands.IntakingStop;
+import frc.robot.commands.RobotInitialize;
+import frc.robot.commands.ScoringActionLowHub;
+import frc.robot.commands.ScoringPrime;
+import frc.robot.commands.ScoringStop;
+import frc.robot.commands.ShooterAim;
+import frc.robot.commands.ShooterAimToggle;
+import frc.robot.commands.ShooterReverse;
+import frc.robot.commands.ShooterRun;
+import frc.robot.commands.SimulateLimelight;
+import frc.robot.commands.TowerConveyorRun;
+import frc.robot.frc2135.RobotConfig;
+import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.FloorConveyor;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LED;
+import frc.robot.subsystems.Pneumatics;
+import frc.robot.subsystems.Power;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.TowerConveyor;
+import frc.robot.subsystems.Vision;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -22,6 +86,7 @@ import frc.robot.subsystems.*;
 public class RobotContainer
 {
   private static RobotContainer m_robotContainer = new RobotContainer( );
+  private static RobotConfig    m_robotConfig    = RobotConfig.getInstance( );
 
   // The robot's subsystems
   public final Vision           m_vision         = new Vision( );
@@ -88,7 +153,12 @@ public class RobotContainer
     SmartDashboard.putData("IntakingStop", new IntakingStop( ));
     SmartDashboard.putData("RobotInitialize", new RobotInitialize( ));
     SmartDashboard.putData("ShooterAimToggle", new ShooterAimToggle( ));
-    SmartDashboard.putData("ShooterReverse", new ShooterReverse( ));
+    SmartDashboard.putData("Shooter-OFF", new ShooterRun(Mode.SHOOTER_STOP, m_shooter));
+    SmartDashboard.putData("Shooter-PRIME", new ShooterRun(Mode.SHOOTER_PRIME, m_shooter));
+    SmartDashboard.putData("Shooter-LOW", new ShooterRun(Mode.SHOOTER_LOWERHUB, m_shooter));
+    SmartDashboard.putData("Shooter-HIGH", new ShooterRun(Mode.SHOOTER_UPPERHUB, m_shooter));
+    SmartDashboard.putData("Shooter-REV", new ShooterRun(Mode.SHOOTER_REVERSE, m_shooter));
+    SmartDashboard.putData("ShootReverse", new ShooterReverse(m_shooter));
     SmartDashboard.putData("SimulateLimelight", new SimulateLimelight( ));
     SmartDashboard.putData("Dummy", new Dummy( ));
 
@@ -96,12 +166,8 @@ public class RobotContainer
     configureButtonBindings( );
 
     // Configure default commands
-    m_climber.setDefaultCommand(new ClimberRun(m_climber));
-    m_shooter.setDefaultCommand(new ShooterRun(0, m_shooter));
-    m_towerConveyor.setDefaultCommand(new TowerConveyorRun(0));
-    m_floorConveyor.setDefaultCommand(new IntakeRun(0, m_intake));
-    m_intake.setDefaultCommand(new IntakeRun(0, m_intake));
     m_drivetrain.setDefaultCommand(new DriveTeleop(m_drivetrain));
+    m_climber.setDefaultCommand(new ClimberRun(m_climber));
 
     // Configure autonomous sendable chooser
 
