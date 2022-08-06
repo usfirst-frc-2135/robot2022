@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  */
 public class Vision extends SubsystemBase
 {
-
   private double            targetHorizAngle;                   // Horizontal Offset from Crosshair to Target (-27
                                                                 // degrees to 27 degrees)
   private double            targetVertAngle;                    // Vertical Offset from Crosshair to Target (-20.5
@@ -74,7 +73,6 @@ public class Vision extends SubsystemBase
     SmartDashboard.putNumber("VI_Distance2", distance2);
     SmartDashboard.putNumber("VI_VertOffset1", vertOffset1);
     SmartDashboard.putNumber("VI_VertOffset2", vertOffset2);
-
   }
 
   double calculateDist( )
@@ -202,5 +200,4 @@ public class Vision extends SubsystemBase
     // TODO: Replace with DataLogs
     // spdlog::info("VI SetCameraDisplay : {}", stream);
   }
-
 }
