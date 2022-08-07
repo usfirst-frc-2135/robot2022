@@ -9,6 +9,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.frc2135.RobotConfig;
 
 /**
@@ -16,17 +17,6 @@ import frc.robot.frc2135.RobotConfig;
  */
 public class Vision extends SubsystemBase
 {
-  // Camera Limelight streaming states
-  private final int    STANDARD      = 0;
-  private final int    PIP_MAIN      = 1;
-  private final int    PIP_SECONDARY = 2;
-
-  // Limelight LED mode states
-  private final int    LED_CUR_MODE  = 0;
-  private final int    LED_OFF       = 1;
-  private final int    LED_BLINK     = 2;
-  private final int    LED_ON        = 3;
-
   private NetworkTable table;
 
   private double       targetHorizAngle; // Horizontal Offset from Crosshair to Target (-27 to 27 degrees)
@@ -36,14 +26,14 @@ public class Vision extends SubsystemBase
   private boolean      targetValid;      // Target Valid or not
 
   // Variables in inches to calculate limelight distance
-  private double       distance1     = 48;    // x position in inches for first reference point
-  private double       vertOffset1   = 0.42;  // y reading in degrees for first reference point
-  private double       distance2     = 60;    // x position in inches for second reference point
-  private double       vertOffset2   = -4.85; // y reading in degrees for second reference point
+  private double       distance1   = 48;    // x position in inches for first reference point
+  private double       vertOffset1 = 0.42;  // y reading in degrees for first reference point
+  private double       distance2   = 60;    // x position in inches for second reference point
+  private double       vertOffset2 = -4.85; // y reading in degrees for second reference point
   private double       distLL;                // calculated distance in inches for the current y value
 
   // Creates a MedianFilter with a window size of 5 samples
-  MedianFilter         yfilter       = new MedianFilter(5); // filter y values to remove outliers
+  MedianFilter         yfilter     = new MedianFilter(5); // filter y values to remove outliers
 
   /**
    *
@@ -58,7 +48,7 @@ public class Vision extends SubsystemBase
     table = inst.getTable("limelight");
 
     // Set camera and LED display
-    setLEDMode(LED_ON);
+    setLEDMode(Constants.Vision.LED_ON);
 
     // Read these values from config file
     RobotConfig config = RobotConfig.getInstance( );
@@ -128,8 +118,8 @@ public class Vision extends SubsystemBase
   {
     DataLogManager.log(getSubsystem( ) + ": subsystem initialized!");
 
-    setLEDMode(LED_OFF);
-    setCameraDisplay(PIP_SECONDARY);
+    setLEDMode(Constants.Vision.LED_OFF);
+    setCameraDisplay(Constants.Vision.PIP_SECONDARY);
 
     syncStateFromDashboard( );
   }
