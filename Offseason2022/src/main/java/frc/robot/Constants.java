@@ -47,6 +47,20 @@ public class Constants
 
   }
 
+  public static final class Vision
+  {
+    // Camera Limelight streaming states
+    public static final int STANDARD      = 0;
+    public static final int PIP_MAIN      = 1;
+    public static final int PIP_SECONDARY = 2;
+
+    // Limelight LED mode states
+    public static final int LED_CUR_MODE  = 0;
+    public static final int LED_OFF       = 1;
+    public static final int LED_BLINK     = 2;
+    public static final int LED_ON        = 3;
+  }
+
   public static final class Shooter
   {
     public static final double kFlywheelGearRatio = (18.0 / 12.0);
