@@ -15,8 +15,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  */
 public class Pneumatics extends SubsystemBase
 {
-
-  // TODO: should compressor be defined locally or in constructor(it is not used)?
   private Compressor              compressor       = new Compressor(PneumaticsModuleType.CTREPCM);
 
   private PneumaticsControlModule pcm              = new PneumaticsControlModule(0);
@@ -32,7 +30,6 @@ public class Pneumatics extends SubsystemBase
     setName("Pneumatics");
     setSubsystem("Pneumatics");
 
-    // compressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
     addChild("Compressor", compressor);
   }
 
@@ -42,10 +39,7 @@ public class Pneumatics extends SubsystemBase
     // This method will be called once per scheduler run
 
     if ((pneumaticsDebug > 0) && (periodicInterval++ % 5 == 0))
-    {
       SmartDashboard.putNumber("PCM_Output_Comp", pcm.getCompressorCurrent( ));
-    }
-
   }
 
   @Override
