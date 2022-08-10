@@ -24,13 +24,9 @@ public class Drivetrain extends SubsystemBase
   public Drivetrain( )
   {
     driveL1 = new WPI_TalonFX(1);
-
     driveL2 = new WPI_TalonFX(2);
-
     driveR3 = new WPI_TalonFX(3);
-
     driveR4 = new WPI_TalonFX(4);
-
     pigeonIMU = new Pigeon2(0);
   }
 
