@@ -31,6 +31,8 @@ public class Pneumatics extends SubsystemBase
     setSubsystem("Pneumatics");
 
     addChild("Compressor", compressor);
+
+    initialize( );
   }
 
   @Override
