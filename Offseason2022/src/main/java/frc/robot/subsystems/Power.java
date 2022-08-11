@@ -53,7 +53,7 @@ public class Power extends SubsystemBase
     DataLogManager.log(getSubsystem( ) + ": Input Voltage is " + powerDistribution.getVoltage( ));
     for (int i = 0; i <= 15; i++)
     {
-      DataLogManager.log(getSubsystem( ) + ": Chan is " + i + " & Current is" + powerDistribution.getCurrent(i));
+      DataLogManager.log(getSubsystem( ) + ": Chan is " + i + " Current is " + powerDistribution.getCurrent(i));
     }
     DataLogManager.log(getSubsystem( ) + ": Total Current is " + powerDistribution.getTotalCurrent( ));
     DataLogManager.log(getSubsystem( ) + ": Total Power is " + powerDistribution.getTotalPower( ));
