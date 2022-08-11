@@ -81,4 +81,20 @@ public class Constants
   {
 
   }
+
+  public static final class LED
+  {
+    public enum LEDColor
+    {
+      LEDCOLOR_OFF, // enter
+      LEDCOLOR_WHITE, // enter
+      LEDCOLOR_RED, // ernter
+      LEDCOLOR_ORANGE, // enter
+      LEDCOLOR_YELLOW, // enter
+      LEDCOLOR_GREEN, // enter
+      LEDCOLOR_BLUE, // enter
+      LEDCOLOR_PURPLE, // enter
+      LEDCOLOR_DASH // enter
+    }
+  }
 }

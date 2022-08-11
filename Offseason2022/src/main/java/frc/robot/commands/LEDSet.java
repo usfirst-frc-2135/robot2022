@@ -4,26 +4,30 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.LED.LEDColor;
+import frc.robot.subsystems.LED;
 
 /**
  *
  */
 public class LEDSet extends CommandBase
 {
-  private int m_color;
+  private LEDColor color;
+  private LED      m_led;
 
-  public LEDSet(int color)
+  public LEDSet(LEDColor col, LED led)
   {
-    m_color = color;
-
-    // m_subsystem = subsystem;
-    // addRequirements(m_subsystem);
+    setName("LEDSet");
+    addRequirements(m_led);
+    color = col;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize( )
-  {}
+  {
+    m_led.setColor(color);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -33,13 +37,15 @@ public class LEDSet extends CommandBase
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted)
-  {}
+  {
+
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished( )
   {
-    return false;
+    return true;
   }
 
   @Override
