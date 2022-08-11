@@ -19,7 +19,7 @@ public class LED extends SubsystemBase
   // variables
   public LEDColor           previousColor = LEDColor.LEDCOLOR_OFF;
   private CANdle            candle        = new CANdle(0);
-  SendableChooser<LEDColor> ledChooser;
+  SendableChooser<LEDColor> ledChooser    = new SendableChooser<LEDColor>( );
 
   /**
    *
