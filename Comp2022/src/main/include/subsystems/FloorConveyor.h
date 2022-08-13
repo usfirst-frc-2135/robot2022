@@ -35,11 +35,11 @@ private:
 
     // Declare constants
     const int m_conveyorDebug = 0; // DEBUG flag to disable/enable extra logging calls
-    const int kCANTimeout = 10;    // CAN timeout in msec to wait for response
+    const int kCANTimeout = 30;    // CAN timeout in msec to wait for response
 
     // Declare module variables
     bool m_talonValidFC8; // Health indicator for floor conveyor talon
-    int m_countFC8;       //reset counter for motor
+    int m_resetCountFC8;  //reset counter for motor
     double m_acquireSpeed;
     double m_expelSpeed;
     double m_expelSpeedFast;

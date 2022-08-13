@@ -33,7 +33,7 @@ DriveLimelight::DriveLimelight(bool endAtTarget, Drivetrain *m_drivetrain, Visio
 // Called just before this Command runs the first time
 void DriveLimelight::Initialize()
 {
-    spdlog::info("DriveLimelight - Init HERE");
+    spdlog::info("DriveLimelight - Init");
     m_vision->SetLEDMode(Vision::LED_ON);
     m_vision->SetCameraDisplay(Vision::PIP_MAIN);
     m_drivetrain->MoveWithLimelightInit(m_endAtTarget);

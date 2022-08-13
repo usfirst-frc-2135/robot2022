@@ -48,14 +48,15 @@ private:
 
     // Declare constants
     const int m_climberDebug = 0; // DEBUG flag to disable/enable extra logging calls
-    const int kCANTimeout = 10;   // CAN timeout in msec to wait for response
+    const int kCANTimeout = 30;   // CAN timeout in msec to wait for response
 
     // Declare module variables
     bool m_talonValidCL14; // Health indicator for climber Talon 14
     bool m_talonValidCL15; // Health indicator for climber Talon 15
+
     double m_stickDeadband = 0.2;
-    int m_countCL14;       //reset counter for motor
-    int m_countCL15;       //reset counter for motor
+    int m_resetCountCL14; // reset counter for motor
+    int m_resetCountCL15; // reset counter for motor
 
     double m_targetInches;   // Target inches of height that are requested of the climber
     double m_curInches;      // Current elevator height in inches

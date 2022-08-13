@@ -39,11 +39,11 @@ private:
 
     // Declare constants
     const int m_intakeDebug = 0; // DEBUG flag to disable/enable extra logging calls
-    const int kCANTimeout = 10;  // CAN timeout in msec to wait for response
+    const int kCANTimeout = 30;  // CAN timeout in msec to wait for response
 
     // Declare module variables
     bool m_talonValidIN6; // Health indicator for intake Talon 6
-    int m_countIN6;       //reset count checker for motor
+    int m_resetCountIN6;  //reset count checker for motor
 
     double m_acquireSpeed;
     double m_expelSpeed;

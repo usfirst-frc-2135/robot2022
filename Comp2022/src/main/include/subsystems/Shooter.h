@@ -44,7 +44,7 @@ private:
 
     const int kPidIndex = 0;    // PID index for primary sensor
     const int kSlotIndex = 0;   // PID slot index for sensors
-    const int kCANTimeout = 10; // CAN timeout in msec to wait for response
+    const int kCANTimeout = 30; // CAN timeout in msec to wait for response
 
     const double kFalconEncoderCPR = 2048; // CPR is 2048 from Falcon 500 Manual
 
@@ -53,7 +53,9 @@ private:
 
     // Declare module variables
     bool m_talonValidSH11; // Health indicator for shooter talon 11
-    int m_countSH11;       //reset counter for motor
+    int m_resetCountSH11;  //reset counter for motor
+    bool m_ifShooterTest = false;
+    //checks to see if testing the shooter
 
     // Simulated flywheels - MOI is an estimate that seems to work for 2022 (not a calculated value)
     frc::LinearFilter<double> m_flywheelFilter = frc::LinearFilter<double>::SinglePoleIIR(0.1, 0.02_s);
@@ -61,13 +63,14 @@ private:
 
     // Configuration file parameters
 
-    double m_flywheelPidKf;             // Flywheel PID force constant
-    double m_flywheelPidKp;             // Flywheel PID proportional constant
-    double m_flywheelPidKi;             // Flywheel PID integral constant
-    double m_flywheelPidKd;             // Flywheel PID derivative constant
-    double m_flywheelNeutralDeadband;   // Flywheel PID neutral deadband in percent
-    double m_flywheelLowerHubTargetRPM; // Target flywheel RPM for shooting lower hub
-    double m_flywheelUpperHubTargetRPM; // Target flywheel RPM for shooting upper hub
+    double m_flywheelPidKf;                  // Flywheel PID force constant
+    double m_flywheelPidKp;                  // Flywheel PID proportional constant
+    double m_flywheelPidKi;                  // Flywheel PID integral constant
+    double m_flywheelPidKd;                  // Flywheel PID derivative constant
+    double m_flywheelNeutralDeadband;        // Flywheel PID neutral deadband in percent
+    double m_flywheelLowerHubTargetRPM;      // Target flywheel RPM for shooting lower hub
+    double m_flywheelUpperHubTargetRPM;      // Target flywheel RPM for shooting upper hub
+    const double m_flywheelPrimeRPM = 200.0; // Target priming RPM
 
     // Measured RPM
     double m_flywheelCurrentRPM; // Current flywheel RPM

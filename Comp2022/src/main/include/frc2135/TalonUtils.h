@@ -16,7 +16,7 @@ namespace frc2135
     class TalonUtils
     {
     private:
-        static const int kCANTimeout = 10; // CAN timeout in msec to wait for response
+        static const int kCANTimeout = 30; // CAN timeout in msec to wait for response
         static const int m_retries = 4;    // Number of version check attempts
 
         static const int m_reqVersion = ((22 * 256) + 0);   // Talon version is 22.0
