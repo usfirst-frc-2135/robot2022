@@ -37,9 +37,9 @@ public class Intake extends SubsystemBase
 
     // Check if solenoids are functional or blacklisted
     if (arm.isDisabled( ))
-      DataLogManager.log(getSubsystem( ) + "Deploy Solenoid is BLACKLISTED");
+      DataLogManager.log(getSubsystem( ) + ": Deploy Solenoid is BLACKLISTED");
     else
-      DataLogManager.log(getSubsystem( ) + "Deploy Solenoid is FUNCTIONAL");
+      DataLogManager.log(getSubsystem( ) + ": Deploy Solenoid is FUNCTIONAL");
 
     RobotConfig config = RobotConfig.getInstance( );
     acquireSpeed = config.getValueAsDouble("IN_AcquireSpeed", 0.6);
@@ -58,7 +58,7 @@ public class Intake extends SubsystemBase
   {
     DataLogManager.log(getSubsystem( ) + ": subsystem initialized!");
     setIntakeSpeed(Mode.INTAKE_STOP);
-    setDeployerSolenoid(false);
+    setArmSolenoid(false);
   }
 
   public void setIntakeSpeed(Mode mode)
@@ -84,21 +84,15 @@ public class Intake extends SubsystemBase
     }
 
     // Set speed of intake and the percent output
-    DataLogManager.log(getSubsystem( ) + ": IN Set Speed - {}" + strName);
+    DataLogManager.log(getSubsystem( ) + ": Set Speed - " + strName);
 
     motorIN8.set(output);
   }
 
-  public void setDeployerSolenoid(boolean extended)
+  public void setArmSolenoid(boolean extended)
   {
-    if (extended = true)
-    {
-      DataLogManager.log(getSubsystem( ) + "IN Intake {} DEPLOY");
-    }
-    else
-    {
-      DataLogManager.log(getSubsystem( ) + "IN Intake {} STOW");
-    }
+    DataLogManager.log(getSubsystem( ) + ": Arm " + ((extended) ? "DEPLOYED" : "STOWED"));
+
     // DataLogManager.log("IN Intake {}", (extended) ? "DEPLOY" : "STOW");
     SmartDashboard.putBoolean("IN_Deployed", extended);
 
