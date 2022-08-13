@@ -68,8 +68,6 @@ public class Shooter extends SubsystemBase
     setName("Shooter");
     setSubsystem("Shooter");
 
-    motorSH11 = new WPI_TalonFX(11);
-
     SupplyCurrentLimitConfiguration supplyCurrentLimits = new SupplyCurrentLimitConfiguration(true, 45.0, 45.0, 0.001);
     StatorCurrentLimitConfiguration statorCurrentLimits = new StatorCurrentLimitConfiguration(true, 80.0, 80.0, 0.001);
 
@@ -124,8 +122,9 @@ public class Shooter extends SubsystemBase
 
       motorSH11.set(ControlMode.Velocity, 0.0);
 
-      initialize( );
     }
+
+    initialize( );
   }
 
   @Override
