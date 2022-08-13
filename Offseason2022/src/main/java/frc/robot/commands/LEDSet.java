@@ -2,49 +2,55 @@
 // ROBOTBUILDER TYPE: Command.
 
 package frc.robot.commands;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.LED.LEDColor;
+import frc.robot.subsystems.LED;
 
 /**
  *
  */
-public class LEDSet extends CommandBase {
+public class LEDSet extends CommandBase
+{
+  private LEDColor color;
+  private LED      m_led;
 
-    private int m_color;
-
-  
-  
-  public LEDSet(int color) {
-
-            m_color = color;
-
-        
-    // m_subsystem = subsystem;
-    // addRequirements(m_subsystem);
-
-      }
+  public LEDSet(LEDColor col, LED led)
+  {
+    setName("LEDSet");
+    addRequirements(m_led);
+    color = col;
+  }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize( )
+  {
+    m_led.setColor(color);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute( )
+  {}
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted)
+  {
+
+  }
 
   // Returns true when the command should end.
   @Override
-  public boolean isFinished() {
-    return false;
+  public boolean isFinished( )
+  {
+    return true;
   }
 
   @Override
-  public boolean runsWhenDisabled() {
-        return false;
-
-      }
+  public boolean runsWhenDisabled( )
+  {
+    return false;
+  }
 }
