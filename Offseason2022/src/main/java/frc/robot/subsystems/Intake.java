@@ -37,9 +37,9 @@ public class Intake extends SubsystemBase
 
     // Check if solenoids are functional or blacklisted
     if (arm.isDisabled( ))
-      DataLogManager.log(getSubsystem( ) + ": Deploy Solenoid is BLACKLISTED");
+      DataLogManager.log(getSubsystem( ) + ": Arm Solenoid is BLACKLISTED");
     else
-      DataLogManager.log(getSubsystem( ) + ": Deploy Solenoid is FUNCTIONAL");
+      DataLogManager.log(getSubsystem( ) + ": Arm Solenoid is FUNCTIONAL");
 
     RobotConfig config = RobotConfig.getInstance( );
     acquireSpeed = config.getValueAsDouble("IN_AcquireSpeed", 0.6);
