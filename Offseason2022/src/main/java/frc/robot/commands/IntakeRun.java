@@ -14,12 +14,12 @@ import frc.robot.Constants.Intake.Mode;
 public class IntakeRun extends CommandBase
 {
   private Intake m_intake;
-  private Mode   m_intakeDirection;
+  private Mode   m_mode;
 
   public void intakeRun(Intake intake, Mode intakeDirection)
   {
     m_intake = intake;
-    m_intakeDirection = intakeDirection;
+    m_mode = mode;
     setName("IntakeRun");
     addRequirements(m_intake);
   }
@@ -28,8 +28,7 @@ public class IntakeRun extends CommandBase
   @Override
   public void initialize( )
   {
-    DataLogManager.log("IntakeRun - Init " + m_intakeDirection);
-    m_intake.setIntakeSpeed(m_intakeDirection);
+    m_intake.setIntakeSpeed(m_mode);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -40,11 +39,8 @@ public class IntakeRun extends CommandBase
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted)
-  {
-    DataLogManager.log("IntakeRun - End");
-  }
-
-  // Returns true when the command should end.
+  {}
+    // Returns true when the command should end.
   @Override
   public boolean isFinished( )
   {
