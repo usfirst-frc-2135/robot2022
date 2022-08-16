@@ -63,9 +63,14 @@ public class Constants
 
   public static final class Shooter
   {
-    public static final double kFlywheelGearRatio = (18.0 / 12.0);
-    public static final double kFlywheelCPR       = Falcon500.kEncoderCPR * kFlywheelGearRatio;
-    public static final double kFlywheelPrimeRPM  = 200.0; // Target priming RPM
+    public static final int    kShooterCANID         = 11;
+    public static final double kFlywheelGearRatio    = (18.0 / 12.0);
+    public static final double kFlywheelCPR          = Falcon500.kEncoderCPR * kFlywheelGearRatio;
+    public static final double kFlywheelToleranceRPM = 200.0; // Tolerance band around target RPM
+    public static final double kFlywheelPrimeRPM     = 1000.0; // RPM for priming the shooter
+
+    public static final double kReverseRPMThreshold  = 20.0; // RPM threshold for allowing reverse of motor
+    public static final double kFlywheelReverseRPM   = -1000.0; // RPM for reversing out game pieces
 
     public enum Mode
     {
