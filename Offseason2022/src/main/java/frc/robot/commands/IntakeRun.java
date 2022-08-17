@@ -16,7 +16,7 @@ public class IntakeRun extends CommandBase
   private Intake m_intake;
   private Mode   m_mode;
 
-  public void intakeRun(Intake intake, Mode intakeDirection)
+  public void intakeRun(Intake intake, Mode mode)
   {
     m_intake = intake;
     m_mode = mode;
@@ -40,7 +40,8 @@ public class IntakeRun extends CommandBase
   @Override
   public void end(boolean interrupted)
   {}
-    // Returns true when the command should end.
+
+  // Returns true when the command should end.
   @Override
   public boolean isFinished( )
   {
