@@ -36,8 +36,7 @@ public class Intake extends SubsystemBase
     SmartDashboard.putBoolean("HL_IN8Valid", talonValidIN8);
 
     // Check if solenoids are functional or blacklisted
-    DataLogManager.log(getSubsystem( ) + ": Arm Solenoid is " + ((arm.isDisabled) ? "BLACKLISTED" : "OK"));
-
+    DataLogManager.log(getSubsystem( ) + ": Arm Solenoid is " + ((arm.isDisabled( )) ? "BLACKLISTED" : "OK"));
 
     RobotConfig config = RobotConfig.getInstance( );
     acquireSpeed = config.getValueAsDouble("IN_AcquireSpeed", 0.6);
