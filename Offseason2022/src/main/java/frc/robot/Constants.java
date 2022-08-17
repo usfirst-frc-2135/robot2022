@@ -34,7 +34,10 @@ public class Constants
 
   public static final class Intake
   {
-
+    public enum Mode
+    {
+      INTAKE_STOP, INTAKE_ACQUIRE, INTAKE_EXPEL,
+    }
   }
 
   public static final class FloorConveyor
