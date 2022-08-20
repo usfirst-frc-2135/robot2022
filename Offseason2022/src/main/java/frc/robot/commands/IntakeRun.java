@@ -3,28 +3,33 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
+import frc.robot.Constants.Intake.Mode;
 
 /**
  *
  */
 public class IntakeRun extends CommandBase
 {
-  private final Intake m_intake;
-  private int          m_mode;
+  private Intake m_intake;
+  private Mode   m_mode;
 
-  public IntakeRun(int mode, Intake subsystem)
+  public void intakeRun(Intake intake, Mode mode)
   {
-    m_intake = subsystem;
+    m_intake = intake;
     m_mode = mode;
+    setName("IntakeRun");
     addRequirements(m_intake);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize( )
-  {}
+  {
+    m_intake.setIntakeSpeed(m_mode);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -40,7 +45,7 @@ public class IntakeRun extends CommandBase
   @Override
   public boolean isFinished( )
   {
-    return false;
+    return true;
   }
 
   @Override
