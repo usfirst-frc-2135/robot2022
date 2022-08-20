@@ -2,7 +2,7 @@ package frc.robot.frc2135;
 
 import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.ctre.phoenix.sensors.Pigeon2;
+import com.ctre.phoenix.sensors.PigeonIMU;
 
 public class PhoenixUtil
 {
@@ -30,12 +30,12 @@ public class PhoenixUtil
 
   }
 
-  public boolean pigeon2Initialize(Pigeon2 pigeon)
+  public boolean pigeonIMUInitialize(PigeonIMU pigeon)
   {
     return true;
   }
 
-  public void pigeonFaultDump(Pigeon2 pigeon)
+  public void pigeonIMUFaultDump(PigeonIMU pigeon)
   {
 
   }

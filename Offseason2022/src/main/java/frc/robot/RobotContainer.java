@@ -90,7 +90,7 @@ public class RobotContainer
 
   // The robot's subsystems
   public final Vision           m_vision         = new Vision( );
-  public final LED              m_lED            = new LED( );
+  public final LED              m_led            = new LED( );
   public final Power            m_power          = new Power( );
   public final Pneumatics       m_pneumatics     = new Pneumatics( );
   public final Climber          m_climber        = new Climber( );
