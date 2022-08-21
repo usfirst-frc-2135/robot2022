@@ -47,7 +47,10 @@ public class Constants
 
   public static final class TowerConveyor
   {
-
+    public enum Mode
+    {
+      VCONVEYOR_STOP, VCONVEYOR_ACQUIRE, VCONVEYOR_ACQUIRE_SLOW, VCONVEYOR_EXPEL, VCONVEYOR_EXPEL_FAST,
+    }
   }
 
   public static final class Vision
