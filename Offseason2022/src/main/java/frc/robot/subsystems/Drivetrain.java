@@ -200,6 +200,8 @@ public class Drivetrain extends SubsystemBase
     // If either master drive talons are valid, enable safety timer
     m_diffDrive.setSafetyEnabled(m_talonValidL1 || m_talonValidR3);
 
+    SmartDashboard.putData("Field", m_field);
+
     // TODO: port rest of Constructor in
 
     initialize( );
@@ -266,7 +268,7 @@ public class Drivetrain extends SubsystemBase
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
-  void initialize( )
+  public void initialize( )
   {
     DataLogManager.log(getSubsystem( ) + ": subsystem initialized!");
 
@@ -284,7 +286,7 @@ public class Drivetrain extends SubsystemBase
     m_driveSim.setPose(getPose( ));
   }
 
-  void FaultDump( )
+  public void FaultDump( )
   {
     PhoenixUtil.getInstance( ).talonFXFaultDump(m_driveL1, "DT L1");
     PhoenixUtil.getInstance( ).talonFXFaultDump(m_driveL2, "DT L2");
@@ -297,7 +299,7 @@ public class Drivetrain extends SubsystemBase
   // Initialization helper methods
   //
 
-  void configFileLoad( )
+  public void configFileLoad( )
   {
     // Retrieve drivetrain modified parameters from RobotConfig
     RobotConfig config = RobotConfig.getInstance( );
@@ -364,7 +366,7 @@ public class Drivetrain extends SubsystemBase
     SmartDashboard.putNumber("DTR_ramseteZeta", m_ramseteZeta);
   }
 
-  void talonMasterInitialize(WPI_TalonFX motor, boolean inverted)
+  public void talonMasterInitialize(WPI_TalonFX motor, boolean inverted)
   {
     motor.setInverted(inverted);
     motor.setNeutralMode(NeutralMode.Coast);
@@ -386,7 +388,7 @@ public class Drivetrain extends SubsystemBase
         "HL_ConfigStatorCurrentLimit");
   }
 
-  void talonFollowerInitialize(WPI_TalonFX motor, int master)
+  public void talonFollowerInitialize(WPI_TalonFX motor, int master)
   {
     motor.set(ControlMode.Follower, master);
     motor.setInverted(InvertType.FollowMaster);
@@ -405,12 +407,12 @@ public class Drivetrain extends SubsystemBase
         "HL_ConfigStatorCurrentLimit");
   }
 
-  void updateOdometry( )
+  public void updateOdometry( )
   {
 
   }
 
-  void updateDashboardValues( )
+  public void updateDashboardValues( )
   {
 
   }
@@ -422,7 +424,7 @@ public class Drivetrain extends SubsystemBase
   // Wheel encoders
   //
 
-  void resetEncoders( )
+  public void resetEncoders( )
   {
     if (m_talonValidL1)
       m_driveL1.setSelectedSensorPosition(0);
@@ -430,7 +432,7 @@ public class Drivetrain extends SubsystemBase
       m_driveR3.setSelectedSensorPosition(0);
   }
 
-  double getDistanceMetersLeft( )
+  public double getDistanceMetersLeft( )
   {
     if (m_talonValidL1)
       return Constants.Drivetrain.kEncoderMetersPerCount * m_driveL1.getSelectedSensorPosition(kPidIndex);
@@ -438,7 +440,7 @@ public class Drivetrain extends SubsystemBase
     return 0;
   }
 
-  double getDistanceMetersRight( )
+  public double getDistanceMetersRight( )
   {
     if (m_talonValidR3)
       return Constants.Drivetrain.kEncoderMetersPerCount * m_driveR3.getSelectedSensorPosition(kPidIndex);
@@ -446,7 +448,7 @@ public class Drivetrain extends SubsystemBase
     return 0;
   }
 
-  // DifferentialDriveWheelSpeeds getWheelSpeedsMPS( )
+  // public DifferentialDriveWheelSpeeds getWheelSpeedsMPS( )
   // {
   // double leftVelocity = 0;
   // double rightVelocity = 0;
@@ -463,27 +465,27 @@ public class Drivetrain extends SubsystemBase
 
   // }
 
-  int metersToNativeUnits(double meters)
+  public int metersToNativeUnits(double meters)
   {
     return (int) (meters / Constants.Drivetrain.kEncoderMetersPerCount);
   }
 
-  double nativeUnitsToMeters(int nativeUnits)
+  public double nativeUnitsToMeters(int nativeUnits)
   {
     return nativeUnits * Constants.Drivetrain.kEncoderMetersPerCount;
   }
 
-  int mpsToNativeUnits(double velocity)
+  public int mpsToNativeUnits(double velocity)
   {
     return (int) (velocity / Constants.Drivetrain.kEncoderMetersPerCount / 10);
   }
 
-  double nativeUnitsToMPS(int nativeUnitsVelocity)
+  public double nativeUnitsToMPS(int nativeUnitsVelocity)
   {
     return nativeUnitsVelocity * Constants.Drivetrain.kEncoderMetersPerCount * 10;
   }
 
-  // double joystickOutputToNative( )
+  // public double joystickOutputToNative( )
   // {
   // double outputScaling = 1.0;
   // TODO: figure out how to define output
@@ -493,12 +495,12 @@ public class Drivetrain extends SubsystemBase
   //
   // Gyro
   //
-  void resetGyro( )
+  public void resetGyro( )
   {
 
   }
 
-  double getHeadingAngle( )
+  public double getHeadingAngle( )
   {
     return (m_pigeonValid) ? (m_gyroOffset + m_gyro.getFusedHeading( )) : 0;
   }
@@ -506,7 +508,7 @@ public class Drivetrain extends SubsystemBase
   //
   // Odometry
   //
-  void resetOdometry(Pose2d pose)
+  public void resetOdometry(Pose2d pose)
   {
     resetSensors( );
     m_driveSim.setPose(pose);
@@ -517,7 +519,7 @@ public class Drivetrain extends SubsystemBase
     DataLogManager.log(getSubsystem( ) + ": Heading angle after odometry reset" + null);
   }
 
-  void setBrakeMode(boolean brakeMode)
+  public void setBrakeMode(boolean brakeMode)
   {
     m_brakeMode = brakeMode;
 
@@ -543,13 +545,13 @@ public class Drivetrain extends SubsystemBase
       m_driveR4.setNeutralMode(brakeOutput);
   }
 
-  void resetSensors( )
+  public void resetSensors( )
   {
     resetEncoders( );
     resetGyro( );
   }
 
-  Pose2d getPose( )
+  public Pose2d getPose( )
   {
     return m_odometry.getPoseMeters( );
   }
@@ -557,24 +559,24 @@ public class Drivetrain extends SubsystemBase
   //
   // Set quick turn for curvature drive
   //
-  void moveSetQuickTurn(boolean quickTurn)
+  public void moveSetQuickTurn(boolean quickTurn)
   {
     m_isQuickTurn = quickTurn;
   }
 
-  void moveStop( )
+  public void moveStop( )
   {
 
   }
 
-  void moveWithJoysticksInit( )
+  public void moveWithJoysticksInit( )
   {
     setBrakeMode(true);
     m_driveL1.configOpenloopRamp(m_openLoopRampRate);
     m_driveR3.configOpenloopRamp(m_openLoopRampRate);
   }
 
-  void moveWithJoysticks(XboxController throttleJstick)
+  public void moveWithJoysticks(XboxController throttleJstick)
   {
     double xValue = throttleJstick.getRightX( );
     double yValue = throttleJstick.getLeftY( );
@@ -611,7 +613,7 @@ public class Drivetrain extends SubsystemBase
       m_diffDrive.curvatureDrive(yOutput, xOutput, m_isQuickTurn);
   }
 
-  void MoveWithJoysticksEnd( )
+  public void moveWithJoysticksEnd( )
   {
     setBrakeMode(false);
     m_driveL1.configOpenloopRamp(0.0);
