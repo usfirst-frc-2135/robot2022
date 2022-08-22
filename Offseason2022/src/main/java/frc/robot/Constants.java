@@ -15,7 +15,9 @@ public class Constants
 {
   public static final class Falcon500
   {
-    public static final double kEncoderCPR = 2048; // CPR is 2048 from Falcon 500 Manual
+    public static final double kEncoderCPR       = 2048; // CPR is 2048 from Falcon 500 Manual
+    public static final int    kTalonReqVersion  = ((22 * 256) + 0); // Talon version is 22.0
+    public static final int    kPigeonReqVersion = ((22 * 256) + 0); // Pigeon IMU version is 22.0
   }
 
   /**
@@ -64,7 +66,10 @@ public class Constants
 
   public static final class TowerConveyor
   {
-
+    public enum Mode
+    {
+      VCONVEYOR_STOP, VCONVEYOR_ACQUIRE, VCONVEYOR_ACQUIRE_SLOW, VCONVEYOR_EXPEL, VCONVEYOR_EXPEL_FAST,
+    }
   }
 
   public static final class Vision
