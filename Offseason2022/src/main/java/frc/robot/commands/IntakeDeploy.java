@@ -3,7 +3,6 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
 
@@ -27,8 +26,6 @@ public class IntakeDeploy extends CommandBase
   @Override
   public void initialize( )
   {
-    DataLogManager.log(getSubsystem( ) + ((m_intakeExtend) ? "DEPLOY" : "STOW"));
-
     RobotContainer rc = RobotContainer.getInstance( );
     rc.m_intake.setArmSolenoid(m_intakeExtend);
   }
@@ -41,9 +38,7 @@ public class IntakeDeploy extends CommandBase
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted)
-  {
-    DataLogManager.log(getSubsystem( ) + ": End");
-  }
+  {}
 
   // Returns true when the command should end.
   @Override
