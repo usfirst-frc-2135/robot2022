@@ -31,6 +31,23 @@ public class Constants
 
   public static final class Drivetrain
   {
+    // Odometry constants
+    public static int          kEncoderCPR            = 2048; // CPR is 2048 for new TalonFX
+    public static int          kRPM                   = 6380;        // free speed for Falcon 500 motor
+
+    // Kinematics values for 2135 Bebula - 2019 B-bo
+    public static final double ks                     = 0.65; // units
+    public static final double kv                     = 2.84; // units
+    public static final double ka                     = 0.309;
+    public static final double KvAngular              = 1.5;
+    public static final double KaAngular              = 0.3;
+
+    public static final double kWheelDiaMeters        = 4.0; // Units library does the conversion
+    public static final double kGearRatio             = 8.45;
+
+    public static final double kEncoderMetersPerCount = (kWheelDiaMeters * Math.PI) / (kEncoderCPR) / kGearRatio;
+    public static final double kTrackWidthMeters      = 0.6477; // Measured track width
+                                                                // Gear reduction
 
   }
 

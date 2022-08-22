@@ -10,15 +10,27 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.TalonFXSimCollection;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.sensors.BasePigeonSimCollection;
 import com.ctre.phoenix.sensors.PigeonIMU;
 
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.frc2135.PhoenixUtil;
 import frc.robot.frc2135.RobotConfig;
 
@@ -56,6 +68,20 @@ public class Drivetrain extends SubsystemBase
   private final int                       kPidIndex             = 0;        // PID index for primary sensor
   private final int                       kCANTimeout           = 30;     // CAN timeout in msec to wait for response
 
+  // TODO: adjust kV and kA angular from robot characterization
+  private DifferentialDrivetrainSim       m_driveSim            = new DifferentialDrivetrainSim(
+      LinearSystemId.identifyDrivetrainSystem(
+          Constants.Drivetrain.kv,
+          Constants.Drivetrain.ka,
+          Constants.Drivetrain.KvAngular,
+          Constants.Drivetrain.KaAngular,
+          Constants.Drivetrain.kTrackWidthMeters),
+      DCMotor.getFalcon500(2),
+      Constants.Drivetrain.kGearRatio,
+      Constants.Drivetrain.kTrackWidthMeters,
+      Constants.Drivetrain.kWheelDiaMeters / 2,
+      VecBuilder.fill(0.001, 0.001, 0.001, 0.1, 0.1, 0.005, 0.005));
+
   // Current limit settings
   private SupplyCurrentLimitConfiguration m_supplyCurrentLimits = new SupplyCurrentLimitConfiguration(true, 45.0, 45.0,
       0.001);
@@ -89,6 +115,12 @@ public class Drivetrain extends SubsystemBase
 
   private double                          m_gyroOffset;
 
+  // Periodic update methods
+  private int                             m_resetCountL1; // motor reset count storer
+  private int                             m_resetCountL2; // motor reset count storer
+  private int                             m_resetCountR3; // motor reset count storer
+  private int                             m_resetCountR4; // motor reset count storer
+
   // limelight drive
   private double                          m_turnConstant        = 0;
   private double                          m_turnPidKp           = 0.1;
@@ -115,6 +147,12 @@ public class Drivetrain extends SubsystemBase
   private double                          m_ramseteB            = 0.0;
   private double                          m_ramseteZeta         = 0.0;
   private boolean                         m_ramseteTuningMode;
+
+  // Odometry and telemetry
+  private Field2d                         m_field               = new Field2d( );
+
+  private DifferentialDriveOdometry       m_odometry            = new DifferentialDriveOdometry(
+      Rotation2d.fromDegrees(0.0));
 
   /**
    *
@@ -162,7 +200,10 @@ public class Drivetrain extends SubsystemBase
     // If either master drive talons are valid, enable safety timer
     m_diffDrive.setSafetyEnabled(m_talonValidL1 || m_talonValidR3);
 
+    SmartDashboard.putData("Field", m_field);
+
     // TODO: port rest of Constructor in
+
     initialize( );
   }
 
@@ -170,23 +211,95 @@ public class Drivetrain extends SubsystemBase
   public void periodic( )
   {
     // This method will be called once per scheduler run
+    updateOdometry( );
+    updateDashboardValues( );
+    // TODO: replace getRobotPose --> C++ version is not inbuilt but a method in file
+    m_field.setRobotPose(m_field.getRobotPose( ));
+
+    m_resetCountL1 += (m_driveL1.hasResetOccurred( ) ? 1 : 0);
+    m_resetCountL2 += (m_driveL2.hasResetOccurred( ) ? 1 : 0);
+    m_resetCountR3 += (m_driveR3.hasResetOccurred( ) ? 1 : 0);
+    m_resetCountR4 += (m_driveR4.hasResetOccurred( ) ? 1 : 0);
+
+    if (RobotState.isDisabled( ))
+      resetGyro( );
   }
 
   @Override
   public void simulationPeriodic( )
   {
     // This method will be called once per scheduler run when in simulation
+    TalonFXSimCollection leftSim = new TalonFXSimCollection(m_driveL1);
+    TalonFXSimCollection rightSim = new TalonFXSimCollection(m_driveR3);
+    BasePigeonSimCollection pidgeonSim = new BasePigeonSimCollection(m_gyro, false);
+
+    /* Pass the robot battery voltage to the simulated Talon FXs */
+    leftSim.setBusVoltage(RobotController.getInputVoltage( ));
+    rightSim.setBusVoltage(RobotController.getInputVoltage( ));
+
+    m_driveSim.setInputs(leftSim.getMotorOutputLeadVoltage( ), -rightSim.getMotorOutputLeadVoltage( ));
+
+    /* Advance the model by 20 ms. */
+    m_driveSim.update(0.02);
+
+    /*
+     * Update all of our sensors.
+     *
+     * Since WPILib's simulation class is assuming +V is forward, but -V is forward for the
+     * right motor, we need to negate the position reported by the simulation class. Basically,
+     * we negated the input, so we need to negate the output.
+     *
+     * We also observe on our physical robot that a positive voltage across the output leads
+     * results in a negative sensor velocity for both the left and right motors, so we need to
+     * negate the output once more.
+     * Left output: +1 * -1 = -1
+     * Right output: -1 * -1 = +1
+     */
+
+    leftSim.setIntegratedSensorRawPosition(metersToNativeUnits(m_driveSim.getLeftPositionMeters( )));
+    leftSim.setIntegratedSensorVelocity(mpsToNativeUnits(m_driveSim.getLeftVelocityMetersPerSecond( )));
+    rightSim.setIntegratedSensorRawPosition(metersToNativeUnits(-m_driveSim.getRightPositionMeters( )));
+    rightSim.setIntegratedSensorVelocity(mpsToNativeUnits(-m_driveSim.getRightVelocityMetersPerSecond( )));
+
+    pidgeonSim.setRawHeading(m_driveSim.getHeading( ).getDegrees( ));
+
   }
 
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
-  void initialize( )
+  public void initialize( )
   {
+    DataLogManager.log(getSubsystem( ) + ": subsystem initialized!");
 
+    // When disabled, set low gear and coast mode to allow easier pushing
+    m_brakeMode = false;
+    m_throttleZeroed = false;
+    m_isQuickTurn = false;
+    m_isDriveSlowMode = false;
+    moveSetQuickTurn(false);
+
+    setBrakeMode(m_brakeMode);
+    moveStop( );
+
+    resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
+    m_driveSim.setPose(getPose( ));
   }
 
-  void configFileLoad( )
+  public void FaultDump( )
+  {
+    PhoenixUtil.getInstance( ).talonFXFaultDump(m_driveL1, "DT L1");
+    PhoenixUtil.getInstance( ).talonFXFaultDump(m_driveL2, "DT L2");
+    PhoenixUtil.getInstance( ).talonFXFaultDump(m_driveR3, "DT R3");
+    PhoenixUtil.getInstance( ).talonFXFaultDump(m_driveR4, "DT R4");
+  }
+
+  ///////////////////////////////////////////////////////////////////////////////
+  //
+  // Initialization helper methods
+  //
+
+  public void configFileLoad( )
   {
     // Retrieve drivetrain modified parameters from RobotConfig
     RobotConfig config = RobotConfig.getInstance( );
@@ -253,7 +366,7 @@ public class Drivetrain extends SubsystemBase
     SmartDashboard.putNumber("DTR_ramseteZeta", m_ramseteZeta);
   }
 
-  void talonMasterInitialize(WPI_TalonFX motor, boolean inverted)
+  public void talonMasterInitialize(WPI_TalonFX motor, boolean inverted)
   {
     motor.setInverted(inverted);
     motor.setNeutralMode(NeutralMode.Coast);
@@ -275,7 +388,7 @@ public class Drivetrain extends SubsystemBase
         "HL_ConfigStatorCurrentLimit");
   }
 
-  void talonFollowerInitialize(WPI_TalonFX motor, int master)
+  public void talonFollowerInitialize(WPI_TalonFX motor, int master)
   {
     motor.set(ControlMode.Follower, master);
     motor.setInverted(InvertType.FollowMaster);
@@ -294,7 +407,119 @@ public class Drivetrain extends SubsystemBase
         "HL_ConfigStatorCurrentLimit");
   }
 
-  void setBrakeMode(boolean brakeMode)
+  public void updateOdometry( )
+  {
+
+  }
+
+  public void updateDashboardValues( )
+  {
+
+  }
+
+  ///////////////////////////////////////////////////////////////////////////////
+  //
+  // Getters/Setters
+  //
+  // Wheel encoders
+  //
+
+  public void resetEncoders( )
+  {
+    if (m_talonValidL1)
+      m_driveL1.setSelectedSensorPosition(0);
+    if (m_talonValidR3)
+      m_driveR3.setSelectedSensorPosition(0);
+  }
+
+  public double getDistanceMetersLeft( )
+  {
+    if (m_talonValidL1)
+      return Constants.Drivetrain.kEncoderMetersPerCount * m_driveL1.getSelectedSensorPosition(kPidIndex);
+
+    return 0;
+  }
+
+  public double getDistanceMetersRight( )
+  {
+    if (m_talonValidR3)
+      return Constants.Drivetrain.kEncoderMetersPerCount * m_driveR3.getSelectedSensorPosition(kPidIndex);
+
+    return 0;
+  }
+
+  // public DifferentialDriveWheelSpeeds getWheelSpeedsMPS( )
+  // {
+  // double leftVelocity = 0;
+  // double rightVelocity = 0;
+
+  // if (m_talonValidL1)
+  // leftVelocity = Constants.Drivetrain.kEncoderMetersPerCount * m_driveL1.getSelectedSensorVelocity( ) * 10;
+
+  // if (m_talonValidR3)
+  // {
+  // rightVelocity = Constants.Drivetrain.kEncoderMetersPerCount * m_driveR3.getSelectedSensorVelocity( ) * 10;
+  // }
+  // //TODO: Replace return statement
+  // //return {leftVelocity, rightVelocity};
+
+  // }
+
+  public int metersToNativeUnits(double meters)
+  {
+    return (int) (meters / Constants.Drivetrain.kEncoderMetersPerCount);
+  }
+
+  public double nativeUnitsToMeters(int nativeUnits)
+  {
+    return nativeUnits * Constants.Drivetrain.kEncoderMetersPerCount;
+  }
+
+  public int mpsToNativeUnits(double velocity)
+  {
+    return (int) (velocity / Constants.Drivetrain.kEncoderMetersPerCount / 10);
+  }
+
+  public double nativeUnitsToMPS(int nativeUnitsVelocity)
+  {
+    return nativeUnitsVelocity * Constants.Drivetrain.kEncoderMetersPerCount * 10;
+  }
+
+  // public double joystickOutputToNative( )
+  // {
+  // double outputScaling = 1.0;
+  // TODO: figure out how to define output
+  // return (output * outputScaling * Constants.Drivetrain.kRPM * Constants.Drivetrain.kEncoderCPR) / (60.0 * 10.0);
+  // }
+
+  //
+  // Gyro
+  //
+  public void resetGyro( )
+  {
+
+  }
+
+  public double getHeadingAngle( )
+  {
+    return (m_pigeonValid) ? (m_gyroOffset + m_gyro.getFusedHeading( )) : 0;
+  }
+
+  //
+  // Odometry
+  //
+  public void resetOdometry(Pose2d pose)
+  {
+    resetSensors( );
+    m_driveSim.setPose(pose);
+    m_odometry.resetPosition(pose, Rotation2d.fromDegrees(getHeadingAngle( )));
+
+    // Original Line: spdlog.info("Heading angle after odometry reset {}", GetHeadingAngle());
+
+    DataLogManager.log(getSubsystem( ) + ": Heading angle after odometry reset" + null);
+  }
+
+  public void setBrakeMode(boolean brakeMode)
   {
     m_brakeMode = brakeMode;
 
@@ -320,22 +545,38 @@ public class Drivetrain extends SubsystemBase
       m_driveR4.setNeutralMode(brakeOutput);
   }
 
+  public void resetSensors( )
+  {
+    resetEncoders( );
+    resetGyro( );
+  }
+
+  public Pose2d getPose( )
+  {
+    return m_odometry.getPoseMeters( );
+  }
+
   //
   // Set quick turn for curvature drive
   //
-  void moveSetQuickTurn(boolean quickTurn)
+  public void moveSetQuickTurn(boolean quickTurn)
   {
     m_isQuickTurn = quickTurn;
   }
 
-  void moveWithJoysticksInit( )
+  public void moveStop( )
+  {
+
+  }
+
+  public void moveWithJoysticksInit( )
   {
     setBrakeMode(true);
     m_driveL1.configOpenloopRamp(m_openLoopRampRate);
     m_driveR3.configOpenloopRamp(m_openLoopRampRate);
   }
 
-  void moveWithJoysticks(XboxController throttleJstick)
+  public void moveWithJoysticks(XboxController throttleJstick)
   {
     double xValue = throttleJstick.getRightX( );
     double yValue = throttleJstick.getLeftY( );
@@ -372,7 +613,7 @@ public class Drivetrain extends SubsystemBase
       m_diffDrive.curvatureDrive(yOutput, xOutput, m_isQuickTurn);
   }
 
-  void MoveWithJoysticksEnd( )
+  public void moveWithJoysticksEnd( )
   {
     setBrakeMode(false);
     m_driveL1.configOpenloopRamp(0.0);
