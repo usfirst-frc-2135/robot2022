@@ -21,7 +21,9 @@ import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.LED.LEDColor;
 import frc.robot.Constants.Shooter.Mode;
+import frc.robot.RobotContainer;
 import frc.robot.frc2135.PhoenixUtil;
 import frc.robot.frc2135.RobotConfig;
 
@@ -31,135 +33,164 @@ import frc.robot.frc2135.RobotConfig;
 public class Shooter extends SubsystemBase
 {
   // Constants
-  private static final int     PIDINDEX       = 0;   // PID in use (0-primary, 1-aux)
-  private static final int     SLOTINDEX      = 0;   // Use first PID slot
-  private static final int     CANTIMEOUT     = 30;  // CAN timeout in msec
+  private static final int     PIDINDEX             = 0;   // PID in use (0-primary, 1-aux)
+  private static final int     SLOTINDEX            = 0;   // Use first PID slot
+  private static final int     CANTIMEOUT           = 30;  // CAN timeout in msec
 
-  // Devices
-  private WPI_TalonFX          motorSH11      = new WPI_TalonFX(11);
-  private TalonFXSimCollection motorSim       = new TalonFXSimCollection(motorSH11);
-  private FlywheelSim          flywheelSim    = new FlywheelSim(DCMotor.getFalcon500(1),
+  private static final double  SUPPLYCURRENTLIMIT   = 45.0; // Max continuous current allowed
+  private static final double  SUPPLYTRIGGERCURRENT = 45.0; // Instantaneous current threshold to trigger
+  private static final double  SUPPLYTRIGGERTIME    = 0.001; // Time allowed for trigger current before limiting
+
+  private static final double  STATORCURRENTLIMIT   = 80.0; // Max continuous current allowed
+  private static final double  STATORTRIGGERCURRENT = 80.0; // Instantaneous current threshold to trigger
+  private static final double  STATORTRIGGERTIME    = 0.001; // Time allowed for trigger current before limiting
+
+  // Devices and simulation objects
+  private WPI_TalonFX          m_motorSH11          = new WPI_TalonFX(Constants.Shooter.kShooterCANID);
+  private TalonFXSimCollection m_motorSim           = new TalonFXSimCollection(m_motorSH11);
+  private FlywheelSim          m_flywheelSim        = new FlywheelSim(DCMotor.getFalcon500(1),
       Constants.Shooter.kFlywheelGearRatio, 0.01);
-  private LinearFilter         flywheelFilter = LinearFilter.singlePoleIIR(0.1, 0.02);
+  private LinearFilter         m_flywheelFilter     = LinearFilter.singlePoleIIR(0.1, 0.02);
 
   // Configuration file parameters
-  private double               flywheelPidKf;           // Flywheel PID force constant
-  private double               flywheelPidKp;           // Flywheel PID proportional constant
-  private double               flywheelPidKi;           // Flywheel PID integral constant
-  private double               flywheelPidKd;           // Flywheel PID derivative constant
-  private double               flywheelNeutralDeadband; // Flywheel PID neutral deadband in percent
-  private double               flywheelLowerTargetRPM;  // Target flywheel RPM for shooting lower hub
-  private double               flywheelUpperTargetRPM;  // Target flywheel RPM for shooting upper hub
-  private double               flywheelToleranceRPM;    // Allowed variation from target RPM
+  private double               m_flywheelPidKf;           // Flywheel PID force constant
+  private double               m_flywheelPidKp;           // Flywheel PID proportional constant
+  private double               m_flywheelPidKi;           // Flywheel PID integral constant
+  private double               m_flywheelPidKd;           // Flywheel PID derivative constant
+  private double               m_flywheelNeutralDeadband; // Flywheel PID neutral deadband in percent
+  private double               m_flywheelLowerTargetRPM;  // Target flywheel RPM for shooting lower hub
+  private double               m_flywheelUpperTargetRPM;  // Target flywheel RPM for shooting upper hub
+  private double               m_flywheelToleranceRPM;    // Allowed variation from target RPM
 
   // Declare module variables
-  private boolean              SH11Valid      = false; // Health indicator for shooter talon 11
-  private int                  resetCountSH11 = 0;     // reset counter for motor
-  private boolean              ifShooterTest  = false; // checks to see if testing the shooter
+  private boolean              m_SH11Valid          = false; // Health indicator for shooter talon 11
+  private int                  m_resetCountSH11     = 0;     // reset counter for motor
+  private boolean              m_ifShooterTest      = false; // checks to see if testing the shooter
+  private boolean              m_atDesiredSpeed     = false; // Indicates flywheel RPM is close to target
+  private boolean              m_atDesiredSpeedPrevious;
 
-  private double               flywheelRPM;            // Current flywheel RPM
-  private Mode                 curMode;                // Current shooter mode
+  private double               m_flywheelTargetRPM;      // Requested flywheel RPM
+  private double               m_flywheelRPM;            // Current flywheel RPM
+  private Mode                 m_curMode;                // Current shooter mode
 
   /**
    *
    */
   public Shooter( )
   {
+    // Set the names for this subsystem for later use
     setName("Shooter");
     setSubsystem("Shooter");
 
-    motorSH11 = new WPI_TalonFX(11);
-
-    SupplyCurrentLimitConfiguration supplyCurrentLimits = new SupplyCurrentLimitConfiguration(true, 45.0, 45.0, 0.001);
-    StatorCurrentLimitConfiguration statorCurrentLimits = new StatorCurrentLimitConfiguration(true, 80.0, 80.0, 0.001);
-
-    SH11Valid = PhoenixUtil.getInstance( ).talonFXInitialize(motorSH11, "SH11");
-    SmartDashboard.putBoolean("HL_SH11Valid", SH11Valid);
+    // Confirm the motor controller is talking and initialize it to factory defaults
+    m_SH11Valid = PhoenixUtil.getInstance( ).talonFXInitialize(m_motorSH11, "SH11");
+    SmartDashboard.putBoolean("HL_SH11Valid", m_SH11Valid);
 
     // Get values from config file
     RobotConfig config = RobotConfig.getInstance( );
-    flywheelPidKf = config.getValueAsDouble("SH_FlywheelPidKf", 0.0475);
-    flywheelPidKp = config.getValueAsDouble("SH_FlywheelPidKf", 0.05);
-    flywheelPidKi = config.getValueAsDouble("SH_FlywheelPidKf", 0.0);
-    flywheelPidKd = config.getValueAsDouble("SH_FlywheelPidKf", 0.0);
-    flywheelNeutralDeadband = config.getValueAsDouble("SH_FlywheelPidKf", 0.004);
-    flywheelLowerTargetRPM = config.getValueAsDouble("SH_FlywheelPidKf", 1450.0);
-    flywheelUpperTargetRPM = config.getValueAsDouble("SH_FlywheelPidKf", 3000.0);
-    flywheelToleranceRPM = config.getValueAsDouble("SH_FlywheelPidKf", Constants.Shooter.kFlywheelPrimeRPM);
+    m_flywheelPidKf = config.getValueAsDouble("SH_flywheelPidKf", 0.0475);
+    m_flywheelPidKp = config.getValueAsDouble("SH_flywheelPidKp", 0.05);
+    m_flywheelPidKi = config.getValueAsDouble("SH_flywheelPidKi", 0.0);
+    m_flywheelPidKd = config.getValueAsDouble("SH_flywheelPidKd", 0.0);
+    m_flywheelNeutralDeadband = config.getValueAsDouble("SH_flywheelNeutralDeadband", 0.004);
+    m_flywheelLowerTargetRPM = config.getValueAsDouble("SH_flywheelLowerTargetRPM", 1450.0);
+    m_flywheelUpperTargetRPM = config.getValueAsDouble("SH_flywheelUpperTargetRPM", 3000.0);
+    m_flywheelToleranceRPM = config.getValueAsDouble("SH_flywheelToleranceRPM", Constants.Shooter.kFlywheelToleranceRPM);
 
-    // Put values to smart dashboard
-    SmartDashboard.putNumber("SH_flywheelPidKf", flywheelPidKf);
-    SmartDashboard.putNumber("SH_flywheelPidKp", flywheelPidKp);
-    SmartDashboard.putNumber("SH_flywheelPidKi", flywheelPidKi);
-    SmartDashboard.putNumber("SH_flywheelPidKd", flywheelPidKd);
-    SmartDashboard.putNumber("SH_flywheelNeutralDeadband", flywheelNeutralDeadband);
-    SmartDashboard.putNumber("SH_flywheelLowerTargetRPM", flywheelLowerTargetRPM);
-    SmartDashboard.putNumber("SH_flywheelUpperTargetRPM", flywheelUpperTargetRPM);
-    SmartDashboard.putNumber("SH_flywheelToleranceRPM", flywheelToleranceRPM);
+    // Put config file values to smart dashboard
+    SmartDashboard.putNumber("SH_flywheelPidKf", m_flywheelPidKf);
+    SmartDashboard.putNumber("SH_flywheelPidKp", m_flywheelPidKp);
+    SmartDashboard.putNumber("SH_flywheelPidKi", m_flywheelPidKi);
+    SmartDashboard.putNumber("SH_flywheelPidKd", m_flywheelPidKd);
+    SmartDashboard.putNumber("SH_flywheelNeutralDeadband", m_flywheelNeutralDeadband);
+    SmartDashboard.putNumber("SH_flywheelLowerTargetRPM", m_flywheelLowerTargetRPM);
+    SmartDashboard.putNumber("SH_flywheelUpperTargetRPM", m_flywheelUpperTargetRPM);
+    SmartDashboard.putNumber("SH_flywheelToleranceRPM", m_flywheelToleranceRPM);
 
-    if (SH11Valid)
+    // Initialize the motor controller for use as a shooter
+    if (m_SH11Valid)
     {
       // Set motor direction and coast/brake mode
-      motorSH11.setInverted(true);
-      motorSH11.setNeutralMode(NeutralMode.Coast);
-      motorSH11.setSafetyEnabled(false);
+      m_motorSH11.setInverted(true);
+      m_motorSH11.setNeutralMode(NeutralMode.Coast);
+      m_motorSH11.setSafetyEnabled(false);
 
       // Enable voltage compensation
-      motorSH11.configNeutralDeadband(flywheelNeutralDeadband, CANTIMEOUT);
-      motorSH11.configPeakOutputReverse(0.0, CANTIMEOUT);
+      m_motorSH11.configNeutralDeadband(m_flywheelNeutralDeadband, CANTIMEOUT);
+      m_motorSH11.configPeakOutputReverse(0.0, CANTIMEOUT);
 
-      motorSH11.configSupplyCurrentLimit(supplyCurrentLimits);
-      motorSH11.configStatorCurrentLimit(statorCurrentLimits);
+      SupplyCurrentLimitConfiguration supplyCurrentLimits = new SupplyCurrentLimitConfiguration(true, SUPPLYCURRENTLIMIT,
+          SUPPLYTRIGGERCURRENT, SUPPLYTRIGGERTIME);
+      StatorCurrentLimitConfiguration statorCurrentLimits = new StatorCurrentLimitConfiguration(true, STATORCURRENTLIMIT,
+          STATORTRIGGERCURRENT, STATORTRIGGERTIME);
+
+      m_motorSH11.configSupplyCurrentLimit(supplyCurrentLimits);
+      m_motorSH11.configStatorCurrentLimit(statorCurrentLimits);
 
       // Configure sensor settings
-      motorSH11.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, PIDINDEX, CANTIMEOUT);
-      motorSH11.setSensorPhase(true);
+      m_motorSH11.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, PIDINDEX, CANTIMEOUT);
+      m_motorSH11.setSensorPhase(true);
 
       // Configure velocity PIDF settings
-      motorSH11.config_kF(SLOTINDEX, flywheelPidKf, CANTIMEOUT);
-      motorSH11.config_kP(SLOTINDEX, flywheelPidKp, CANTIMEOUT);
-      motorSH11.config_kI(SLOTINDEX, flywheelPidKi, CANTIMEOUT);
-      motorSH11.config_kD(SLOTINDEX, flywheelPidKd, CANTIMEOUT);
-      motorSH11.selectProfileSlot(SLOTINDEX, PIDINDEX);
+      m_motorSH11.config_kF(SLOTINDEX, m_flywheelPidKf, CANTIMEOUT);
+      m_motorSH11.config_kP(SLOTINDEX, m_flywheelPidKp, CANTIMEOUT);
+      m_motorSH11.config_kI(SLOTINDEX, m_flywheelPidKi, CANTIMEOUT);
+      m_motorSH11.config_kD(SLOTINDEX, m_flywheelPidKd, CANTIMEOUT);
+      m_motorSH11.selectProfileSlot(SLOTINDEX, PIDINDEX);
 
-      motorSH11.set(ControlMode.Velocity, 0.0);
-
-      initialize( );
+      m_motorSH11.set(ControlMode.Velocity, 0.0);
     }
+
+    // Initialize subsystem settings for current states
+    initialize( );
   }
 
   @Override
   public void periodic( )
   {
-    // This method will be called once per scheduler run
-    if (SH11Valid)
-      flywheelRPM = flywheelFilter
-          .calculate(flywheelNativeToRPM((motorSH11.getSelectedSensorVelocity(PIDINDEX))));
+    // This periodic method will be called once per scheduler run
 
-    SmartDashboard.putNumber("SH_flywheelRPM", flywheelRPM);
+    RobotContainer rc = RobotContainer.getInstance( );
 
-    if (curMode != Mode.SHOOTER_STOP)
+    // Calculate flywheel RPM and display on dashboard
+    if (m_SH11Valid)
+      m_flywheelRPM = m_flywheelFilter
+          .calculate(flywheelNativeToRPM((m_motorSH11.getSelectedSensorVelocity(PIDINDEX))));
+    SmartDashboard.putNumber("SH_flywheelRPM", m_flywheelRPM);
+
+    m_atDesiredSpeed = Math.abs(m_flywheelTargetRPM - m_flywheelRPM) < m_flywheelToleranceRPM;
+    SmartDashboard.putBoolean("SH_atDesiredSpeed", m_atDesiredSpeed);
+
+    if (m_atDesiredSpeed != m_atDesiredSpeedPrevious)
     {
-      if (!isAtDesiredSpeed( ))
+      DataLogManager.log(getSubsystem( ) + ": at desired speed now " + m_flywheelTargetRPM);
+      m_atDesiredSpeedPrevious = m_atDesiredSpeed;
+    }
+
+    // Control CANdle LEDs based on shooter status
+    if (m_curMode != Mode.SHOOTER_STOP)
+    {
+      if (!m_atDesiredSpeed)
       {
-        ; // TODO: LED Set the color to BLUE
-        DataLogManager.log(getSubsystem( ) + ": flywheelRPM " + flywheelRPM);
+        rc.m_led.setColor(LEDColor.LEDCOLOR_BLUE);
+        DataLogManager.log(getSubsystem( ) + ": m_flywheelRPM " + m_flywheelRPM);
       }
       else
-        ; // TODO: LED Set the color to GREEN
+        rc.m_led.setColor(LEDColor.LEDCOLOR_GREEN);
     }
     else
-      ; // TODO: LED Set the color to OFF
+      rc.m_led.setColor(LEDColor.LEDCOLOR_OFF);
 
+    // Display motor current on dashboard
     double currentSH11 = 0.0;
 
-    if (SH11Valid)
-      currentSH11 = motorSH11.getStatorCurrent( );
-
+    if (m_SH11Valid)
+      currentSH11 = m_motorSH11.getStatorCurrent( );
     SmartDashboard.putNumber("SH_currentSH11", currentSH11);
 
-    if (motorSH11.hasResetOccurred( ))
-      SmartDashboard.putNumber("HL_resetCountSH11", ++resetCountSH11);
+    // Count motor controller resets and display on dashboard
+    if (m_motorSH11.hasResetOccurred( ))
+      SmartDashboard.putNumber("HL_resetCountSH11", ++m_resetCountSH11);
   }
 
   @Override
@@ -168,22 +199,25 @@ public class Shooter extends SubsystemBase
     // This method will be called once per scheduler run when in simulation
 
     // Set input flywheel voltage from the motor setting
-    motorSim.setBusVoltage(RobotController.getInputVoltage( ));
-    flywheelSim.setInput(motorSim.getMotorOutputLeadVoltage( ));
+    m_motorSim.setBusVoltage(RobotController.getInputVoltage( ));
+    m_flywheelSim.setInput(m_motorSim.getMotorOutputLeadVoltage( ));
 
-    // update
-    flywheelSim.update(0.020);
+    // update for 20 msec loop
+    m_flywheelSim.update(0.020);
 
     // Finally, we set our simulated encoder's readings and simulated battery voltage
-    motorSim.setIntegratedSensorVelocity(flywheelRPMToNative(flywheelSim.getAngularVelocityRPM( )));
+    m_motorSim.setIntegratedSensorVelocity(flywheelRPMToNative(m_flywheelSim.getAngularVelocityRPM( )));
 
     // SimBattery estimates loaded battery voltages
     RoboRioSim.setVInVoltage(
-        BatterySim.calculateDefaultBatteryLoadedVoltage(flywheelSim.getCurrentDrawAmps( )));
+        BatterySim.calculateDefaultBatteryLoadedVoltage(m_flywheelSim.getCurrentDrawAmps( )));
   }
 
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
+
+  // private static methods first
+
   private static int flywheelRPMToNative(double rpm)
   {
     return (int) ((rpm * Constants.Shooter.kFlywheelCPR) / (60.0 * 10.0));
@@ -194,6 +228,8 @@ public class Shooter extends SubsystemBase
     return (nativeUnits * 60.0 * 10.0) / Constants.Shooter.kFlywheelCPR;
   }
 
+  // public methods
+
   public void initialize( )
   {
     DataLogManager.log(getSubsystem( ) + ": subsystem initialized!");
@@ -202,103 +238,72 @@ public class Shooter extends SubsystemBase
 
   public void dumpFaults( )
   {
-    if (SH11Valid)
-      PhoenixUtil.getInstance( ).talonFXFaultDump(motorSH11, "SH11");
+    if (m_SH11Valid)
+      PhoenixUtil.getInstance( ).talonFXFaultDump(m_motorSH11, "SH11");
   }
 
   public void setShooterMode(Mode mode)
   {
-    double flywheelRPM = 0.0;
-
-    curMode = mode;
+    m_curMode = mode;
 
     DataLogManager.log(getSubsystem( ) + ": set shooter mode " + mode);
 
-    flywheelLowerTargetRPM = SmartDashboard.getNumber("SH_flywheelLowerTargetRPM", flywheelLowerTargetRPM);
-    flywheelUpperTargetRPM = SmartDashboard.getNumber("SH_flywheelUpperTargetRPM", flywheelUpperTargetRPM);
-    flywheelToleranceRPM = SmartDashboard.getNumber("SH_flywheelToleranceRPM", flywheelToleranceRPM);
+    // Get latest flywheel settings from dashboard
+    m_flywheelLowerTargetRPM = SmartDashboard.getNumber("SH_flywheelLowerTargetRPM", m_flywheelLowerTargetRPM);
+    m_flywheelUpperTargetRPM = SmartDashboard.getNumber("SH_flywheelUpperTargetRPM", m_flywheelUpperTargetRPM);
+    m_flywheelToleranceRPM = SmartDashboard.getNumber("SH_flywheelToleranceRPM", m_flywheelToleranceRPM);
 
-    if (SH11Valid && ifShooterTest)
+    // If in shooter test mode, get PIDF settings and program motor controller
+    if (m_SH11Valid && m_ifShooterTest)
     {
-      flywheelPidKf = SmartDashboard.getNumber("SH_flywheelPidKf", flywheelPidKf);
-      flywheelPidKp = SmartDashboard.getNumber("SH_flywheelPidKp", flywheelPidKp);
-      flywheelPidKi = SmartDashboard.getNumber("SH_flywheelPidKi", flywheelPidKi);
-      flywheelPidKd = SmartDashboard.getNumber("SH_flywheelPidKd", flywheelPidKd);
+      m_flywheelPidKf = SmartDashboard.getNumber("SH_flywheelPidKf", m_flywheelPidKf);
+      m_flywheelPidKp = SmartDashboard.getNumber("SH_flywheelPidKp", m_flywheelPidKp);
+      m_flywheelPidKi = SmartDashboard.getNumber("SH_flywheelPidKi", m_flywheelPidKi);
+      m_flywheelPidKd = SmartDashboard.getNumber("SH_flywheelPidKd", m_flywheelPidKd);
 
-      motorSH11.config_kF(SLOTINDEX, flywheelPidKf, 0);
-      motorSH11.config_kP(SLOTINDEX, flywheelPidKp, 0);
-      motorSH11.config_kI(SLOTINDEX, flywheelPidKi, 0);
-      motorSH11.config_kD(SLOTINDEX, flywheelPidKd, 0);
-      motorSH11.selectProfileSlot(SLOTINDEX, PIDINDEX);
+      m_motorSH11.config_kF(SLOTINDEX, m_flywheelPidKf, 0);
+      m_motorSH11.config_kP(SLOTINDEX, m_flywheelPidKp, 0);
+      m_motorSH11.config_kI(SLOTINDEX, m_flywheelPidKi, 0);
+      m_motorSH11.config_kD(SLOTINDEX, m_flywheelPidKd, 0);
+      m_motorSH11.selectProfileSlot(SLOTINDEX, PIDINDEX);
 
-      DataLogManager
-          .log(getSubsystem( ) + ": kF " + flywheelPidKf + " kP " + flywheelPidKp + " kI " + flywheelPidKi + " kD");
+      DataLogManager.log(getSubsystem( ) + ": kF " + m_flywheelPidKf + " kP " + m_flywheelPidKp + " kI " + m_flywheelPidKi + " kD"
+          + m_flywheelPidKd);
     }
 
+    // Select the shooter RPM from the requested mode
     switch (mode)
     {
       case SHOOTER_REVERSE :
-        flywheelRPM = -1000;
+        m_flywheelTargetRPM = Constants.Shooter.kFlywheelReverseRPM;
         break;
       case SHOOTER_STOP :
-        flywheelRPM = 0;
+        m_flywheelTargetRPM = 0;
         break;
       case SHOOTER_PRIME :
-        flywheelRPM = Constants.Shooter.kFlywheelPrimeRPM;
+        m_flywheelTargetRPM = Constants.Shooter.kFlywheelPrimeRPM;
         break;
       case SHOOTER_LOWERHUB :
-        flywheelRPM = flywheelLowerTargetRPM;
+        m_flywheelTargetRPM = m_flywheelLowerTargetRPM;
         break;
       case SHOOTER_UPPERHUB :
-        flywheelRPM = flywheelUpperTargetRPM;
+        m_flywheelTargetRPM = m_flywheelUpperTargetRPM;
         break;
       default :
         DataLogManager.log(getSubsystem( ) + ": invalid shooter mode requested " + mode);
         break;
     }
 
-    if (SH11Valid)
-      motorSH11.set(ControlMode.Velocity, flywheelRPMToNative(flywheelRPM));
+    if (m_SH11Valid)
+      m_motorSH11.set(ControlMode.Velocity, flywheelRPMToNative(m_flywheelTargetRPM));
 
-    DataLogManager.log(getSubsystem( ) + ": target speed is " + flywheelRPM);
+    DataLogManager.log(getSubsystem( ) + ": target speed is " + m_flywheelTargetRPM);
   }
-
-  private static boolean atDesiredSpeedPrevious;
 
   public boolean isAtDesiredSpeed( )
   {
-    double desiredSpeed;
-    boolean atDesiredSpeed;
 
-    switch (curMode)
-    {
-      default :
-      case SHOOTER_STOP :
-        desiredSpeed = 0.0;
-        break;
-      case SHOOTER_PRIME :
-        desiredSpeed = Constants.Shooter.kFlywheelPrimeRPM;
-        break;
-      case SHOOTER_LOWERHUB :
-        desiredSpeed = flywheelLowerTargetRPM;
-        break;
-      case SHOOTER_UPPERHUB :
-        desiredSpeed = flywheelUpperTargetRPM;
-        break;
-      case SHOOTER_REVERSE :
-        desiredSpeed = 0.0;
-        break;
-    }
-
-    atDesiredSpeed = (Math.abs(desiredSpeed - flywheelRPM) < flywheelToleranceRPM);
-
-    if (atDesiredSpeed != atDesiredSpeedPrevious)
-    {
-      DataLogManager.log(getSubsystem( ) + ": at desired speed now " + atDesiredSpeed);
-      atDesiredSpeedPrevious = atDesiredSpeed;
-    }
-
-    return atDesiredSpeed;
+    return m_atDesiredSpeed;
   }
 
   public void setReverseInit( )
@@ -308,11 +313,9 @@ public class Shooter extends SubsystemBase
 
   public void setReverseExecute( )
   {
-    double reverseRPMThreshold = 20;
-
-    if (flywheelRPM < reverseRPMThreshold)
+    if (m_flywheelRPM < Constants.Shooter.kReverseRPMThreshold)
     {
-      motorSH11.configPeakOutputReverse(-1.0);
+      m_motorSH11.configPeakOutputReverse(-1.0);
       DataLogManager.log(getSubsystem( ) + ": reverse mode now available");
       setShooterMode(Mode.SHOOTER_REVERSE);
     }
@@ -320,7 +323,7 @@ public class Shooter extends SubsystemBase
 
   public void setReverseEnd( )
   {
-    motorSH11.configPeakOutputForward(0.0);
+    m_motorSH11.configPeakOutputForward(0.0);
     setShooterMode(Mode.SHOOTER_STOP);
   }
 }
