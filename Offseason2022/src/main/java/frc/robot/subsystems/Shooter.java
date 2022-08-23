@@ -48,8 +48,8 @@ public class Shooter extends SubsystemBase
   // Devices and simulation objects
   private WPI_TalonFX          m_motorSH11          = new WPI_TalonFX(Constants.Shooter.kShooterCANID);
   private TalonFXSimCollection m_motorSim           = new TalonFXSimCollection(m_motorSH11);
-  private FlywheelSim          m_flywheelSim        = new FlywheelSim(DCMotor.getFalcon500(1),
-      Constants.Shooter.kFlywheelGearRatio, 0.01);
+  private FlywheelSim          m_flywheelSim        =
+      new FlywheelSim(DCMotor.getFalcon500(1), Constants.Shooter.kFlywheelGearRatio, 0.01);
   private LinearFilter         m_flywheelFilter     = LinearFilter.singlePoleIIR(0.1, 0.02);
 
   // Configuration file parameters
@@ -119,10 +119,10 @@ public class Shooter extends SubsystemBase
       m_motorSH11.configNeutralDeadband(m_flywheelNeutralDeadband, CANTIMEOUT);
       m_motorSH11.configPeakOutputReverse(0.0, CANTIMEOUT);
 
-      SupplyCurrentLimitConfiguration supplyCurrentLimits = new SupplyCurrentLimitConfiguration(true, SUPPLYCURRENTLIMIT,
-          SUPPLYTRIGGERCURRENT, SUPPLYTRIGGERTIME);
-      StatorCurrentLimitConfiguration statorCurrentLimits = new StatorCurrentLimitConfiguration(true, STATORCURRENTLIMIT,
-          STATORTRIGGERCURRENT, STATORTRIGGERTIME);
+      SupplyCurrentLimitConfiguration supplyCurrentLimits =
+          new SupplyCurrentLimitConfiguration(true, SUPPLYCURRENTLIMIT, SUPPLYTRIGGERCURRENT, SUPPLYTRIGGERTIME);
+      StatorCurrentLimitConfiguration statorCurrentLimits =
+          new StatorCurrentLimitConfiguration(true, STATORCURRENTLIMIT, STATORTRIGGERCURRENT, STATORTRIGGERTIME);
 
       m_motorSH11.configSupplyCurrentLimit(supplyCurrentLimits);
       m_motorSH11.configStatorCurrentLimit(statorCurrentLimits);
@@ -153,9 +153,8 @@ public class Shooter extends SubsystemBase
     RobotContainer rc = RobotContainer.getInstance( );
 
     // Calculate flywheel RPM and display on dashboard
-    if (m_SH11Valid)
-      m_flywheelRPM = m_flywheelFilter
-          .calculate(flywheelNativeToRPM((m_motorSH11.getSelectedSensorVelocity(PIDINDEX))));
+    // if (m_SH11Valid)
+    m_flywheelRPM = m_flywheelFilter.calculate(flywheelNativeToRPM((m_motorSH11.getSelectedSensorVelocity(PIDINDEX))));
     SmartDashboard.putNumber("SH_flywheelRPM", m_flywheelRPM);
 
     m_atDesiredSpeed = Math.abs(m_flywheelTargetRPM - m_flywheelRPM) < m_flywheelToleranceRPM;
@@ -209,8 +208,7 @@ public class Shooter extends SubsystemBase
     m_motorSim.setIntegratedSensorVelocity(flywheelRPMToNative(m_flywheelSim.getAngularVelocityRPM( )));
 
     // SimBattery estimates loaded battery voltages
-    RoboRioSim.setVInVoltage(
-        BatterySim.calculateDefaultBatteryLoadedVoltage(m_flywheelSim.getCurrentDrawAmps( )));
+    RoboRioSim.setVInVoltage(BatterySim.calculateDefaultBatteryLoadedVoltage(m_flywheelSim.getCurrentDrawAmps( )));
   }
 
   // Put methods for controlling this subsystem
