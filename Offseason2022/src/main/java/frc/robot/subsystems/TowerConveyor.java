@@ -28,10 +28,8 @@ public class TowerConveyor extends SubsystemBase
   private double                          m_acquireSpeedSlow;
   private double                          m_expelSpeed;
   private double                          m_expelSpeedFast;
-  private SupplyCurrentLimitConfiguration m_supplyCurrentLimits = new SupplyCurrentLimitConfiguration(true, 45.0, 45.0,
-      0.001);
-  private StatorCurrentLimitConfiguration m_statorCurrentLimits = new StatorCurrentLimitConfiguration(true, 80.0, 80.0,
-      0.001);
+  private SupplyCurrentLimitConfiguration m_supplyCurrentLimits = new SupplyCurrentLimitConfiguration(true, 45.0, 45.0, 0.001);
+  private StatorCurrentLimitConfiguration m_statorCurrentLimits = new StatorCurrentLimitConfiguration(true, 80.0, 80.0, 0.001);
   private final int                       kCANTimeout           = 30;
   private int                             resetCountVC9;
   private DigitalInput                    m_cargoDetected       = new DigitalInput(2);
@@ -95,7 +93,7 @@ public class TowerConveyor extends SubsystemBase
   public void initialize( )
   {
     DataLogManager.log("VC Init");
-    setVerticalConveyorSpeed(Mode.VCONVEYOR_STOP);
+    setVerticalConveyorSpeed(Mode.TCONVEYOR_STOP);
   }
 
   public void faultDump( )
@@ -112,23 +110,23 @@ public class TowerConveyor extends SubsystemBase
     switch (mode)
     {
       default :
-      case VCONVEYOR_STOP :
+      case TCONVEYOR_STOP :
         strName = "STOP";
         outputVC = 0.0;
         break;
-      case VCONVEYOR_ACQUIRE :
+      case TCONVEYOR_ACQUIRE :
         strName = "ACQUIRE";
         outputVC = m_acquireSpeed;
         break;
-      case VCONVEYOR_ACQUIRE_SLOW :
+      case TCONVEYOR_ACQUIRE_SLOW :
         strName = "ACQUIRE_SLOW";
         outputVC = m_acquireSpeedSlow;
         break;
-      case VCONVEYOR_EXPEL :
+      case TCONVEYOR_EXPEL :
         strName = "EXPEL";
         outputVC = m_expelSpeed;
         break;
-      case VCONVEYOR_EXPEL_FAST :
+      case TCONVEYOR_EXPEL_FAST :
         strName = "EXPEL_FAST";
         outputVC = m_expelSpeedFast;
         break;
