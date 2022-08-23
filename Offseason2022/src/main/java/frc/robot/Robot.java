@@ -8,6 +8,7 @@ import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.shuffleboard.EventImportance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -32,11 +33,16 @@ public class Robot extends TimedRobot
   @Override
   public void robotInit( )
   {
+    // Starts recording to data log
+    DataLogManager.start( );
+    DataLogManager.log("RobotInit: RoboRIO SN:" + System.getenv("serialnum"));
+
     // Instantiate our RobotContainer. This will perform all our button
     // bindings, and put our autonomous chooser on the dashboard.
     m_robotContainer = RobotContainer.getInstance( );
-    HAL.report(tResourceType.kResourceType_Framework,
-        tInstances.kFramework_RobotBuilder);
+    HAL.report(tResourceType.kResourceType_Framework, tInstances.kFramework_RobotBuilder);
+
+    LiveWindow.disableAllTelemetry( );
 
     CommandScheduler.getInstance( ).onCommandInitialize(cmd -> DataLogManager.log(cmd.getName( ) + ": Init"));
     CommandScheduler.getInstance( ).onCommandInterrupt(cmd -> DataLogManager.log(cmd.getName( ) + ": Interrupted"));
