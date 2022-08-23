@@ -36,10 +36,10 @@ public class Climber extends SubsystemBase
 
     gateHookAngle = new CANCoder(0);
 
-    downLimitLeft = new DigitalInput(1);
+    downLimitLeft = new DigitalInput(0);
     addChild("DownLimitLeft", downLimitLeft);
 
-    downLimitRight = new DigitalInput(2);
+    downLimitRight = new DigitalInput(1);
     addChild("DownLimitRight", downLimitRight);
   }
 

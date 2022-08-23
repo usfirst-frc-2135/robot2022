@@ -168,8 +168,6 @@ public class Drivetrain extends SubsystemBase
     m_diffDrive.setExpiration(0.250);
     m_diffDrive.setMaxOutput(1.0);
 
-    Field2d field = new Field2d( );
-
     // Validate Talon controllers, reset and display firmware versions
 
     // TODO: define globaly since the declaration is global already
@@ -514,9 +512,7 @@ public class Drivetrain extends SubsystemBase
     m_driveSim.setPose(pose);
     m_odometry.resetPosition(pose, Rotation2d.fromDegrees(getHeadingAngle( )));
 
-    // Original Line: spdlog.info("Heading angle after odometry reset {}", GetHeadingAngle());
-
-    DataLogManager.log(getSubsystem( ) + ": Heading angle after odometry reset" + null);
+    DataLogManager.log(getSubsystem( ) + ": Heading angle after odometry reset" + getHeadingAngle( ));
   }
 
   public void setBrakeMode(boolean brakeMode)
