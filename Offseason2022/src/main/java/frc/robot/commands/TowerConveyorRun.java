@@ -13,12 +13,12 @@ import frc.robot.subsystems.TowerConveyor;
 public class TowerConveyorRun extends CommandBase
 {
   private final TowerConveyor m_towerConveyor;
-  private Mode                m_vConveyorDirection;
+  private Mode                m_mode;
 
-  public TowerConveyorRun(Mode vConveyorDirection, TowerConveyor subsystem, Mode mode)
+  public TowerConveyorRun(Mode mode, TowerConveyor subsystem)
   {
     m_towerConveyor = subsystem;
-    m_vConveyorDirection = vConveyorDirection;
+    m_mode = mode;
     setName("TowerConveyorRun");
     addRequirements(m_towerConveyor);
   }
@@ -27,7 +27,7 @@ public class TowerConveyorRun extends CommandBase
   @Override
   public void initialize( )
   {
-    m_towerConveyor.setVerticalConveyorSpeed(m_vConveyorDirection);
+    m_towerConveyor.setVerticalConveyorSpeed(m_mode);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
