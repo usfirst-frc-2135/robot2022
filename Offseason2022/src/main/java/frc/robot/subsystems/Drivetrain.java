@@ -3,8 +3,6 @@
 
 package frc.robot.subsystems;
 
-import javax.xml.crypto.Data;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.InvertType;
@@ -18,8 +16,11 @@ import com.ctre.phoenix.sensors.BasePigeonSimCollection;
 import com.ctre.phoenix.sensors.PigeonIMU;
 
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -28,6 +29,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
@@ -73,7 +75,7 @@ public class Drivetrain extends SubsystemBase
   private final int                       kPidIndex             = 0;        // PID index for primary sensor
   private final int                       kCANTimeout           = 30;     // CAN timeout in msec to wait for response
 
-  // TODO: Adjust kV and kA angular from robot characterization
+  // TODO: from Comp 2022 - adjust kV and kA angular from robot characterization
   private DifferentialDrivetrainSim       m_driveSim            = new DifferentialDrivetrainSim(
       LinearSystemId.identifyDrivetrainSystem(
           Constants.Drivetrain.kv,
@@ -155,6 +157,17 @@ public class Drivetrain extends SubsystemBase
   private double                          m_ramseteZeta         = 0.0;
   private boolean                         m_ramseteTuningMode;
 
+  // DriveWithLimelight pid controller objects
+  PIDController                           m_turnPid;
+  PIDController                           m_throttlePid;
+
+  // Ramsete follower objects
+  Trajectory                              m_trajectory;
+  RamseteController                       m_ramseteController;
+  DifferentialDriveKinematics             m_kinematics          = new DifferentialDriveKinematics(
+      Constants.Drivetrain.kTrackWidthMeters);
+  Timer                                   m_trajTimer;
+
   // Odometry and telemetry
   private double                          m_distanceLeft;
   private double                          m_distanceRight;
@@ -163,10 +176,10 @@ public class Drivetrain extends SubsystemBase
       Rotation2d.fromDegrees(0.0));
   private Field2d                         m_field               = new Field2d( );
 
-  public double                           m_currentl1           = 0.0; // Motor L1 output current from Falcon
-  public double                           m_currentL2           = 0.0; // Motor L2 output current from Falcon
-  public double                           m_currentR3           = 0.0; // Motor R3 output current from Falcon
-  public double                           m_currentR4           = 0.0; // Motor R4 output current from Falcon
+  private double                          m_currentl1           = 0.0; // Motor L1 output current from Falcon
+  private double                          m_currentL2           = 0.0; // Motor L2 output current from Falcon
+  private double                          m_currentR3           = 0.0; // Motor R3 output current from Falcon
+  private double                          m_currentR4           = 0.0; // Motor R4 output current from Falcon
 
   /**
    *
@@ -213,7 +226,19 @@ public class Drivetrain extends SubsystemBase
 
     SmartDashboard.putData("Field", m_field);
 
-    // TODO: port rest of Constructor in
+    // Limelight Pid Controllers
+    m_turnPid = new PIDController(m_turnPidKp, m_turnPidKi, m_turnPidKd);
+    m_throttlePid = new PIDController(m_throttlePidKp, m_throttlePidKi, m_throttlePidKd);
+
+    // Ramsete Controller
+    m_ramseteController = new RamseteController(m_ramseteB, m_ramseteZeta);
+
+    // Reset gyro
+    if (m_pigeonValid)
+    {
+      m_gyro.setFusedHeading(0.0);
+      resetGyro( );
+    }
 
     initialize( );
   }
@@ -465,13 +490,11 @@ public class Drivetrain extends SubsystemBase
     // Only update indicators every 100 ms to cut down on network traffic
     if ((m_periodicInterval++ % 5 == 0) && (m_driveDebug > 1))
     {
-      // TODO: How to implement "GetPose().Rotation().Degrees()" and round?
-
       DataLogManager.log(getSubsystem( ) + ": DT deg " + Rotation2d.fromDegrees(getHeadingAngle( )) + "LR dist"
-      m_distanceLeft +" "+  m_distanceRight) + " amps (" + String.format("%.1f", m_currentl1) + " " +
-    String.format("%.1f", m_currentL2) + " " +
-      String.format("%.1f", m_currentR3) + " " +
-      String.format("%.1f", m_currentR4) + ")");
+          + m_distanceLeft + " " + m_distanceRight + " amps (" + String.format("%.1f", m_currentl1) + " " +
+          String.format("%.1f", m_currentL2) + " " +
+          String.format("%.1f", m_currentR3) + " " +
+          String.format("%.1f", m_currentR4) + ")");
 
     }
   }
@@ -672,11 +695,8 @@ public class Drivetrain extends SubsystemBase
   //
   public boolean moveIsStopped( )
   {
-    // TODO: resolve left and right errors
-    boolean leftStopped = false;
-    // = m_wheelSpeeds.left<=m_tolerance;
-    boolean rightStopped = false;
-    // = m_wheelSpeeds.right<=m_tolerance;
+    boolean leftStopped = m_wheelSpeeds.leftMetersPerSecond <= m_tolerance;
+    boolean rightStopped = m_wheelSpeeds.rightMetersPerSecond <= m_tolerance;
 
     return (leftStopped && rightStopped);
   }
@@ -776,8 +796,8 @@ public class Drivetrain extends SubsystemBase
   }
 
   // Movement during limelight shooting phase
-public void moveWithLimelightInit(boolean m_endAtTarget)
-{
+  public void moveWithLimelightInit(boolean m_endAtTarget)
+  {
     // get pid values from dashboard
 
     m_turnConstant = SmartDashboard.getNumber("DTL_TurnConstant", m_turnConstant);
@@ -799,14 +819,74 @@ public void moveWithLimelightInit(boolean m_endAtTarget)
     m_setPointDistance = SmartDashboard.getNumber("DTL_SetPointDistance", m_setPointDistance);
 
     // load in Pid constants to controller
-    //m_turnPid = frc2::PIDController(m_turnPidKp, m_turnPidKi, m_turnPidKd);
-    //m_throttlePid = frc2::PIDController(m_throttlePidKp, m_throttlePidKi, m_throttlePidKd);
+    // m_turnPid = frc2::PIDController(m_turnPidKp, m_turnPidKi, m_turnPidKd);
+    // m_throttlePid = frc2::PIDController(m_throttlePidKp, m_throttlePidKi, m_throttlePidKd);
 
-    RobotContainer robotContainer = RobotContainer.getInstance();
-    robotContainer.m_yfilter.reset();
-    robotContainer.m_vfilter.reset();
+    RobotContainer robotContainer = RobotContainer.getInstance( );
+    robotContainer.m_vision.m_yfilter.reset( );
 
-    robotContainer->m_vision.SyncStateFromDashboard();
-}
+    robotContainer.m_vision.syncStateFromDashboard( );
+  }
+
+  public void moveWithLimelightExecute( )
+  {
+    RobotContainer robotContainer = RobotContainer.getInstance( );
+    double tx = robotContainer.m_vision.getHorizOffsetDeg( );
+    double ty = robotContainer.m_vision.getVertOffsetDeg( );
+    boolean tv = robotContainer.m_vision.getTargetValid( );
+
+    if (tv == false)
+    {
+      velocityArcadeDrive(0, 0);
+      if (m_limelightDebug >= 1)
+        DataLogManager.log(getSubsystem( ) + ": TV-FALSE SO STILL STILL");
+      return;
+    }
+
+    // get turn value - just horizontal offset from target
+    double turnOutput = -m_turnPid.calculate(robotContainer.m_vision.getHorizOffsetDeg( ), m_targetAngle);
+    if (turnOutput > 0)
+    {
+      turnOutput = turnOutput + m_turnConstant;
+    }
+    else if (turnOutput < 0)
+    {
+      turnOutput = turnOutput - m_turnConstant;
+    }
+
+    // get throttle value
+    m_limelightDistance = robotContainer.m_vision.getDistLimelight( );
+
+    double throttleDistance = m_throttlePid.calculate(m_limelightDistance, m_setPointDistance);
+    double throttleOutput = throttleDistance * Math.pow(Math.cos(turnOutput * Math.PI / 180), m_throttleShape);
+
+    // put turn and throttle outputs on the dashboard
+    SmartDashboard.putNumber("DTL_TurnOutput", turnOutput);
+    SmartDashboard.putNumber("DTL_ThrottleOutput", throttleOutput);
+    SmartDashboard.putNumber("DTL_LimeLightDist", m_limelightDistance);
+
+    // cap max turn and throttle output
+    // TODO: figure out what std does again
+    // turnOutput = std::clamp(turnOutput, -m_maxTurn, m_maxTurn);
+    // throttleOutput = std::clamp(throttleOutput, -m_maxThrottle, m_maxThrottle);
+
+    // put turn and throttle outputs on the dashboard
+    SmartDashboard.putNumber("DTL_TurnOutputClamped", turnOutput);
+    SmartDashboard.putNumber("DTL_ThrottleOutputClamped", throttleOutput);
+
+    if (m_talonValidL1 || m_talonValidR3)
+      velocityArcadeDrive(throttleOutput, turnOutput);
+
+    if (m_limelightDebug >= 1)
+      DataLogManager.log(getSubsystem( ) +
+          ": DTL tv - " + tv +
+          " tx - " + String.format("%.1f", tx) +
+          " ty - " + String.format("%.1f", ty) +
+          " distError" + String.format("%.1f", Math.abs(m_setPointDistance - m_limelightDistance)) +
+          " lldistance" + String.format("%.1f", m_limelightDistance) +
+          " stopped" + moveIsStopped( ) +
+          " tOutput" + String.format("%.2f", turnOutput) +
+          " thrOutput - " + String.format("%.2f", throttleOutput));
+  }
 
 }
