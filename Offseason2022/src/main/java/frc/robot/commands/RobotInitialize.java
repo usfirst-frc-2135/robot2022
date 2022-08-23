@@ -16,8 +16,6 @@ public class RobotInitialize extends CommandBase
     // m_subsystem = subsystem;
     // addRequirements(m_subsystem);
 
-    // Starts recording to data log
-    DataLogManager.start( );
   }
 
   // Called when the command is initially scheduled.
