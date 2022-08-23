@@ -21,6 +21,11 @@ public class Constants
 
   public static final class Drivetrain
   {
+    public static final int    kL1CANID               = 1;
+    public static final int    kL2CANID               = 2;
+    public static final int    kR3CANID               = 3;
+    public static final int    kR4CANID               = 4;
+
     // Odometry constants
     public static int          kEncoderCPR            = 2048; // CPR is 2048 for new TalonFX
     public static int          kRPM                   = 6380;        // free speed for Falcon 500 motor
@@ -43,6 +48,9 @@ public class Constants
 
   public static final class Intake
   {
+    public static final int kCANID       = 6;
+    public static final int kArmSolenoid = 0;
+
     public enum Mode
     {
       INTAKE_STOP,    // Stop intake motor
@@ -53,11 +61,15 @@ public class Constants
 
   public static final class FloorConveyor
   {
+    public static final int kCANID = 8;
 
   }
 
   public static final class TowerConveyor
   {
+    public static final int kCANID    = 9;
+    public static final int kCargoDIO = 2;
+
     public enum Mode
     {
       TCONVEYOR_STOP,         // Conveyor stop
@@ -70,7 +82,8 @@ public class Constants
 
   public static final class Shooter
   {
-    public static final int    kShooterCANID         = 11;
+    public static final int    kCANID                = 11;
+
     public static final double kFlywheelGearRatio    = (18.0 / 12.0);
     public static final double kFlywheelCPR          = Falcon500.kEncoderCPR * kFlywheelGearRatio;
     public static final double kFlywheelToleranceRPM = 200.0;     // Tolerance band around target RPM
@@ -91,7 +104,12 @@ public class Constants
 
   public static final class Climber
   {
-
+    public static final int kLeftCANID       = 14;
+    public static final int kRightCANID      = 15;
+    public static final int kCancoderID      = 0;
+    public static final int kLeftLimitDIO    = 0;
+    public static final int kRightLimitDIO   = 1;
+    public static final int kGateHookSolenod = 1;
   }
 
   public static final class Vision
@@ -110,6 +128,8 @@ public class Constants
 
   public static final class LED
   {
+    public static final int kCANDdleID = 0;
+
     public enum LEDColor
     {
       LEDCOLOR_OFF,     // CANdle off

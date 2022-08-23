@@ -3,44 +3,52 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
+
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 /**
  *
  */
 public class Climber extends SubsystemBase
 {
-  private WPI_TalonFX  motorCL14;
-  private WPI_TalonFX  motorCL15;
-  private Solenoid     gateHook;
-  private CANCoder     gateHookAngle;
-  private DigitalInput downLimitLeft;
-  private DigitalInput downLimitRight;
+  // Constants
+  private static final int                CANTIMEOUT            = 30;  // CAN timeout in msec
+  private static final int                PIDINDEX              = 0;   // PID in use (0-primary, 1-aux)
+  private static final int                SLOTINDEX             = 0;   // Use first PID slot
+
+  // Devices and simulation objects
+  private WPI_TalonFX                     m_motorCL14           = new WPI_TalonFX(Constants.Climber.kLeftCANID);
+  private WPI_TalonFX                     m_motorCL15           = new WPI_TalonFX(Constants.Climber.kRightCANID);
+  private Solenoid                        m_gateHook            =
+      new Solenoid(0, PneumaticsModuleType.CTREPCM, Constants.Climber.kGateHookSolenod);
+  private CANCoder                        m_gateHookAngle       = new CANCoder(Constants.Climber.kCancoderID);
+  private DigitalInput                    m_downLimitLeft       = new DigitalInput(Constants.Climber.kLeftLimitDIO);
+  private DigitalInput                    m_downLimitRight      = new DigitalInput(Constants.Climber.kRightLimitDIO);
+
+  private SupplyCurrentLimitConfiguration m_supplyCurrentLimits = new SupplyCurrentLimitConfiguration(true, 45.0, 45.0, 0.001);
+  private StatorCurrentLimitConfiguration m_statorCurrentLimits = new StatorCurrentLimitConfiguration(true, 80.0, 80.0, 0.001);
+
+  // Declare module variables
 
   /**
    *
    */
   public Climber( )
   {
-    motorCL14 = new WPI_TalonFX(14);
-
-    motorCL15 = new WPI_TalonFX(15);
-
-    gateHook = new Solenoid(0, PneumaticsModuleType.CTREPCM, 1);
-    addChild("GateHook", gateHook);
-
-    gateHookAngle = new CANCoder(0);
-
-    downLimitLeft = new DigitalInput(0);
-    addChild("DownLimitLeft", downLimitLeft);
-
-    downLimitRight = new DigitalInput(1);
-    addChild("DownLimitRight", downLimitRight);
+    // Set the names for this subsystem for later use
+    setName("Climber");
+    setSubsystem("Climber");
+    addChild("GateHook", m_gateHook);
+    addChild("DownLimitLeft", m_downLimitLeft);
+    addChild("DownLimitRight", m_downLimitRight);
   }
 
   @Override

@@ -33,45 +33,48 @@ import frc.robot.frc2135.RobotConfig;
 public class Shooter extends SubsystemBase
 {
   // Constants
-  private static final int     PIDINDEX             = 0;   // PID in use (0-primary, 1-aux)
-  private static final int     SLOTINDEX            = 0;   // Use first PID slot
-  private static final int     CANTIMEOUT           = 30;  // CAN timeout in msec
+  private static final int                CANTIMEOUT            = 30;  // CAN timeout in msec
+  private static final int                PIDINDEX              = 0;   // PID in use (0-primary, 1-aux)
+  private static final int                SLOTINDEX             = 0;   // Use first PID slot
 
-  private static final double  SUPPLYCURRENTLIMIT   = 45.0; // Max continuous current allowed
-  private static final double  SUPPLYTRIGGERCURRENT = 45.0; // Instantaneous current threshold to trigger
-  private static final double  SUPPLYTRIGGERTIME    = 0.001; // Time allowed for trigger current before limiting
+  private static final double             SUPPLYCURRENTLIMIT    = 45.0; // Max continuous current allowed
+  private static final double             SUPPLYTRIGGERCURRENT  = 45.0; // Instantaneous current threshold to trigger
+  private static final double             SUPPLYTRIGGERTIME     = 0.001; // Time allowed for trigger current before limiting
 
-  private static final double  STATORCURRENTLIMIT   = 80.0; // Max continuous current allowed
-  private static final double  STATORTRIGGERCURRENT = 80.0; // Instantaneous current threshold to trigger
-  private static final double  STATORTRIGGERTIME    = 0.001; // Time allowed for trigger current before limiting
+  private static final double             STATORCURRENTLIMIT    = 80.0; // Max continuous current allowed
+  private static final double             STATORTRIGGERCURRENT  = 80.0; // Instantaneous current threshold to trigger
+  private static final double             STATORTRIGGERTIME     = 0.001; // Time allowed for trigger current before limiting
 
   // Devices and simulation objects
-  private WPI_TalonFX          m_motorSH11          = new WPI_TalonFX(Constants.Shooter.kShooterCANID);
-  private TalonFXSimCollection m_motorSim           = new TalonFXSimCollection(m_motorSH11);
-  private FlywheelSim          m_flywheelSim        =
+  private WPI_TalonFX                     m_motorSH11           = new WPI_TalonFX(Constants.Shooter.kCANID);
+  private TalonFXSimCollection            m_motorSim            = new TalonFXSimCollection(m_motorSH11);
+  private FlywheelSim                     m_flywheelSim         =
       new FlywheelSim(DCMotor.getFalcon500(1), Constants.Shooter.kFlywheelGearRatio, 0.01);
-  private LinearFilter         m_flywheelFilter     = LinearFilter.singlePoleIIR(0.1, 0.02);
+  private LinearFilter                    m_flywheelFilter      = LinearFilter.singlePoleIIR(0.1, 0.02);
 
-  // Configuration file parameters
-  private double               m_flywheelPidKf;           // Flywheel PID force constant
-  private double               m_flywheelPidKp;           // Flywheel PID proportional constant
-  private double               m_flywheelPidKi;           // Flywheel PID integral constant
-  private double               m_flywheelPidKd;           // Flywheel PID derivative constant
-  private double               m_flywheelNeutralDeadband; // Flywheel PID neutral deadband in percent
-  private double               m_flywheelLowerTargetRPM;  // Target flywheel RPM for shooting lower hub
-  private double               m_flywheelUpperTargetRPM;  // Target flywheel RPM for shooting upper hub
-  private double               m_flywheelToleranceRPM;    // Allowed variation from target RPM
+  private SupplyCurrentLimitConfiguration m_supplyCurrentLimits = new SupplyCurrentLimitConfiguration(true, 45.0, 45.0, 0.001);
+  private StatorCurrentLimitConfiguration m_statorCurrentLimits = new StatorCurrentLimitConfiguration(true, 80.0, 80.0, 0.001);
 
   // Declare module variables
-  private boolean              m_SH11Valid          = false; // Health indicator for shooter talon 11
-  private int                  m_resetCountSH11     = 0;     // reset counter for motor
-  private boolean              m_ifShooterTest      = false; // checks to see if testing the shooter
-  private boolean              m_atDesiredSpeed     = false; // Indicates flywheel RPM is close to target
-  private boolean              m_atDesiredSpeedPrevious;
+  private boolean                         m_validSH11           = false; // Health indicator for shooter talon 11
+  private int                             m_resetCountSH11      = 0;     // reset counter for motor
+  private boolean                         m_ifShooterTest       = false; // checks to see if testing the shooter
+  private boolean                         m_atDesiredSpeed      = false; // Indicates flywheel RPM is close to target
+  private boolean                         m_atDesiredSpeedPrevious;
 
-  private double               m_flywheelTargetRPM;      // Requested flywheel RPM
-  private double               m_flywheelRPM;            // Current flywheel RPM
-  private Mode                 m_curMode;                // Current shooter mode
+  private double                          m_flywheelTargetRPM;      // Requested flywheel RPM
+  private double                          m_flywheelRPM;            // Current flywheel RPM
+  private Mode                            m_curMode;                // Current shooter mode
+
+  // Configuration file parameters
+  private double                          m_flywheelPidKf;           // Flywheel PID force constant
+  private double                          m_flywheelPidKp;           // Flywheel PID proportional constant
+  private double                          m_flywheelPidKi;           // Flywheel PID integral constant
+  private double                          m_flywheelPidKd;           // Flywheel PID derivative constant
+  private double                          m_flywheelNeutralDeadband; // Flywheel PID neutral deadband in percent
+  private double                          m_flywheelLowerTargetRPM;  // Target flywheel RPM for shooting lower hub
+  private double                          m_flywheelUpperTargetRPM;  // Target flywheel RPM for shooting upper hub
+  private double                          m_flywheelToleranceRPM;    // Allowed variation from target RPM
 
   /**
    *
@@ -83,8 +86,8 @@ public class Shooter extends SubsystemBase
     setSubsystem("Shooter");
 
     // Confirm the motor controller is talking and initialize it to factory defaults
-    m_SH11Valid = PhoenixUtil.getInstance( ).talonFXInitialize(m_motorSH11, "SH11");
-    SmartDashboard.putBoolean("HL_SH11Valid", m_SH11Valid);
+    m_validSH11 = PhoenixUtil.getInstance( ).talonFXInitialize(m_motorSH11, "SH11");
+    SmartDashboard.putBoolean("HL_validSH11", m_validSH11);
 
     // Get values from config file
     RobotConfig config = RobotConfig.getInstance( );
@@ -108,7 +111,7 @@ public class Shooter extends SubsystemBase
     SmartDashboard.putNumber("SH_flywheelToleranceRPM", m_flywheelToleranceRPM);
 
     // Initialize the motor controller for use as a shooter
-    if (m_SH11Valid)
+    if (m_validSH11)
     {
       // Set motor direction and coast/brake mode
       m_motorSH11.setInverted(true);
@@ -119,13 +122,8 @@ public class Shooter extends SubsystemBase
       m_motorSH11.configNeutralDeadband(m_flywheelNeutralDeadband, CANTIMEOUT);
       m_motorSH11.configPeakOutputReverse(0.0, CANTIMEOUT);
 
-      SupplyCurrentLimitConfiguration supplyCurrentLimits =
-          new SupplyCurrentLimitConfiguration(true, SUPPLYCURRENTLIMIT, SUPPLYTRIGGERCURRENT, SUPPLYTRIGGERTIME);
-      StatorCurrentLimitConfiguration statorCurrentLimits =
-          new StatorCurrentLimitConfiguration(true, STATORCURRENTLIMIT, STATORTRIGGERCURRENT, STATORTRIGGERTIME);
-
-      m_motorSH11.configSupplyCurrentLimit(supplyCurrentLimits);
-      m_motorSH11.configStatorCurrentLimit(statorCurrentLimits);
+      m_motorSH11.configSupplyCurrentLimit(m_supplyCurrentLimits);
+      m_motorSH11.configStatorCurrentLimit(m_statorCurrentLimits);
 
       // Configure sensor settings
       m_motorSH11.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, PIDINDEX, CANTIMEOUT);
@@ -153,7 +151,7 @@ public class Shooter extends SubsystemBase
     RobotContainer rc = RobotContainer.getInstance( );
 
     // Calculate flywheel RPM and display on dashboard
-    // if (m_SH11Valid)
+    // if (m_validSH11)
     m_flywheelRPM = m_flywheelFilter.calculate(flywheelNativeToRPM((m_motorSH11.getSelectedSensorVelocity(PIDINDEX))));
     SmartDashboard.putNumber("SH_flywheelRPM", m_flywheelRPM);
 
@@ -183,7 +181,7 @@ public class Shooter extends SubsystemBase
     // Display motor current on dashboard
     double currentSH11 = 0.0;
 
-    if (m_SH11Valid)
+    if (m_validSH11)
       currentSH11 = m_motorSH11.getStatorCurrent( );
     SmartDashboard.putNumber("SH_currentSH11", currentSH11);
 
@@ -236,7 +234,7 @@ public class Shooter extends SubsystemBase
 
   public void dumpFaults( )
   {
-    if (m_SH11Valid)
+    if (m_validSH11)
       PhoenixUtil.getInstance( ).talonFXFaultDump(m_motorSH11, "SH11");
   }
 
@@ -252,7 +250,7 @@ public class Shooter extends SubsystemBase
     m_flywheelToleranceRPM = SmartDashboard.getNumber("SH_flywheelToleranceRPM", m_flywheelToleranceRPM);
 
     // If in shooter test mode, get PIDF settings and program motor controller
-    if (m_SH11Valid && m_ifShooterTest)
+    if (m_validSH11 && m_ifShooterTest)
     {
       m_flywheelPidKf = SmartDashboard.getNumber("SH_flywheelPidKf", m_flywheelPidKf);
       m_flywheelPidKp = SmartDashboard.getNumber("SH_flywheelPidKp", m_flywheelPidKp);
@@ -292,7 +290,7 @@ public class Shooter extends SubsystemBase
         break;
     }
 
-    if (m_SH11Valid)
+    if (m_validSH11)
       m_motorSH11.set(ControlMode.Velocity, flywheelRPMToNative(m_flywheelTargetRPM));
 
     DataLogManager.log(getSubsystem( ) + ": target speed is " + m_flywheelTargetRPM);
