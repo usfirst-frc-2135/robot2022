@@ -49,6 +49,7 @@ public class Constants
   public static final class Intake
   {
     public static final int kCANID       = 6;
+    public static final int kIntakePWM   = 1;
     public static final int kArmSolenoid = 0;
 
     public enum Mode
