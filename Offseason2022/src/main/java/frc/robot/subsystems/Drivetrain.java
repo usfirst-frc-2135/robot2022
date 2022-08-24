@@ -38,6 +38,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.Constants.LED.LEDColor;
 import frc.robot.frc2135.PhoenixUtil;
 import frc.robot.frc2135.RobotConfig;
 
@@ -819,8 +820,8 @@ public class Drivetrain extends SubsystemBase
     m_setPointDistance = SmartDashboard.getNumber("DTL_SetPointDistance", m_setPointDistance);
 
     // load in Pid constants to controller
-    // m_turnPid = frc2::PIDController(m_turnPidKp, m_turnPidKi, m_turnPidKd);
-    // m_throttlePid = frc2::PIDController(m_throttlePidKp, m_throttlePidKi, m_throttlePidKd);
+    m_turnPid = new PIDController(m_turnPidKp, m_turnPidKi, m_turnPidKd);
+    m_throttlePid = new PIDController(m_throttlePidKp, m_throttlePidKi, m_throttlePidKd);
 
     RobotContainer robotContainer = RobotContainer.getInstance( );
     robotContainer.m_vision.m_yfilter.reset( );
@@ -866,7 +867,7 @@ public class Drivetrain extends SubsystemBase
     SmartDashboard.putNumber("DTL_LimeLightDist", m_limelightDistance);
 
     // cap max turn and throttle output
-    // TODO: figure out what std does again
+    // TODO: figure out what std does
     // turnOutput = std::clamp(turnOutput, -m_maxTurn, m_maxTurn);
     // throttleOutput = std::clamp(throttleOutput, -m_maxThrottle, m_maxThrottle);
 
@@ -889,4 +890,46 @@ public class Drivetrain extends SubsystemBase
           " thrOutput - " + String.format("%.2f", throttleOutput));
   }
 
+  public boolean moveWithLimelightIsFinished( )
+  {
+    RobotContainer robotContainer = RobotContainer.getInstance( );
+    double tx = robotContainer.m_vision.getHorizOffsetDeg( );
+    boolean tv = robotContainer.m_vision.getTargetValid( );
+
+    if (tv)
+    {
+      if (Math.abs(tx) <= m_angleThreshold)
+      {
+        robotContainer.m_led.setLLColor(LEDColor.LEDCOLOR_GREEN);
+      }
+      else
+      {
+        if (tx < -m_angleThreshold)
+        {
+          robotContainer.m_led.setLLColor(LEDColor.LEDCOLOR_RED);
+        }
+        else if (tx > m_angleThreshold)
+        {
+          robotContainer.m_led.setLLColor(LEDColor.LEDCOLOR_BLUE);
+        }
+      }
+    }
+    else
+    {
+      robotContainer.m_led.setLLColor(LEDColor.LEDCOLOR_YELLOW);
+    }
+
+    return (tv && ((Math.abs(tx)) <= m_angleThreshold)
+        && (Math.abs(m_setPointDistance - m_limelightDistance) <= m_distThreshold)
+        && moveIsStopped( ));
+  }
+
+  public void moveWithLimelightEnd( )
+  {
+    RobotContainer robotContainer = RobotContainer.getInstance( );
+    if (m_talonValidL1 || m_talonValidR3)
+      velocityArcadeDrive(0.0, 0.0);
+
+    robotContainer.m_led.setLLColor(LEDColor.LEDCOLOR_OFF);
+  }
 }
