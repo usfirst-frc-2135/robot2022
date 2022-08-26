@@ -15,6 +15,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.BasePigeonSimCollection;
 import com.ctre.phoenix.sensors.PigeonIMU;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
@@ -37,8 +38,8 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 import frc.robot.Constants.LED.LEDColor;
+import frc.robot.RobotContainer;
 import frc.robot.frc2135.PhoenixUtil;
 import frc.robot.frc2135.RobotConfig;
 
@@ -78,23 +79,14 @@ public class Drivetrain extends SubsystemBase
 
   // TODO: from Comp 2022 - adjust kV and kA angular from robot characterization
   private DifferentialDrivetrainSim       m_driveSim            = new DifferentialDrivetrainSim(
-      LinearSystemId.identifyDrivetrainSystem(
-          Constants.Drivetrain.kv,
-          Constants.Drivetrain.ka,
-          Constants.Drivetrain.KvAngular,
-          Constants.Drivetrain.KaAngular,
-          Constants.Drivetrain.kTrackWidthMeters),
-      DCMotor.getFalcon500(2),
-      Constants.Drivetrain.kGearRatio,
-      Constants.Drivetrain.kTrackWidthMeters,
-      Constants.Drivetrain.kWheelDiaMeters / 2,
-      VecBuilder.fill(0.001, 0.001, 0.001, 0.1, 0.1, 0.005, 0.005));
+      LinearSystemId.identifyDrivetrainSystem(Constants.Drivetrain.kv, Constants.Drivetrain.ka, Constants.Drivetrain.KvAngular,
+          Constants.Drivetrain.KaAngular, Constants.Drivetrain.kTrackWidthMeters),
+      DCMotor.getFalcon500(2), Constants.Drivetrain.kGearRatio, Constants.Drivetrain.kTrackWidthMeters,
+      Constants.Drivetrain.kWheelDiaMeters / 2, VecBuilder.fill(0.001, 0.001, 0.001, 0.1, 0.1, 0.005, 0.005));
 
   // Current limit settings
-  private SupplyCurrentLimitConfiguration m_supplyCurrentLimits = new SupplyCurrentLimitConfiguration(true, 45.0, 45.0,
-      0.001);
-  private StatorCurrentLimitConfiguration m_statorCurrentLimits = new StatorCurrentLimitConfiguration(true, 80.0, 80.0,
-      0.001);
+  private SupplyCurrentLimitConfiguration m_supplyCurrentLimits = new SupplyCurrentLimitConfiguration(true, 45.0, 45.0, 0.001);
+  private StatorCurrentLimitConfiguration m_statorCurrentLimits = new StatorCurrentLimitConfiguration(true, 80.0, 80.0, 0.001);
 
   // Joysticks
   private double                          m_driveXScaling;  // Scaling applied to Joystick
@@ -165,16 +157,15 @@ public class Drivetrain extends SubsystemBase
   // Ramsete follower objects
   Trajectory                              m_trajectory;
   RamseteController                       m_ramseteController;
-  DifferentialDriveKinematics             m_kinematics          = new DifferentialDriveKinematics(
-      Constants.Drivetrain.kTrackWidthMeters);
+  DifferentialDriveKinematics             m_kinematics          =
+      new DifferentialDriveKinematics(Constants.Drivetrain.kTrackWidthMeters);
   Timer                                   m_trajTimer;
 
   // Odometry and telemetry
   private double                          m_distanceLeft;
   private double                          m_distanceRight;
   private DifferentialDriveWheelSpeeds    m_wheelSpeeds;
-  private DifferentialDriveOdometry       m_odometry            = new DifferentialDriveOdometry(
-      Rotation2d.fromDegrees(0.0));
+  private DifferentialDriveOdometry       m_odometry            = new DifferentialDriveOdometry(Rotation2d.fromDegrees(0.0));
   private Field2d                         m_field               = new Field2d( );
 
   private double                          m_currentl1           = 0.0; // Motor L1 output current from Falcon
@@ -413,16 +404,11 @@ public class Drivetrain extends SubsystemBase
     motor.setSensorPhase(false);
     motor.setSelectedSensorPosition(0, kPidIndex, kCANTimeout);
 
-    PhoenixUtil.getInstance( ).checkError(motor.configOpenloopRamp(m_openLoopRampRate, kCANTimeout),
-        "HL_ConfigOpenloopRamp");
-    PhoenixUtil.getInstance( ).checkError(
-        motor.configClosedloopRamp(m_closedLoopRampRate, kCANTimeout),
+    PhoenixUtil.getInstance( ).checkError(motor.configOpenloopRamp(m_openLoopRampRate, kCANTimeout), "HL_ConfigOpenloopRamp");
+    PhoenixUtil.getInstance( ).checkError(motor.configClosedloopRamp(m_closedLoopRampRate, kCANTimeout),
         "HL_ConfigClosedloopRamp");
-    PhoenixUtil.getInstance( ).checkError(
-        motor.configSupplyCurrentLimit(m_supplyCurrentLimits),
-        "HL_ConfigSupplyCurrentLimit");
-    PhoenixUtil.getInstance( ).checkError(motor.configStatorCurrentLimit(m_statorCurrentLimits),
-        "HL_ConfigStatorCurrentLimit");
+    PhoenixUtil.getInstance( ).checkError(motor.configSupplyCurrentLimit(m_supplyCurrentLimits), "HL_ConfigSupplyCurrentLimit");
+    PhoenixUtil.getInstance( ).checkError(motor.configStatorCurrentLimit(m_statorCurrentLimits), "HL_ConfigStatorCurrentLimit");
   }
 
   public void talonFollowerInitialize(WPI_TalonFX motor, int master)
@@ -430,18 +416,12 @@ public class Drivetrain extends SubsystemBase
     motor.set(ControlMode.Follower, master);
     motor.setInverted(InvertType.FollowMaster);
     motor.setNeutralMode(NeutralMode.Coast);
-    PhoenixUtil.getInstance( ).checkError(
-        motor.setStatusFramePeriod(StatusFrame.Status_1_General, 255, kCANTimeout),
+    PhoenixUtil.getInstance( ).checkError(motor.setStatusFramePeriod(StatusFrame.Status_1_General, 255, kCANTimeout),
         "HL_SetStatusFramePeriod_Status1");
-    PhoenixUtil.getInstance( ).checkError(
-        motor.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 255, kCANTimeout),
+    PhoenixUtil.getInstance( ).checkError(motor.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 255, kCANTimeout),
         "HL_SetStatusFramePeriod_Status2");
-    PhoenixUtil.getInstance( ).checkError(
-        motor.configSupplyCurrentLimit(m_supplyCurrentLimits),
-        "HL_ConfigSupplyCurrentLimit");
-    PhoenixUtil.getInstance( ).checkError(
-        motor.configStatorCurrentLimit(m_statorCurrentLimits),
-        "HL_ConfigStatorCurrentLimit");
+    PhoenixUtil.getInstance( ).checkError(motor.configSupplyCurrentLimit(m_supplyCurrentLimits), "HL_ConfigSupplyCurrentLimit");
+    PhoenixUtil.getInstance( ).checkError(motor.configStatorCurrentLimit(m_statorCurrentLimits), "HL_ConfigStatorCurrentLimit");
   }
 
   public void updateOdometry( )
@@ -491,11 +471,9 @@ public class Drivetrain extends SubsystemBase
     // Only update indicators every 100 ms to cut down on network traffic
     if ((m_periodicInterval++ % 5 == 0) && (m_driveDebug > 1))
     {
-      DataLogManager.log(getSubsystem( ) + ": DT deg " + Rotation2d.fromDegrees(getHeadingAngle( )) + "LR dist"
-          + m_distanceLeft + " " + m_distanceRight + " amps (" + String.format("%.1f", m_currentl1) + " " +
-          String.format("%.1f", m_currentL2) + " " +
-          String.format("%.1f", m_currentR3) + " " +
-          String.format("%.1f", m_currentR4) + ")");
+      DataLogManager.log(getSubsystem( ) + ": DT deg " + Rotation2d.fromDegrees(getHeadingAngle( )) + "LR dist" + m_distanceLeft
+          + " " + m_distanceRight + " amps (" + String.format("%.1f", m_currentl1) + " " + String.format("%.1f", m_currentL2)
+          + " " + String.format("%.1f", m_currentR3) + " " + String.format("%.1f", m_currentR4) + ")");
 
     }
   }
@@ -566,20 +544,17 @@ public class Drivetrain extends SubsystemBase
     return nativeUnitsVelocity * Constants.Drivetrain.kEncoderMetersPerCount * 10;
   }
 
-  // public double joystickOutputToNative( )
-  // {
-  // double outputScaling = 1.0;
-  // //TODO: figure out how to define output
-  // return (output * outputScaling * Constants.Drivetrain.kRPM * Constants.Drivetrain.kEncoderCPR) / (60.0 * 10.0);
-  // }
+  public double joystickOutputToNative(double output)
+  {
+    double outputScaling = 1.0;
+    return (output * outputScaling * Constants.Drivetrain.kRPM * Constants.Drivetrain.kEncoderCPR) / (60.0 * 10.0);
+  }
 
   void velocityArcadeDrive(double yOutput, double xOutput)
   {
-    // TODO: what does std mean?
-    double leftOutput = 0;
-    // = JoystickOutputToNative(std::clamp(yOutput + xOutput, -1.0, 1.0));
-    double rightOutput = 0;
-    // = JoystickOutputToNative(std::clamp(yOutput - xOutput, -1.0, 1.0));
+    // define joystickOutputToNative
+    double leftOutput = joystickOutputToNative(MathUtil.clamp(yOutput + xOutput, -1.0, 1.0));
+    double rightOutput = joystickOutputToNative(MathUtil.clamp(yOutput - xOutput, -1.0, 1.0));
 
     m_driveL1.set(ControlMode.Velocity, leftOutput);
     m_driveR3.set(ControlMode.Velocity, rightOutput);
@@ -867,9 +842,8 @@ public class Drivetrain extends SubsystemBase
     SmartDashboard.putNumber("DTL_LimeLightDist", m_limelightDistance);
 
     // cap max turn and throttle output
-    // TODO: figure out what std does
-    // turnOutput = std::clamp(turnOutput, -m_maxTurn, m_maxTurn);
-    // throttleOutput = std::clamp(throttleOutput, -m_maxThrottle, m_maxThrottle);
+    turnOutput = MathUtil.clamp(turnOutput, -m_maxTurn, m_maxTurn);
+    throttleOutput = MathUtil.clamp(throttleOutput, -m_maxThrottle, m_maxThrottle);
 
     // put turn and throttle outputs on the dashboard
     SmartDashboard.putNumber("DTL_TurnOutputClamped", turnOutput);
@@ -879,15 +853,10 @@ public class Drivetrain extends SubsystemBase
       velocityArcadeDrive(throttleOutput, turnOutput);
 
     if (m_limelightDebug >= 1)
-      DataLogManager.log(getSubsystem( ) +
-          ": DTL tv - " + tv +
-          " tx - " + String.format("%.1f", tx) +
-          " ty - " + String.format("%.1f", ty) +
-          " distError" + String.format("%.1f", Math.abs(m_setPointDistance - m_limelightDistance)) +
-          " lldistance" + String.format("%.1f", m_limelightDistance) +
-          " stopped" + moveIsStopped( ) +
-          " tOutput" + String.format("%.2f", turnOutput) +
-          " thrOutput - " + String.format("%.2f", throttleOutput));
+      DataLogManager.log(getSubsystem( ) + ": DTL tv - " + tv + " tx - " + String.format("%.1f", tx) + " ty - "
+          + String.format("%.1f", ty) + " distError" + String.format("%.1f", Math.abs(m_setPointDistance - m_limelightDistance))
+          + " lldistance" + String.format("%.1f", m_limelightDistance) + " stopped" + moveIsStopped( ) + " tOutput"
+          + String.format("%.2f", turnOutput) + " thrOutput - " + String.format("%.2f", throttleOutput));
   }
 
   public boolean moveWithLimelightIsFinished( )
@@ -919,8 +888,7 @@ public class Drivetrain extends SubsystemBase
       robotContainer.m_led.setLLColor(LEDColor.LEDCOLOR_YELLOW);
     }
 
-    return (tv && ((Math.abs(tx)) <= m_angleThreshold)
-        && (Math.abs(m_setPointDistance - m_limelightDistance) <= m_distThreshold)
+    return (tv && ((Math.abs(tx)) <= m_angleThreshold) && (Math.abs(m_setPointDistance - m_limelightDistance) <= m_distThreshold)
         && moveIsStopped( ));
   }
 
@@ -932,4 +900,25 @@ public class Drivetrain extends SubsystemBase
 
     robotContainer.m_led.setLLColor(LEDColor.LEDCOLOR_OFF);
   }
+
+  boolean limelightSanityCheck(double horizAngleRange, double distRange)
+  {
+    // check whether target is valid
+    // check whether the limelight tx and ty is within a certain tolerance
+    // check whether distance is within a certain tolerance
+    RobotContainer robotContainer = RobotContainer.getInstance( );
+    double tx = robotContainer.m_vision.getHorizOffsetDeg( );
+    double ty = robotContainer.m_vision.getVertOffsetDeg( );
+    boolean tv = robotContainer.m_vision.getTargetValid( );
+    m_limelightDistance = robotContainer.m_vision.getDistLimelight( );
+
+    boolean sanityCheck =
+        tv && (Math.abs(tx) <= horizAngleRange) && (Math.abs(m_setPointDistance - m_limelightDistance) <= distRange);
+    // && (fabs(ty) <= vertAngleRange)
+
+    // TODO: DataLog call
+
+    return sanityCheck;
+  }
+
 }
