@@ -4,7 +4,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.INConsts.Mode;
+import frc.robot.Constants.INConsts.INMode;
 import frc.robot.subsystems.Intake;
 
 /**
@@ -13,9 +13,9 @@ import frc.robot.subsystems.Intake;
 public class IntakeRun extends CommandBase
 {
   private Intake m_intake;
-  private Mode   m_mode;
+  private INMode m_mode;
 
-  public IntakeRun(Intake intake, Mode mode)
+  public IntakeRun(Intake intake, INMode mode)
   {
     m_intake = intake;
     m_mode = mode;
