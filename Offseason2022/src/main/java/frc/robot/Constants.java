@@ -71,6 +71,13 @@ public class Constants
   {
     public static final int kCANID = 8;
 
+    public enum Mode
+    {
+      FCONVEYOR_STOP,  // FC Stop
+      FCONVEYOR_ACQUIRE, // FC Aquire
+      FCONVEYOR_EXPEL,  // FC Expel
+      FCONVEYOR_EXPEL_FAST, // FC Expel Fast
+    }
   }
 
   public static final class TCConsts

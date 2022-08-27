@@ -4,6 +4,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.FCConsts.Mode;
 import frc.robot.subsystems.FloorConveyor;
 
 /**
@@ -12,19 +13,22 @@ import frc.robot.subsystems.FloorConveyor;
 public class FloorConveyorRun extends CommandBase
 {
   private final FloorConveyor m_floorConveyor;
-  private int                 m_direction;
+  private Mode                m_mode;
 
-  public FloorConveyorRun(int direction, FloorConveyor subsystem)
+  public FloorConveyorRun(Mode mode, FloorConveyor subsystem)
   {
     m_floorConveyor = subsystem;
-    m_direction = direction;
+    m_mode = mode;
+    setName("FloorConveyorRun");
     addRequirements(m_floorConveyor);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize( )
-  {}
+  {
+    m_floorConveyor.setFloorConveyorSpeed(m_mode);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -40,7 +44,7 @@ public class FloorConveyorRun extends CommandBase
   @Override
   public boolean isFinished( )
   {
-    return false;
+    return true;
   }
 
   @Override
