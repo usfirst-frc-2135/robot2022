@@ -10,10 +10,11 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.motorcontrol.PWMTalonFX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.Constants.Intake.Mode;
+import frc.robot.Constants.INConsts;
+import frc.robot.Constants.INConsts.Mode;
 import frc.robot.frc2135.RobotConfig;
 
 /**
@@ -27,9 +28,9 @@ public class Intake extends SubsystemBase
   private static final int                SLOTINDEX             = 0;   // Use first PID slot
 
   // Devices and simulation objects
-  private WPI_TalonFX                     m_motorIN8            = new WPI_TalonFX(Constants.Intake.kCANID);
+  private WPI_TalonFX                     m_motorIN8            = new WPI_TalonFX(INConsts.kCANID);
   private Solenoid                        m_arm                 =
-      new Solenoid(0, PneumaticsModuleType.CTREPCM, Constants.Intake.kArmSolenoid);
+      new Solenoid(0, PneumaticsModuleType.CTREPCM, INConsts.kArmSolenoid);
 
   private SupplyCurrentLimitConfiguration m_supplyCurrentLimits = new SupplyCurrentLimitConfiguration(true, 45.0, 45.0, 0.001);
   private StatorCurrentLimitConfiguration m_statorCurrentLimits = new StatorCurrentLimitConfiguration(true, 80.0, 80.0, 0.001);

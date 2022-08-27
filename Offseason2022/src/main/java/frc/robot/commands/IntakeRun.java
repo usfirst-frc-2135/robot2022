@@ -4,7 +4,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.Intake.Mode;
+import frc.robot.Constants.INConsts.Mode;
 import frc.robot.subsystems.Intake;
 
 /**

@@ -13,8 +13,8 @@ import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.Constants.TowerConveyor.Mode;
+import frc.robot.Constants.TCConsts;
+import frc.robot.Constants.TCConsts.Mode;
 import frc.robot.frc2135.PhoenixUtil;
 import frc.robot.frc2135.RobotConfig;
 
@@ -29,8 +29,8 @@ public class TowerConveyor extends SubsystemBase
   private static final int                SLOTINDEX             = 0;   // Use first PID slot
 
   // Devices and simulation objects
-  private WPI_TalonFX                     m_motorVC9            = new WPI_TalonFX(Constants.TowerConveyor.kCANID);
-  private DigitalInput                    m_cargoDetect         = new DigitalInput(Constants.TowerConveyor.kCargoDIO);
+  private WPI_TalonFX                     m_motorVC9            = new WPI_TalonFX(TCConsts.kCANID);
+  private DigitalInput                    m_cargoDetect         = new DigitalInput(TCConsts.kCargoDIO);
 
   private SupplyCurrentLimitConfiguration m_supplyCurrentLimits = new SupplyCurrentLimitConfiguration(true, 45.0, 45.0, 0.001);
   private StatorCurrentLimitConfiguration m_statorCurrentLimits = new StatorCurrentLimitConfiguration(true, 80.0, 80.0, 0.001);
