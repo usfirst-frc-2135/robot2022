@@ -4,6 +4,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.TCConsts.Mode;
 import frc.robot.subsystems.TowerConveyor;
 
 /**
@@ -12,19 +13,22 @@ import frc.robot.subsystems.TowerConveyor;
 public class TowerConveyorRun extends CommandBase
 {
   private final TowerConveyor m_towerConveyor;
-  private int                 m_mode;
+  private Mode                m_mode;
 
-  public TowerConveyorRun(int mode, TowerConveyor subsystem)
+  public TowerConveyorRun(Mode mode, TowerConveyor subsystem)
   {
     m_towerConveyor = subsystem;
     m_mode = mode;
+    setName("TowerConveyorRun");
     addRequirements(m_towerConveyor);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize( )
-  {}
+  {
+    m_towerConveyor.setVerticalConveyorSpeed(m_mode);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -40,7 +44,7 @@ public class TowerConveyorRun extends CommandBase
   @Override
   public boolean isFinished( )
   {
-    return false;
+    return true;
   }
 
   @Override

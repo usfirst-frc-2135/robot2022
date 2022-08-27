@@ -3,14 +3,18 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.motorcontrol.PWMTalonFX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.Intake.Mode;
+import frc.robot.Constants.INConsts;
+import frc.robot.Constants.INConsts.Mode;
 import frc.robot.frc2135.RobotConfig;
 
 /**
@@ -18,11 +22,23 @@ import frc.robot.frc2135.RobotConfig;
  */
 public class Intake extends SubsystemBase
 {
-  private WPI_TalonFX motorIN8      = new WPI_TalonFX(8);
-  private Solenoid    arm           = new Solenoid(0, PneumaticsModuleType.CTREPCM, 0);
-  private boolean     talonValidIN8 = false;
-  private double      acquireSpeed;
-  private double      expelSpeed;
+  // Constants
+  private static final int                CANTIMEOUT            = 30;  // CAN timeout in msec
+  private static final int                PIDINDEX              = 0;   // PID in use (0-primary, 1-aux)
+  private static final int                SLOTINDEX             = 0;   // Use first PID slot
+
+  // Devices and simulation objects
+  private WPI_TalonFX                     m_motorIN8            = new WPI_TalonFX(INConsts.kCANID);
+  private Solenoid                        m_arm                 =
+      new Solenoid(0, PneumaticsModuleType.CTREPCM, INConsts.kArmSolenoid);
+
+  private SupplyCurrentLimitConfiguration m_supplyCurrentLimits = new SupplyCurrentLimitConfiguration(true, 45.0, 45.0, 0.001);
+  private StatorCurrentLimitConfiguration m_statorCurrentLimits = new StatorCurrentLimitConfiguration(true, 80.0, 80.0, 0.001);
+
+  // Declare module variables
+  private boolean                         m_validIN8            = false;
+  private double                          m_acquireSpeed;
+  private double                          m_expelSpeed;
 
   /**
    *
@@ -31,21 +47,21 @@ public class Intake extends SubsystemBase
   {
     setName("Intake");
     setSubsystem("Intake");
-    addChild("Arm", arm);
+    addChild("Arm", m_arm);
 
-    SmartDashboard.putBoolean("HL_IN8Valid", talonValidIN8);
+    SmartDashboard.putBoolean("HL_validIN8", m_validIN8);
 
     // Check if solenoids are functional or blacklisted
-    DataLogManager.log(getSubsystem( ) + ": Arm Solenoid is " + ((arm.isDisabled( )) ? "BLACKLISTED" : "OK"));
+    DataLogManager.log(getSubsystem( ) + ": Arm Solenoid is " + ((m_arm.isDisabled( )) ? "BLACKLISTED" : "OK"));
 
     RobotConfig config = RobotConfig.getInstance( );
-    acquireSpeed = config.getValueAsDouble("IN_AcquireSpeed", 0.6);
-    expelSpeed = config.getValueAsDouble("IN_ExpelSpeed", -0.6);
+    m_acquireSpeed = config.getValueAsDouble("IN_AcquireSpeed", 0.6);
+    m_expelSpeed = config.getValueAsDouble("IN_ExpelSpeed", -0.6);
 
-    motorIN8.setInverted(true);
-    motorIN8.setSafetyEnabled(false);
+    m_motorIN8.setInverted(true);
+    m_motorIN8.setSafetyEnabled(false);
 
-    motorIN8.set(0.0);
+    m_motorIN8.set(0.0);
 
     initialize( );
 
@@ -72,18 +88,18 @@ public class Intake extends SubsystemBase
         break;
       case INTAKE_ACQUIRE :
         strName = "ACQUIRE";
-        output = acquireSpeed;
+        output = m_acquireSpeed;
         break;
       case INTAKE_EXPEL :
         strName = "EXPEL";
-        output = expelSpeed;
+        output = m_expelSpeed;
         break;
     }
 
     // Set speed of intake and the percent output
     DataLogManager.log(getSubsystem( ) + ": Set Speed - " + strName);
 
-    motorIN8.set(output);
+    m_motorIN8.set(output);
   }
 
   public void setArmSolenoid(boolean extended)
@@ -93,7 +109,7 @@ public class Intake extends SubsystemBase
     // DataLogManager.log("IN Intake {}", (extended) ? "DEPLOY" : "STOW");
     SmartDashboard.putBoolean("IN_Deployed", extended);
 
-    arm.set(extended);
+    m_arm.set(extended);
   }
 
   @Override
