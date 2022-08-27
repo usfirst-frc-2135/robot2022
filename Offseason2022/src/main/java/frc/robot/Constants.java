@@ -71,7 +71,7 @@ public class Constants
   {
     public static final int kCANID = 8;
 
-    public enum Mode
+    public enum FCMode
     {
       FCONVEYOR_STOP,  // FC Stop
       FCONVEYOR_ACQUIRE, // FC Aquire

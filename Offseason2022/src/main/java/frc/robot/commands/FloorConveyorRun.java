@@ -4,7 +4,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.FCConsts.Mode;
+import frc.robot.Constants.FCConsts.FCMode;
 import frc.robot.subsystems.FloorConveyor;
 
 /**
@@ -13,9 +13,9 @@ import frc.robot.subsystems.FloorConveyor;
 public class FloorConveyorRun extends CommandBase
 {
   private final FloorConveyor m_floorConveyor;
-  private Mode                m_mode;
+  private FCMode              m_mode;
 
-  public FloorConveyorRun(Mode mode, FloorConveyor subsystem)
+  public FloorConveyorRun(FCMode mode, FloorConveyor subsystem)
   {
     m_floorConveyor = subsystem;
     m_mode = mode;

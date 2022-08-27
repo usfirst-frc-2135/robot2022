@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.FCConsts;
-import frc.robot.Constants.FCConsts.Mode;
+import frc.robot.Constants.FCConsts.FCMode;
 import frc.robot.frc2135.PhoenixUtil;
 import frc.robot.frc2135.RobotConfig;
 
@@ -98,7 +98,7 @@ public class FloorConveyor extends SubsystemBase
   public void initialize( )
   {
     DataLogManager.log("FC Init");
-    setFloorConveyorSpeed(FCConsts.Mode.FCONVEYOR_STOP);
+    setFloorConveyorSpeed(FCConsts.FCMode.FCONVEYOR_STOP);
   }
 
   // Dump all Talon faults
@@ -107,7 +107,7 @@ public class FloorConveyor extends SubsystemBase
     PhoenixUtil.getInstance( ).talonFXFaultDump(m_motorFC8, "FC 8");
   }
 
-  public void setFloorConveyorSpeed(Mode mode)
+  public void setFloorConveyorSpeed(FCMode mode)
   {
     final String strName;
     double outputFC = 0.0; // Default: off
