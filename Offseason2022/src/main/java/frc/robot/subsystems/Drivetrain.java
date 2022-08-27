@@ -37,8 +37,9 @@ import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.Constants.LED.LEDColor;
+import frc.robot.Constants.DTConsts;
+import frc.robot.Constants.Falcon500;
+import frc.robot.Constants.LEDConsts.LEDColor;
 import frc.robot.RobotContainer;
 import frc.robot.frc2135.PhoenixUtil;
 import frc.robot.frc2135.RobotConfig;
@@ -79,10 +80,10 @@ public class Drivetrain extends SubsystemBase
 
   // TODO: from Comp 2022 - adjust kV and kA angular from robot characterization
   private DifferentialDrivetrainSim       m_driveSim            = new DifferentialDrivetrainSim(
-      LinearSystemId.identifyDrivetrainSystem(Constants.Drivetrain.kv, Constants.Drivetrain.ka, Constants.Drivetrain.KvAngular,
-          Constants.Drivetrain.KaAngular, Constants.Drivetrain.kTrackWidthMeters),
-      DCMotor.getFalcon500(2), Constants.Drivetrain.kGearRatio, Constants.Drivetrain.kTrackWidthMeters,
-      Constants.Drivetrain.kWheelDiaMeters / 2, VecBuilder.fill(0.001, 0.001, 0.001, 0.1, 0.1, 0.005, 0.005));
+      LinearSystemId.identifyDrivetrainSystem(DTConsts.kv, DTConsts.ka, DTConsts.KvAngular, DTConsts.KaAngular,
+          DTConsts.kTrackWidthMeters),
+      DCMotor.getFalcon500(2), DTConsts.kGearRatio, DTConsts.kTrackWidthMeters, DTConsts.kWheelDiaMeters / 2,
+      VecBuilder.fill(0.001, 0.001, 0.001, 0.1, 0.1, 0.005, 0.005));
 
   // Current limit settings
   private SupplyCurrentLimitConfiguration m_supplyCurrentLimits = new SupplyCurrentLimitConfiguration(true, 45.0, 45.0, 0.001);
@@ -157,8 +158,7 @@ public class Drivetrain extends SubsystemBase
   // Ramsete follower objects
   Trajectory                              m_trajectory;
   RamseteController                       m_ramseteController;
-  DifferentialDriveKinematics             m_kinematics          =
-      new DifferentialDriveKinematics(Constants.Drivetrain.kTrackWidthMeters);
+  DifferentialDriveKinematics             m_kinematics          = new DifferentialDriveKinematics(DTConsts.kTrackWidthMeters);
   Timer                                   m_trajTimer;
 
   // Odometry and telemetry
@@ -273,15 +273,13 @@ public class Drivetrain extends SubsystemBase
     /*
      * Update all of our sensors.
      *
-     * Since WPILib's simulation class is assuming +V is forward, but -V is forward for the
-     * right motor, we need to negate the position reported by the simulation class. Basically,
-     * we negated the input, so we need to negate the output.
+     * Since WPILib's simulation class is assuming +V is forward, but -V is forward for the right motor,
+     * we need to negate the position reported by the simulation class. Basically, we negated the input,
+     * so we need to negate the output.
      *
-     * We also observe on our physical robot that a positive voltage across the output leads
-     * results in a negative sensor velocity for both the left and right motors, so we need to
-     * negate the output once more.
-     * Left output: +1 * -1 = -1
-     * Right output: -1 * -1 = +1
+     * We also observe on our physical robot that a positive voltage across the output leads results in
+     * a negative sensor velocity for both the left and right motors, so we need to negate the output
+     * once more. Left output: +1 * -1 = -1 Right output: -1 * -1 = +1
      */
 
     leftSim.setIntegratedSensorRawPosition(metersToNativeUnits(m_driveSim.getLeftPositionMeters( )));
@@ -496,7 +494,7 @@ public class Drivetrain extends SubsystemBase
   public double getDistanceMetersLeft( )
   {
     if (m_talonValidL1)
-      return Constants.Drivetrain.kEncoderMetersPerCount * m_driveL1.getSelectedSensorPosition(kPidIndex);
+      return DTConsts.kEncoderMetersPerCount * m_driveL1.getSelectedSensorPosition(kPidIndex);
 
     return 0;
   }
@@ -504,7 +502,7 @@ public class Drivetrain extends SubsystemBase
   public double getDistanceMetersRight( )
   {
     if (m_talonValidR3)
-      return Constants.Drivetrain.kEncoderMetersPerCount * m_driveR3.getSelectedSensorPosition(kPidIndex);
+      return DTConsts.kEncoderMetersPerCount * m_driveR3.getSelectedSensorPosition(kPidIndex);
 
     return 0;
   }
@@ -515,10 +513,10 @@ public class Drivetrain extends SubsystemBase
     double rightVelocity = 0;
 
     if (m_talonValidL1)
-      leftVelocity = Constants.Drivetrain.kEncoderMetersPerCount * m_driveL1.getSelectedSensorVelocity( ) * 10;
+      leftVelocity = DTConsts.kEncoderMetersPerCount * m_driveL1.getSelectedSensorVelocity( ) * 10;
 
     if (m_talonValidR3)
-      rightVelocity = Constants.Drivetrain.kEncoderMetersPerCount * m_driveR3.getSelectedSensorVelocity( ) * 10;
+      rightVelocity = DTConsts.kEncoderMetersPerCount * m_driveR3.getSelectedSensorVelocity( ) * 10;
 
     return new DifferentialDriveWheelSpeeds(leftVelocity, rightVelocity);
   }
@@ -526,28 +524,28 @@ public class Drivetrain extends SubsystemBase
   // Helper methods to convert between meters and native units
   public int metersToNativeUnits(double meters)
   {
-    return (int) (meters / Constants.Drivetrain.kEncoderMetersPerCount);
+    return (int) (meters / DTConsts.kEncoderMetersPerCount);
   }
 
   public double nativeUnitsToMeters(int nativeUnits)
   {
-    return nativeUnits * Constants.Drivetrain.kEncoderMetersPerCount;
+    return nativeUnits * DTConsts.kEncoderMetersPerCount;
   }
 
   public int mpsToNativeUnits(double velocity)
   {
-    return (int) (velocity / Constants.Drivetrain.kEncoderMetersPerCount / 10);
+    return (int) (velocity / DTConsts.kEncoderMetersPerCount / 10);
   }
 
   public double nativeUnitsToMPS(int nativeUnitsVelocity)
   {
-    return nativeUnitsVelocity * Constants.Drivetrain.kEncoderMetersPerCount * 10;
+    return nativeUnitsVelocity * DTConsts.kEncoderMetersPerCount * 10;
   }
 
   public double joystickOutputToNative(double output)
   {
     double outputScaling = 1.0;
-    return (output * outputScaling * Constants.Drivetrain.kRPM * Constants.Drivetrain.kEncoderCPR) / (60.0 * 10.0);
+    return (output * outputScaling * Falcon500.kMaxRPM * Falcon500.kEncoderCPR) / (60.0 * 10.0);
   }
 
   void velocityArcadeDrive(double yOutput, double xOutput)

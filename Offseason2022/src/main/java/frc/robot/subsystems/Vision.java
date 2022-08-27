@@ -9,7 +9,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.Constants.VIConsts;
 import frc.robot.frc2135.RobotConfig;
 
 /**
@@ -48,7 +48,7 @@ public class Vision extends SubsystemBase
     table = inst.getTable("limelight");
 
     // Set camera and LED display
-    setLEDMode(Constants.Vision.LED_ON);
+    setLEDMode(VIConsts.LED_ON);
 
     // Read these values from config file
     RobotConfig config = RobotConfig.getInstance( );
@@ -118,8 +118,8 @@ public class Vision extends SubsystemBase
   {
     DataLogManager.log(getSubsystem( ) + ": subsystem initialized!");
 
-    setLEDMode(Constants.Vision.LED_OFF);
-    setCameraDisplay(Constants.Vision.PIP_SECONDARY);
+    setLEDMode(VIConsts.LED_OFF);
+    setCameraDisplay(VIConsts.PIP_SECONDARY);
 
     syncStateFromDashboard( );
   }

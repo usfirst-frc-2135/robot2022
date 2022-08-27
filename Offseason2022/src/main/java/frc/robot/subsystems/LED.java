@@ -9,8 +9,8 @@ import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.Constants.LED.LEDColor;
+import frc.robot.Constants.LEDConsts;
+import frc.robot.Constants.LEDConsts.LEDColor;
 
 /**
  *
@@ -19,7 +19,7 @@ import frc.robot.Constants.LED.LEDColor;
 public class LED extends SubsystemBase
 {
   // variables
-  private CANdle            m_candle        = new CANdle(Constants.LED.kCANDdleID);
+  private CANdle            m_candle        = new CANdle(LEDConsts.kCANDdleID);
 
   SendableChooser<LEDColor> m_ledChooser    = new SendableChooser<LEDColor>( );
 
