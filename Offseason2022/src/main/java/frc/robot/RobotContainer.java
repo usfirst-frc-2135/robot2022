@@ -57,7 +57,7 @@ import frc.robot.commands.RobotInitialize;
 import frc.robot.commands.ScoringActionLowHub;
 import frc.robot.commands.ScoringPrime;
 import frc.robot.commands.ScoringStop;
-import frc.robot.commands.ShooterAim;
+import frc.robot.commands.VisionOn;
 import frc.robot.commands.ShooterAimToggle;
 import frc.robot.commands.ShooterReverse;
 import frc.robot.commands.ShooterRun;
@@ -223,7 +223,7 @@ public class RobotContainer
     driverBack.whenPressed(new Dummy( ), true);
 
     final JoystickButton driverStart = new JoystickButton(driver, XboxController.Button.kStart.value);
-    driverStart.whenPressed(new ShooterAim(false), true);
+    driverStart.whenPressed(new VisionOn(false), true);
 
     final JoystickButton driverRightBumper = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
     driverRightBumper.whenPressed(new ScoringActionLowHub(0, m_shooter), true);
