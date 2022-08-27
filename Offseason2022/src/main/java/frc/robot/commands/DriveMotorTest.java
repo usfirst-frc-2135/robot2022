@@ -18,7 +18,6 @@ public class DriveMotorTest extends CommandBase
   public DriveMotorTest(boolean left, Drivetrain drivetrain)
   {
     m_drivetrain = drivetrain;
-    // addRequirements(m_subsystem);
     setName("DriveMotorTest");
     addRequirements(m_drivetrain);
   }
@@ -32,11 +31,7 @@ public class DriveMotorTest extends CommandBase
   @Override
   public void execute( )
   {
-    RobotContainer robotContainer = RobotContainer.getInstance( );
-    if (m_left)
-      robotContainer.m_drivetrain.TankDriveVolts(3.0, 0.0);
-    else
-      robotContainer.m_drivetrain.TankDriveVolts(0.0, 3.0);
+    RobotContainer.getInstance( ).m_drivetrain.TankDriveVolts(m_left ? (3.0) : (0.0), m_left ? (0.0) : (3.0));
   }
 
   // Called once the command ends or is interrupted.

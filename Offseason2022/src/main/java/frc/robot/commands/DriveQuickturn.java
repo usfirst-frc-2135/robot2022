@@ -13,8 +13,6 @@ public class DriveQuickturn extends CommandBase
 {
   public DriveQuickturn( )
   {
-    // m_subsystem = subsystem;
-    // addRequirements(m_subsystem);
     setName("DriveQuickturn");
   }
 
@@ -22,8 +20,7 @@ public class DriveQuickturn extends CommandBase
   @Override
   public void initialize( )
   {
-    RobotContainer robotContainer = RobotContainer.getInstance( );
-    robotContainer.m_drivetrain.moveSetQuickTurn(true);
+    RobotContainer.getInstance( ).m_drivetrain.moveSetQuickTurn(true);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -35,8 +32,7 @@ public class DriveQuickturn extends CommandBase
   @Override
   public void end(boolean interrupted)
   {
-    RobotContainer robotContainer = RobotContainer.getInstance( );
-    robotContainer.m_drivetrain.moveSetQuickTurn(false);
+    RobotContainer.getInstance( ).m_drivetrain.moveSetQuickTurn(false);
   }
 
   // Returns true when the command should end.

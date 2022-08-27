@@ -17,7 +17,6 @@ public class DriveSlowMode extends CommandBase
   {
     m_driveSlow = driveSlow;
     setName("DriveSlowMode");
-    // addRequirements(m_subsystem);
   }
 
   // Called when the command is initially scheduled.

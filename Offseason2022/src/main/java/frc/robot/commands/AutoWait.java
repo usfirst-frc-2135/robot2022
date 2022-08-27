@@ -3,34 +3,28 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.subsystems.Drivetrain;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /**
  *
  */
-public class AutoWait extends WaitCommand
+public class AutoWait extends CommandBase
 {
-  private int        m_timerNum;
-  private Drivetrain m_drivetrain;
-  private double     m_waitTime;
+  private int    m_timerNum;
+  private double m_waitTime;
+  private Timer  m_timer;
 
-  public AutoWait(Drivetrain drivetrain, int timerNum)
+  public AutoWait(int timerNum)
   {
-    super(timerNum);
     m_timerNum = timerNum;
-    m_drivetrain = drivetrain;
-
-    // m_subsystem = subsystem;
-    // addRequirements(m_subsystem);
   }
 
   // Called just before this Command runs the first time
   @Override
   public void initialize( )
   {
-    super.initialize( );
     if (m_timerNum == 1)
       m_waitTime = SmartDashboard.getNumber("AUTO_WaitTime1", 0.0);
 
@@ -44,9 +38,7 @@ public class AutoWait extends WaitCommand
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute( )
-  {
-    m_drivetrain.moveStop( );
-  }
+  {}
 
   public boolean IsFinished( )
   {
@@ -57,7 +49,6 @@ public class AutoWait extends WaitCommand
   @Override
   public void end(boolean interrupted)
   {
-    super.end(interrupted);
     m_timer.stop( );
   }
 
