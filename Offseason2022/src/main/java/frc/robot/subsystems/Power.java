@@ -5,7 +5,6 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.PowerDistribution;
-import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
@@ -13,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  */
 public class Power extends SubsystemBase
 {
-  private PowerDistribution powerDistribution;
+  private PowerDistribution m_powerDistribution = new PowerDistribution( );;
 
   /**
    *
@@ -21,8 +20,9 @@ public class Power extends SubsystemBase
   public Power( )
   {
     setName("Power");
-    powerDistribution = new PowerDistribution( );
-    addChild("PowerDistribution", powerDistribution);
+    addChild("PowerDistribution", m_powerDistribution);
+
+    initialize( );
   }
 
   @Override
@@ -43,23 +43,23 @@ public class Power extends SubsystemBase
   public void initialize( )
   {
     // TODO: round getVoltage()
-    DataLogManager.log(getSubsystem( ) + "Init - Voltage :" + powerDistribution.getVoltage( ));
+    DataLogManager.log(getSubsystem( ) + ": Init Voltage is " + String.format("%.1f", m_powerDistribution.getVoltage( )));
   }
 
   public void FaultDump( )
   {
-    DataLogManager.log(getSubsystem( ) + "Temperature :" + powerDistribution.getTemperature( ));
-    DataLogManager.log(getSubsystem( ) + "Input Voltage : " + powerDistribution.getVoltage( ));
+    DataLogManager.log(getSubsystem( ) + ": Temperature is " + m_powerDistribution.getTemperature( ));
+    DataLogManager.log(getSubsystem( ) + ": Input Voltage is " + m_powerDistribution.getVoltage( ));
     for (int i = 0; i <= 15; i++)
     {
-      DataLogManager.log(getSubsystem( ) + "Chan :" + i + "Current :" + powerDistribution.getCurrent(i));
+      DataLogManager.log(getSubsystem( ) + ": Chan is " + i + " Current is " + m_powerDistribution.getCurrent(i));
     }
-    DataLogManager.log(getSubsystem( ) + "Total Current : " + powerDistribution.getTotalCurrent( ));
-    DataLogManager.log(getSubsystem( ) + "Total Power : " + powerDistribution.getTotalPower( ));
-    DataLogManager.log(getSubsystem( ) + "Total Energy : " + powerDistribution.getTotalEnergy( ));
+    DataLogManager.log(getSubsystem( ) + ": Total Current is " + m_powerDistribution.getTotalCurrent( ));
+    DataLogManager.log(getSubsystem( ) + ": Total Power is " + m_powerDistribution.getTotalPower( ));
+    DataLogManager.log(getSubsystem( ) + ": Total Energy is " + m_powerDistribution.getTotalEnergy( ));
 
-    powerDistribution.resetTotalEnergy( );
-    powerDistribution.clearStickyFaults( );
+    m_powerDistribution.resetTotalEnergy( );
+    m_powerDistribution.clearStickyFaults( );
   }
 
 }

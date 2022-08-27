@@ -15,9 +15,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  */
 public class Pneumatics extends SubsystemBase
 {
-  private Compressor              compressor       = new Compressor(PneumaticsModuleType.CTREPCM);
-
-  private PneumaticsControlModule pcm              = new PneumaticsControlModule(0);
+  private PneumaticsControlModule m_pcm            = new PneumaticsControlModule(0);
+  private Compressor              m_compressor     = new Compressor(PneumaticsModuleType.CTREPCM);
 
   private final int               pneumaticsDebug  = 0;
   private int                     periodicInterval = 0;
@@ -29,8 +28,9 @@ public class Pneumatics extends SubsystemBase
   {
     setName("Pneumatics");
     setSubsystem("Pneumatics");
+    addChild("Compressor", m_compressor);
 
-    addChild("Compressor", compressor);
+    initialize( );
   }
 
   @Override
@@ -39,7 +39,7 @@ public class Pneumatics extends SubsystemBase
     // This method will be called once per scheduler run
 
     if ((pneumaticsDebug > 0) && (periodicInterval++ % 5 == 0))
-      SmartDashboard.putNumber("PCM_Output_Comp", pcm.getCompressorCurrent( ));
+      SmartDashboard.putNumber("PCM_Output_Comp", m_pcm.getCompressorCurrent( ));
   }
 
   @Override
@@ -56,16 +56,16 @@ public class Pneumatics extends SubsystemBase
     // Print out PCM faults and clear sticky ones
     DataLogManager.log(getSubsystem( ) + ": ----- PCM FAULTS --------------");
 
-    if (pcm.getCompressorCurrentTooHighFault( ))
+    if (m_pcm.getCompressorCurrentTooHighFault( ))
       DataLogManager.log(getSubsystem( ) + ": Warn - CurrentTooHighFault");
-    if (pcm.getCompressorNotConnectedFault( ))
+    if (m_pcm.getCompressorNotConnectedFault( ))
       DataLogManager.log(getSubsystem( ) + ": Warn - CompressorNotConnectedFault");
-    if (pcm.getCompressorShortedFault( ))
+    if (m_pcm.getCompressorShortedFault( ))
       DataLogManager.log(getSubsystem( ) + ": Warn - CompressorShortedFault");
-    if (pcm.getSolenoidVoltageFault( ))
+    if (m_pcm.getSolenoidVoltageFault( ))
       DataLogManager.log(getSubsystem( ) + ": Warn - SolenoidVoltageFault");
 
-    pcm.clearAllStickyFaults( );
+    m_pcm.clearAllStickyFaults( );
   }
 
   public void initialize( )

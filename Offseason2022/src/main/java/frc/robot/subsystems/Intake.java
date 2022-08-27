@@ -3,28 +3,113 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.motorcontrol.PWMTalonFX;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.INConsts;
+import frc.robot.Constants.INConsts.Mode;
+import frc.robot.frc2135.RobotConfig;
 
 /**
  *
  */
 public class Intake extends SubsystemBase
 {
-  private WPI_TalonFX motorIN8;
-  private Solenoid    arm;
+  // Constants
+  private static final int                CANTIMEOUT            = 30;  // CAN timeout in msec
+  private static final int                PIDINDEX              = 0;   // PID in use (0-primary, 1-aux)
+  private static final int                SLOTINDEX             = 0;   // Use first PID slot
+
+  // Devices and simulation objects
+  private WPI_TalonFX                     m_motorIN8            = new WPI_TalonFX(INConsts.kCANID);
+  private Solenoid                        m_arm                 =
+      new Solenoid(0, PneumaticsModuleType.CTREPCM, INConsts.kArmSolenoid);
+
+  private SupplyCurrentLimitConfiguration m_supplyCurrentLimits = new SupplyCurrentLimitConfiguration(true, 45.0, 45.0, 0.001);
+  private StatorCurrentLimitConfiguration m_statorCurrentLimits = new StatorCurrentLimitConfiguration(true, 80.0, 80.0, 0.001);
+
+  // Declare module variables
+  private boolean                         m_validIN8            = false;
+  private double                          m_acquireSpeed;
+  private double                          m_expelSpeed;
 
   /**
    *
    */
   public Intake( )
   {
-    motorIN8 = new WPI_TalonFX(6);
+    setName("Intake");
+    setSubsystem("Intake");
+    addChild("Arm", m_arm);
 
-    arm = new Solenoid(0, PneumaticsModuleType.CTREPCM, 0);
-    addChild("Arm", arm);
+    SmartDashboard.putBoolean("HL_validIN8", m_validIN8);
+
+    // Check if solenoids are functional or blacklisted
+    DataLogManager.log(getSubsystem( ) + ": Arm Solenoid is " + ((m_arm.isDisabled( )) ? "BLACKLISTED" : "OK"));
+
+    RobotConfig config = RobotConfig.getInstance( );
+    m_acquireSpeed = config.getValueAsDouble("IN_AcquireSpeed", 0.6);
+    m_expelSpeed = config.getValueAsDouble("IN_ExpelSpeed", -0.6);
+
+    m_motorIN8.setInverted(true);
+    m_motorIN8.setSafetyEnabled(false);
+
+    m_motorIN8.set(0.0);
+
+    initialize( );
+
+  }
+
+  public void initialize( )
+  {
+    DataLogManager.log(getSubsystem( ) + ": subsystem initialized!");
+    setIntakeSpeed(Mode.INTAKE_STOP);
+    setArmSolenoid(false);
+  }
+
+  public void setIntakeSpeed(Mode mode)
+  {
+    final String strName;
+    double output = 0.0; // Default: off
+
+    switch (mode)
+    {
+      default :
+      case INTAKE_STOP :
+        strName = "STOP";
+        output = 0.0;
+        break;
+      case INTAKE_ACQUIRE :
+        strName = "ACQUIRE";
+        output = m_acquireSpeed;
+        break;
+      case INTAKE_EXPEL :
+        strName = "EXPEL";
+        output = m_expelSpeed;
+        break;
+    }
+
+    // Set speed of intake and the percent output
+    DataLogManager.log(getSubsystem( ) + ": Set Speed - " + strName);
+
+    m_motorIN8.set(output);
+  }
+
+  public void setArmSolenoid(boolean extended)
+  {
+    DataLogManager.log(getSubsystem( ) + ": Arm " + ((extended) ? "DEPLOYED" : "STOWED"));
+
+    // DataLogManager.log("IN Intake {}", (extended) ? "DEPLOY" : "STOW");
+    SmartDashboard.putBoolean("IN_Deployed", extended);
+
+    m_arm.set(extended);
   }
 
   @Override

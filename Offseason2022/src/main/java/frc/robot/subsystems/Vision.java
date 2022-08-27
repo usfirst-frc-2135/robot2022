@@ -9,7 +9,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.Constants.VIConsts;
 import frc.robot.frc2135.RobotConfig;
 
 /**
@@ -19,21 +19,21 @@ public class Vision extends SubsystemBase
 {
   private NetworkTable table;
 
-  private double       targetHorizAngle; // Horizontal Offset from Crosshair to Target (-27 to 27 degrees)
-  private double       targetVertAngle;  // Vertical Offset from Crosshair to Target (-20.5 to 20.5 degrees)
-  private double       targetArea;       // Target Area (0% of image to 100% of image)
-  private double       targetSkew;       // Target Skew or rotation (-90 degrees to 0 degrees)
-  private boolean      targetValid;      // Target Valid or not
+  private double       m_targetHorizAngle; // Horizontal Offset from Crosshair to Target (-27 to 27 degrees)
+  private double       m_targetVertAngle;  // Vertical Offset from Crosshair to Target (-20.5 to 20.5 degrees)
+  private double       m_targetArea;       // Target Area (0% of image to 100% of image)
+  private double       m_targetSkew;       // Target Skew or rotation (-90 degrees to 0 degrees)
+  private boolean      m_targetValid;      // Target Valid or not
 
   // Variables in inches to calculate limelight distance
-  private double       distance1   = 48;    // x position in inches for first reference point
-  private double       vertOffset1 = 0.42;  // y reading in degrees for first reference point
-  private double       distance2   = 60;    // x position in inches for second reference point
-  private double       vertOffset2 = -4.85; // y reading in degrees for second reference point
-  private double       distLL;                // calculated distance in inches for the current y value
+  private double       m_distance1   = 48;    // x position in inches for first reference point
+  private double       m_vertOffset1 = 0.42;  // y reading in degrees for first reference point
+  private double       m_distance2   = 60;    // x position in inches for second reference point
+  private double       m_vertOffset2 = -4.85; // y reading in degrees for second reference point
+  private double       m_distLL;                // calculated distance in inches for the current y value
 
   // Creates a MedianFilter with a window size of 5 samples
-  MedianFilter         yfilter     = new MedianFilter(5); // filter y values to remove outliers
+  MedianFilter         m_yfilter     = new MedianFilter(5); // filter y values to remove outliers
 
   /**
    *
@@ -48,20 +48,20 @@ public class Vision extends SubsystemBase
     table = inst.getTable("limelight");
 
     // Set camera and LED display
-    setLEDMode(Constants.Vision.LED_ON);
+    setLEDMode(VIConsts.LED_ON);
 
     // Read these values from config file
     RobotConfig config = RobotConfig.getInstance( );
-    distance1 = config.getValueAsDouble("VI_distance1", 48.0);
-    distance2 = config.getValueAsDouble("VI_distance2", 60.0);
-    vertOffset1 = config.getValueAsDouble("VI_vertOffset1", 0.42);
-    vertOffset2 = config.getValueAsDouble("VI_vertOffset2", -4.85);
+    m_distance1 = config.getValueAsDouble("VI_distance1", 48.0);
+    m_distance2 = config.getValueAsDouble("VI_distance2", 60.0);
+    m_vertOffset1 = config.getValueAsDouble("VI_vertOffset1", 0.42);
+    m_vertOffset2 = config.getValueAsDouble("VI_vertOffset2", -4.85);
 
     // Put all the needed widgets on the dashboard
-    SmartDashboard.putNumber("VI_distance1", distance1);
-    SmartDashboard.putNumber("VI_distance2", distance2);
-    SmartDashboard.putNumber("VI_vertOffset1", vertOffset1);
-    SmartDashboard.putNumber("VI_vertOffset2", vertOffset2);
+    SmartDashboard.putNumber("VI_distance1", m_distance1);
+    SmartDashboard.putNumber("VI_distance2", m_distance2);
+    SmartDashboard.putNumber("VI_vertOffset1", m_vertOffset1);
+    SmartDashboard.putNumber("VI_vertOffset2", m_vertOffset2);
 
     SmartDashboard.setDefaultBoolean("VI_OVERRIDE", false);
     SmartDashboard.putNumber("VI_OVERRIDE_TX", 0.0);
@@ -80,30 +80,30 @@ public class Vision extends SubsystemBase
     if (SmartDashboard.getBoolean("VI_OVERRIDE", false))
     {
       // Allow the limelight to be bypassed by entries from the dashboard
-      targetHorizAngle = SmartDashboard.getNumber("VI_OVERRIDE_TX", 0.0);
-      targetVertAngle = SmartDashboard.getNumber("VI_OVERRIDE_TY", 0.0);
-      targetArea = SmartDashboard.getNumber("VI_OVERRIDE_TA", 0.0);
-      targetSkew = SmartDashboard.getNumber("VI_OVERRIDE_TS", 0.0);
-      targetValid = SmartDashboard.getBoolean("VI_OVERRIDE_TV", true);
+      m_targetHorizAngle = SmartDashboard.getNumber("VI_OVERRIDE_TX", 0.0);
+      m_targetVertAngle = SmartDashboard.getNumber("VI_OVERRIDE_TY", 0.0);
+      m_targetArea = SmartDashboard.getNumber("VI_OVERRIDE_TA", 0.0);
+      m_targetSkew = SmartDashboard.getNumber("VI_OVERRIDE_TS", 0.0);
+      m_targetValid = SmartDashboard.getBoolean("VI_OVERRIDE_TV", true);
     }
     else
     {
-      targetHorizAngle = table.getEntry("tx").getDouble(0.0);
-      targetVertAngle = yfilter.calculate(table.getEntry("ty").getDouble(0.0));
-      targetArea = table.getEntry("ta").getDouble(0.0);
-      targetSkew = table.getEntry("ts").getDouble(0.0);
-      targetValid = table.getEntry("tv").getBoolean(false);
+      m_targetHorizAngle = table.getEntry("tx").getDouble(0.0);
+      m_targetVertAngle = m_yfilter.calculate(table.getEntry("ty").getDouble(0.0));
+      m_targetArea = table.getEntry("ta").getDouble(0.0);
+      m_targetSkew = table.getEntry("ts").getDouble(0.0);
+      m_targetValid = table.getEntry("tv").getBoolean(false);
     }
 
-    distLL = calculateDist(targetVertAngle);
+    m_distLL = calculateDist(m_targetVertAngle);
 
-    SmartDashboard.putNumber("VI_horizAngle", targetHorizAngle);
-    SmartDashboard.putNumber("VI_vertAngle", targetVertAngle);
-    SmartDashboard.putNumber("VI_area", targetArea);
-    SmartDashboard.putNumber("VI_skew", targetSkew);
-    SmartDashboard.putBoolean("VI_valid", targetValid);
+    SmartDashboard.putNumber("VI_horizAngle", m_targetHorizAngle);
+    SmartDashboard.putNumber("VI_vertAngle", m_targetVertAngle);
+    SmartDashboard.putNumber("VI_area", m_targetArea);
+    SmartDashboard.putNumber("VI_skew", m_targetSkew);
+    SmartDashboard.putBoolean("VI_valid", m_targetValid);
 
-    SmartDashboard.putNumber("VI_distLL", distLL);
+    SmartDashboard.putNumber("VI_distLL", m_distLL);
   }
 
   @Override
@@ -118,40 +118,40 @@ public class Vision extends SubsystemBase
   {
     DataLogManager.log(getSubsystem( ) + ": subsystem initialized!");
 
-    setLEDMode(Constants.Vision.LED_OFF);
-    setCameraDisplay(Constants.Vision.PIP_SECONDARY);
+    setLEDMode(VIConsts.LED_OFF);
+    setCameraDisplay(VIConsts.PIP_SECONDARY);
 
     syncStateFromDashboard( );
   }
 
   public double getHorizOffsetDeg( )
   {
-    return targetHorizAngle;
+    return m_targetHorizAngle;
   }
 
   public double getVertOffsetDeg( )
   {
-    return targetVertAngle;
+    return m_targetVertAngle;
   }
 
   public double getTargetArea( )
   {
-    return targetArea;
+    return m_targetArea;
   }
 
   public double getTargetSkew( )
   {
-    return targetSkew;
+    return m_targetSkew;
   }
 
   public boolean getTargetValid( )
   {
-    return targetValid;
+    return m_targetValid;
   }
 
-  public double getgetDistLimelight( )
+  public double getDistLimelight( )
   {
-    return distLL;
+    return m_distLL;
   }
 
   public void setLEDMode(int mode)
@@ -180,19 +180,19 @@ public class Vision extends SubsystemBase
 
   private double calculateDist(double vertAngle)
   {
-    double slope = (distance2 - distance1) / (vertOffset2 - vertOffset1);
-    double offset = distance1 - slope * vertOffset1;
+    double slope = (m_distance2 - m_distance1) / (m_vertOffset2 - m_vertOffset1);
+    double offset = m_distance1 - slope * m_vertOffset1;
 
     SmartDashboard.putNumber("VI_Slope", slope);
 
     return (slope * vertAngle) + offset;
   }
 
-  private void syncStateFromDashboard( )
+  public void syncStateFromDashboard( )
   {
-    distance1 = SmartDashboard.getNumber("VI_distance1", distance1);
-    distance2 = SmartDashboard.getNumber("VI_distance2", distance2);
-    vertOffset1 = SmartDashboard.getNumber("VI_vertOffset1", vertOffset1);
-    vertOffset2 = SmartDashboard.getNumber("VI_vertOffset2", vertOffset2);
+    m_distance1 = SmartDashboard.getNumber("VI_distance1", m_distance1);
+    m_distance2 = SmartDashboard.getNumber("VI_distance2", m_distance2);
+    m_vertOffset1 = SmartDashboard.getNumber("VI_vertOffset1", m_vertOffset1);
+    m_vertOffset2 = SmartDashboard.getNumber("VI_vertOffset2", m_vertOffset2);
   }
 }
