@@ -14,7 +14,8 @@ public class Constants
 {
   public static final class Falcon500
   {
-    public static final double kEncoderCPR           = 2048; // CPR is 2048 from Falcon 500 Manual
+    public static int          kMaxRPM               = 6380;             // free speed for Falcon 500 motor
+    public static final double kEncoderCPR           = 2048;             // CPR is 2048 from Falcon 500 Manual
     public static final int    kTalonReqVersion      = ((22 * 256) + 0); // Talon version is 22.0
     public static final int    kPigeonReqVersion     = ((22 * 256) + 0); // Pigeon IMU version is 22.0
 
@@ -36,10 +37,6 @@ public class Constants
     public static final int    kR3CANID               = 3;
     public static final int    kR4CANID               = 4;
 
-    // Odometry constants
-    public static int          kEncoderCPR            = 2048; // CPR is 2048 for new TalonFX
-    public static int          kRPM                   = 6380;        // free speed for Falcon 500 motor
-
     // Kinematics values for 2135 Bebula - 2019 B-bo
     public static final double ks                     = 0.65; // units
     public static final double kv                     = 2.84; // units
@@ -50,7 +47,7 @@ public class Constants
     public static final double kWheelDiaMeters        = 4.0; // Units library does the conversion
     public static final double kGearRatio             = 8.45;
 
-    public static final double kEncoderMetersPerCount = (kWheelDiaMeters * Math.PI) / (kEncoderCPR) / kGearRatio;
+    public static final double kEncoderMetersPerCount = (kWheelDiaMeters * Math.PI) / (Falcon500.kEncoderCPR) / kGearRatio;
     public static final double kTrackWidthMeters      = 0.6477; // Measured track width
                                                                 // Gear reduction
 

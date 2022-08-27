@@ -38,6 +38,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DTConsts;
+import frc.robot.Constants.Falcon500;
 import frc.robot.Constants.LEDConsts.LEDColor;
 import frc.robot.RobotContainer;
 import frc.robot.frc2135.PhoenixUtil;
@@ -157,8 +158,7 @@ public class Drivetrain extends SubsystemBase
   // Ramsete follower objects
   Trajectory                              m_trajectory;
   RamseteController                       m_ramseteController;
-  DifferentialDriveKinematics             m_kinematics          =
-      new DifferentialDriveKinematics(Constants.Drivetrain.kTrackWidthMeters);
+  DifferentialDriveKinematics             m_kinematics          = new DifferentialDriveKinematics(DTConsts.kTrackWidthMeters);
   Timer                                   m_trajTimer;
 
   // Odometry and telemetry
@@ -168,7 +168,6 @@ public class Drivetrain extends SubsystemBase
   private DifferentialDriveOdometry       m_odometry            = new DifferentialDriveOdometry(Rotation2d.fromDegrees(0.0));
   private Field2d                         m_field               = new Field2d( );
 
-  private DifferentialDriveOdometry       m_odometry            = new DifferentialDriveOdometry(Rotation2d.fromDegrees(0.0));
   private double                          m_currentl1           = 0.0; // Motor L1 output current from Falcon
   private double                          m_currentL2           = 0.0; // Motor L2 output current from Falcon
   private double                          m_currentR3           = 0.0; // Motor R3 output current from Falcon
@@ -514,10 +513,10 @@ public class Drivetrain extends SubsystemBase
     double rightVelocity = 0;
 
     if (m_talonValidL1)
-      leftVelocity = Constants.Drivetrain.kEncoderMetersPerCount * m_driveL1.getSelectedSensorVelocity( ) * 10;
+      leftVelocity = DTConsts.kEncoderMetersPerCount * m_driveL1.getSelectedSensorVelocity( ) * 10;
 
     if (m_talonValidR3)
-      rightVelocity = Constants.Drivetrain.kEncoderMetersPerCount * m_driveR3.getSelectedSensorVelocity( ) * 10;
+      rightVelocity = DTConsts.kEncoderMetersPerCount * m_driveR3.getSelectedSensorVelocity( ) * 10;
 
     return new DifferentialDriveWheelSpeeds(leftVelocity, rightVelocity);
   }
@@ -546,7 +545,7 @@ public class Drivetrain extends SubsystemBase
   public double joystickOutputToNative(double output)
   {
     double outputScaling = 1.0;
-    return (output * outputScaling * Constants.Drivetrain.kRPM * Constants.Drivetrain.kEncoderCPR) / (60.0 * 10.0);
+    return (output * outputScaling * Falcon500.kMaxRPM * Falcon500.kEncoderCPR) / (60.0 * 10.0);
   }
 
   void velocityArcadeDrive(double yOutput, double xOutput)
