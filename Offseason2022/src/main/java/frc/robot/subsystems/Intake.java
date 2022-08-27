@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.motorcontrol.PWMTalonFX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.INConsts;
-import frc.robot.Constants.INConsts.Mode;
+import frc.robot.Constants.INConsts.INMode;
 import frc.robot.frc2135.RobotConfig;
 
 /**
@@ -70,11 +70,11 @@ public class Intake extends SubsystemBase
   public void initialize( )
   {
     DataLogManager.log(getSubsystem( ) + ": subsystem initialized!");
-    setIntakeSpeed(Mode.INTAKE_STOP);
+    setIntakeSpeed(INMode.INTAKE_STOP);
     setArmSolenoid(false);
   }
 
-  public void setIntakeSpeed(Mode mode)
+  public void setIntakeSpeed(INMode mode)
   {
     final String strName;
     double output = 0.0; // Default: off
