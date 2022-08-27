@@ -59,7 +59,7 @@ public class Constants
     public static final int kIntakePWM   = 1;
     public static final int kArmSolenoid = 0;
 
-    public enum Mode
+    public enum INMode
     {
       INTAKE_STOP,    // Stop intake motor
       INTAKE_ACQUIRE, // Acquire game pieces
@@ -85,7 +85,7 @@ public class Constants
     public static final int kCANID    = 9;
     public static final int kCargoDIO = 2;
 
-    public enum Mode
+    public enum TCMode
     {
       TCONVEYOR_STOP,         // Conveyor stop
       TCONVEYOR_ACQUIRE,      // Conveyor moves game pieces to shooter
