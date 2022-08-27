@@ -100,7 +100,7 @@ public class TowerConveyor extends SubsystemBase
   public void initialize( )
   {
     DataLogManager.log("VC Init");
-    setVerticalConveyorSpeed(Mode.TCONVEYOR_STOP);
+    setTowerConveyorSpeed(Mode.TCONVEYOR_STOP);
   }
 
   public void faultDump( )
@@ -109,7 +109,7 @@ public class TowerConveyor extends SubsystemBase
   }
 
   // Set mode of conveyor
-  public void setVerticalConveyorSpeed(Mode mode)
+  public void setTowerConveyorSpeed(Mode mode)
   {
     final String strName;
     double outputVC = 0.0; // Default: off

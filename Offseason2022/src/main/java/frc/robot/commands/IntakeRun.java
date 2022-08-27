@@ -15,7 +15,7 @@ public class IntakeRun extends CommandBase
   private Intake m_intake;
   private Mode   m_mode;
 
-  public void intakeRun(Intake intake, Mode mode)
+  public IntakeRun(Intake intake, Mode mode)
   {
     m_intake = intake;
     m_mode = mode;
