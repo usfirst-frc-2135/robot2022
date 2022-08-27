@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.Constants.CLConsts;
 
 /**
  *
@@ -25,13 +25,13 @@ public class Climber extends SubsystemBase
   private static final int                SLOTINDEX             = 0;   // Use first PID slot
 
   // Devices and simulation objects
-  private WPI_TalonFX                     m_motorCL14           = new WPI_TalonFX(Constants.Climber.kLeftCANID);
-  private WPI_TalonFX                     m_motorCL15           = new WPI_TalonFX(Constants.Climber.kRightCANID);
+  private WPI_TalonFX                     m_motorCL14           = new WPI_TalonFX(CLConsts.kLeftCANID);
+  private WPI_TalonFX                     m_motorCL15           = new WPI_TalonFX(CLConsts.kRightCANID);
   private Solenoid                        m_gateHook            =
-      new Solenoid(0, PneumaticsModuleType.CTREPCM, Constants.Climber.kGateHookSolenod);
-  private CANCoder                        m_gateHookAngle       = new CANCoder(Constants.Climber.kCancoderID);
-  private DigitalInput                    m_downLimitLeft       = new DigitalInput(Constants.Climber.kLeftLimitDIO);
-  private DigitalInput                    m_downLimitRight      = new DigitalInput(Constants.Climber.kRightLimitDIO);
+      new Solenoid(0, PneumaticsModuleType.CTREPCM, CLConsts.kGateHookSolenod);
+  private CANCoder                        m_gateHookAngle       = new CANCoder(CLConsts.kCancoderID);
+  private DigitalInput                    m_downLimitLeft       = new DigitalInput(CLConsts.kLeftLimitDIO);
+  private DigitalInput                    m_downLimitRight      = new DigitalInput(CLConsts.kRightLimitDIO);
 
   private SupplyCurrentLimitConfiguration m_supplyCurrentLimits = new SupplyCurrentLimitConfiguration(true, 45.0, 45.0, 0.001);
   private StatorCurrentLimitConfiguration m_statorCurrentLimits = new StatorCurrentLimitConfiguration(true, 80.0, 80.0, 0.001);
