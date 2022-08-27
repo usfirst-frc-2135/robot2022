@@ -30,7 +30,9 @@ import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.Constants.DTConsts;
+import frc.robot.Constants.LEDConsts.LEDColor;
+import frc.robot.RobotContainer;
 import frc.robot.frc2135.PhoenixUtil;
 import frc.robot.frc2135.RobotConfig;
 
@@ -70,23 +72,14 @@ public class Drivetrain extends SubsystemBase
 
   // TODO: adjust kV and kA angular from robot characterization
   private DifferentialDrivetrainSim       m_driveSim            = new DifferentialDrivetrainSim(
-      LinearSystemId.identifyDrivetrainSystem(
-          Constants.Drivetrain.kv,
-          Constants.Drivetrain.ka,
-          Constants.Drivetrain.KvAngular,
-          Constants.Drivetrain.KaAngular,
-          Constants.Drivetrain.kTrackWidthMeters),
-      DCMotor.getFalcon500(2),
-      Constants.Drivetrain.kGearRatio,
-      Constants.Drivetrain.kTrackWidthMeters,
-      Constants.Drivetrain.kWheelDiaMeters / 2,
+      LinearSystemId.identifyDrivetrainSystem(DTConsts.kv, DTConsts.ka, DTConsts.KvAngular, DTConsts.KaAngular,
+          DTConsts.kTrackWidthMeters),
+      DCMotor.getFalcon500(2), DTConsts.kGearRatio, DTConsts.kTrackWidthMeters, DTConsts.kWheelDiaMeters / 2,
       VecBuilder.fill(0.001, 0.001, 0.001, 0.1, 0.1, 0.005, 0.005));
 
   // Current limit settings
-  private SupplyCurrentLimitConfiguration m_supplyCurrentLimits = new SupplyCurrentLimitConfiguration(true, 45.0, 45.0,
-      0.001);
-  private StatorCurrentLimitConfiguration m_statorCurrentLimits = new StatorCurrentLimitConfiguration(true, 80.0, 80.0,
-      0.001);
+  private SupplyCurrentLimitConfiguration m_supplyCurrentLimits = new SupplyCurrentLimitConfiguration(true, 45.0, 45.0, 0.001);
+  private StatorCurrentLimitConfiguration m_statorCurrentLimits = new StatorCurrentLimitConfiguration(true, 80.0, 80.0, 0.001);
 
   // Joysticks
   private double                          m_driveXScaling;  // Scaling applied to Joystick
@@ -151,8 +144,7 @@ public class Drivetrain extends SubsystemBase
   // Odometry and telemetry
   private Field2d                         m_field               = new Field2d( );
 
-  private DifferentialDriveOdometry       m_odometry            = new DifferentialDriveOdometry(
-      Rotation2d.fromDegrees(0.0));
+  private DifferentialDriveOdometry       m_odometry            = new DifferentialDriveOdometry(Rotation2d.fromDegrees(0.0));
 
   /**
    *
@@ -243,15 +235,13 @@ public class Drivetrain extends SubsystemBase
     /*
      * Update all of our sensors.
      *
-     * Since WPILib's simulation class is assuming +V is forward, but -V is forward for the
-     * right motor, we need to negate the position reported by the simulation class. Basically,
-     * we negated the input, so we need to negate the output.
+     * Since WPILib's simulation class is assuming +V is forward, but -V is forward for the right motor,
+     * we need to negate the position reported by the simulation class. Basically, we negated the input,
+     * so we need to negate the output.
      *
-     * We also observe on our physical robot that a positive voltage across the output leads
-     * results in a negative sensor velocity for both the left and right motors, so we need to
-     * negate the output once more.
-     * Left output: +1 * -1 = -1
-     * Right output: -1 * -1 = +1
+     * We also observe on our physical robot that a positive voltage across the output leads results in
+     * a negative sensor velocity for both the left and right motors, so we need to negate the output
+     * once more. Left output: +1 * -1 = -1 Right output: -1 * -1 = +1
      */
 
     leftSim.setIntegratedSensorRawPosition(metersToNativeUnits(m_driveSim.getLeftPositionMeters( )));
@@ -374,16 +364,11 @@ public class Drivetrain extends SubsystemBase
     motor.setSensorPhase(false);
     motor.setSelectedSensorPosition(0, kPidIndex, kCANTimeout);
 
-    PhoenixUtil.getInstance( ).checkError(motor.configOpenloopRamp(m_openLoopRampRate, kCANTimeout),
-        "HL_ConfigOpenloopRamp");
-    PhoenixUtil.getInstance( ).checkError(
-        motor.configClosedloopRamp(m_closedLoopRampRate, kCANTimeout),
+    PhoenixUtil.getInstance( ).checkError(motor.configOpenloopRamp(m_openLoopRampRate, kCANTimeout), "HL_ConfigOpenloopRamp");
+    PhoenixUtil.getInstance( ).checkError(motor.configClosedloopRamp(m_closedLoopRampRate, kCANTimeout),
         "HL_ConfigClosedloopRamp");
-    PhoenixUtil.getInstance( ).checkError(
-        motor.configSupplyCurrentLimit(m_supplyCurrentLimits),
-        "HL_ConfigSupplyCurrentLimit");
-    PhoenixUtil.getInstance( ).checkError(motor.configStatorCurrentLimit(m_statorCurrentLimits),
-        "HL_ConfigStatorCurrentLimit");
+    PhoenixUtil.getInstance( ).checkError(motor.configSupplyCurrentLimit(m_supplyCurrentLimits), "HL_ConfigSupplyCurrentLimit");
+    PhoenixUtil.getInstance( ).checkError(motor.configStatorCurrentLimit(m_statorCurrentLimits), "HL_ConfigStatorCurrentLimit");
   }
 
   public void talonFollowerInitialize(WPI_TalonFX motor, int master)
@@ -391,18 +376,12 @@ public class Drivetrain extends SubsystemBase
     motor.set(ControlMode.Follower, master);
     motor.setInverted(InvertType.FollowMaster);
     motor.setNeutralMode(NeutralMode.Coast);
-    PhoenixUtil.getInstance( ).checkError(
-        motor.setStatusFramePeriod(StatusFrame.Status_1_General, 255, kCANTimeout),
+    PhoenixUtil.getInstance( ).checkError(motor.setStatusFramePeriod(StatusFrame.Status_1_General, 255, kCANTimeout),
         "HL_SetStatusFramePeriod_Status1");
-    PhoenixUtil.getInstance( ).checkError(
-        motor.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 255, kCANTimeout),
+    PhoenixUtil.getInstance( ).checkError(motor.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 255, kCANTimeout),
         "HL_SetStatusFramePeriod_Status2");
-    PhoenixUtil.getInstance( ).checkError(
-        motor.configSupplyCurrentLimit(m_supplyCurrentLimits),
-        "HL_ConfigSupplyCurrentLimit");
-    PhoenixUtil.getInstance( ).checkError(
-        motor.configStatorCurrentLimit(m_statorCurrentLimits),
-        "HL_ConfigStatorCurrentLimit");
+    PhoenixUtil.getInstance( ).checkError(motor.configSupplyCurrentLimit(m_supplyCurrentLimits), "HL_ConfigSupplyCurrentLimit");
+    PhoenixUtil.getInstance( ).checkError(motor.configStatorCurrentLimit(m_statorCurrentLimits), "HL_ConfigStatorCurrentLimit");
   }
 
   public void updateOdometry( )
@@ -433,7 +412,7 @@ public class Drivetrain extends SubsystemBase
   public double getDistanceMetersLeft( )
   {
     if (m_talonValidL1)
-      return Constants.Drivetrain.kEncoderMetersPerCount * m_driveL1.getSelectedSensorPosition(kPidIndex);
+      return DTConsts.kEncoderMetersPerCount * m_driveL1.getSelectedSensorPosition(kPidIndex);
 
     return 0;
   }
@@ -441,7 +420,7 @@ public class Drivetrain extends SubsystemBase
   public double getDistanceMetersRight( )
   {
     if (m_talonValidR3)
-      return Constants.Drivetrain.kEncoderMetersPerCount * m_driveR3.getSelectedSensorPosition(kPidIndex);
+      return DTConsts.kEncoderMetersPerCount * m_driveR3.getSelectedSensorPosition(kPidIndex);
 
     return 0;
   }
@@ -452,11 +431,13 @@ public class Drivetrain extends SubsystemBase
   // double rightVelocity = 0;
 
   // if (m_talonValidL1)
-  // leftVelocity = Constants.Drivetrain.kEncoderMetersPerCount * m_driveL1.getSelectedSensorVelocity( ) * 10;
+  // leftVelocity = Constants.Drivetrain.kEncoderMetersPerCount * m_driveL1.getSelectedSensorVelocity(
+  // ) * 10;
 
   // if (m_talonValidR3)
   // {
-  // rightVelocity = Constants.Drivetrain.kEncoderMetersPerCount * m_driveR3.getSelectedSensorVelocity( ) * 10;
+  // rightVelocity = Constants.Drivetrain.kEncoderMetersPerCount *
+  // m_driveR3.getSelectedSensorVelocity( ) * 10;
   // }
   // //TODO: Replace return statement
   // //return {leftVelocity, rightVelocity};
@@ -465,29 +446,30 @@ public class Drivetrain extends SubsystemBase
 
   public int metersToNativeUnits(double meters)
   {
-    return (int) (meters / Constants.Drivetrain.kEncoderMetersPerCount);
+    return (int) (meters / DTConsts.kEncoderMetersPerCount);
   }
 
   public double nativeUnitsToMeters(int nativeUnits)
   {
-    return nativeUnits * Constants.Drivetrain.kEncoderMetersPerCount;
+    return nativeUnits * DTConsts.kEncoderMetersPerCount;
   }
 
   public int mpsToNativeUnits(double velocity)
   {
-    return (int) (velocity / Constants.Drivetrain.kEncoderMetersPerCount / 10);
+    return (int) (velocity / DTConsts.kEncoderMetersPerCount / 10);
   }
 
   public double nativeUnitsToMPS(int nativeUnitsVelocity)
   {
-    return nativeUnitsVelocity * Constants.Drivetrain.kEncoderMetersPerCount * 10;
+    return nativeUnitsVelocity * DTConsts.kEncoderMetersPerCount * 10;
   }
 
   // public double joystickOutputToNative( )
   // {
   // double outputScaling = 1.0;
   // TODO: figure out how to define output
-  // return (output * outputScaling * Constants.Drivetrain.kRPM * Constants.Drivetrain.kEncoderCPR) / (60.0 * 10.0);
+  // return (output * outputScaling * Constants.Drivetrain.kRPM * Constants.Drivetrain.kEncoderCPR) /
+  // (60.0 * 10.0);
   // }
 
   //

@@ -14,12 +14,22 @@ public class Constants
 {
   public static final class Falcon500
   {
-    public static final double kEncoderCPR       = 2048; // CPR is 2048 from Falcon 500 Manual
-    public static final int    kTalonReqVersion  = ((22 * 256) + 0); // Talon version is 22.0
-    public static final int    kPigeonReqVersion = ((22 * 256) + 0); // Pigeon IMU version is 22.0
+    public static final double kEncoderCPR           = 2048; // CPR is 2048 from Falcon 500 Manual
+    public static final int    kTalonReqVersion      = ((22 * 256) + 0); // Talon version is 22.0
+    public static final int    kPigeonReqVersion     = ((22 * 256) + 0); // Pigeon IMU version is 22.0
+
+    // Input current limit settings
+    public static final double kSupplyCurrentLimit   = 45.0;  // Default supply current limit (after trigger)
+    public static final double kSupplyTriggerCurrent = 45.0;  // Trigger current that will cause limiting
+    public static final double kSupplyTriggerTime    = 0.001; // Time duration of trigger that will causing limiting
+
+    // Output current limit settings
+    public static final double kStatorCurrentLimit   = 80.0;  // Default supply current limit (after trigger)
+    public static final double kStatorTriggerCurrent = 80.0;  // Default trigger current that will cause limiting
+    public static final double kStatorTriggerTime    = 0.001; // Default time duration of trigger that will causing limiting
   }
 
-  public static final class Drivetrain
+  public static final class DTConsts
   {
     public static final int    kL1CANID               = 1;
     public static final int    kL2CANID               = 2;
@@ -46,7 +56,7 @@ public class Constants
 
   }
 
-  public static final class Intake
+  public static final class INConsts
   {
     public static final int kCANID       = 6;
     public static final int kIntakePWM   = 1;
@@ -60,13 +70,13 @@ public class Constants
     }
   }
 
-  public static final class FloorConveyor
+  public static final class FCConsts
   {
     public static final int kCANID = 8;
 
   }
 
-  public static final class TowerConveyor
+  public static final class TCConsts
   {
     public static final int kCANID    = 9;
     public static final int kCargoDIO = 2;
@@ -81,17 +91,26 @@ public class Constants
     }
   }
 
-  public static final class Shooter
+  public static final class SHConsts
   {
-    public static final int    kCANID                = 11;
+    public static final int    kCANID                   = 11;
 
-    public static final double kFlywheelGearRatio    = (18.0 / 12.0);
-    public static final double kFlywheelCPR          = Falcon500.kEncoderCPR * kFlywheelGearRatio;
-    public static final double kFlywheelToleranceRPM = 200.0;     // Tolerance band around target RPM
-    public static final double kFlywheelPrimeRPM     = 1000.0;    // RPM for priming the shooter
+    public static final double kFlywheelGearRatio       = (18.0 / 12.0);
+    public static final double kFlywheelCPR             = Falcon500.kEncoderCPR * kFlywheelGearRatio;
 
-    public static final double kReverseRPMThreshold  = 20.0;      // RPM threshold for allowing reverse of motor
-    public static final double kFlywheelReverseRPM   = -1000.0;   // RPM for reversing out game pieces
+    public static final double kFlywheelPidKf           = 0.0475;
+    public static final double kFlywheelPidKp           = 0.05;
+    public static final double kFlywheelPidKi           = 0.0;
+    public static final double kFlywheelPidKd           = 0.0;
+    public static final double kFlywheelNeutralDeadband = 0.004;
+
+    public static final double kFlywheelToleranceRPM    = 200.0;     // Tolerance band around target RPM
+    public static final double kFlywheelPrimeRPM        = 1000.0;    // RPM for priming the shooter
+    public static final double kFlywheelLowerTargetRPM  = 1450.0;    // RPM for lower hub
+    public static final double kFlywheelUpperTargetRPM  = 3000.0;    // RPM for upper hub
+
+    public static final double kReverseRPMThreshold     = 20.0;      // RPM threshold for allowing reverse of motor
+    public static final double kFlywheelReverseRPM      = -1000.0;   // RPM for reversing out game pieces
 
     public enum Mode
     {
@@ -103,7 +122,7 @@ public class Constants
     }
   }
 
-  public static final class Climber
+  public static final class CLConsts
   {
     public static final int kLeftCANID       = 14;
     public static final int kRightCANID      = 15;
@@ -113,7 +132,7 @@ public class Constants
     public static final int kGateHookSolenod = 1;
   }
 
-  public static final class Vision
+  public static final class VIConsts
   {
     // Camera Limelight streaming states
     public static final int STANDARD      = 0;  // Both cameras side-by-side
@@ -127,7 +146,7 @@ public class Constants
     public static final int LED_ON        = 3;
   }
 
-  public static final class LED
+  public static final class LEDConsts
   {
     public static final int kCANDdleID = 0;
 
