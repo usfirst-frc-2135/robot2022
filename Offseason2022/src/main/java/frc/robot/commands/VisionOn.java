@@ -3,8 +3,6 @@
 
 package frc.robot.commands;
 
-import javax.lang.model.util.ElementScanner6;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.VIConsts;
 import frc.robot.RobotContainer;
@@ -27,10 +25,7 @@ public class VisionOn extends CommandBase
   @Override
   public void initialize( )
   {
-    // TODO: get method to recognize m_vision
-    /*
-     * if (m_lightOn) { m_vision.setLEDMode( ); } else { m_vision.setLEDMode(VIConsts.LED_OFF); }
-     */
+    RobotContainer.getInstance( ).m_vision.setLEDMode(VIConsts.LED_ON);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
