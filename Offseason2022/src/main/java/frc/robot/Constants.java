@@ -128,12 +128,25 @@ public class Constants
 
   public static final class CLConsts
   {
-    public static final int kLeftCANID       = 14;
-    public static final int kRightCANID      = 15;
-    public static final int kCancoderID      = 0;
-    public static final int kLeftLimitDIO    = 0;
-    public static final int kRightLimitDIO   = 1;
-    public static final int kGateHookSolenod = 1;
+    public static final int    kClimberEncoderCPR   = 2048;
+    public static final double kClimberRolloutRatio = 0.432; // inches per shaft rotation
+    public static final double kInchesPerCount      = kClimberRolloutRatio * (1.0 / (double) kClimberEncoderCPR);
+
+    public enum Height
+    {                             // Climber subsystem movement states
+      NOCHANGE_HEIGHT,     // No change in climber height--maintain current position
+      STOW_HEIGHT,         // Move to stow height
+      EXTEND_L2_HEIGHT,     // Move to extend to L2 height
+      ROTATE_L3_HEIGHT,     // Move to rotate to L3 height
+      GATEHOOK_REST_HEIGHT, // Move to lower on L3 height so gate hooks clamp
+      RAISE_L4_HEIGHT      // Move to extend on last rung ~6 inches
+    }
+
+    public enum Position
+    {
+      CLIMBER_INIT, CLIMBER_DOWN, CLIMBER_STOPPED, CLIMBER_UP
+    }
+
   }
 
   public static final class VIConsts
