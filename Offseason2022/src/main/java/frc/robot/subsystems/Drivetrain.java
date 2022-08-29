@@ -21,7 +21,6 @@ import com.ctre.phoenix.sensors.PigeonIMU;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -44,7 +43,6 @@ import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.math.trajectory.Trajectory.State;
 import frc.robot.Constants.DTConsts;
 import frc.robot.Constants.Falcon500;
 import frc.robot.Constants.LEDConsts.LEDColor;
@@ -542,9 +540,9 @@ public class Drivetrain extends SubsystemBase
     return (int) (velocity / DTConsts.kEncoderMetersPerCount / 10);
   }
 
-  public double nativeUnitsToMPS(double velLeftCurrent)
+  public double nativeUnitsToMPS(double nativeUnitsVelocity)
   {
-    return velLeftCurrent * DTConsts.kEncoderMetersPerCount * 10;
+    return nativeUnitsVelocity * DTConsts.kEncoderMetersPerCount * 10;
   }
 
   public double joystickOutputToNative(double output)
