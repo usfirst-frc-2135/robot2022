@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.TCConsts;
-import frc.robot.Constants.TCConsts.Mode;
+import frc.robot.Constants.TCConsts.TCMode;
 import frc.robot.frc2135.PhoenixUtil;
 import frc.robot.frc2135.RobotConfig;
 
@@ -100,7 +100,7 @@ public class TowerConveyor extends SubsystemBase
   public void initialize( )
   {
     DataLogManager.log("VC Init");
-    setVerticalConveyorSpeed(Mode.TCONVEYOR_STOP);
+    setTowerConveyorSpeed(TCMode.TCONVEYOR_STOP);
   }
 
   public void faultDump( )
@@ -109,7 +109,7 @@ public class TowerConveyor extends SubsystemBase
   }
 
   // Set mode of conveyor
-  public void setVerticalConveyorSpeed(Mode mode)
+  public void setTowerConveyorSpeed(TCMode mode)
   {
     final String strName;
     double outputVC = 0.0; // Default: off
@@ -145,7 +145,7 @@ public class TowerConveyor extends SubsystemBase
       m_motorVC9.set(ControlMode.PercentOutput, outputVC);
   }
 
-  boolean isCargoDetected( )
+  public boolean isCargoDetected( )
   {
     boolean cargoDetected = m_cargoDetect.get( );
     SmartDashboard.putBoolean("VC_cargoDetected", cargoDetected);
