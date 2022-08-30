@@ -55,9 +55,9 @@ public class Constants
 
   public static final class INConsts
   {
-    public static final int    kIN8CANID    = 6;
-    public static final int    kIntakePWM   = 1;
-    public static final int    kArmSolenoid = 0;
+    // public static final int kIN8CANID = 6;
+    public static final int    kINPWM1         = 1;
+    public static final int    kArmSolenoid    = 0;
 
     public static final double kINAcquireSpeed = 0.6;
     public static final double kINExpelSpeed   = -0.6;
@@ -72,7 +72,7 @@ public class Constants
 
   public static final class FCConsts
   {
-    public static final int    kFC8CANID = 8;
+    public static final int    kFC8CANID         = 8;
 
     public static final double kFCAcquireSpeed   = 1.0;
     public static final double kFCExpelSpeed     = -1.0;
@@ -89,8 +89,8 @@ public class Constants
 
   public static final class TCConsts
   {
-    public static final int    kTC9CANID = 9;
-    public static final int    kCargoDIO = 2;
+    public static final int    kTC9CANID         = 9;
+    public static final int    kCargoDIO         = 2;
     public static final double kTCAcquireSpeed   = 1.0;
     public static final double kAcquireSpeedSlow = 0.2;
     public static final double kTCExpelSpeed     = -0.2;

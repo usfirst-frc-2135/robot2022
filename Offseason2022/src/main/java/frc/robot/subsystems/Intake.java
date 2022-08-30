@@ -3,13 +3,12 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
-import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.motorcontrol.TalonFXSimCollection;
 
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.motorcontrol.PWMTalonFX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.INConsts;
@@ -21,22 +20,22 @@ import frc.robot.Constants.INConsts.INMode;
 public class Intake extends SubsystemBase
 {
   // Constants
-  private static final int                CANTIMEOUT            = 30;  // CAN timeout in msec
-  private static final int                PIDINDEX              = 0;   // PID in use (0-primary, 1-aux)
-  private static final int                SLOTINDEX             = 0;   // Use first PID slot
+  // private static final int CANTIMEOUT = 30; // CAN timeout in msec
 
-  // Devices and simulation objects
-  private WPI_TalonFX                     m_motorIN8            = new WPI_TalonFX(INConsts.kIN8CANID);
-  private Solenoid                        m_arm                 =
-      new Solenoid(0, PneumaticsModuleType.CTREPCM, INConsts.kArmSolenoid);
+  // Devices and simulation objects (intake was moved from CAN bus to PWM1)
+  // private WPI_TalonFX m_motorIN8 = new WPI_TalonFX(INConsts.kIN8CANID);
+  private PWMTalonFX m_motorIN8 = new PWMTalonFX(INConsts.kINPWM1);
+  private Solenoid   m_arm      = new Solenoid(0, PneumaticsModuleType.CTREPCM, INConsts.kArmSolenoid);
 
-  private SupplyCurrentLimitConfiguration m_supplyCurrentLimits = new SupplyCurrentLimitConfiguration(true, 45.0, 45.0, 0.001);
-  private StatorCurrentLimitConfiguration m_statorCurrentLimits = new StatorCurrentLimitConfiguration(true, 80.0, 80.0, 0.001);
+  // private SupplyCurrentLimitConfiguration m_supplyCurrentLimits = new
+  // SupplyCurrentLimitConfiguration(true, 45.0, 45.0, 0.001);
+  // private StatorCurrentLimitConfiguration m_statorCurrentLimits = new
+  // StatorCurrentLimitConfiguration(true, 80.0, 80.0, 0.001);
 
   // Declare module variables
-  private boolean                         m_validIN8            = false;
-  private double                          m_acquireSpeed;
-  private double                          m_expelSpeed;
+  private boolean    m_validIN8 = false;
+  private double     m_acquireSpeed;
+  private double     m_expelSpeed;
 
   /**
    *
@@ -49,7 +48,7 @@ public class Intake extends SubsystemBase
 
     SmartDashboard.putBoolean("HL_validIN8", m_validIN8);
 
-    // Check if solenoids are functional or blacklisted
+    // Check if solenoid is functional or blacklisted
     DataLogManager.log(getSubsystem( ) + ": Arm Solenoid is " + ((m_arm.isDisabled( )) ? "BLACKLISTED" : "OK"));
 
     m_acquireSpeed = INConsts.kINAcquireSpeed;
@@ -57,12 +56,24 @@ public class Intake extends SubsystemBase
 
     m_motorIN8.setInverted(true);
     m_motorIN8.setSafetyEnabled(false);
-
     m_motorIN8.set(0.0);
 
     initialize( );
-
   }
+
+  @Override
+  public void periodic( )
+  {
+    // This method will be called once per scheduler run
+  }
+
+  @Override
+  public void simulationPeriodic( )
+  {
+    // This method will be called once per scheduler run when in simulation
+  }
+
+  // Put methods for controlling this subsystem here. Call these from Commands.
 
   public void initialize( )
   {
@@ -95,32 +106,13 @@ public class Intake extends SubsystemBase
 
     // Set speed of intake and the percent output
     DataLogManager.log(getSubsystem( ) + ": Set Speed - " + strName);
-
     m_motorIN8.set(output);
   }
 
-  public void setArmSolenoid(boolean extended)
+  public void setArmSolenoid(boolean extend)
   {
-    DataLogManager.log(getSubsystem( ) + ": Arm " + ((extended) ? "DEPLOYED" : "STOWED"));
-
-    // DataLogManager.log("IN Intake {}", (extended) ? "DEPLOY" : "STOW");
-    SmartDashboard.putBoolean("IN_Deployed", extended);
-
-    m_arm.set(extended);
+    DataLogManager.log(getSubsystem( ) + ": Arm " + ((extend) ? "DEPLOYED" : "STOWED"));
+    SmartDashboard.putBoolean("IN_Deployed", extend);
+    m_arm.set(extend);
   }
-
-  @Override
-  public void periodic( )
-  {
-    // This method will be called once per scheduler run
-  }
-
-  @Override
-  public void simulationPeriodic( )
-  {
-    // This method will be called once per scheduler run when in simulation
-  }
-
-  // Put methods for controlling this subsystem
-  // here. Call these from Commands.
 }
