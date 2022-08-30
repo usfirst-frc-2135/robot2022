@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.TCConsts;
 import frc.robot.Constants.TCConsts.TCMode;
 import frc.robot.frc2135.PhoenixUtil;
-import frc.robot.frc2135.RobotConfig;
 
 /**
  *
@@ -55,11 +54,10 @@ public class TowerConveyor extends SubsystemBase
     m_validVC9 = PhoenixUtil.getInstance( ).talonFXInitialize(m_motorVC9, "VC9");
     SmartDashboard.putBoolean("HL_validVC9", m_validVC9);
 
-    RobotConfig config = RobotConfig.getInstance( );
-    m_acquireSpeed = config.getValueAsDouble("VC_AcquireSpeed", 1.0);
-    m_acquireSpeedSlow = config.getValueAsDouble("VC_AcquireSpeedSlow", 0.2);
-    m_expelSpeed = config.getValueAsDouble("VC_expelSpeed", -0.2);
-    m_expelSpeedFast = config.getValueAsDouble("VC_expelSpeedFast", -1.0);
+    m_acquireSpeed = TCConsts.kTCAcquireSpeed;
+    m_acquireSpeedSlow = TCConsts.kAcquireSpeedSlow;
+    m_expelSpeed = TCConsts.kTCExpelSpeed;
+    m_expelSpeedFast = TCConsts.kTCExpelSpeedFast;
 
     if (m_validVC9)
     {

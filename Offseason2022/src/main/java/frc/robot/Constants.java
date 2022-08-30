@@ -55,9 +55,11 @@ public class Constants
 
   public static final class INConsts
   {
-    public static final int kCANID       = 6;
-    public static final int kIntakePWM   = 1;
-    public static final int kArmSolenoid = 0;
+    public static final int    kCANID          = 6;
+    public static final int    kIntakePWM      = 1;
+    public static final int    kArmSolenoid    = 0;
+    public static final double kINAcquireSpeed = 0.6;
+    public static final double kINExpelSpeed   = -0.6;
 
     public enum INMode
     {
@@ -82,8 +84,12 @@ public class Constants
 
   public static final class TCConsts
   {
-    public static final int kCANID    = 9;
-    public static final int kCargoDIO = 2;
+    public static final int    kCANID            = 9;
+    public static final int    kCargoDIO         = 2;
+    public static final double kTCAcquireSpeed   = 1.0;
+    public static final double kAcquireSpeedSlow = 0.2;
+    public static final double kTCExpelSpeed     = -0.2;
+    public static final double kTCExpelSpeedFast = -1.0;
 
     public enum TCMode
     {
