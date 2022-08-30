@@ -24,7 +24,7 @@ import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.CLConsts;
 import frc.robot.Constants.CLConsts.Height;
-import frc.robot.Constants.CLConsts.Position;
+import frc.robot.Constants.CLConsts.CLMode;
 import frc.robot.Constants.LEDConsts.LEDColor;
 import frc.robot.frc2135.PhoenixUtil;
 import frc.robot.frc2135.RobotConfig;
@@ -36,16 +36,17 @@ public class Climber extends SubsystemBase
 {
   // Constants
 
-  private Solenoid                        m_gatehook            = new Solenoid(0, PneumaticsModuleType.CTREPCM, 1);
-  private WPI_TalonFX                     m_motorCL14           = new WPI_TalonFX(14);
-  private WPI_TalonFX                     m_motorCL15           = new WPI_TalonFX(15);
-  private WPI_CANCoder                    m_gatehookAngle       = new WPI_CANCoder(0);
-  private DigitalInput                    m_climberDownLeft     = new DigitalInput(0);
-  private DigitalInput                    m_climberDownRight    = new DigitalInput(1);
+  private final int                       kCANTimeout           = 30;  // CAN timeout in msec to wait for response
+  private WPI_TalonFX                     m_motorCL14           = new WPI_TalonFX(CLConsts.kCL14LeftCANID);
+  private WPI_TalonFX                     m_motorCL15           = new WPI_TalonFX(CLConsts.kCL15RightCANID);
+  private Solenoid                        m_gateHook            =
+      new Solenoid(0, PneumaticsModuleType.CTREPCM, CLConsts.kGateHookSolenod);
+  private CANCoder                        m_gateHookAngle       = new CANCoder(CLConsts.kCLCancoderID);
+  private DigitalInput                    m_climberDownLeft     = new DigitalInput(CLConsts.kCLLeftLimitDIO);
+  private DigitalInput                    m_climberDownRight    = new DigitalInput(CLConsts.kCLRightLimitDIO);
 
   // Declare constants
   private final int                       m_climberDebug        = 0; // DEBUG flag to disable/enable extra logging calls
-  private final int                       kCANTimeout           = 30;   // CAN timeout in msec to wait for response
 
   // Declare module variables
 
@@ -98,7 +99,7 @@ public class Climber extends SubsystemBase
 
   // Periodic declarations
   public int                              periodicInterval      = 0;
-  public Position                         state                 = Position.CLIMBER_INIT;
+  public CLMode                           state                 = CLMode.CLIMBER_INIT;
 
   /**
    *
@@ -108,9 +109,11 @@ public class Climber extends SubsystemBase
     // Set the names for this subsystem for later use
     setName("Climber");
     setSubsystem("Climber");
-    addChild("GateHook", m_gatehook);
-
-    addChild("Brake", m_gatehook);
+    addChild("GateHook", m_gateHook);
+    addChild("GateHook", m_gateHook);
+    addChild("DownLimitLeft", m_climberDownLeft);
+    addChild("DownLimitLeft", m_climberDownRight);
+    addChild("Brake", m_gateHook);
 
     // Validate Talon SRX controllers, initialize and display firmware versions
     m_talonValidCL14 = PhoenixUtil.getInstance( ).talonFXInitialize(m_motorCL14, "CL14");
@@ -119,11 +122,11 @@ public class Climber extends SubsystemBase
     SmartDashboard.putBoolean("CL_CL14Valid", m_talonValidCL14);
     SmartDashboard.putBoolean("CL_CL15Valid", m_talonValidCL15);
 
-    DataLogManager.log(getSubsystem( ) + "CL 14 motor valid: {}" + m_talonValidCL14);
-    DataLogManager.log(getSubsystem( ) + "CL 15 motor valid: {}" + m_talonValidCL15);
+    // DataLogManager.log(getSubsystem( ) + "CL 14 motor valid: {}" + m_talonValidCL14);
+    // DataLogManager.log(getSubsystem( ) + "CL 15 motor valid: {}" + m_talonValidCL15);
 
     // Check if solenoids are functional or blacklisted
-    if (m_gatehook.isDisabled( ))
+    if (m_gateHook.isDisabled( ))
       DataLogManager.log("CL Climber Solenoid is BLACKLISTED");
     else
       DataLogManager.log("CL Climber Solenoid is FUNCTIONAL");
@@ -376,18 +379,18 @@ public class Climber extends SubsystemBase
     yCLValue = -joystick.getLeftY( );
     if (yCLValue > -0.1 && yCLValue < 0.1)
     {
-      if (state != Constants.CLConsts.Position.CLIMBER_STOPPED)
+      if (state != Constants.CLConsts.CLMode.CLIMBER_STOPPED)
         DataLogManager.log(getSubsystem( ) + "CL Climber Stopped");
-      state = Constants.CLConsts.Position.CLIMBER_STOPPED;
+      state = Constants.CLConsts.CLMode.CLIMBER_STOPPED;
     }
     else
     {
       // If joystick is above a value, climber will move up
       if (yCLValue > m_stickDeadband)
       {
-        if (state != Constants.CLConsts.Position.CLIMBER_UP)
+        if (state != Constants.CLConsts.CLMode.CLIMBER_UP)
           DataLogManager.log(getSubsystem( ) + ("CL Climber Up"));
-        state = Constants.CLConsts.Position.CLIMBER_UP;
+        state = Constants.CLConsts.CLMode.CLIMBER_UP;
 
         yCLValue -= m_stickDeadband;
         yCLValue *= (1.0 / (1.0 - m_stickDeadband));
@@ -396,9 +399,9 @@ public class Climber extends SubsystemBase
       // If joystick is below a value, climber will move down
       else if (yCLValue < -m_stickDeadband)
       {
-        if (state != Constants.CLConsts.Position.CLIMBER_DOWN)
+        if (state != Constants.CLConsts.CLMode.CLIMBER_DOWN)
           DataLogManager.log(getSubsystem( ) + "CL Climber Down");
-        state = Constants.CLConsts.Position.CLIMBER_DOWN;
+        state = Constants.CLConsts.CLMode.CLIMBER_DOWN;
 
         yCLValue += m_stickDeadband;
         yCLValue *= (1.0 / (1.0 - m_stickDeadband));
@@ -426,12 +429,12 @@ public class Climber extends SubsystemBase
 
   public void setGateHook(boolean hookClosed)
   {
-    if (hookClosed != m_gatehook.get( ))
+    if (hookClosed != m_gateHook.get( ))
     {
       DataLogManager.log(getSubsystem( ) + ": CL HOOK {}" + ((hookClosed) ? "OPEN" : "CLOSED"));
       SmartDashboard.putBoolean("CL_Hook_Closed", hookClosed);
 
-      m_gatehook.set(hookClosed);
+      m_gateHook.set(hookClosed);
     }
   }
 

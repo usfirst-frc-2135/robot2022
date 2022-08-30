@@ -55,7 +55,7 @@ public class Constants
 
   public static final class INConsts
   {
-    public static final int kCANID       = 6;
+    public static final int kIN8CANID    = 6;
     public static final int kIntakePWM   = 1;
     public static final int kArmSolenoid = 0;
 
@@ -69,7 +69,7 @@ public class Constants
 
   public static final class FCConsts
   {
-    public static final int kCANID = 8;
+    public static final int kFC8CANID = 8;
 
     public enum FCMode
     {
@@ -82,7 +82,7 @@ public class Constants
 
   public static final class TCConsts
   {
-    public static final int kCANID    = 9;
+    public static final int kTC9CANID = 9;
     public static final int kCargoDIO = 2;
 
     public enum TCMode
@@ -97,7 +97,7 @@ public class Constants
 
   public static final class SHConsts
   {
-    public static final int    kCANID                   = 11;
+    public static final int    kSH11CANID               = 11;
 
     public static final double kFlywheelGearRatio       = (18.0 / 12.0);
     public static final double kFlywheelCPR             = Falcon500.kEncoderCPR * kFlywheelGearRatio;
@@ -128,9 +128,14 @@ public class Constants
 
   public static final class CLConsts
   {
-    public static final int    kClimberEncoderCPR   = 2048;
     public static final double kClimberRolloutRatio = 0.432; // inches per shaft rotation
-    public static final double kInchesPerCount      = kClimberRolloutRatio * (1.0 / (double) kClimberEncoderCPR);
+    public static final double kInchesPerCount      = kClimberRolloutRatio * (1.0 / (double) Falcon500.kEncoderCPR);
+    public static final int    kCL14LeftCANID       = 14;
+    public static final int    kCL15RightCANID      = 15;
+    public static final int    kGateHookSolenod     = 1;
+    public static final int    kCLCancoderID        = 0;
+    public static final int    kCLLeftLimitDIO      = 0;
+    public static final int    kCLRightLimitDIO     = 1;
 
     public enum Height
     {                             // Climber subsystem movement states
@@ -142,7 +147,7 @@ public class Constants
       RAISE_L4_HEIGHT      // Move to extend on last rung ~6 inches
     }
 
-    public enum Position
+    public enum CLMode
     {
       CLIMBER_INIT, CLIMBER_DOWN, CLIMBER_STOPPED, CLIMBER_UP
     }
