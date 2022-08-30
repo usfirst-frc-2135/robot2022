@@ -29,7 +29,7 @@ public class FloorConveyor extends SubsystemBase
   private static final int                SLOTINDEX             = 0;   // Use first PID slot
 
   // Devices and simulation objects
-  private WPI_TalonFX                     m_motorFC8            = new WPI_TalonFX(FCConsts.kCANID);
+  private WPI_TalonFX                     m_motorFC8            = new WPI_TalonFX(FCConsts.kFC8CANID);
 
   private SupplyCurrentLimitConfiguration m_supplyCurrentLimits = new SupplyCurrentLimitConfiguration(true, 45.0, 45.0, 0.001);
   private StatorCurrentLimitConfiguration m_statorCurrentLimits = new StatorCurrentLimitConfiguration(true, 80.0, 80.0, 0.001);
@@ -97,7 +97,7 @@ public class FloorConveyor extends SubsystemBase
   // here. Call these from Commands.
   public void initialize( )
   {
-    DataLogManager.log("FC Init");
+    DataLogManager.log(getSubsystem( ) + ": subsystem intitialized!");
     setFloorConveyorSpeed(FCConsts.FCMode.FCONVEYOR_STOP);
   }
 

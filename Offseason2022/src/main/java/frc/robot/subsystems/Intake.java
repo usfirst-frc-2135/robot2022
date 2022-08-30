@@ -26,7 +26,7 @@ public class Intake extends SubsystemBase
   private static final int                SLOTINDEX             = 0;   // Use first PID slot
 
   // Devices and simulation objects
-  private WPI_TalonFX                     m_motorIN8            = new WPI_TalonFX(INConsts.kCANID);
+  private WPI_TalonFX                     m_motorIN8            = new WPI_TalonFX(INConsts.kIN8CANID);
   private Solenoid                        m_arm                 =
       new Solenoid(0, PneumaticsModuleType.CTREPCM, INConsts.kArmSolenoid);
 
