@@ -10,12 +10,10 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.motorcontrol.PWMTalonFX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.INConsts;
 import frc.robot.Constants.INConsts.INMode;
-import frc.robot.frc2135.RobotConfig;
 
 /**
  *
@@ -54,9 +52,8 @@ public class Intake extends SubsystemBase
     // Check if solenoids are functional or blacklisted
     DataLogManager.log(getSubsystem( ) + ": Arm Solenoid is " + ((m_arm.isDisabled( )) ? "BLACKLISTED" : "OK"));
 
-    RobotConfig config = RobotConfig.getInstance( );
-    m_acquireSpeed = config.getValueAsDouble("IN_AcquireSpeed", 0.6);
-    m_expelSpeed = config.getValueAsDouble("IN_ExpelSpeed", -0.6);
+    m_acquireSpeed = INConsts.kINAcquireSpeed;
+    m_expelSpeed = INConsts.kINExpelSpeed;
 
     m_motorIN8.setInverted(true);
     m_motorIN8.setSafetyEnabled(false);

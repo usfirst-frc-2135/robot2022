@@ -145,8 +145,8 @@ public class RobotContainer
     SmartDashboard.putData("ClimberSetGatehook", new ClimberSetGatehook( ));
     SmartDashboard.putData("ClimberTimerOverride", new ClimberTimerOverride( ));
     SmartDashboard.putData("DriveLimelight", new DriveLimelight( ));
-    SmartDashboard.putData("DriveMotorTest", new DriveMotorTest(true, m_drivetrain));
-    SmartDashboard.putData("DriveResetSensors", new DriveResetSensors(m_drivetrain));
+    SmartDashboard.putData("DriveMotorTest", new DriveMotorTest(m_drivetrain, true));
+    SmartDashboard.putData("DriveResetSensors", new DriveResetSensors( ));
     SmartDashboard.putData("ExhaustingAction", new ExhaustingAction( ));
     SmartDashboard.putData("ExhaustingStop", new ExhaustingStop( ));
     SmartDashboard.putData("Fconveyor-STOP", new FloorConveyorRun(FCMode.FCONVEYOR_STOP, m_floorConveyor));
