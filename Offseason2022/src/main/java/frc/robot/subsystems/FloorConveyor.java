@@ -55,10 +55,10 @@ public class FloorConveyor extends SubsystemBase
     SmartDashboard.putBoolean("HL_validFC8", m_validFC8);
 
     // Initialize Variables
-    RobotConfig config = RobotConfig.getInstance( );
-    m_acquireSpeed = config.getValueAsDouble("FC_AcquireSpeed", 1.0);
-    m_expelSpeed = config.getValueAsDouble("FC_expelSpeed", 0.2);
-    m_expelSpeedFast = config.getValueAsDouble("FC_expelSpeedFast", -1.0);
+
+    m_acquireSpeed = FCConsts.kFCAcquireSpeed;
+    m_expelSpeed = FCConsts.kFCExpelSpeed;
+    m_expelSpeedFast = FCConsts.kFCExpelSpeedFast;
 
     if (m_validFC8)
     {
