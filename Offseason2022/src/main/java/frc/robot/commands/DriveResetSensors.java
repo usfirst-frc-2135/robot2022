@@ -4,22 +4,29 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Drivetrain;
 
 /**
  *
  */
 public class DriveResetSensors extends CommandBase
 {
-  public DriveResetSensors( )
+  private Drivetrain m_drivetrain;
+
+  public DriveResetSensors(Drivetrain drivetrain)
   {
-    // m_subsystem = subsystem;
-    // addRequirements(m_subsystem);
+
+    drivetrain = m_drivetrain;
+    setName("ResetDriveSensors");
+
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize( )
-  {}
+  {
+    m_drivetrain.resetSensors( );
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -35,12 +42,12 @@ public class DriveResetSensors extends CommandBase
   @Override
   public boolean isFinished( )
   {
-    return false;
+    return true;
   }
 
   @Override
   public boolean runsWhenDisabled( )
   {
-    return false;
+    return true;
   }
 }

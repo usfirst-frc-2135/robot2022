@@ -71,7 +71,10 @@ public class Constants
 
   public static final class FCConsts
   {
-    public static final int kCANID = 8;
+    public static final int    kCANID            = 8;
+    public static final double kFCAcquireSpeed   = 1.0;
+    public static final double kFCExpelSpeed     = -1.0;
+    public static final double kFCExpelSpeedFast = -1.0;
 
     public enum FCMode
     {
