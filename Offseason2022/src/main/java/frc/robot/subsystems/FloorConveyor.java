@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.FCConsts;
 import frc.robot.Constants.FCConsts.FCMode;
 import frc.robot.frc2135.PhoenixUtil;
-import frc.robot.frc2135.RobotConfig;
 
 /**
  *
@@ -25,8 +24,6 @@ public class FloorConveyor extends SubsystemBase
 {
   // Constants
   private static final int                CANTIMEOUT            = 30;  // CAN timeout in msec
-  private static final int                PIDINDEX              = 0;   // PID in use (0-primary, 1-aux)
-  private static final int                SLOTINDEX             = 0;   // Use first PID slot
 
   // Devices and simulation objects
   private WPI_TalonFX                     m_motorFC8            = new WPI_TalonFX(FCConsts.kFC8CANID);
@@ -35,7 +32,7 @@ public class FloorConveyor extends SubsystemBase
   private StatorCurrentLimitConfiguration m_statorCurrentLimits = new StatorCurrentLimitConfiguration(true, 80.0, 80.0, 0.001);
 
   // Declare module variables
-  private boolean                         m_validFC8;  // Health indicator for floor conveyor talon
+  private boolean                         m_validFC8;       // Health indicator for floor conveyor talon
   private int                             m_resetCountFC8;  // reset counter for motor
   private double                          m_acquireSpeed;
   private double                          m_expelSpeed;
@@ -55,7 +52,6 @@ public class FloorConveyor extends SubsystemBase
     SmartDashboard.putBoolean("HL_validFC8", m_validFC8);
 
     // Initialize Variables
-
     m_acquireSpeed = FCConsts.kFCAcquireSpeed;
     m_expelSpeed = FCConsts.kFCExpelSpeed;
     m_expelSpeedFast = FCConsts.kFCExpelSpeedFast;
@@ -68,7 +64,6 @@ public class FloorConveyor extends SubsystemBase
 
       m_motorFC8.configSupplyCurrentLimit(m_supplyCurrentLimits);
       m_motorFC8.configStatorCurrentLimit(m_statorCurrentLimits);
-
       m_motorFC8.setStatusFramePeriod(StatusFrame.Status_1_General, 255, CANTIMEOUT);
       m_motorFC8.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 255, CANTIMEOUT);
     }
@@ -104,7 +99,7 @@ public class FloorConveyor extends SubsystemBase
   // Dump all Talon faults
   void faultDump( )
   {
-    PhoenixUtil.getInstance( ).talonFXFaultDump(m_motorFC8, "FC 8");
+    PhoenixUtil.getInstance( ).talonFXFaultDump(m_motorFC8, "FC8");
   }
 
   public void setFloorConveyorSpeed(FCMode mode)
@@ -138,5 +133,4 @@ public class FloorConveyor extends SubsystemBase
     if (m_validFC8)
       m_motorFC8.set(ControlMode.PercentOutput, outputFC);
   }
-
 }
