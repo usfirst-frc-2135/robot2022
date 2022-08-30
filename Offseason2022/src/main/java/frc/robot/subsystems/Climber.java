@@ -122,9 +122,6 @@ public class Climber extends SubsystemBase
     SmartDashboard.putBoolean("CL_CL14Valid", m_talonValidCL14);
     SmartDashboard.putBoolean("CL_CL15Valid", m_talonValidCL15);
 
-    // DataLogManager.log(getSubsystem( ) + "CL 14 motor valid: {}" + m_talonValidCL14);
-    // DataLogManager.log(getSubsystem( ) + "CL 15 motor valid: {}" + m_talonValidCL15);
-
     // Check if solenoids are functional or blacklisted
     if (m_gateHook.isDisabled( ))
       DataLogManager.log("CL Climber Solenoid is BLACKLISTED");
