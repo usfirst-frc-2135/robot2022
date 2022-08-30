@@ -32,11 +32,11 @@ public class FloorConveyor extends SubsystemBase
   private StatorCurrentLimitConfiguration m_statorCurrentLimits = new StatorCurrentLimitConfiguration(true, 80.0, 80.0, 0.001);
 
   // Declare module variables
-  private boolean                         m_validFC8;       // Health indicator for floor conveyor talon
-  private int                             m_resetCountFC8;  // reset counter for motor
-  private double                          m_acquireSpeed;
-  private double                          m_acquireSpeedSlow;
-  private double                          m_expelSpeedFast;
+  private boolean                         m_validFC8            = false;  // Health indicator for floor conveyor talon
+  private int                             m_resetCountFC8       = 0;      // reset counter for motor
+  private double                          m_acquireSpeed        = FCConsts.kFCAcquireSpeed;
+  private double                          m_acquireSpeedSlow    = FCConsts.kFCAcquireSpeedSlow;
+  private double                          m_expelSpeedFast      = FCConsts.kFCExpelSpeedFast;
 
   /**
    *
@@ -51,11 +51,7 @@ public class FloorConveyor extends SubsystemBase
     m_validFC8 = PhoenixUtil.getInstance( ).talonFXInitialize(m_motorFC8, "FC8");
     SmartDashboard.putBoolean("HL_validFC8", m_validFC8);
 
-    // Initialize Variables
-    m_acquireSpeed = FCConsts.kFCAcquireSpeed;
-    m_acquireSpeedSlow = FCConsts.kFCAcquireSpeedSlow;
-    m_expelSpeedFast = FCConsts.kFCExpelSpeedFast;
-
+    // Initialize Motor
     if (m_validFC8)
     {
       m_motorFC8.setInverted(false);
@@ -129,7 +125,6 @@ public class FloorConveyor extends SubsystemBase
     }
 
     DataLogManager.log(getSubsystem( ) + ": FC Set Speed - " + strName);
-
     if (m_validFC8)
       m_motorFC8.set(ControlMode.PercentOutput, output);
   }

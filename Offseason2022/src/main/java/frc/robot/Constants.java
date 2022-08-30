@@ -78,22 +78,22 @@ public class Constants
 
     public enum FCMode
     {
-      FCONVEYOR_STOP,  // FC Stop
-      FCONVEYOR_ACQUIRE, // FC Aquire
-      FCONVEYOR_EXPEL,  // FC Expel
-      FCONVEYOR_EXPEL_FAST, // FC Expel Fast
+      FCONVEYOR_STOP,       // Stop floor conveyor motor
+      FCONVEYOR_ACQUIRE,    // Aquire game pieces
+      FCONVEYOR_EXPEL,      // Expel game pieces
+      FCONVEYOR_EXPEL_FAST, // Expel Fast
     }
   }
 
   public static final class TCConsts
   {
-    public static final int    kTC9CANID         = 9;
-    public static final int    kCargoDIO         = 2;
+    public static final int    kTC9CANID           = 9;
+    public static final int    kCargoDIO           = 2;
 
-    public static final double kTCAcquireSpeed   = 1.0;
-    public static final double kAcquireSpeedSlow = 0.2;
-    public static final double kTCExpelSpeed     = -0.2;
-    public static final double kTCExpelSpeedFast = -1.0;
+    public static final double kTCAcquireSpeed     = 1.0;
+    public static final double kTCAcquireSpeedSlow = 0.2;
+    public static final double kTCExpelSpeed       = -0.2;
+    public static final double kTCExpelSpeedFast   = -1.0;
 
     public enum TCMode
     {
