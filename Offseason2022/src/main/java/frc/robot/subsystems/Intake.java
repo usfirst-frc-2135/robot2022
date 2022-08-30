@@ -31,9 +31,10 @@ public class Intake extends SubsystemBase
   // StatorCurrentLimitConfiguration(true, 80.0, 80.0, 0.001);
 
   // Declare module variables
-  private boolean    m_validIN6     = false;
   private double     m_acquireSpeed = INConsts.kINAcquireSpeed;
   private double     m_expelSpeed   = INConsts.kINExpelSpeed;
+
+  private boolean    m_validIN6     = false;
 
   /**
    *

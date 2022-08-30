@@ -35,12 +35,13 @@ public class TowerConveyor extends SubsystemBase
   private boolean                         m_cargoDetected;  // current state of cargo detect limit switch
 
   // Declare module variables
-  private boolean                         m_validTC9            = false; // Health indicator for floor conveyor talon
-  private int                             m_resetCountTC9       = 0;     // reset counter for motor
   private double                          m_acquireSpeed        = TCConsts.kTCAcquireSpeed;
   private double                          m_acquireSpeedSlow    = TCConsts.kTCAcquireSpeedSlow;
   private double                          m_expelSpeed          = TCConsts.kTCExpelSpeed;
   private double                          m_expelSpeedFast      = TCConsts.kTCExpelSpeedFast;
+
+  private boolean                         m_validTC9            = false; // Health indicator for floor conveyor talon
+  private int                             m_resetCountTC9       = 0;     // reset counter for motor
 
   /**
    *

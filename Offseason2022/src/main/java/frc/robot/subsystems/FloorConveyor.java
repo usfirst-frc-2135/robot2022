@@ -32,11 +32,12 @@ public class FloorConveyor extends SubsystemBase
   private StatorCurrentLimitConfiguration m_statorCurrentLimits = new StatorCurrentLimitConfiguration(true, 80.0, 80.0, 0.001);
 
   // Declare module variables
-  private boolean                         m_validFC8            = false;  // Health indicator for floor conveyor talon
-  private int                             m_resetCountFC8       = 0;      // reset counter for motor
   private double                          m_acquireSpeed        = FCConsts.kFCAcquireSpeed;
   private double                          m_acquireSpeedSlow    = FCConsts.kFCAcquireSpeedSlow;
   private double                          m_expelSpeedFast      = FCConsts.kFCExpelSpeedFast;
+
+  private boolean                         m_validFC8            = false;  // Health indicator for floor conveyor talon
+  private int                             m_resetCountFC8       = 0;      // reset counter for motor
 
   /**
    *
