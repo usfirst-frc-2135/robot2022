@@ -35,7 +35,7 @@ public class FloorConveyor extends SubsystemBase
   private boolean                         m_validFC8;       // Health indicator for floor conveyor talon
   private int                             m_resetCountFC8;  // reset counter for motor
   private double                          m_acquireSpeed;
-  private double                          m_expelSpeed;
+  private double                          m_acquireSpeedSlow;
   private double                          m_expelSpeedFast;
 
   /**
@@ -53,7 +53,7 @@ public class FloorConveyor extends SubsystemBase
 
     // Initialize Variables
     m_acquireSpeed = FCConsts.kFCAcquireSpeed;
-    m_expelSpeed = FCConsts.kFCExpelSpeed;
+    m_acquireSpeedSlow = FCConsts.kFCAcquireSpeedSlow;
     m_expelSpeedFast = FCConsts.kFCExpelSpeedFast;
 
     if (m_validFC8)
@@ -105,32 +105,32 @@ public class FloorConveyor extends SubsystemBase
   public void setFloorConveyorSpeed(FCMode mode)
   {
     final String strName;
-    double outputFC = 0.0; // Default: off
+    double output = 0.0; // Default: off
 
     switch (mode)
     {
       default :
       case FCONVEYOR_STOP :
         strName = "STOP";
-        outputFC = 0.0;
+        output = 0.0;
         break;
       case FCONVEYOR_ACQUIRE :
         strName = "ACQUIRE";
-        outputFC = m_acquireSpeed;
+        output = m_acquireSpeed;
         break;
       case FCONVEYOR_EXPEL :
         strName = "EXPEL";
-        outputFC = m_expelSpeed;
+        output = m_acquireSpeedSlow;
         break;
       case FCONVEYOR_EXPEL_FAST :
         strName = "EXPEL_FAST";
-        outputFC = m_expelSpeedFast;
+        output = m_expelSpeedFast;
         break;
     }
 
     DataLogManager.log(getSubsystem( ) + ": FC Set Speed - " + strName);
 
     if (m_validFC8)
-      m_motorFC8.set(ControlMode.PercentOutput, outputFC);
+      m_motorFC8.set(ControlMode.PercentOutput, output);
   }
 }

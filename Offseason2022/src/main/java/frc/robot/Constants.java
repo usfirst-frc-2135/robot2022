@@ -44,13 +44,11 @@ public class Constants
     public static final double KvAngular              = 1.5;
     public static final double KaAngular              = 0.3;
 
-    public static final double kWheelDiaMeters        = 4.0; // Units library does the conversion
-    public static final double kGearRatio             = 8.45;
+    public static final double kWheelDiaMeters        = 4.0;  // Units library does the conversion
+    public static final double kGearRatio             = 8.45; // Gear reduction
+    public static final double kTrackWidthMeters      = 0.6477; // Measured track width
 
     public static final double kEncoderMetersPerCount = (kWheelDiaMeters * Math.PI) / (Falcon500.kEncoderCPR) / kGearRatio;
-    public static final double kTrackWidthMeters      = 0.6477; // Measured track width
-                                                                // Gear reduction
-
   }
 
   public static final class INConsts
@@ -72,11 +70,11 @@ public class Constants
 
   public static final class FCConsts
   {
-    public static final int    kFC8CANID         = 8;
+    public static final int    kFC8CANID           = 8;
 
-    public static final double kFCAcquireSpeed   = 1.0;
-    public static final double kFCExpelSpeed     = -1.0;
-    public static final double kFCExpelSpeedFast = -1.0;
+    public static final double kFCAcquireSpeed     = 1.0;
+    public static final double kFCAcquireSpeedSlow = 0.2;
+    public static final double kFCExpelSpeedFast   = -1.0;
 
     public enum FCMode
     {
@@ -91,6 +89,7 @@ public class Constants
   {
     public static final int    kTC9CANID         = 9;
     public static final int    kCargoDIO         = 2;
+
     public static final double kTCAcquireSpeed   = 1.0;
     public static final double kAcquireSpeedSlow = 0.2;
     public static final double kTCExpelSpeed     = -0.2;
