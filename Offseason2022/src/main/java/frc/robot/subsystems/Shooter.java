@@ -41,7 +41,7 @@ public class Shooter extends SubsystemBase
 
   // Devices and simulation objects
   private ErrorCode                       error;
-  private WPI_TalonFX                     m_motorSH11           = new WPI_TalonFX(SHConsts.kCANID);
+  private WPI_TalonFX                     m_motorSH11           = new WPI_TalonFX(SHConsts.kSH11CANID);
   private TalonFXSimCollection            m_motorSim            = new TalonFXSimCollection(m_motorSH11);
   private FlywheelSim                     m_flywheelSim         =
       new FlywheelSim(DCMotor.getFalcon500(1), SHConsts.kFlywheelGearRatio, 0.01);

@@ -4,26 +4,29 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.VIConsts;
+import frc.robot.RobotContainer;
 
 /**
  *
  */
-public class ShooterAim extends CommandBase
+public class VisionOn extends CommandBase
 {
   private boolean m_mode;
+  private boolean m_lightOn;
 
-  public ShooterAim(boolean mode)
+  public VisionOn(boolean lightOn)
   {
-    m_mode = mode;
-
-    // m_subsystem = subsystem;
-    // addRequirements(m_subsystem);
+    m_lightOn = lightOn;
+    setName("VisionOn");
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize( )
-  {}
+  {
+    RobotContainer.getInstance( ).m_vision.setLEDMode(VIConsts.LED_ON);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -39,12 +42,12 @@ public class ShooterAim extends CommandBase
   @Override
   public boolean isFinished( )
   {
-    return false;
+    return true;
   }
 
   @Override
   public boolean runsWhenDisabled( )
   {
-    return false;
+    return true;
   }
 }

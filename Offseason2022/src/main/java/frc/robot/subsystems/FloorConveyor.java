@@ -29,7 +29,7 @@ public class FloorConveyor extends SubsystemBase
   private static final int                SLOTINDEX             = 0;   // Use first PID slot
 
   // Devices and simulation objects
-  private WPI_TalonFX                     m_motorFC8            = new WPI_TalonFX(FCConsts.kCANID);
+  private WPI_TalonFX                     m_motorFC8            = new WPI_TalonFX(FCConsts.kFC8CANID);
 
   private SupplyCurrentLimitConfiguration m_supplyCurrentLimits = new SupplyCurrentLimitConfiguration(true, 45.0, 45.0, 0.001);
   private StatorCurrentLimitConfiguration m_statorCurrentLimits = new StatorCurrentLimitConfiguration(true, 80.0, 80.0, 0.001);
@@ -55,10 +55,10 @@ public class FloorConveyor extends SubsystemBase
     SmartDashboard.putBoolean("HL_validFC8", m_validFC8);
 
     // Initialize Variables
-    RobotConfig config = RobotConfig.getInstance( );
-    m_acquireSpeed = config.getValueAsDouble("FC_AcquireSpeed", 1.0);
-    m_expelSpeed = config.getValueAsDouble("FC_expelSpeed", 0.2);
-    m_expelSpeedFast = config.getValueAsDouble("FC_expelSpeedFast", -1.0);
+
+    m_acquireSpeed = FCConsts.kFCAcquireSpeed;
+    m_expelSpeed = FCConsts.kFCExpelSpeed;
+    m_expelSpeedFast = FCConsts.kFCExpelSpeedFast;
 
     if (m_validFC8)
     {
@@ -97,7 +97,7 @@ public class FloorConveyor extends SubsystemBase
   // here. Call these from Commands.
   public void initialize( )
   {
-    DataLogManager.log("FC Init");
+    DataLogManager.log(getSubsystem( ) + ": subsystem intitialized!");
     setFloorConveyorSpeed(FCConsts.FCMode.FCONVEYOR_STOP);
   }
 

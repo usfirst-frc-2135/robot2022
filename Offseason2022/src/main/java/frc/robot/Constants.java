@@ -55,9 +55,10 @@ public class Constants
 
   public static final class INConsts
   {
-    public static final int    kCANID          = 6;
-    public static final int    kIntakePWM      = 1;
-    public static final int    kArmSolenoid    = 0;
+    public static final int    kIN8CANID    = 6;
+    public static final int    kIntakePWM   = 1;
+    public static final int    kArmSolenoid = 0;
+
     public static final double kINAcquireSpeed = 0.6;
     public static final double kINExpelSpeed   = -0.6;
 
@@ -71,7 +72,11 @@ public class Constants
 
   public static final class FCConsts
   {
-    public static final int kCANID = 8;
+    public static final int    kFC8CANID = 8;
+
+    public static final double kFCAcquireSpeed   = 1.0;
+    public static final double kFCExpelSpeed     = -1.0;
+    public static final double kFCExpelSpeedFast = -1.0;
 
     public enum FCMode
     {
@@ -84,8 +89,8 @@ public class Constants
 
   public static final class TCConsts
   {
-    public static final int    kCANID            = 9;
-    public static final int    kCargoDIO         = 2;
+    public static final int    kTC9CANID = 9;
+    public static final int    kCargoDIO = 2;
     public static final double kTCAcquireSpeed   = 1.0;
     public static final double kAcquireSpeedSlow = 0.2;
     public static final double kTCExpelSpeed     = -0.2;
@@ -103,7 +108,7 @@ public class Constants
 
   public static final class SHConsts
   {
-    public static final int    kCANID                   = 11;
+    public static final int    kSH11CANID               = 11;
 
     public static final double kFlywheelGearRatio       = (18.0 / 12.0);
     public static final double kFlywheelCPR             = Falcon500.kEncoderCPR * kFlywheelGearRatio;
@@ -134,12 +139,30 @@ public class Constants
 
   public static final class CLConsts
   {
-    public static final int kLeftCANID       = 14;
-    public static final int kRightCANID      = 15;
-    public static final int kCancoderID      = 0;
-    public static final int kLeftLimitDIO    = 0;
-    public static final int kRightLimitDIO   = 1;
-    public static final int kGateHookSolenod = 1;
+    public static final double kClimberRolloutRatio = 0.432; // inches per shaft rotation
+    public static final double kInchesPerCount      = kClimberRolloutRatio * (1.0 / (double) Falcon500.kEncoderCPR);
+    public static final int    kCL14LeftCANID       = 14;
+    public static final int    kCL15RightCANID      = 15;
+    public static final int    kGateHookSolenod     = 1;
+    public static final int    kCLCancoderID        = 0;
+    public static final int    kCLLeftLimitDIO      = 0;
+    public static final int    kCLRightLimitDIO     = 1;
+
+    public enum Height
+    {                             // Climber subsystem movement states
+      NOCHANGE_HEIGHT,     // No change in climber height--maintain current position
+      STOW_HEIGHT,         // Move to stow height
+      EXTEND_L2_HEIGHT,     // Move to extend to L2 height
+      ROTATE_L3_HEIGHT,     // Move to rotate to L3 height
+      GATEHOOK_REST_HEIGHT, // Move to lower on L3 height so gate hooks clamp
+      RAISE_L4_HEIGHT      // Move to extend on last rung ~6 inches
+    }
+
+    public enum CLMode
+    {
+      CLIMBER_INIT, CLIMBER_DOWN, CLIMBER_STOPPED, CLIMBER_UP
+    }
+
   }
 
   public static final class VIConsts
