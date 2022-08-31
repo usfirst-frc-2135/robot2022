@@ -44,20 +44,18 @@ public class Constants
     public static final double KvAngular              = 1.5;
     public static final double KaAngular              = 0.3;
 
-    public static final double kWheelDiaMeters        = 4.0; // Units library does the conversion
-    public static final double kGearRatio             = 8.45;
+    public static final double kWheelDiaMeters        = 4.0;  // Units library does the conversion
+    public static final double kGearRatio             = 8.45; // Gear reduction
+    public static final double kTrackWidthMeters      = 0.6477; // Measured track width
 
     public static final double kEncoderMetersPerCount = (kWheelDiaMeters * Math.PI) / (Falcon500.kEncoderCPR) / kGearRatio;
-    public static final double kTrackWidthMeters      = 0.6477; // Measured track width
-                                                                // Gear reduction
-
   }
 
   public static final class INConsts
   {
-    public static final int    kIN8CANID    = 6;
-    public static final int    kIntakePWM   = 1;
-    public static final int    kArmSolenoid = 0;
+    // public static final int kIN8CANID = 6;
+    public static final int    kINPWM1         = 1;
+    public static final int    kArmSolenoid    = 0;
 
     public static final double kINAcquireSpeed = 0.6;
     public static final double kINExpelSpeed   = -0.6;
@@ -72,29 +70,30 @@ public class Constants
 
   public static final class FCConsts
   {
-    public static final int    kFC8CANID = 8;
+    public static final int    kFC8CANID           = 8;
 
-    public static final double kFCAcquireSpeed   = 1.0;
-    public static final double kFCExpelSpeed     = -1.0;
-    public static final double kFCExpelSpeedFast = -1.0;
+    public static final double kFCAcquireSpeed     = 1.0;
+    public static final double kFCAcquireSpeedSlow = 0.2;
+    public static final double kFCExpelSpeedFast   = -1.0;
 
     public enum FCMode
     {
-      FCONVEYOR_STOP,  // FC Stop
-      FCONVEYOR_ACQUIRE, // FC Aquire
-      FCONVEYOR_EXPEL,  // FC Expel
-      FCONVEYOR_EXPEL_FAST, // FC Expel Fast
+      FCONVEYOR_STOP,       // Stop floor conveyor motor
+      FCONVEYOR_ACQUIRE,    // Aquire game pieces
+      FCONVEYOR_EXPEL,      // Expel game pieces
+      FCONVEYOR_EXPEL_FAST, // Expel Fast
     }
   }
 
   public static final class TCConsts
   {
-    public static final int    kTC9CANID = 9;
-    public static final int    kCargoDIO = 2;
-    public static final double kTCAcquireSpeed   = 1.0;
-    public static final double kAcquireSpeedSlow = 0.2;
-    public static final double kTCExpelSpeed     = -0.2;
-    public static final double kTCExpelSpeedFast = -1.0;
+    public static final int    kTC9CANID           = 9;
+    public static final int    kCargoDIO           = 2;
+
+    public static final double kTCAcquireSpeed     = 1.0;
+    public static final double kTCAcquireSpeedSlow = 0.2;
+    public static final double kTCExpelSpeed       = -0.2;
+    public static final double kTCExpelSpeedFast   = -1.0;
 
     public enum TCMode
     {

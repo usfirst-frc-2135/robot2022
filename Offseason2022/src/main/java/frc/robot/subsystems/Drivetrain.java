@@ -318,7 +318,7 @@ public class Drivetrain extends SubsystemBase
     m_driveSim.setPose(getPose( ));
   }
 
-  public void FaultDump( )
+  public void faultDump( )
   {
     PhoenixUtil.getInstance( ).talonFXFaultDump(m_driveL1, "DT L1");
     PhoenixUtil.getInstance( ).talonFXFaultDump(m_driveL2, "DT L2");

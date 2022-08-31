@@ -15,11 +15,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  */
 public class Pneumatics extends SubsystemBase
 {
-  private PneumaticsControlModule m_pcm            = new PneumaticsControlModule(0);
-  private Compressor              m_compressor     = new Compressor(PneumaticsModuleType.CTREPCM);
-
-  private final int               pneumaticsDebug  = 0;
-  private int                     periodicInterval = 0;
+  private PneumaticsControlModule m_pcm        = new PneumaticsControlModule(0);
+  private Compressor              m_compressor = new Compressor(PneumaticsModuleType.CTREPCM);
 
   /**
    *
@@ -38,8 +35,7 @@ public class Pneumatics extends SubsystemBase
   {
     // This method will be called once per scheduler run
 
-    if ((pneumaticsDebug > 0) && (periodicInterval++ % 5 == 0))
-      SmartDashboard.putNumber("PCM_Output_Comp", m_pcm.getCompressorCurrent( ));
+    SmartDashboard.putNumber("PCM_Output_Comp", m_pcm.getCompressorCurrent( ));
   }
 
   @Override
@@ -48,10 +44,9 @@ public class Pneumatics extends SubsystemBase
     // This method will be called once per scheduler run when in simulation
   }
 
-  // Put methods for controlling this subsystem
-  // here. Call these from Commands.
+  // Put methods for controlling this subsystem here. Call these from Commands.
 
-  public void FaultDump( )
+  public void faultDump( )
   {
     // Print out PCM faults and clear sticky ones
     DataLogManager.log(getSubsystem( ) + ": ----- PCM FAULTS --------------");

@@ -270,11 +270,11 @@ public class Climber extends SubsystemBase
       RobotContainer robotContainer = RobotContainer.getInstance( );
       if (!m_climberDownLeft.get( ) || !m_climberDownRight.get( ))
       {
-        robotContainer.m_led.setColor(LEDColor.LEDCOLOR_BLUE);
+        robotContainer.m_led.setNormalColor(LEDColor.LEDCOLOR_BLUE);
       }
       else
       {
-        robotContainer.m_led.setColor(LEDColor.LEDCOLOR_OFF);
+        robotContainer.m_led.setNormalColor(LEDColor.LEDCOLOR_OFF);
       }
     }
 
