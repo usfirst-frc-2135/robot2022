@@ -83,7 +83,6 @@ public class Climber extends SubsystemBase
   private double                          m_raiseL4             = CLConsts.kRaiseL4;            // Raise to layout 4
   private double                          m_gatehookRestHeight  = CLConsts.kGatehookRestHeight; // Gate hook resting height
 
-  // Declare constants
   private int                             m_climberDebug        = 0; // DEBUG flag to disable/enable extra logging calls
   private boolean                         m_validCL14;               // Health indicator for climber Talon 14
   private boolean                         m_validCL15;               // Health indicator for climber Talon 15
@@ -143,9 +142,9 @@ public class Climber extends SubsystemBase
 
     // Set motor directions, coast mode (not brake), set motor peak outputs
     if (m_validCL14)
-      climberTalonFXInitialize(m_motorCL14);
+      climberTalonInitialize(m_motorCL14, true);
     if (m_validCL15)
-      climberTalonFXInitialize(m_motorCL15);
+      climberTalonInitialize(m_motorCL15, false);
 
     m_gateHookAngle.configMagnetOffset(0.0, CANTIMEOUT);
 
@@ -268,9 +267,9 @@ public class Climber extends SubsystemBase
     return counts * Constants.CLConsts.kInchesPerCount;
   }
 
-  private void climberTalonFXInitialize(WPI_TalonFX motor)
+  private void climberTalonInitialize(WPI_TalonFX motor, boolean inverted)
   {
-    motor.setInverted(true);
+    motor.setInverted(inverted);
     PhoenixUtil.getInstance( ).checkTalonError(motor, "setInverted");
     motor.setNeutralMode(NeutralMode.Brake);
     PhoenixUtil.getInstance( ).checkTalonError(motor, "setNeutralMode");
