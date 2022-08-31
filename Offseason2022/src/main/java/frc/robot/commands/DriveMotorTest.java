@@ -15,7 +15,7 @@ public class DriveMotorTest extends CommandBase
   private Drivetrain m_drivetrain;
   private boolean    m_left;
 
-  public DriveMotorTest(boolean left, Drivetrain drivetrain)
+  public DriveMotorTest(Drivetrain drivetrain, boolean left)
   {
     m_drivetrain = drivetrain;
     setName("DriveMotorTest");
