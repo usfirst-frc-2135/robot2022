@@ -138,28 +138,55 @@ public class Constants
 
   public static final class CLConsts
   {
-    public static final double kClimberRolloutRatio = 0.432; // inches per shaft rotation
-    public static final double kInchesPerCount      = kClimberRolloutRatio * (1.0 / (double) Falcon500.kEncoderCPR);
     public static final int    kCL14LeftCANID       = 14;
     public static final int    kCL15RightCANID      = 15;
-    public static final int    kGateHookSolenod     = 1;
-    public static final int    kCLCancoderID        = 0;
     public static final int    kCLLeftLimitDIO      = 0;
     public static final int    kCLRightLimitDIO     = 1;
+    public static final int    kGateHookSolenod     = 1;
+    public static final int    kCLCancoderID        = 0;
+
+    // Config file parameters
+    public static final int    kMMVelocity          = 21776;  // Climber motion magic velocity
+    public static final int    kMMAcceleration      = 43552;  // Climber motion magic acceleration
+    public static final int    kMMSCurveStrength    = 0;      // Climber motion magic S curve smoothing strength
+    public static final double kCLPidKf             = 0.0496; // Climber PID force constant
+    public static final double kCLPidKp             = 0.500;  // Climber PID proportional constant
+    public static final double kCLPidKi             = 0.0;    // Climber PID integral constant
+    public static final double kCLPidKd             = 0.0;    // Climber PID derivative constant
+
+    public static final double kStowHeight          = 0.10;   // 0.25 inches
+    public static final double kExtendL2            = 29.0;   // 29 inches
+    public static final double kRotateL3            = 31.25;  // 21 inches
+    public static final double kRaiseL4             = 15.0;   // 25.25 inches
+    public static final double kGatehookRestHeight  = 4.0;    // 0.35 inches
+
+    public static final int    kCLAllowedError      = 0;      // Climber PID allowable closed loop error in counts
+    public static final double kCLToleranceInches   = 0.25;   // Climber PID tolerance in inches
+    public static final double kClimberMaxHeight    = 36.0;   // Climber maximum allowable height
+    public static final double kClimberMinHeight    = 0.0;    // Climber minimum allowable height
+
+    public static final double kClimberRolloutRatio = 0.432;  // inches per shaft rotation
+    public static final double kInchesPerCount      = kClimberRolloutRatio * (1.0 / (double) Falcon500.kEncoderCPR);
+
+    public static final double kClimberGearRatio    = 10.0;   // 1/rollout in meters
+    public static final double kClimberCPR          = Falcon500.kEncoderCPR / kClimberGearRatio;
 
     public enum Height
-    {                             // Climber subsystem movement states
-      NOCHANGE_HEIGHT,     // No change in climber height--maintain current position
-      STOW_HEIGHT,         // Move to stow height
+    {                       // Climber subsystem movement states
+      NOCHANGE_HEIGHT,      // No change in climber height--maintain current position
+      STOW_HEIGHT,          // Move to stow height
       EXTEND_L2_HEIGHT,     // Move to extend to L2 height
       ROTATE_L3_HEIGHT,     // Move to rotate to L3 height
       GATEHOOK_REST_HEIGHT, // Move to lower on L3 height so gate hooks clamp
-      RAISE_L4_HEIGHT      // Move to extend on last rung ~6 inches
+      RAISE_L4_HEIGHT       // Move to extend on last rung ~6 inches
     }
 
     public enum CLMode
     {
-      CLIMBER_INIT, CLIMBER_DOWN, CLIMBER_STOPPED, CLIMBER_UP
+      CLIMBER_INIT,         // Initialize climber
+      CLIMBER_DOWN,         // Move climber down
+      CLIMBER_STOPPED,      // Stop and hold position
+      CLIMBER_UP            // Move climber up
     }
   }
 
