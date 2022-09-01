@@ -24,23 +24,24 @@ public class TowerConveyor extends SubsystemBase
 {
   // Constants
   private static final int                CANTIMEOUT            = 30;  // CAN timeout in msec
-  private static final int                PIDINDEX              = 0;   // PID in use (0-primary, 1-aux)
-  private static final int                SLOTINDEX             = 0;   // Use first PID slot
 
   // Devices and simulation objects
-  private WPI_TalonFX                     m_motorVC9            = new WPI_TalonFX(TCConsts.kTC9CANID);
-  private DigitalInput                    m_cargoDetect         = new DigitalInput(TCConsts.kCargoDIO);
+  private WPI_TalonFX                     m_motorTC9            = new WPI_TalonFX(TCConsts.kTC9CANID);
+  private DigitalInput                    m_cargoLimit          = new DigitalInput(TCConsts.kCargoDIO);
 
   private SupplyCurrentLimitConfiguration m_supplyCurrentLimits = new SupplyCurrentLimitConfiguration(true, 45.0, 45.0, 0.001);
   private StatorCurrentLimitConfiguration m_statorCurrentLimits = new StatorCurrentLimitConfiguration(true, 80.0, 80.0, 0.001);
 
+  private boolean                         m_cargoDetected;  // current state of cargo detect limit switch
+
   // Declare module variables
-  private boolean                         m_validVC9;
-  private int                             m_resetCountVC9;
-  private double                          m_acquireSpeed;
-  private double                          m_acquireSpeedSlow;
-  private double                          m_expelSpeed;
-  private double                          m_expelSpeedFast;
+  private double                          m_acquireSpeed        = TCConsts.kTCAcquireSpeed;
+  private double                          m_acquireSpeedSlow    = TCConsts.kTCAcquireSpeedSlow;
+  private double                          m_expelSpeed          = TCConsts.kTCExpelSpeed;
+  private double                          m_expelSpeedFast      = TCConsts.kTCExpelSpeedFast;
+
+  private boolean                         m_validTC9            = false; // Health indicator for floor conveyor talon
+  private int                             m_resetCountTC9       = 0;     // reset counter for motor
 
   /**
    *
@@ -49,27 +50,23 @@ public class TowerConveyor extends SubsystemBase
   {
     setName("TowerConveyor");
     setSubsystem("TowerConveyor");
-    addChild("CargoDetect", m_cargoDetect);
+    addChild("CargoDetect", m_cargoLimit);
 
-    m_validVC9 = PhoenixUtil.getInstance( ).talonFXInitialize(m_motorVC9, "VC9");
-    SmartDashboard.putBoolean("HL_validVC9", m_validVC9);
+    // Validate Talon FX controllers, initialize and display firmware versions
+    m_validTC9 = PhoenixUtil.getInstance( ).talonFXInitialize(m_motorTC9, "TC9");
+    SmartDashboard.putBoolean("HL_validTC9", m_validTC9);
 
-    m_acquireSpeed = TCConsts.kTCAcquireSpeed;
-    m_acquireSpeedSlow = TCConsts.kAcquireSpeedSlow;
-    m_expelSpeed = TCConsts.kTCExpelSpeed;
-    m_expelSpeedFast = TCConsts.kTCExpelSpeedFast;
-
-    if (m_validVC9)
+    // Initialize Motor
+    if (m_validTC9)
     {
-      m_motorVC9.setInverted(false);
-      m_motorVC9.setNeutralMode(NeutralMode.Coast);
-      m_motorVC9.set(ControlMode.PercentOutput, 0.0);
+      m_motorTC9.setInverted(false);
+      m_motorTC9.setNeutralMode(NeutralMode.Coast);
+      m_motorTC9.set(ControlMode.PercentOutput, 0.0);
 
-      m_motorVC9.configSupplyCurrentLimit(m_supplyCurrentLimits);
-      m_motorVC9.configStatorCurrentLimit(m_statorCurrentLimits);
-
-      m_motorVC9.setStatusFramePeriod(StatusFrame.Status_1_General, 255, CANTIMEOUT);
-      m_motorVC9.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 255, CANTIMEOUT);
+      m_motorTC9.configSupplyCurrentLimit(m_supplyCurrentLimits);
+      m_motorTC9.configStatorCurrentLimit(m_statorCurrentLimits);
+      m_motorTC9.setStatusFramePeriod(StatusFrame.Status_1_General, 255, CANTIMEOUT);
+      m_motorTC9.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 255, CANTIMEOUT);
     }
 
     initialize( );
@@ -79,11 +76,14 @@ public class TowerConveyor extends SubsystemBase
   public void periodic( )
   {
     // This method will be called once per scheduler run
-    if (m_motorVC9.hasResetOccurred( ))
+    if (m_motorTC9.hasResetOccurred( ))
     {
-      m_resetCountVC9 += 1;
-      SmartDashboard.putNumber("HL_resetCountVC9", m_resetCountVC9);
+      m_resetCountTC9 += 1;
+      SmartDashboard.putNumber("HL_resetCountTC9", m_resetCountTC9);
     }
+
+    m_cargoDetected = m_cargoLimit.get( );
+    SmartDashboard.putBoolean("TC_cargoDetected", m_cargoDetected);
   }
 
   @Override
@@ -97,56 +97,53 @@ public class TowerConveyor extends SubsystemBase
 
   public void initialize( )
   {
-    DataLogManager.log("VC Init");
+    DataLogManager.log(getSubsystem( ) + ": subsystem intitialized!");
     setTowerConveyorSpeed(TCMode.TCONVEYOR_STOP);
   }
 
   public void faultDump( )
   {
-    PhoenixUtil.getInstance( ).talonFXFaultDump(m_motorVC9, "VC 9");
+    PhoenixUtil.getInstance( ).talonFXFaultDump(m_motorTC9, "TC9");
   }
 
   // Set mode of conveyor
   public void setTowerConveyorSpeed(TCMode mode)
   {
     final String strName;
-    double outputVC = 0.0; // Default: off
+    double output = 0.0; // Default: off
 
     switch (mode)
     {
       default :
       case TCONVEYOR_STOP :
         strName = "STOP";
-        outputVC = 0.0;
+        output = 0.0;
         break;
       case TCONVEYOR_ACQUIRE :
         strName = "ACQUIRE";
-        outputVC = m_acquireSpeed;
+        output = m_acquireSpeed;
         break;
       case TCONVEYOR_ACQUIRE_SLOW :
         strName = "ACQUIRE_SLOW";
-        outputVC = m_acquireSpeedSlow;
+        output = m_acquireSpeedSlow;
         break;
       case TCONVEYOR_EXPEL :
         strName = "EXPEL";
-        outputVC = m_expelSpeed;
+        output = m_expelSpeed;
         break;
       case TCONVEYOR_EXPEL_FAST :
         strName = "EXPEL_FAST";
-        outputVC = m_expelSpeedFast;
+        output = m_expelSpeedFast;
         break;
     }
 
-    DataLogManager.log(getSubsystem( ) + ": VC Set Speed - " + strName);
-
-    if (m_validVC9)
-      m_motorVC9.set(ControlMode.PercentOutput, outputVC);
+    DataLogManager.log(getSubsystem( ) + ": TC Set Speed - " + strName);
+    if (m_validTC9)
+      m_motorTC9.set(ControlMode.PercentOutput, output);
   }
 
   public boolean isCargoDetected( )
   {
-    boolean cargoDetected = m_cargoDetect.get( );
-    SmartDashboard.putBoolean("VC_cargoDetected", cargoDetected);
-    return cargoDetected;
+    return m_cargoDetected;
   }
 }

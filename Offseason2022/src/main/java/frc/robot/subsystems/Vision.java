@@ -17,23 +17,24 @@ import frc.robot.frc2135.RobotConfig;
  */
 public class Vision extends SubsystemBase
 {
-  private NetworkTable table;
+  // Objects
+  MedianFilter         m_yfilter     = new MedianFilter(5); // median filter y values to remove outliers (5 sample)
 
-  private double       m_targetHorizAngle; // Horizontal Offset from Crosshair to Target (-27 to 27 degrees)
-  private double       m_targetVertAngle;  // Vertical Offset from Crosshair to Target (-20.5 to 20.5 degrees)
-  private double       m_targetArea;       // Target Area (0% of image to 100% of image)
-  private double       m_targetSkew;       // Target Skew or rotation (-90 degrees to 0 degrees)
-  private boolean      m_targetValid;      // Target Valid or not
+  // Declare module variables
+  private double       m_distance1   = VIConsts.kLLDistance1;   // x position in inches for first reference point
+  private double       m_vertOffset1 = VIConsts.kLLVertOffset1; // y reading in degrees for first reference point
+  private double       m_distance2   = VIConsts.kLLDistance2;   // x position in inches for second reference point
+  private double       m_vertOffset2 = VIConsts.kLLVertOffset2; // y reading in degrees for second reference point
 
-  // Variables in inches to calculate limelight distance
-  private double       m_distance1   = 48;    // x position in inches for first reference point
-  private double       m_vertOffset1 = 0.42;  // y reading in degrees for first reference point
-  private double       m_distance2   = 60;    // x position in inches for second reference point
-  private double       m_vertOffset2 = -4.85; // y reading in degrees for second reference point
-  private double       m_distLL;                // calculated distance in inches for the current y value
+  private NetworkTable table;              // Network table reference for getting LL values
 
-  // Creates a MedianFilter with a window size of 5 samples
-  MedianFilter         m_yfilter     = new MedianFilter(5); // filter y values to remove outliers
+  private double       m_targetHorizAngle; // LL Target horizontal Offset from Crosshair to Target (-27 to 27 deg)
+  private double       m_targetVertAngle;  // LL Target vertical Offset from Crosshair to Target (-20.5 to 20.5 deg)
+  private double       m_targetArea;       // LL Target Area (0% of image to 100% of image)
+  private double       m_targetSkew;       // LL Target Skew or rotation (-90 to 0 deg)
+  private boolean      m_targetValid;      // LL Target Valid or not
+
+  private double       m_distLL;           // calculated distance in inches for the current y value
 
   /**
    *
@@ -44,18 +45,10 @@ public class Vision extends SubsystemBase
     setSubsystem("Vision");
 
     // Get the Network table reference once for all methods
-    NetworkTableInstance inst = NetworkTableInstance.getDefault( );
-    table = inst.getTable("limelight");
+    table = NetworkTableInstance.getDefault( ).getTable("limelight");
 
     // Set camera and LED display
     setLEDMode(VIConsts.LED_ON);
-
-    // Read these values from config file
-    RobotConfig config = RobotConfig.getInstance( );
-    m_distance1 = config.getValueAsDouble("VI_distance1", 48.0);
-    m_distance2 = config.getValueAsDouble("VI_distance2", 60.0);
-    m_vertOffset1 = config.getValueAsDouble("VI_vertOffset1", 0.42);
-    m_vertOffset2 = config.getValueAsDouble("VI_vertOffset2", -4.85);
 
     // Put all the needed widgets on the dashboard
     SmartDashboard.putNumber("VI_distance1", m_distance1);
@@ -157,9 +150,7 @@ public class Vision extends SubsystemBase
   public void setLEDMode(int mode)
   {
     DataLogManager.log(getSubsystem( ) + ": setLedMode " + mode);
-
-    NetworkTableEntry modeEntry = table.getEntry("ledMode");
-    modeEntry.setValue(mode);
+    table.getEntry("ledMode").setValue(mode);
   }
 
   public int getLEDMode( )
@@ -173,9 +164,7 @@ public class Vision extends SubsystemBase
   public void setCameraDisplay(int stream)
   {
     DataLogManager.log(getSubsystem( ) + ": setCameraDisplay " + stream);
-
-    NetworkTableEntry streamEntry = table.getEntry("stream");
-    streamEntry.setValue(stream);
+    table.getEntry("stream").setValue(stream);
   }
 
   private double calculateDist(double vertAngle)
