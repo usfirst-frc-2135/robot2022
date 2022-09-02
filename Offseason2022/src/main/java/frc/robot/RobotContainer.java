@@ -61,7 +61,7 @@ import frc.robot.commands.ScoringActionLowHub;
 import frc.robot.commands.ScoringPrime;
 import frc.robot.commands.ScoringStop;
 import frc.robot.commands.VisionOn;
-import frc.robot.commands.ShooterAimToggle;
+import frc.robot.commands.VisionOnToggle;
 import frc.robot.commands.ShooterReverse;
 import frc.robot.commands.ShooterRun;
 import frc.robot.commands.SimulateLimelight;
@@ -159,7 +159,7 @@ public class RobotContainer
     SmartDashboard.putData("Intake-ACQUIRE", new IntakeRun(m_intake, INMode.INTAKE_ACQUIRE));
     SmartDashboard.putData("Intake-EXPEL", new IntakeRun(m_intake, INMode.INTAKE_EXPEL));
     SmartDashboard.putData("RobotInitialize", new RobotInitialize( ));
-    SmartDashboard.putData("ShooterAimToggle", new ShooterAimToggle( ));
+    SmartDashboard.putData("ShooterAimToggle", new VisionOnToggle( ));
     SmartDashboard.putData("Shooter-OFF", new ShooterRun(Mode.SHOOTER_STOP, m_shooter));
     SmartDashboard.putData("Shooter-PRIME", new ShooterRun(Mode.SHOOTER_PRIME, m_shooter));
     SmartDashboard.putData("Shooter-LOW", new ShooterRun(Mode.SHOOTER_LOWERHUB, m_shooter));
