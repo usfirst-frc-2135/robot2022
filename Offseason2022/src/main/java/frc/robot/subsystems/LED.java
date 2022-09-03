@@ -69,6 +69,9 @@ public class LED extends SubsystemBase
     setColor(LEDColor.LEDCOLOR_OFF);
   }
 
+  public void faultDump( )
+  {}
+
   public void setColor(LEDColor color)
   {
     final String strName;

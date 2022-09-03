@@ -105,7 +105,7 @@ public class Vision extends SubsystemBase
 
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
-  private void initialize( )
+  public void initialize( )
   {
     DataLogManager.log(getSubsystem( ) + ": subsystem initialized!");
 

@@ -46,6 +46,11 @@ public class Pneumatics extends SubsystemBase
 
   // Put methods for controlling this subsystem here. Call these from Commands.
 
+  public void initialize( )
+  {
+    DataLogManager.log(getSubsystem( ) + ": subsystem initialized!");
+  }
+
   public void faultDump( )
   {
     // Print out PCM faults and clear sticky ones
@@ -61,10 +66,5 @@ public class Pneumatics extends SubsystemBase
       DataLogManager.log(getSubsystem( ) + ": Warn - SolenoidVoltageFault");
 
     m_pcm.clearAllStickyFaults( );
-  }
-
-  public void initialize( )
-  {
-    DataLogManager.log(getSubsystem( ) + ": subsystem initialized!");
   }
 }
