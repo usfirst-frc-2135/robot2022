@@ -66,7 +66,6 @@ import frc.robot.commands.ShooterReverse;
 import frc.robot.commands.ShooterRun;
 import frc.robot.commands.SimulateLimelight;
 import frc.robot.commands.TowerConveyorRun;
-import frc.robot.frc2135.RobotConfig;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.FloorConveyor;
@@ -87,7 +86,6 @@ import frc.robot.subsystems.Vision;
 public class RobotContainer
 {
   private static RobotContainer m_robotContainer = new RobotContainer( );
-  private static RobotConfig    m_robotConfig    = RobotConfig.getInstance( );
 
   // The robot's subsystems
   public final Drivetrain       m_drivetrain     = new Drivetrain( );
