@@ -102,8 +102,8 @@ public class RobotContainer
   public final Power            m_power          = new Power( );
 
   // Joysticks
-  private final XboxController  operator         = new XboxController(1);
   private final XboxController  driver           = new XboxController(0);
+  private final XboxController  operator         = new XboxController(1);
 
   // A chooser for autonomous commands
   SendableChooser<Command>      m_chooser        = new SendableChooser<>( );

@@ -25,7 +25,8 @@ public class DriveResetSensors extends CommandBase
   @Override
   public void initialize( )
   {
-    m_drivetrain.resetSensors( );
+    m_drivetrain.resetEncoders( );
+    m_drivetrain.resetGyro( );
   }
 
   // Called every time the scheduler runs while the command is scheduled.

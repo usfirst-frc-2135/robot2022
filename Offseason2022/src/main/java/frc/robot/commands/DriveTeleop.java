@@ -31,7 +31,7 @@ public class DriveTeleop extends CommandBase
   @Override
   public void execute( )
   {
-    m_drivetrain.moveWithJoysticks(RobotContainer.getInstance( ).getDriver( ));
+    m_drivetrain.moveWithJoysticksExecute(RobotContainer.getInstance( ).getDriver( ));
   }
 
   // Called once the command ends or is interrupted.
