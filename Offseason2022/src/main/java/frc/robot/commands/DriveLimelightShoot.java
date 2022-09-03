@@ -4,14 +4,20 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.subsystems.Drivetrain;
 
 /**
  *
  */
 public class DriveLimelightShoot extends SequentialCommandGroup
 {
-  public DriveLimelightShoot( )
+  private final Drivetrain m_drivetrain;
+
+  public DriveLimelightShoot(Drivetrain drivetrain)
   {
+    m_drivetrain = drivetrain;
+    setName("DriveLimelightShoot");
+
     addCommands(
     // Add Commands here:
     // Also add parallel commands using the

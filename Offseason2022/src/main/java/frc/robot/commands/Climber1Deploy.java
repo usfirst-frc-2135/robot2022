@@ -4,14 +4,31 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.FloorConveyor;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.TowerConveyor;
 
 /**
  *
  */
 public class Climber1Deploy extends SequentialCommandGroup
 {
-  public Climber1Deploy( )
+  private final Climber       m_climber;
+  private final Intake        m_intake;
+  private final FloorConveyor m_fConv;
+  private final TowerConveyor m_tConv;
+  private final Shooter       m_shooter;
+
+  public Climber1Deploy(Climber climber, Intake intake, FloorConveyor fConv, TowerConveyor tConv, Shooter shooter)
   {
+    m_climber = climber;
+    m_intake = intake;
+    m_fConv = fConv;
+    m_tConv = tConv;
+    m_shooter = shooter;
+
     addCommands(
     // Add Commands here:
     // Also add parallel commands using the

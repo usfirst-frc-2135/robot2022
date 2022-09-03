@@ -11,14 +11,12 @@ import frc.robot.subsystems.Drivetrain;
  */
 public class DriveResetSensors extends CommandBase
 {
-  private Drivetrain m_drivetrain;
+  private final Drivetrain m_drivetrain;
 
   public DriveResetSensors(Drivetrain drivetrain)
   {
-
-    drivetrain = m_drivetrain;
+    m_drivetrain = drivetrain;
     setName("ResetDriveSensors");
-
   }
 
   // Called when the command is initially scheduled.

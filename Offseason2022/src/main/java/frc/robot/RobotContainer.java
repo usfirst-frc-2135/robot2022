@@ -9,8 +9,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.Constants.FCConsts.FCMode;
 import frc.robot.Constants.INConsts.INMode;
+import frc.robot.Constants.LEDConsts.LEDColor;
 import frc.robot.Constants.SHConsts.Mode;
 import frc.robot.Constants.TCConsts.TCMode;
 import frc.robot.commands.Auto1Ball1OppRight;
@@ -25,8 +27,8 @@ import frc.robot.commands.AutoDriveShoot;
 import frc.robot.commands.AutoPathSequence;
 import frc.robot.commands.AutoShoot;
 import frc.robot.commands.AutoShootDriveShoot;
+import frc.robot.commands.AutoShootLowHub;
 import frc.robot.commands.AutoStop;
-import frc.robot.commands.AutonomousCommand;
 import frc.robot.commands.Climber0Stow;
 import frc.robot.commands.Climber1Deploy;
 import frc.robot.commands.Climber2ClimbToL2;
@@ -44,9 +46,12 @@ import frc.robot.commands.ClimberRun;
 import frc.robot.commands.ClimberSetGatehook;
 import frc.robot.commands.ClimberTimerOverride;
 import frc.robot.commands.DriveLimelight;
+import frc.robot.commands.DriveLimelightShoot;
+import frc.robot.commands.DriveLimelightStop;
 import frc.robot.commands.DriveMotorTest;
 import frc.robot.commands.DriveQuickturn;
 import frc.robot.commands.DriveResetSensors;
+import frc.robot.commands.DriveSlowMode;
 import frc.robot.commands.DriveTeleop;
 import frc.robot.commands.Dummy;
 import frc.robot.commands.ExhaustingAction;
@@ -56,16 +61,18 @@ import frc.robot.commands.IntakeDeploy;
 import frc.robot.commands.IntakeRun;
 import frc.robot.commands.IntakingAction;
 import frc.robot.commands.IntakingStop;
+import frc.robot.commands.LEDSet;
 import frc.robot.commands.RobotInitialize;
+import frc.robot.commands.ScoringActionHighHub;
 import frc.robot.commands.ScoringActionLowHub;
 import frc.robot.commands.ScoringPrime;
 import frc.robot.commands.ScoringStop;
-import frc.robot.commands.VisionOn;
 import frc.robot.commands.ShooterAimToggle;
 import frc.robot.commands.ShooterReverse;
 import frc.robot.commands.ShooterRun;
 import frc.robot.commands.SimulateLimelight;
 import frc.robot.commands.TowerConveyorRun;
+import frc.robot.commands.VisionOn;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.FloorConveyor;
@@ -100,8 +107,8 @@ public class RobotContainer
   public final Power            m_power          = new Power( );
 
   // Joysticks
-  private final XboxController  driver           = new XboxController(0);
-  private final XboxController  operator         = new XboxController(1);
+  private final XboxController  m_driver         = new XboxController(0);
+  private final XboxController  m_operator       = new XboxController(1);
 
   // A chooser for autonomous commands
   SendableChooser<Command>      m_chooser        = new SendableChooser<>( );
@@ -126,9 +133,12 @@ public class RobotContainer
     SmartDashboard.putData("AutoPathSequence", new AutoPathSequence( ));
     SmartDashboard.putData("AutoShoot", new AutoShoot( ));
     SmartDashboard.putData("AutoShootDriveShoot", new AutoShootDriveShoot( ));
+    SmartDashboard.putData("AutoShootLowHub", new AutoShootLowHub( ));
     SmartDashboard.putData("AutoStop", new AutoStop(m_drivetrain));
-    SmartDashboard.putData("Climber0Stow", new Climber0Stow( ));
-    SmartDashboard.putData("Climber1Deploy", new Climber1Deploy( ));
+
+    SmartDashboard.putData("Climber0Stow", new Climber0Stow(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter));
+    SmartDashboard.putData("Climber1Deploy",
+        new Climber1Deploy(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter));
     SmartDashboard.putData("Climber2ClimbToL2", new Climber2ClimbToL2( ));
     SmartDashboard.putData("Climber3RotateToL3", new Climber3RotateToL3( ));
     SmartDashboard.putData("Climber5RotateIntoL3", new Climber5RotateIntoL3( ));
@@ -137,46 +147,67 @@ public class RobotContainer
     SmartDashboard.putData("Climber8SettleToL4", new Climber8SettleToL4( ));
     SmartDashboard.putData("ClimberCalibrate", new ClimberCalibrate(m_climber));
     SmartDashboard.putData("ClimberFullClimb", new ClimberFullClimb( ));
-    SmartDashboard.putData("ClimberL2ToL3", new ClimberL2ToL3( ));
-    SmartDashboard.putData("ClimberL3ToL4", new ClimberL3ToL4( ));
+    SmartDashboard.putData("ClimberL2ToL3", new ClimberL2ToL3(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter));
+    SmartDashboard.putData("ClimberL3ToL4", new ClimberL3ToL4(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter));
     SmartDashboard.putData("ClimberMoveToHeight", new ClimberMoveToHeight(m_climber));
     SmartDashboard.putData("ClimberSetGatehook", new ClimberSetGatehook( ));
     SmartDashboard.putData("ClimberTimerOverride", new ClimberTimerOverride( ));
-    SmartDashboard.putData("DriveLimelight", new DriveLimelight( ));
+
+    SmartDashboard.putData("DriveLimelight", new DriveLimelight(m_drivetrain, m_vision, false));
+    SmartDashboard.putData("DriveLimelightShoot", new DriveLimelightShoot(m_drivetrain));
+    SmartDashboard.putData("DriveLimelightStop", new DriveLimelightStop(m_drivetrain));
     SmartDashboard.putData("DriveMotorTest", new DriveMotorTest(m_drivetrain, true));
+    SmartDashboard.putData("DriveMotorTest", new DriveQuickturn(m_drivetrain));
     SmartDashboard.putData("DriveResetSensors", new DriveResetSensors(m_drivetrain));
+    SmartDashboard.putData("DriveSlowMode", new DriveSlowMode(m_drivetrain, false));
+
     SmartDashboard.putData("ExhaustingAction", new ExhaustingAction( ));
     SmartDashboard.putData("ExhaustingStop", new ExhaustingStop( ));
+
     SmartDashboard.putData("Fconveyor-STOP", new FloorConveyorRun(FCMode.FCONVEYOR_STOP, m_floorConveyor));
     SmartDashboard.putData("Fconveyor-ACQUIRE", new FloorConveyorRun(FCMode.FCONVEYOR_ACQUIRE, m_floorConveyor));
     SmartDashboard.putData("Fconveyor-EXPEL", new FloorConveyorRun(FCMode.FCONVEYOR_EXPEL, m_floorConveyor));
     SmartDashboard.putData("Fconveyor-EXPELFAST", new FloorConveyorRun(FCMode.FCONVEYOR_EXPEL_FAST, m_floorConveyor));
-    SmartDashboard.putData("IntakingAction", new IntakingAction( ));
-    SmartDashboard.putData("IntakingStop", new IntakingStop( ));
+
+    SmartDashboard.putData("IntakeDeploy", new IntakeDeploy(false));
     SmartDashboard.putData("Intake-STOP", new IntakeRun(m_intake, INMode.INTAKE_STOP));
     SmartDashboard.putData("Intake-ACQUIRE", new IntakeRun(m_intake, INMode.INTAKE_ACQUIRE));
     SmartDashboard.putData("Intake-EXPEL", new IntakeRun(m_intake, INMode.INTAKE_EXPEL));
+
+    SmartDashboard.putData("IntakingAction", new IntakingAction( ));
+    SmartDashboard.putData("IntakingStop", new IntakingStop( ));
+
+    SmartDashboard.putData("LEDSet", new LEDSet(LEDColor.LEDCOLOR_OFF, m_led));
     SmartDashboard.putData("RobotInitialize", new RobotInitialize( ));
-    SmartDashboard.putData("ShooterAimToggle", new ShooterAimToggle( ));
+
+    SmartDashboard.putData("ScoringActionHighHub", new ScoringActionHighHub(0, m_shooter));
+    SmartDashboard.putData("ScoringActionLowHub", new ScoringActionLowHub(0, m_shooter));
+    SmartDashboard.putData("ScoringPrime", new ScoringPrime(m_shooter));
+    SmartDashboard.putData("ScoringStop", new ScoringStop(m_shooter));
+
     SmartDashboard.putData("Shooter-OFF", new ShooterRun(Mode.SHOOTER_STOP, m_shooter));
     SmartDashboard.putData("Shooter-PRIME", new ShooterRun(Mode.SHOOTER_PRIME, m_shooter));
     SmartDashboard.putData("Shooter-LOW", new ShooterRun(Mode.SHOOTER_LOWERHUB, m_shooter));
     SmartDashboard.putData("Shooter-HIGH", new ShooterRun(Mode.SHOOTER_UPPERHUB, m_shooter));
     SmartDashboard.putData("Shooter-REV", new ShooterRun(Mode.SHOOTER_REVERSE, m_shooter));
-    SmartDashboard.putData("ShootReverse", new ShooterReverse(m_shooter));
+    SmartDashboard.putData("ShooterAimToggle", new ShooterAimToggle( ));
+    SmartDashboard.putData("ShooterReverse", new ShooterReverse(m_shooter));
+
     SmartDashboard.putData("SimulateLimelight", new SimulateLimelight( ));
+
     SmartDashboard.putData("Tconveyor-STOP", new TowerConveyorRun(m_towerConveyor, TCMode.TCONVEYOR_STOP));
     SmartDashboard.putData("Tconveyor-ACQUIRE", new TowerConveyorRun(m_towerConveyor, TCMode.TCONVEYOR_ACQUIRE));
     SmartDashboard.putData("Tconveyor-ACQUIRESLOW", new TowerConveyorRun(m_towerConveyor, TCMode.TCONVEYOR_ACQUIRE_SLOW));
     SmartDashboard.putData("Tconveyor-EXPEL", new TowerConveyorRun(m_towerConveyor, TCMode.TCONVEYOR_EXPEL));
     SmartDashboard.putData("Tconveyor-EXPELFAST", new TowerConveyorRun(m_towerConveyor, TCMode.TCONVEYOR_EXPEL_FAST));
+
     SmartDashboard.putData("Dummy", new Dummy( ));
 
     // Configure the button bindings
     configureButtonBindings( );
 
     // Configure default commands
-    m_drivetrain.setDefaultCommand(new DriveTeleop(m_drivetrain));
+    m_drivetrain.setDefaultCommand(new DriveTeleop(m_drivetrain, m_operator));
     m_climber.setDefaultCommand(new ClimberRun(m_climber));
 
     // Configure autonomous sendable chooser
@@ -205,64 +236,104 @@ public class RobotContainer
    */
   private void configureButtonBindings( )
   {
-    // Create some buttons
-    final JoystickButton operBack = new JoystickButton(operator, XboxController.Button.kBack.value);
-    operBack.whenPressed(new ClimberFullClimb( ), true);
+    // Driver Controller Assignments
+    // Driver - A, B, X, Y
+    final JoystickButton m_driverA = new JoystickButton(m_driver, XboxController.Button.kA.value);
+    m_driverA.whileHeld(new DriveQuickturn(m_drivetrain), true);
 
-    final JoystickButton operStart = new JoystickButton(operator, XboxController.Button.kStart.value);
-    operStart.whenPressed(new ClimberRun(m_climber), true);
+    final JoystickButton m_driverB = new JoystickButton(m_driver, XboxController.Button.kB.value);
+    m_driverB.whenPressed(new Dummy( ), true);
 
-    final JoystickButton operRightBumper = new JoystickButton(operator, XboxController.Button.kRightBumper.value);
-    operRightBumper.whenPressed(new ScoringPrime(0, m_shooter), true);
+    final JoystickButton m_driverX = new JoystickButton(m_driver, XboxController.Button.kX.value);
+    m_driverX.whenPressed(new Dummy( ), true);
 
-    final JoystickButton operLeftBumper = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
-    operLeftBumper.whenPressed(new IntakingAction( ), true);
+    final JoystickButton m_driverY = new JoystickButton(m_driver, XboxController.Button.kY.value);
+    m_driverY.whenPressed(new Dummy( ), true);
 
-    final JoystickButton operY = new JoystickButton(operator, XboxController.Button.kY.value);
-    operY.whenPressed(new Dummy( ), true);
+    // Driver - Bumpers, start, back
+    final JoystickButton m_driverLeftBumper = new JoystickButton(m_driver, XboxController.Button.kLeftBumper.value);
+    m_driverLeftBumper.whenPressed(new IntakingAction( ), true);
+    m_driverLeftBumper.whenReleased(new IntakingStop( ), true);
 
-    final JoystickButton operX = new JoystickButton(operator, XboxController.Button.kX.value);
-    operX.whenPressed(new ScoringStop(m_shooter), true);
+    final JoystickButton m_driverRightBumper = new JoystickButton(m_driver, XboxController.Button.kRightBumper.value);
+    m_driverRightBumper.whenPressed(new ScoringActionLowHub(10.0, m_shooter), true);
+    m_driverRightBumper.whenReleased(new ScoringStop(m_shooter), true);
 
-    final JoystickButton operB = new JoystickButton(operator, XboxController.Button.kB.value);
-    operB.whenPressed(new ExhaustingAction( ), true);
+    // final JoystickButton m_driverBack = new JoystickButton(m_driver,
+    // XboxController.Button.kBack.value);
+    // m_driverBack.whenPressed(new Dummy( ), true);
 
-    final JoystickButton operA = new JoystickButton(operator, XboxController.Button.kA.value);
+    final JoystickButton m_driverStart = new JoystickButton(m_driver, XboxController.Button.kStart.value);
+    m_driverStart.whenPressed(new VisionOn(true), true);
+    m_driverStart.whenReleased(new VisionOn(false), true);
+
+    // Driver - Triggers
+    // frc2135::AxisButton m_m_driverRightTrigger(&m_m_driverController,
+    // (int)frc::XboxController::Axis::kRightTrigger);
+    final JoystickButton m_driverRightTrigger = new JoystickButton(m_driver, XboxController.Button.kBack.value);
+    m_driverRightTrigger.whenPressed(new DriveLimelightShoot(m_drivetrain));
+    m_driverRightTrigger.whenReleased(new DriveLimelightStop(m_drivetrain), true);
+
+    // Operator Controller Assignments
+    // Operator - A, B, X, Y
+    final JoystickButton operA = new JoystickButton(m_operator, XboxController.Button.kA.value);
     operA.whenPressed(new IntakeDeploy(false), true);
 
-    final JoystickButton driverBack = new JoystickButton(driver, XboxController.Button.kBack.value);
-    driverBack.whenPressed(new Dummy( ), true);
+    final JoystickButton operB = new JoystickButton(m_operator, XboxController.Button.kB.value);
+    operB.whenPressed(new ExhaustingAction( ), true);
+    operB.whenReleased(new ExhaustingStop( ), true);
 
-    final JoystickButton driverStart = new JoystickButton(driver, XboxController.Button.kStart.value);
-    driverStart.whenPressed(new VisionOn(false), true);
+    final JoystickButton operX = new JoystickButton(m_operator, XboxController.Button.kX.value);
+    operX.whenPressed(new ScoringStop(m_shooter), true);
 
-    final JoystickButton driverRightBumper = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
-    driverRightBumper.whenPressed(new ScoringActionLowHub(0, m_shooter), true);
+    final JoystickButton operY = new JoystickButton(m_operator, XboxController.Button.kY.value);
+    operY.whenPressed(new ClimberTimerOverride( ), true);
 
-    final JoystickButton driverLeftBumper = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
-    driverLeftBumper.whenPressed(new IntakingAction( ), true);
+    // Operator - Bumpers, start, back
+    final JoystickButton operLeftBumper = new JoystickButton(m_operator, XboxController.Button.kLeftBumper.value);
+    operLeftBumper.whenPressed(new IntakingAction( ), true);
+    operLeftBumper.whenReleased(new IntakingStop( ), true);
 
-    final JoystickButton driverY = new JoystickButton(driver, XboxController.Button.kY.value);
-    driverY.whenPressed(new Dummy( ), true);
+    final JoystickButton operRightBumper = new JoystickButton(m_operator, XboxController.Button.kRightBumper.value);
+    operRightBumper.whenPressed(new ScoringPrime(m_shooter), true);
 
-    final JoystickButton driverX = new JoystickButton(driver, XboxController.Button.kX.value);
-    driverX.whenPressed(new Dummy( ), true);
+    final JoystickButton operBack = new JoystickButton(m_operator, XboxController.Button.kBack.value);
+    operBack.whenPressed(new ClimberFullClimb( ), true);
 
-    final JoystickButton driverB = new JoystickButton(driver, XboxController.Button.kB.value);
-    driverB.whenPressed(new Dummy( ), true);
+    final JoystickButton operStart = new JoystickButton(m_operator, XboxController.Button.kStart.value);
+    operStart.whenPressed(new ClimberRun(m_climber), true);
 
-    final JoystickButton driverA = new JoystickButton(driver, XboxController.Button.kA.value);
-    driverA.whenPressed(new DriveQuickturn( ), true);
+    // Operator - POV buttons
+    final POVButton operDown = new POVButton(m_operator, 180);
+    operDown.whenPressed(new Climber0Stow(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter), true);
+
+    final POVButton operUp = new POVButton(m_operator, 0);
+    operDown.whenPressed(new Climber1Deploy(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter), true);
+
+    final POVButton operLeft = new POVButton(m_operator, 270);
+    operDown.whenPressed(new ClimberL2ToL3(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter), true);
+
+    final POVButton operRight = new POVButton(m_operator, 90);
+    operDown.whenPressed(new ClimberL3ToL4(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter), true);
+
+    // Operator Left/Right Trigger
+    // :AxisButton operLeftTrigger(&m_operController, frc::XboxController::Axis::kLeftTrigger);
+    final JoystickButton operLeftTrigger = new JoystickButton(m_driver, XboxController.Button.kBack.value);
+    operLeftTrigger.whenPressed(new ClimberCalibrate(m_climber), true);
+    // :AxisButton operRightTrigger(&m_operController, frc::XboxController::Axis::kRightTrigger);
+    final JoystickButton operRightTrigger = new JoystickButton(m_driver, XboxController.Button.kBack.value);
+    operRightTrigger.whileHeld(new ShooterReverse(m_shooter), true);
+
   }
 
   public XboxController getDriver( )
   {
-    return driver;
+    return m_driver;
   }
 
   public XboxController getOperator( )
   {
-    return operator;
+    return m_operator;
   }
 
   /**

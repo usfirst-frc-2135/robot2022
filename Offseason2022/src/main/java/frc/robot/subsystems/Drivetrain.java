@@ -266,10 +266,10 @@ public class Drivetrain extends SubsystemBase
 
     m_throttleZeroed = false;
     setBrakeMode(false);
-    moveSetQuickTurn(false);
+    driveSetQuickTurn(false);
     setDriveSlowMode(false);
 
-    moveStop( );
+    driveStopMotors( );
 
     resetGyro( );
     resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
@@ -576,7 +576,7 @@ public class Drivetrain extends SubsystemBase
   //
   // Voltage-based tank drive
   //
-  public void TankDriveVolts(double left, double right)
+  public void tankDriveVolts(double left, double right)
   {
     if (m_validL1)
       m_driveL1.setVoltage(left);
@@ -615,7 +615,7 @@ public class Drivetrain extends SubsystemBase
   //
   // Check if speed is below tolerance settings
   //
-  public boolean moveIsStopped( )
+  public boolean driveIsStopped( )
   {
     boolean leftStopped = m_wheelSpeeds.leftMetersPerSecond <= m_stopTolerance;
     boolean rightStopped = m_wheelSpeeds.rightMetersPerSecond <= m_stopTolerance;
@@ -638,7 +638,7 @@ public class Drivetrain extends SubsystemBase
   //
   // Set quick turn for curvature drive
   //
-  public void moveSetQuickTurn(boolean quickTurn)
+  public void driveSetQuickTurn(boolean quickTurn)
   {
     m_isQuickTurn = quickTurn;
   }
@@ -648,7 +648,7 @@ public class Drivetrain extends SubsystemBase
     m_driveSlowMode = driveSlowMode;
   }
 
-  public void moveStop( )
+  public void driveStopMotors( )
   {
     if (m_validL1 || m_validR3)
       m_diffDrive.tankDrive(0.0, 0.0, false);
@@ -657,15 +657,16 @@ public class Drivetrain extends SubsystemBase
   ///////////////////////////////////////////////////////////////////////////////
   //
   // Teleop driving mode
+  // TODO (remove this later): previously named moveWithJoysticks
   //
-  public void moveWithJoysticksInit( )
+  public void driveWithJoysticksInit( )
   {
     setBrakeMode(true);
     m_driveL1.configOpenloopRamp(m_openLoopRamp);
     m_driveR3.configOpenloopRamp(m_openLoopRamp);
   }
 
-  public void moveWithJoysticksExecute(XboxController driverPad)
+  public void driveWithJoysticksExecute(XboxController driverPad)
   {
     double xValue;
 
@@ -702,7 +703,7 @@ public class Drivetrain extends SubsystemBase
       m_diffDrive.curvatureDrive(yOutput, xOutput, m_isQuickTurn);
   }
 
-  public void moveWithJoysticksEnd( )
+  public void driveWithJoysticksEnd( )
   {
     setBrakeMode(false);
     m_driveL1.configOpenloopRamp(0.0);
@@ -712,8 +713,9 @@ public class Drivetrain extends SubsystemBase
   ///////////////////////////////////////////////////////////////////////////////
   //
   // Limelight driving mode
+  // TODO (remove this later): previously named moveWithLimelight
   //
-  public void moveWithLimelightInit(boolean m_endAtTarget)
+  public void driveWithLimelightInit(boolean m_endAtTarget)
   {
     // get pid values from dashboard
 
@@ -742,7 +744,7 @@ public class Drivetrain extends SubsystemBase
     RobotContainer.getInstance( ).m_vision.syncStateFromDashboard( );
   }
 
-  public void moveWithLimelightExecute( )
+  public void driveWithLimelightExecute( )
   {
     RobotContainer rc = RobotContainer.getInstance( );
     boolean tv = rc.m_vision.getTargetValid( );
@@ -788,19 +790,19 @@ public class Drivetrain extends SubsystemBase
       velocityArcadeDrive(throttleOutput, turnOutput);
 
     if (m_limelightDebug >= 1)
-      DataLogManager.log(getSubsystem( )                            //
-          + ": DTL tv: " + tv                                      //
-          + " tx: " + String.format("%.1f", tx)                    //
-          + " ty: " + String.format("%.1f", ty)                    //
+      DataLogManager.log(getSubsystem( )                             //
+          + ": DTL tv: " + tv                                        //
+          + " tx: " + String.format("%.1f", tx)                      //
+          + " ty: " + String.format("%.1f", ty)                      //
           + " distErr: " + String.format("%.1f", Math.abs(m_setPointDistance - m_limelightDistance)) //
           + " lldist: " + String.format("%.1f", m_limelightDistance) //
-          + " stopped: " + moveIsStopped( )                           //
+          + " stopped: " + driveIsStopped( )                         //
           + " trnOut: " + String.format("%.2f", turnOutput)          //
-          + " thrOut: " + String.format("%.2f", throttleOutput) //
+          + " thrOut: " + String.format("%.2f", throttleOutput)      //
       );
   }
 
-  public boolean moveWithLimelightIsFinished( )
+  public boolean driveWithLimelightIsFinished( )
   {
     RobotContainer rc = RobotContainer.getInstance( );
     boolean tv = rc.m_vision.getTargetValid( );
@@ -824,10 +826,10 @@ public class Drivetrain extends SubsystemBase
     return (tv //
         && ((Math.abs(tx)) <= m_angleThreshold) //
         && (Math.abs(m_setPointDistance - m_limelightDistance) <= m_distThreshold)//
-        && moveIsStopped( ));
+        && driveIsStopped( ));
   }
 
-  public void moveWithLimelightEnd( )
+  public void driveWithLimelightEnd( )
   {
     if (m_validL1 || m_validR3)
       velocityArcadeDrive(0.0, 0.0);
@@ -835,7 +837,9 @@ public class Drivetrain extends SubsystemBase
     RobotContainer.getInstance( ).m_led.setLLColor(LEDColor.LEDCOLOR_OFF);
   }
 
-  public boolean limelightSanityCheck(double horizAngleRange, double distRange)
+  // TODO (remove this later): Previously called LimelightSanityCheck
+
+  public boolean isLimelightValid(double horizAngleRange, double distRange)
   {
     // check whether target is valid
     // check whether the limelight tx and ty is within a certain tolerance
@@ -864,9 +868,10 @@ public class Drivetrain extends SubsystemBase
 
   ///////////////////////////////////////////////////////////////////////////////
   //
-  // Autonomous mode - Ramsete follower
+  // Autonomous mode - Ramsete path follower
+  // TODO (remove this later): previously called RamseteFollower
   //
-  public void RamseteFollowerInit(Trajectory trajectory, boolean resetOdometry)
+  public void driveWithPathFollowerInit(Trajectory trajectory, boolean resetOdometry)
   {
     m_stopTolerance = SmartDashboard.getNumber("DT_stopTolerance", m_stopTolerance);
     m_ramseteB = SmartDashboard.getNumber("DTR_ramseteB", m_ramseteB);
@@ -904,7 +909,7 @@ public class Drivetrain extends SubsystemBase
     m_field.setRobotPose(getPose( ));
   }
 
-  public void RamseteFollowerExecute( )
+  public void driveWithPathFollowerExecute( )
   {
     // Need to step through the states through the trajectory
 
@@ -973,7 +978,7 @@ public class Drivetrain extends SubsystemBase
       );
   }
 
-  public boolean RamseteFollowerIsFinished( )
+  public boolean driveWithPathFollowerIsFinished( )
   {
     if (m_trajTimer.get( ) == 0)
       return false;
@@ -983,7 +988,7 @@ public class Drivetrain extends SubsystemBase
         && (Math.abs(m_wheelSpeeds.rightMetersPerSecond) <= 0 + m_stopTolerance));
   }
 
-  public void RamseteFollowerEnd( )
+  public void driveWithPathFollowerEnd( )
   {
     m_trajTimer.stop( );
     velocityArcadeDrive(0.0, 0.0);
