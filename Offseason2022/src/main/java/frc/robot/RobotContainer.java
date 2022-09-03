@@ -183,15 +183,13 @@ public class RobotContainer
 
     // Configure autonomous sendable chooser
 
-    m_chooser.addOption("Autonomous Command", new AutonomousCommand( ));
     m_chooser.addOption("Auto1Ball1OppRight", new Auto1Ball1OppRight( ));
     m_chooser.addOption("Auto1Ball2OppLeft", new Auto1Ball2OppLeft( ));
     m_chooser.addOption("Auto1BallLimelight", new Auto1BallLimelight( ));
     m_chooser.addOption("Auto3BallLeft", new Auto3BallLeft( ));
     m_chooser.addOption("Auto3BallRight", new Auto3BallRight( ));
     m_chooser.addOption("AutoShootDriveShoot", new AutoShootDriveShoot( ));
-    m_chooser.addOption("AutoStop", new AutoStop(m_drivetrain));
-    m_chooser.setDefaultOption("Autonomous Command", new AutonomousCommand( ));
+    m_chooser.setDefaultOption("AutoStop", new AutoStop(m_drivetrain));
 
     SmartDashboard.putData("Auto Mode", m_chooser);
   }

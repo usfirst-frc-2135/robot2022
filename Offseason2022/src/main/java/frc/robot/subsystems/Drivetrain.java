@@ -100,7 +100,7 @@ public class Drivetrain extends SubsystemBase
   private double                          m_turnConstant        = DTConsts.kTurnConstant;
   private double                          m_turnPidKp           = DTConsts.kTurnPidKp;
   private double                          m_turnPidKi           = DTConsts.kTurnPidKi;
-  private double                          m_turnPidKd           = DTConsts.kTurnPidKp;
+  private double                          m_turnPidKd           = DTConsts.kTurnPidKd;
   private double                          m_turnMax             = DTConsts.kTurnMax;
   private double                          m_throttlePidKp       = DTConsts.kThrottlePidKp;
   private double                          m_throttlePidKi       = DTConsts.kThrottlePidKi;
@@ -328,10 +328,6 @@ public class Drivetrain extends SubsystemBase
     SmartDashboard.putNumber("DTR_ramseteB", m_ramseteB);
     SmartDashboard.putNumber("DTR_ramseteZeta", m_ramseteZeta);
 
-    SmartDashboard.putNumber("DT_gyroYaw", m_yaw);
-    SmartDashboard.putNumber("DT_gyroPitch", m_pitch);
-    SmartDashboard.putNumber("DT_gyroRoll", m_roll);
-
     SmartDashboard.putData("Field", m_field);
   }
 
@@ -419,9 +415,9 @@ public class Drivetrain extends SubsystemBase
     SmartDashboard.putNumber("DT_currentY", getPose( ).getY( ));
     SmartDashboard.putNumber("DT_heading", getPose( ).getRotation( ).getDegrees( ));
 
-    SmartDashboard.putNumber("DT_yaw", m_yaw);
-    SmartDashboard.putNumber("DT_pitch", m_pitch);
-    SmartDashboard.putNumber("DT_roll", m_roll);
+    SmartDashboard.putNumber("DT_gyroYaw", m_yaw);
+    SmartDashboard.putNumber("DT_gyroPitch", m_pitch);
+    SmartDashboard.putNumber("DT_gyroRoll", m_roll);
 
     SmartDashboard.putNumber("DT_currentL1", m_currentl1);
     SmartDashboard.putNumber("DT_currentL2", m_currentL2);
@@ -785,8 +781,8 @@ public class Drivetrain extends SubsystemBase
     throttleOutput = MathUtil.clamp(throttleOutput, -m_throttleMax, m_throttleMax);
 
     // put turn and throttle outputs on the dashboard
-    SmartDashboard.putNumber("DTL_turnOutputClamped", turnOutput);
-    SmartDashboard.putNumber("DTL_throttleOutputClamped", throttleOutput);
+    SmartDashboard.putNumber("DTL_turnClamped", turnOutput);
+    SmartDashboard.putNumber("DTL_throttleClamped", throttleOutput);
 
     if (m_validL1 || m_validR3)
       velocityArcadeDrive(throttleOutput, turnOutput);
