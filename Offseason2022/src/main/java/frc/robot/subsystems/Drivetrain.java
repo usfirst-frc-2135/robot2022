@@ -20,7 +20,6 @@ import com.ctre.phoenix.sensors.BasePigeonSimCollection;
 import com.ctre.phoenix.sensors.PigeonIMU;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -740,8 +739,9 @@ public class Drivetrain extends SubsystemBase
     m_turnPid = new PIDController(m_turnPidKp, m_turnPidKi, m_turnPidKd);
     m_throttlePid = new PIDController(m_throttlePidKp, m_throttlePidKi, m_throttlePidKd);
 
-    RobotContainer.getInstance( ).m_vision.m_yfilter.reset( );
-    RobotContainer.getInstance( ).m_vision.syncStateFromDashboard( );
+    RobotContainer rc = RobotContainer.getInstance( );
+    rc.m_vision.m_yfilter.reset( );
+    rc.m_vision.syncStateFromDashboard( );
   }
 
   public void driveWithLimelightExecute( )

@@ -45,8 +45,8 @@ public class Robot extends TimedRobot
     DataLogManager.start( );
     DataLogManager.log("RobotInit: RoboRIO SN:" + System.getenv("serialnum"));
 
-    // Instantiate our RobotContainer. This will perform all our button
-    // bindings, and put our autonomous chooser on the dashboard.
+    // Instantiate our RobotContainer. This will perform all our button bindings, and put our autonomous
+    // chooser on the dashboard.
     m_robotContainer = RobotContainer.getInstance( );
     HAL.report(tResourceType.kResourceType_Framework, tInstances.kFramework_RobotBuilder);
 

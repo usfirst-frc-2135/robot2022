@@ -15,8 +15,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  */
 public class Pneumatics extends SubsystemBase
 {
-  private PneumaticsControlModule m_pcm        = new PneumaticsControlModule(0);
-  private Compressor              m_compressor = new Compressor(PneumaticsModuleType.CTREPCM);
+  private final PneumaticsControlModule m_pcm        = new PneumaticsControlModule(0);
+  private final Compressor              m_compressor = new Compressor(PneumaticsModuleType.CTREPCM);
 
   /**
    *

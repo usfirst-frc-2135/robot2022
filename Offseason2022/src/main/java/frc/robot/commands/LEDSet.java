@@ -12,21 +12,22 @@ import frc.robot.subsystems.LED;
  */
 public class LEDSet extends CommandBase
 {
-  private LEDColor color;
-  private LED      m_led;
+  private final LEDColor m_color;
+  private final LED      m_led;
 
-  public LEDSet(LEDColor col, LED led)
+  public LEDSet(LED led, LEDColor color)
   {
+    m_led = led;
+    m_color = color;
     setName("LEDSet");
     addRequirements(m_led);
-    color = col;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize( )
   {
-    m_led.setColor(color);
+    m_led.setColor(m_color);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

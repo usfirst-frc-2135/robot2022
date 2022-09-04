@@ -164,19 +164,23 @@ public class Shooter extends SubsystemBase
     SmartDashboard.putBoolean("SH_atDesiredSpeed", m_atDesiredSpeed);
     SmartDashboard.putNumber("SH_currentSH11", currentSH11);
 
+    LEDColor color;
+
     // Control CANdle LEDs based on shooter status
     if (m_curMode != Mode.SHOOTER_STOP)
     {
       if (!m_atDesiredSpeed)
       {
-        RobotContainer.getInstance( ).m_led.setNormalColor(LEDColor.LEDCOLOR_BLUE);
+        color = LEDColor.LEDCOLOR_BLUE;
         DataLogManager.log(getSubsystem( ) + ": m_flywheelRPM " + m_flywheelRPM);
       }
       else
-        RobotContainer.getInstance( ).m_led.setNormalColor(LEDColor.LEDCOLOR_GREEN);
+        color = LEDColor.LEDCOLOR_GREEN;
     }
     else
-      RobotContainer.getInstance( ).m_led.setNormalColor(LEDColor.LEDCOLOR_OFF);
+      color = LEDColor.LEDCOLOR_OFF;
+
+    RobotContainer.getInstance( ).m_led.setNormalColor(color);
   }
 
   @Override

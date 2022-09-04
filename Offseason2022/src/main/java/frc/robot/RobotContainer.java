@@ -5,11 +5,13 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.FCConsts.FCMode;
 import frc.robot.Constants.INConsts.INMode;
 import frc.robot.Constants.LEDConsts.LEDColor;
@@ -118,6 +120,22 @@ public class RobotContainer
    */
   private RobotContainer( )
   {
+    addSmartDashboardWidgets( );
+
+    configureButtonBindings( );
+
+    initDefaultCommands( );
+
+    initAutonomousChooser( );
+  }
+
+  public static RobotContainer getInstance( )
+  {
+    return m_robotContainer;
+  }
+
+  private void addSmartDashboardWidgets( )
+  {
     // Smartdashboard Subsystems
 
     // SmartDashboard Buttons
@@ -139,19 +157,19 @@ public class RobotContainer
     SmartDashboard.putData("Climber0Stow", new Climber0Stow(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter));
     SmartDashboard.putData("Climber1Deploy",
         new Climber1Deploy(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter));
-    SmartDashboard.putData("Climber2ClimbToL2", new Climber2ClimbToL2( ));
-    SmartDashboard.putData("Climber3RotateToL3", new Climber3RotateToL3( ));
-    SmartDashboard.putData("Climber5RotateIntoL3", new Climber5RotateIntoL3( ));
-    SmartDashboard.putData("Climber6ClimbToL3", new Climber6ClimbToL3( ));
-    SmartDashboard.putData("Climber7ClimbToL4", new Climber7ClimbToL4( ));
-    SmartDashboard.putData("Climber8SettleToL4", new Climber8SettleToL4( ));
+    SmartDashboard.putData("Climber2ClimbToL2", new Climber2ClimbToL2(m_climber));
+    SmartDashboard.putData("Climber3RotateToL3", new Climber3RotateToL3(m_climber));
+    SmartDashboard.putData("Climber5RotateIntoL3", new Climber5RotateIntoL3(m_climber));
+    SmartDashboard.putData("Climber6ClimbToL3", new Climber6ClimbToL3(m_climber));
+    SmartDashboard.putData("Climber7ClimbToL4", new Climber7ClimbToL4(m_climber));
+    SmartDashboard.putData("Climber8SettleToL4", new Climber8SettleToL4(m_climber));
     SmartDashboard.putData("ClimberCalibrate", new ClimberCalibrate(m_climber));
-    SmartDashboard.putData("ClimberFullClimb", new ClimberFullClimb( ));
+    SmartDashboard.putData("ClimberFullClimb", new ClimberFullClimb(m_climber));
     SmartDashboard.putData("ClimberL2ToL3", new ClimberL2ToL3(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter));
     SmartDashboard.putData("ClimberL3ToL4", new ClimberL3ToL4(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter));
     SmartDashboard.putData("ClimberMoveToHeight", new ClimberMoveToHeight(m_climber));
-    SmartDashboard.putData("ClimberSetGatehook", new ClimberSetGatehook( ));
-    SmartDashboard.putData("ClimberTimerOverride", new ClimberTimerOverride( ));
+    SmartDashboard.putData("ClimberSetGatehook", new ClimberSetGatehook(m_climber));
+    SmartDashboard.putData("ClimberTimerOverride", new ClimberTimerOverride(m_climber));
 
     SmartDashboard.putData("DriveLimelight", new DriveLimelight(m_drivetrain, m_vision, false));
     SmartDashboard.putData("DriveLimelightShoot", new DriveLimelightShoot(m_drivetrain));
@@ -164,12 +182,12 @@ public class RobotContainer
     SmartDashboard.putData("ExhaustingAction", new ExhaustingAction( ));
     SmartDashboard.putData("ExhaustingStop", new ExhaustingStop( ));
 
-    SmartDashboard.putData("Fconveyor-STOP", new FloorConveyorRun(FCMode.FCONVEYOR_STOP, m_floorConveyor));
-    SmartDashboard.putData("Fconveyor-ACQUIRE", new FloorConveyorRun(FCMode.FCONVEYOR_ACQUIRE, m_floorConveyor));
-    SmartDashboard.putData("Fconveyor-EXPEL", new FloorConveyorRun(FCMode.FCONVEYOR_EXPEL, m_floorConveyor));
-    SmartDashboard.putData("Fconveyor-EXPELFAST", new FloorConveyorRun(FCMode.FCONVEYOR_EXPEL_FAST, m_floorConveyor));
+    SmartDashboard.putData("Fconveyor-STOP", new FloorConveyorRun(m_floorConveyor, FCMode.FCONVEYOR_STOP));
+    SmartDashboard.putData("Fconveyor-ACQUIRE", new FloorConveyorRun(m_floorConveyor, FCMode.FCONVEYOR_ACQUIRE));
+    SmartDashboard.putData("Fconveyor-EXPEL", new FloorConveyorRun(m_floorConveyor, FCMode.FCONVEYOR_EXPEL));
+    SmartDashboard.putData("Fconveyor-EXPELFAST", new FloorConveyorRun(m_floorConveyor, FCMode.FCONVEYOR_EXPEL_FAST));
 
-    SmartDashboard.putData("IntakeDeploy", new IntakeDeploy(false));
+    SmartDashboard.putData("IntakeDeploy", new IntakeDeploy(m_intake, false));
     SmartDashboard.putData("Intake-STOP", new IntakeRun(m_intake, INMode.INTAKE_STOP));
     SmartDashboard.putData("Intake-ACQUIRE", new IntakeRun(m_intake, INMode.INTAKE_ACQUIRE));
     SmartDashboard.putData("Intake-EXPEL", new IntakeRun(m_intake, INMode.INTAKE_EXPEL));
@@ -177,7 +195,7 @@ public class RobotContainer
     SmartDashboard.putData("IntakingAction", new IntakingAction( ));
     SmartDashboard.putData("IntakingStop", new IntakingStop( ));
 
-    SmartDashboard.putData("LEDSet", new LEDSet(LEDColor.LEDCOLOR_OFF, m_led));
+    SmartDashboard.putData("LEDSet", new LEDSet(m_led, LEDColor.LEDCOLOR_OFF));
     SmartDashboard.putData("RobotInitialize", new RobotInitialize( ));
 
     SmartDashboard.putData("ScoringActionHighHub", new ScoringActionHighHub(0, m_shooter));
@@ -185,11 +203,11 @@ public class RobotContainer
     SmartDashboard.putData("ScoringPrime", new ScoringPrime(m_shooter));
     SmartDashboard.putData("ScoringStop", new ScoringStop(m_shooter));
 
-    SmartDashboard.putData("Shooter-OFF", new ShooterRun(Mode.SHOOTER_STOP, m_shooter));
-    SmartDashboard.putData("Shooter-PRIME", new ShooterRun(Mode.SHOOTER_PRIME, m_shooter));
-    SmartDashboard.putData("Shooter-LOW", new ShooterRun(Mode.SHOOTER_LOWERHUB, m_shooter));
-    SmartDashboard.putData("Shooter-HIGH", new ShooterRun(Mode.SHOOTER_UPPERHUB, m_shooter));
-    SmartDashboard.putData("Shooter-REV", new ShooterRun(Mode.SHOOTER_REVERSE, m_shooter));
+    SmartDashboard.putData("Shooter-OFF", new ShooterRun(m_shooter, Mode.SHOOTER_STOP));
+    SmartDashboard.putData("Shooter-PRIME", new ShooterRun(m_shooter, Mode.SHOOTER_PRIME));
+    SmartDashboard.putData("Shooter-LOW", new ShooterRun(m_shooter, Mode.SHOOTER_LOWERHUB));
+    SmartDashboard.putData("Shooter-HIGH", new ShooterRun(m_shooter, Mode.SHOOTER_UPPERHUB));
+    SmartDashboard.putData("Shooter-REV", new ShooterRun(m_shooter, Mode.SHOOTER_REVERSE));
     SmartDashboard.putData("ShooterAimToggle", new ShooterAimToggle( ));
     SmartDashboard.putData("ShooterReverse", new ShooterReverse(m_shooter));
 
@@ -201,31 +219,35 @@ public class RobotContainer
     SmartDashboard.putData("Tconveyor-EXPEL", new TowerConveyorRun(m_towerConveyor, TCMode.TCONVEYOR_EXPEL));
     SmartDashboard.putData("Tconveyor-EXPELFAST", new TowerConveyorRun(m_towerConveyor, TCMode.TCONVEYOR_EXPEL_FAST));
 
-    SmartDashboard.putData("Dummy", new Dummy( ));
-
-    // Configure the button bindings
-    configureButtonBindings( );
-
-    // Configure default commands
-    m_drivetrain.setDefaultCommand(new DriveTeleop(m_drivetrain, m_operator));
-    m_climber.setDefaultCommand(new ClimberRun(m_climber));
-
-    // Configure autonomous sendable chooser
-
-    m_chooser.addOption("Auto1Ball1OppRight", new Auto1Ball1OppRight( ));
-    m_chooser.addOption("Auto1Ball2OppLeft", new Auto1Ball2OppLeft( ));
-    m_chooser.addOption("Auto1BallLimelight", new Auto1BallLimelight( ));
-    m_chooser.addOption("Auto3BallLeft", new Auto3BallLeft( ));
-    m_chooser.addOption("Auto3BallRight", new Auto3BallRight( ));
-    m_chooser.addOption("AutoShootDriveShoot", new AutoShootDriveShoot( ));
-    m_chooser.setDefaultOption("AutoStop", new AutoStop(m_drivetrain));
-
-    SmartDashboard.putData("Auto Mode", m_chooser);
+    SmartDashboard.putData("Dummy", new Dummy(2135)); // TODO: Remove me when all commands/buttons are completed
   }
 
-  public static RobotContainer getInstance( )
+  private void initDefaultCommands( )
   {
-    return m_robotContainer;
+    // Configure default commands for these subsystems
+    m_drivetrain.setDefaultCommand(new DriveTeleop(m_drivetrain, m_operator));
+    m_climber.setDefaultCommand(new ClimberRun(m_climber));
+  }
+
+  // Create a trigger object that monitors a joystick axis
+
+  private class AxisTrigger extends Trigger
+  {
+    XboxController m_gamepad;
+    Axis           m_axis;
+
+    AxisTrigger(XboxController gamepad, Axis axis)
+    {
+      m_gamepad = gamepad;
+      m_axis = axis;
+    }
+
+    @Override
+    public boolean get( )
+    {
+      // This returns whether the trigger is active
+      return (m_gamepad.getRawAxis(m_axis.value) > 0.5);
+    }
   }
 
   /**
@@ -236,94 +258,110 @@ public class RobotContainer
    */
   private void configureButtonBindings( )
   {
+    ///////////////////////////////////////////////////////
     // Driver Controller Assignments
+    final JoystickButton driverA = new JoystickButton(m_driver, XboxController.Button.kA.value);
+    final JoystickButton driverB = new JoystickButton(m_driver, XboxController.Button.kB.value);
+    final JoystickButton driverX = new JoystickButton(m_driver, XboxController.Button.kX.value);
+    final JoystickButton driverY = new JoystickButton(m_driver, XboxController.Button.kY.value);
+    final JoystickButton driverLeftBumper = new JoystickButton(m_driver, XboxController.Button.kLeftBumper.value);
+    final JoystickButton driverRightBumper = new JoystickButton(m_driver, XboxController.Button.kRightBumper.value);
+    final JoystickButton driverBack = new JoystickButton(m_driver, XboxController.Button.kBack.value);
+    final JoystickButton driverStart = new JoystickButton(m_driver, XboxController.Button.kStart.value);
+    final POVButton driverUp = new POVButton(m_driver, 0);
+    final POVButton driverRight = new POVButton(m_driver, 90);
+    final POVButton driverDown = new POVButton(m_driver, 180);
+    final POVButton driverLeft = new POVButton(m_driver, 270);
+    // Xbox enums { leftX = 0, leftY = 1, leftTrigger = 2, rightTrigger = 3, rightX = 4, rightY = 5}
+    final AxisTrigger driverLeftTrigger = new AxisTrigger(m_driver, XboxController.Axis.kLeftTrigger);
+    final AxisTrigger driverRightTrigger = new AxisTrigger(m_driver, XboxController.Axis.kRightTrigger);
+    // Xbox on MacOS { leftX = 0, leftY = 1, rightX = 2, rightY = 3, leftTrigger = 5, rightTrigger = 4}
+    // final AxisTrigger driverLeftTrigger = new AxisTrigger(m_driver, XboxController.Axis.kRightX);
+    // final AxisTrigger driverRightTrigger = new AxisTrigger(m_driver, XboxController.Axis.kRightY);
+
     // Driver - A, B, X, Y
-    final JoystickButton m_driverA = new JoystickButton(m_driver, XboxController.Button.kA.value);
-    m_driverA.whileHeld(new DriveQuickturn(m_drivetrain), true);
-
-    final JoystickButton m_driverB = new JoystickButton(m_driver, XboxController.Button.kB.value);
-    m_driverB.whenPressed(new Dummy( ), true);
-
-    final JoystickButton m_driverX = new JoystickButton(m_driver, XboxController.Button.kX.value);
-    m_driverX.whenPressed(new Dummy( ), true);
-
-    final JoystickButton m_driverY = new JoystickButton(m_driver, XboxController.Button.kY.value);
-    m_driverY.whenPressed(new Dummy( ), true);
+    driverA.whileHeld(new DriveQuickturn(m_drivetrain), true);
+    driverB.whenPressed(new Dummy(XboxController.Button.kB.value), true);
+    driverX.whenPressed(new Dummy(XboxController.Button.kX.value), true);
+    driverY.whenPressed(new Dummy(XboxController.Button.kY.value), true);
 
     // Driver - Bumpers, start, back
-    final JoystickButton m_driverLeftBumper = new JoystickButton(m_driver, XboxController.Button.kLeftBumper.value);
-    m_driverLeftBumper.whenPressed(new IntakingAction( ), true);
-    m_driverLeftBumper.whenReleased(new IntakingStop( ), true);
+    driverLeftBumper.whenPressed(new IntakingAction( ), true);
+    driverLeftBumper.whenReleased(new IntakingStop( ), true);
+    driverRightBumper.whenPressed(new ScoringActionLowHub(10.0, m_shooter), true);
+    driverRightBumper.whenReleased(new ScoringStop(m_shooter), true);
+    driverBack.whenPressed(new Dummy(XboxController.Button.kBack.value), true);
+    driverStart.whenPressed(new VisionOn(m_vision, true), true);
+    driverStart.whenReleased(new VisionOn(m_vision, false), true);
 
-    final JoystickButton m_driverRightBumper = new JoystickButton(m_driver, XboxController.Button.kRightBumper.value);
-    m_driverRightBumper.whenPressed(new ScoringActionLowHub(10.0, m_shooter), true);
-    m_driverRightBumper.whenReleased(new ScoringStop(m_shooter), true);
-
-    // final JoystickButton m_driverBack = new JoystickButton(m_driver,
-    // XboxController.Button.kBack.value);
-    // m_driverBack.whenPressed(new Dummy( ), true);
-
-    final JoystickButton m_driverStart = new JoystickButton(m_driver, XboxController.Button.kStart.value);
-    m_driverStart.whenPressed(new VisionOn(true), true);
-    m_driverStart.whenReleased(new VisionOn(false), true);
+    // Operator - POV buttons
+    driverUp.whenPressed(new Dummy(0), true);
+    driverRight.whenPressed(new Dummy(90), true);
+    driverDown.whenPressed(new Dummy(180), true);
+    driverLeft.whenPressed(new Dummy(270), true);
 
     // Driver - Triggers
-    // frc2135::AxisButton m_m_driverRightTrigger(&m_m_driverController,
-    // (int)frc::XboxController::Axis::kRightTrigger);
-    final JoystickButton m_driverRightTrigger = new JoystickButton(m_driver, XboxController.Button.kBack.value);
-    m_driverRightTrigger.whenPressed(new DriveLimelightShoot(m_drivetrain));
-    m_driverRightTrigger.whenReleased(new DriveLimelightStop(m_drivetrain), true);
+    driverLeftTrigger.whenActive(new DriveLimelightShoot(m_drivetrain));
+    driverRightTrigger.whenActive(new DriveLimelightStop(m_drivetrain));
 
+    ///////////////////////////////////////////////////////
     // Operator Controller Assignments
-    // Operator - A, B, X, Y
     final JoystickButton operA = new JoystickButton(m_operator, XboxController.Button.kA.value);
-    operA.whenPressed(new IntakeDeploy(false), true);
-
     final JoystickButton operB = new JoystickButton(m_operator, XboxController.Button.kB.value);
+    final JoystickButton operX = new JoystickButton(m_operator, XboxController.Button.kX.value);
+    final JoystickButton operY = new JoystickButton(m_operator, XboxController.Button.kY.value);
+    final JoystickButton operLeftBumper = new JoystickButton(m_operator, XboxController.Button.kLeftBumper.value);
+    final JoystickButton operRightBumper = new JoystickButton(m_operator, XboxController.Button.kRightBumper.value);
+    final JoystickButton operBack = new JoystickButton(m_operator, XboxController.Button.kBack.value);
+    final JoystickButton operStart = new JoystickButton(m_operator, XboxController.Button.kStart.value);
+    final POVButton operUp = new POVButton(m_operator, 0);
+    final POVButton operRight = new POVButton(m_operator, 90);
+    final POVButton operDown = new POVButton(m_operator, 180);
+    final POVButton operLeft = new POVButton(m_operator, 270);
+    // Xbox enums { leftX = 0, leftY = 1, leftTrigger = 2, rightTrigger = 3, rightX = 4, rightY = 5}
+    final AxisTrigger operLeftTrigger = new AxisTrigger(m_operator, XboxController.Axis.kLeftTrigger);
+    final AxisTrigger operRightTrigger = new AxisTrigger(m_operator, XboxController.Axis.kRightTrigger);
+    // Xbox on MacOS { leftX = 0, leftY = 1, rightX = 2, rightY = 3, leftTrigger = 5, rightTrigger = 4}
+    // final AxisTrigger operLeftTrigger = new AxisTrigger(m_operator, XboxController.Axis.rightX);
+    // final AxisTrigger operRightTrigger = new AxisTrigger(m_operator, XboxController.Axis.rightY);
+
+    // Operator - A, B, X, Y
+    operA.whenPressed(new IntakeDeploy(m_intake, false), true);
     operB.whenPressed(new ExhaustingAction( ), true);
     operB.whenReleased(new ExhaustingStop( ), true);
-
-    final JoystickButton operX = new JoystickButton(m_operator, XboxController.Button.kX.value);
     operX.whenPressed(new ScoringStop(m_shooter), true);
-
-    final JoystickButton operY = new JoystickButton(m_operator, XboxController.Button.kY.value);
-    operY.whenPressed(new ClimberTimerOverride( ), true);
+    operY.whenPressed(new ClimberTimerOverride(m_climber), true);
 
     // Operator - Bumpers, start, back
-    final JoystickButton operLeftBumper = new JoystickButton(m_operator, XboxController.Button.kLeftBumper.value);
     operLeftBumper.whenPressed(new IntakingAction( ), true);
     operLeftBumper.whenReleased(new IntakingStop( ), true);
-
-    final JoystickButton operRightBumper = new JoystickButton(m_operator, XboxController.Button.kRightBumper.value);
     operRightBumper.whenPressed(new ScoringPrime(m_shooter), true);
-
-    final JoystickButton operBack = new JoystickButton(m_operator, XboxController.Button.kBack.value);
-    operBack.whenPressed(new ClimberFullClimb( ), true);
-
-    final JoystickButton operStart = new JoystickButton(m_operator, XboxController.Button.kStart.value);
+    operBack.whenPressed(new ClimberFullClimb(m_climber), true);
     operStart.whenPressed(new ClimberRun(m_climber), true);
 
     // Operator - POV buttons
-    final POVButton operDown = new POVButton(m_operator, 180);
+    operUp.whenPressed(new Climber1Deploy(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter), true);
+    operRight.whenPressed(new ClimberL3ToL4(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter), true);
     operDown.whenPressed(new Climber0Stow(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter), true);
-
-    final POVButton operUp = new POVButton(m_operator, 0);
-    operDown.whenPressed(new Climber1Deploy(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter), true);
-
-    final POVButton operLeft = new POVButton(m_operator, 270);
-    operDown.whenPressed(new ClimberL2ToL3(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter), true);
-
-    final POVButton operRight = new POVButton(m_operator, 90);
-    operDown.whenPressed(new ClimberL3ToL4(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter), true);
+    operLeft.whenPressed(new ClimberL2ToL3(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter), true);
 
     // Operator Left/Right Trigger
-    // :AxisButton operLeftTrigger(&m_operController, frc::XboxController::Axis::kLeftTrigger);
-    final JoystickButton operLeftTrigger = new JoystickButton(m_driver, XboxController.Button.kBack.value);
-    operLeftTrigger.whenPressed(new ClimberCalibrate(m_climber), true);
-    // :AxisButton operRightTrigger(&m_operController, frc::XboxController::Axis::kRightTrigger);
-    final JoystickButton operRightTrigger = new JoystickButton(m_driver, XboxController.Button.kBack.value);
-    operRightTrigger.whileHeld(new ShooterReverse(m_shooter), true);
+    operLeftTrigger.whenActive(new ClimberCalibrate(m_climber), true);
+    operRightTrigger.whileActiveContinuous(new ShooterReverse(m_shooter), true);
+  }
 
+  private void initAutonomousChooser( )
+  {
+    // Configure autonomous sendable chooser
+    m_chooser.addOption("Auto1Ball1OppRight", new Auto1Ball1OppRight( ));
+    m_chooser.addOption("Auto1Ball2OppLeft", new Auto1Ball2OppLeft( ));
+    m_chooser.addOption("Auto1BallLimelight", new Auto1BallLimelight( ));
+    m_chooser.addOption("Auto3BallLeft", new Auto3BallLeft( ));
+    m_chooser.addOption("Auto3BallRight", new Auto3BallRight( ));
+    m_chooser.addOption("AutoShootDriveShoot", new AutoShootDriveShoot( ));
+    m_chooser.setDefaultOption("AutoStop", new AutoStop(m_drivetrain));
+
+    SmartDashboard.putData("Auto Mode", m_chooser);
   }
 
   public XboxController getDriver( )
