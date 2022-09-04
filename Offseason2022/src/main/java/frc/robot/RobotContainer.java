@@ -153,8 +153,10 @@ public class RobotContainer
     SmartDashboard.putData("Fconveyor-ACQUIRE", new FloorConveyorRun(FCMode.FCONVEYOR_ACQUIRE, m_floorConveyor));
     SmartDashboard.putData("Fconveyor-EXPEL", new FloorConveyorRun(FCMode.FCONVEYOR_EXPEL, m_floorConveyor));
     SmartDashboard.putData("Fconveyor-EXPELFAST", new FloorConveyorRun(FCMode.FCONVEYOR_EXPEL_FAST, m_floorConveyor));
-    SmartDashboard.putData("IntakingAction", new IntakingAction( ));
-    SmartDashboard.putData("IntakingStop", new IntakingStop( ));
+    SmartDashboard.putData("IntakeDeploy", new IntakeDeploy(true));
+    SmartDashboard.putData("IntakeStow", new IntakeDeploy(false));
+    SmartDashboard.putData("IntakingAction", new IntakingAction(m_intake, m_floorConveyor, m_towerConveyor));
+    SmartDashboard.putData("IntakingStop", new IntakingStop(m_intake, m_floorConveyor, m_towerConveyor));
     SmartDashboard.putData("Intake-STOP", new IntakeRun(m_intake, INMode.INTAKE_STOP));
     SmartDashboard.putData("Intake-ACQUIRE", new IntakeRun(m_intake, INMode.INTAKE_ACQUIRE));
     SmartDashboard.putData("Intake-EXPEL", new IntakeRun(m_intake, INMode.INTAKE_EXPEL));
@@ -220,7 +222,7 @@ public class RobotContainer
     operRightBumper.whenPressed(new ScoringPrime(0, m_shooter), true);
 
     final JoystickButton operLeftBumper = new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
-    operLeftBumper.whenPressed(new IntakingAction( ), true);
+    operLeftBumper.whenPressed(new IntakingAction(m_intake, m_floorConveyor, m_towerConveyor), true);
 
     final JoystickButton operY = new JoystickButton(operator, XboxController.Button.kY.value);
     operY.whenPressed(new Dummy( ), true);
@@ -244,7 +246,7 @@ public class RobotContainer
     driverRightBumper.whenPressed(new ScoringActionLowHub(0, m_shooter), true);
 
     final JoystickButton driverLeftBumper = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
-    driverLeftBumper.whenPressed(new IntakingAction( ), true);
+    driverLeftBumper.whenPressed(new IntakingAction(m_intake, m_floorConveyor, m_towerConveyor), true);
 
     final JoystickButton driverY = new JoystickButton(driver, XboxController.Button.kY.value);
     driverY.whenPressed(new Dummy( ), true);
