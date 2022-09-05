@@ -38,10 +38,10 @@ public class Shooter extends SubsystemBase
   private static final int                SLOTINDEX                 = 0;   // Use first PID slot
 
   // Devices and simulation objects
-  private WPI_TalonFX                     m_motorSH11               = new WPI_TalonFX(SHConsts.kSH11CANID);
+  private final WPI_TalonFX               m_motorSH11               = new WPI_TalonFX(SHConsts.kSH11CANID);
 
-  private TalonFXSimCollection            m_motorSim                = new TalonFXSimCollection(m_motorSH11);
-  private FlywheelSim                     m_flywheelSim             =
+  private final TalonFXSimCollection      m_motorSim                = new TalonFXSimCollection(m_motorSH11);
+  private final FlywheelSim               m_flywheelSim             =
       new FlywheelSim(DCMotor.getFalcon500(1), SHConsts.kFlywheelGearRatio, 0.01);
   private LinearFilter                    m_flywheelFilter          = LinearFilter.singlePoleIIR(0.1, 0.02);
 

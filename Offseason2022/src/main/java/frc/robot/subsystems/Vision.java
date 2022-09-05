@@ -16,7 +16,7 @@ import frc.robot.Constants.VIConsts;
 public class Vision extends SubsystemBase
 {
   // Objects
-  MedianFilter         m_yfilter     = new MedianFilter(5); // median filter y values to remove outliers (5 sample)
+  public MedianFilter  m_yfilter     = new MedianFilter(5); // median filter y values to remove outliers (5 sample)
 
   // Declare module variables
   private double       m_distance1   = VIConsts.kLLDistance1;   // x position in inches for first reference point

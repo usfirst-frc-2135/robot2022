@@ -58,117 +58,116 @@ import frc.robot.frc2135.PhoenixUtil;
 public class Drivetrain extends SubsystemBase
 {
   // Constants
-  private static final int                CANTIMEOUT            = 30;  // CAN timeout in msec
-  private static final int                PIDINDEX              = 0;   // PID in use (0-primary, 1-aux)
-  private static final int                SLOTINDEX             = 0;   // Use first PID slot
+  private static final int                  CANTIMEOUT            = 30;  // CAN timeout in msec
+  private static final int                  PIDINDEX              = 0;   // PID in use (0-primary, 1-aux)
+  private static final int                  SLOTINDEX             = 0;   // Use first PID slot
 
   // Devices and simulation objects
-  private WPI_TalonFX                     m_driveL1             = new WPI_TalonFX(1);;
-  private WPI_TalonFX                     m_driveL2             = new WPI_TalonFX(2);;
-  private WPI_TalonFX                     m_driveR3             = new WPI_TalonFX(3);;
-  private WPI_TalonFX                     m_driveR4             = new WPI_TalonFX(4);;
-  private DifferentialDrive               m_diffDrive           = new DifferentialDrive(m_driveL1, m_driveR3);
-  private PigeonIMU                       m_gyro                = new PigeonIMU(0);
+  private final WPI_TalonFX                 m_driveL1             = new WPI_TalonFX(1);;
+  private final WPI_TalonFX                 m_driveL2             = new WPI_TalonFX(2);;
+  private final WPI_TalonFX                 m_driveR3             = new WPI_TalonFX(3);;
+  private final WPI_TalonFX                 m_driveR4             = new WPI_TalonFX(4);;
+  private final DifferentialDrive           m_diffDrive           = new DifferentialDrive(m_driveL1, m_driveR3);
+  private final PigeonIMU                   m_gyro                = new PigeonIMU(0);
 
-  private DifferentialDriveKinematics     m_kinematics          = new DifferentialDriveKinematics(DTConsts.kTrackWidthMeters);
-  private TalonFXSimCollection            m_leftSim             = m_driveL1.getSimCollection( );
-  private TalonFXSimCollection            m_rightSim            = m_driveR3.getSimCollection( );
-  private DifferentialDrivetrainSim       m_driveSim            = new DifferentialDrivetrainSim(
+  private final DifferentialDriveKinematics m_kinematics          = new DifferentialDriveKinematics(DTConsts.kTrackWidthMeters);
+  private final TalonFXSimCollection        m_leftSim             = m_driveL1.getSimCollection( );
+  private final TalonFXSimCollection        m_rightSim            = m_driveR3.getSimCollection( );
+  private final DifferentialDrivetrainSim   m_driveSim            = new DifferentialDrivetrainSim(
       LinearSystemId.identifyDrivetrainSystem(DTConsts.kv, DTConsts.ka, DTConsts.KvAngular, DTConsts.KaAngular,
           DTConsts.kTrackWidthMeters),
       DCMotor.getFalcon500(2), DTConsts.kGearRatio, DTConsts.kTrackWidthMeters, DTConsts.kWheelDiaMeters / 2, null);
   // Change parameter from "null": noise VecBuilder.fill(0.001, 0.001, 0.001, 0.1, 0.1, 0.005, 0.005)
 
-  private BasePigeonSimCollection         m_pidgeonSim          = new BasePigeonSimCollection(m_gyro, false);
+  private final BasePigeonSimCollection     m_pidgeonSim          = new BasePigeonSimCollection(m_gyro, false);
 
   // Current limit settings
-  private SupplyCurrentLimitConfiguration m_supplyCurrentLimits = new SupplyCurrentLimitConfiguration(true, 45.0, 45.0, 0.001);
-  private StatorCurrentLimitConfiguration m_statorCurrentLimits = new StatorCurrentLimitConfiguration(true, 80.0, 80.0, 0.001);
+  private SupplyCurrentLimitConfiguration   m_supplyCurrentLimits = new SupplyCurrentLimitConfiguration(true, 45.0, 45.0, 0.001);
+  private StatorCurrentLimitConfiguration   m_statorCurrentLimits = new StatorCurrentLimitConfiguration(true, 80.0, 80.0, 0.001);
 
   // Declare module variables
-  private double                          m_driveXScaling       = DTConsts.kDriveXScaling;    // X axis joystick scaling
-  private double                          m_driveYScaling       = DTConsts.kDriveYScaling;    // Y axis joystick scaling
-  private double                          m_driveQTScaling      = DTConsts.kQuickTurnScaling; // Quickturn joystick scaling
-  private double                          m_driveCLScaling      = DTConsts.kSlowClimbScaling; // Slow climb speed joystick scaling
+  private double                            m_driveXScaling       = DTConsts.kDriveXScaling;    // X axis joystick scaling
+  private double                            m_driveYScaling       = DTConsts.kDriveYScaling;    // Y axis joystick scaling
+  private double                            m_driveQTScaling      = DTConsts.kQuickTurnScaling; // Quickturn joystick scaling
+  private double                            m_driveCLScaling      = DTConsts.kSlowClimbScaling; // Slow speed joystick scaling
 
-  private double                          m_openLoopRamp        = DTConsts.kOpenLoopRamp;     // Rate during teleop (opem loop)
-  private double                          m_closedLoopRamp      = DTConsts.kClosedLoopRamp;   // Rate during closed loop modes
-  private double                          m_stopTolerance       = DTConsts.kStopTolerance; // Target position tolerance (< 5cm)
+  private double                            m_openLoopRamp        = DTConsts.kOpenLoopRamp;     // Rate during teleop (opem loop)
+  private double                            m_closedLoopRamp      = DTConsts.kClosedLoopRamp;   // Rate during closed loop modes
+  private double                            m_stopTolerance       = DTConsts.kStopTolerance;    // Position tolerance (<5cm)
 
   // Limelight drive
-  private double                          m_turnConstant        = DTConsts.kTurnConstant;
-  private double                          m_turnPidKp           = DTConsts.kTurnPidKp;
-  private double                          m_turnPidKi           = DTConsts.kTurnPidKi;
-  private double                          m_turnPidKd           = DTConsts.kTurnPidKd;
-  private double                          m_turnMax             = DTConsts.kTurnMax;
-  private double                          m_throttlePidKp       = DTConsts.kThrottlePidKp;
-  private double                          m_throttlePidKi       = DTConsts.kThrottlePidKi;
-  private double                          m_throttlePidKd       = DTConsts.kThrottlePidKd;
-  private double                          m_throttleMax         = DTConsts.kThrottleMax;
-  private double                          m_throttleShape       = DTConsts.kThrottleShape;
+  private double                            m_turnConstant        = DTConsts.kTurnConstant;
+  private double                            m_turnPidKp           = DTConsts.kTurnPidKp;
+  private double                            m_turnPidKi           = DTConsts.kTurnPidKi;
+  private double                            m_turnPidKd           = DTConsts.kTurnPidKd;
+  private double                            m_turnMax             = DTConsts.kTurnMax;
+  private double                            m_throttlePidKp       = DTConsts.kThrottlePidKp;
+  private double                            m_throttlePidKi       = DTConsts.kThrottlePidKi;
+  private double                            m_throttlePidKd       = DTConsts.kThrottlePidKd;
+  private double                            m_throttleMax         = DTConsts.kThrottleMax;
+  private double                            m_throttleShape       = DTConsts.kThrottleShape;
 
-  private double                          m_targetAngle         = DTConsts.kTargetAngle;      // Optimal shooting angle
-  private double                          m_setPointDistance    = DTConsts.kSetPointDistance; // Optimal shooting distance
-  private double                          m_angleThreshold      = DTConsts.kAngleThreshold;   // Tolerance around optimal
-  private double                          m_distThreshold       = DTConsts.kDistThreshold;    // Tolerance around optimal
+  private double                            m_targetAngle         = DTConsts.kTargetAngle;      // Optimal shooting angle
+  private double                            m_setPointDistance    = DTConsts.kSetPointDistance; // Optimal shooting distance
+  private double                            m_angleThreshold      = DTConsts.kAngleThreshold;   // Tolerance around optimal
+  private double                            m_distThreshold       = DTConsts.kDistThreshold;    // Tolerance around optimal
 
   // Path follower controls
-  private double                          m_ramsetePidKf        = DTConsts.kRamsetePidKf;
-  private double                          m_ramsetePidKp        = DTConsts.kRamsetePidKp;
-  private double                          m_ramsetePidKi        = DTConsts.kRamsetePidKi;
-  private double                          m_ramsetePidKd        = DTConsts.kRamsetePidKd;
-  private double                          m_ramseteB            = DTConsts.kRamseteB;
-  private double                          m_ramseteZeta         = DTConsts.kRamseteZeta;
-  private boolean                         m_ramseteTuningMode   = DTConsts.kRamseteTuningMode;
+  private double                            m_ramsetePidKf        = DTConsts.kRamsetePidKf;
+  private double                            m_ramsetePidKp        = DTConsts.kRamsetePidKp;
+  private double                            m_ramsetePidKi        = DTConsts.kRamsetePidKi;
+  private double                            m_ramsetePidKd        = DTConsts.kRamsetePidKd;
+  private double                            m_ramseteB            = DTConsts.kRamseteB;
+  private double                            m_ramseteZeta         = DTConsts.kRamseteZeta;
 
   // Health variables
-  private boolean                         m_validL1;                    // Health indicator for drive Talon Left 1
-  private boolean                         m_validL2;                    // Health indicator for drive Talon Left 2
-  private boolean                         m_validR3;                    // Health indicator for drive Talon Right 3
-  private boolean                         m_validR4;                    // Health indicator for drive Talon Right 4
-  private boolean                         m_pigeonValid;                // Health indicator for Pigeon IMU
-  private int                             m_resetCountL1        = 0;    // motor reset count storer
-  private int                             m_resetCountL2        = 0;    // motor reset count storer
-  private int                             m_resetCountR3        = 0;    // motor reset count storer
-  private int                             m_resetCountR4        = 0;    // motor reset count storer
+  private boolean                           m_validL1;                    // Health indicator for drive Talon Left 1
+  private boolean                           m_validL2;                    // Health indicator for drive Talon Left 2
+  private boolean                           m_validR3;                    // Health indicator for drive Talon Right 3
+  private boolean                           m_validR4;                    // Health indicator for drive Talon Right 4
+  private boolean                           m_pigeonValid;                // Health indicator for Pigeon IMU
+  private int                               m_resetCountL1        = 0;    // motor reset count storer
+  private int                               m_resetCountL2        = 0;    // motor reset count storer
+  private int                               m_resetCountR3        = 0;    // motor reset count storer
+  private int                               m_resetCountR4        = 0;    // motor reset count storer
 
-  private int                             m_driveDebug          = 0;    // Debug flag to disable extra drive logging calls
-  private final int                       m_ramseteDebug        = 1;    // Debug flag to disable extra ramsete logging calls
-  private final int                       m_limelightDebug      = 0;    // Debug flag to disable extra limelight logging calls
+  private int                               m_driveDebug          = 0;    // Debug flag to disable extra drive logging calls
+  private final int                         m_ramseteDebug        = 1;    // Debug flag to disable extra ramsete logging calls
+  private final int                         m_limelightDebug      = 0;    // Debug flag to disable extra limelight logging calls
 
-  private boolean                         m_throttleZeroed      = false; // Throttle joystick zeroed safety check
-  private boolean                         m_isQuickTurn         = false; // Quickturn mode active in curvature drive
-  private boolean                         m_driveSlowMode       = false; // Slow drive mode active when climbing
-  private double                          m_limelightDistance;
+  private boolean                           m_throttleZeroed      = false; // Throttle joystick zeroed safety check
+  private boolean                           m_isQuickTurn         = false; // Quickturn mode active in curvature drive
+  private boolean                           m_driveSlowMode       = false; // Slow drive mode active when climbing
+  private double                            m_limelightDistance;
 
-  private int                             m_periodicInterval    = 0;
+  private int                               m_periodicInterval    = 0;
 
   // Odometry and telemetry
-  private double                          m_distanceLeft;              // Left wheel distance in meters
-  private double                          m_distanceRight;             // Right wheel distance in meters
-  private DifferentialDriveWheelSpeeds    m_wheelSpeeds;               // Wheel speeds in meters / sec
-  private DifferentialDriveOdometry       m_odometry            = new DifferentialDriveOdometry(Rotation2d.fromDegrees(0.0));
-  private Field2d                         m_field               = new Field2d( );
+  private double                            m_distanceLeft;              // Left wheel distance in meters
+  private double                            m_distanceRight;             // Right wheel distance in meters
+  private DifferentialDriveWheelSpeeds      m_wheelSpeeds;               // Wheel speeds in meters / sec
+  private DifferentialDriveOdometry         m_odometry            = new DifferentialDriveOdometry(Rotation2d.fromDegrees(0.0));
+  private Field2d                           m_field               = new Field2d( );
 
   // Gyro Measurements
-  private double                          m_gyroOffset          = 0.0; // Gyro (IMU) correction when reset
-  private double                          m_yaw;                       // Gyro yaw about Z axis
-  private double                          m_pitch;                     // Gyro pitch about X axis
-  private double                          m_roll;                      // Gyro roll about Y axis
+  private double                            m_gyroOffset          = 0.0; // Gyro (IMU) correction when reset
+  private double                            m_yaw;                       // Gyro yaw about Z axis
+  private double                            m_pitch;                     // Gyro pitch about X axis
+  private double                            m_roll;                      // Gyro roll about Y axis
 
   // DriveWithLimelight pid controller objects
-  private PIDController                   m_turnPid             = new PIDController(0.0, 0.0, 0.0);
-  private PIDController                   m_throttlePid         = new PIDController(0.0, 0.0, 0.0);
+  private PIDController                     m_turnPid             = new PIDController(0.0, 0.0, 0.0);
+  private PIDController                     m_throttlePid         = new PIDController(0.0, 0.0, 0.0);
 
   // Ramsete follower objects
-  private RamseteController               m_ramseteController;
-  private Trajectory                      m_trajectory;
-  private Timer                           m_trajTimer;
+  private RamseteController                 m_ramseteController;
+  private Trajectory                        m_trajectory;
+  private Timer                             m_trajTimer;
 
-  private double                          m_currentl1           = 0.0; // Motor L1 Falcon output current
-  private double                          m_currentL2           = 0.0; // Motor L2 Falcon output current
-  private double                          m_currentR3           = 0.0; // Motor R3 Falcon output current
-  private double                          m_currentR4           = 0.0; // Motor R4 Falcon output current
+  private double                            m_currentl1           = 0.0; // Motor L1 Falcon output current
+  private double                            m_currentL2           = 0.0; // Motor L2 Falcon output current
+  private double                            m_currentR3           = 0.0; // Motor R3 Falcon output current
+  private double                            m_currentR4           = 0.0; // Motor R4 Falcon output current
 
   /**
    *
