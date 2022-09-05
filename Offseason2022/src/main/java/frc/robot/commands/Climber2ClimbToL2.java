@@ -11,12 +11,8 @@ import frc.robot.subsystems.Climber;
  */
 public class Climber2ClimbToL2 extends SequentialCommandGroup
 {
-  private final Climber m_climber;
-
   public Climber2ClimbToL2(Climber climber)
   {
-    m_climber = climber;
-
     addCommands(
     // Add Commands here:
     // Also add parallel commands using the

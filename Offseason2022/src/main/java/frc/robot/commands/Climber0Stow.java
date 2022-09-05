@@ -15,20 +15,8 @@ import frc.robot.subsystems.TowerConveyor;
  */
 public class Climber0Stow extends SequentialCommandGroup
 {
-  private final Climber       m_climber;
-  private final Intake        m_intake;
-  private final FloorConveyor m_fConv;
-  private final TowerConveyor m_tConv;
-  private final Shooter       m_shooter;
-
   public Climber0Stow(Climber climber, Intake intake, FloorConveyor fConv, TowerConveyor tConv, Shooter shooter)
   {
-    m_climber = climber;
-    m_intake = intake;
-    m_fConv = fConv;
-    m_tConv = tConv;
-    m_shooter = shooter;
-
     addCommands(
     // Add Commands here:
     // Also add parallel commands using the

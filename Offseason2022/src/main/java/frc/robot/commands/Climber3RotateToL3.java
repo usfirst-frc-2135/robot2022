@@ -11,12 +11,8 @@ import frc.robot.subsystems.Climber;
  */
 public class Climber3RotateToL3 extends SequentialCommandGroup
 {
-  private final Climber m_climber;
-
   public Climber3RotateToL3(Climber climber)
   {
-    m_climber = climber;
-
     addCommands(
     // Add Commands here:
     // Also add parallel commands using the
