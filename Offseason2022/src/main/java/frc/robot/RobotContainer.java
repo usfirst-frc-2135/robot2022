@@ -225,7 +225,7 @@ public class RobotContainer
   private void initDefaultCommands( )
   {
     // Configure default commands for these subsystems
-    m_drivetrain.setDefaultCommand(new DriveTeleop(m_drivetrain, m_operator));
+    m_drivetrain.setDefaultCommand(new DriveTeleop(m_drivetrain, m_driver));
     m_climber.setDefaultCommand(new ClimberRun(m_climber));
   }
 
