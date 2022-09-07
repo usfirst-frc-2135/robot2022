@@ -4,15 +4,18 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Climber;
 
 /**
  *
  */
 public class ClimberTimerOverride extends CommandBase
 {
-  public ClimberTimerOverride( )
+  private final Climber m_climber;
+
+  public ClimberTimerOverride(Climber climber)
   {
-    // m_subsystem = subsystem;
+    m_climber = climber;
     // addRequirements(m_subsystem);
   }
 
