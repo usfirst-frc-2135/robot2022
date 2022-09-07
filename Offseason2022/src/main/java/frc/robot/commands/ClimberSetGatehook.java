@@ -11,11 +11,11 @@ import frc.robot.RobotContainer;
  */
 public class ClimberSetGatehook extends CommandBase
 {
-  private boolean m_climberGateHookClosed;
+  private boolean m_gateHookClosed;
 
-  public ClimberSetGatehook(boolean climberSetGateHook)
+  public ClimberSetGatehook(boolean gateHookClosed)
   {
-    m_climberGateHookClosed = climberSetGateHook;
+    m_gateHookClosed = gateHookClosed;
     setName("ClimberSetGateHook");
   }
 
@@ -24,7 +24,7 @@ public class ClimberSetGatehook extends CommandBase
   public void initialize( )
   {
     RobotContainer robotContainer = RobotContainer.getInstance( );
-    robotContainer.m_climber.setGateHook(m_climberGateHookClosed);
+    robotContainer.m_climber.setGateHook(m_gateHookClosed);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -14,7 +14,7 @@ import frc.robot.subsystems.Climber;
 public class ClimberTimerOverride extends CommandBase
 {
   private Climber        m_climber;
-  private XboxController operatorController;
+  private XboxController gamePad;
 
   public ClimberTimerOverride(Climber climber)
   {
@@ -26,7 +26,8 @@ public class ClimberTimerOverride extends CommandBase
   @Override
   public void initialize( )
   {
-    operatorController = RobotContainer.getInstance( ).getOperator( );
+    gamePad = RobotContainer.getInstance( ).getOperator( );
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -45,7 +46,7 @@ public class ClimberTimerOverride extends CommandBase
   {
     // return operatorController->GetRawButtonPressed((int)frc::XboxController::Button::kY);
 
-    return operatorController.getRawButtonPressed(XboxController.Button.kY.value);
+    return gamePad.getRawButtonPressed(XboxController.Button.kY.value);
   }
 
   @Override
