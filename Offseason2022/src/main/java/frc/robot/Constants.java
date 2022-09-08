@@ -1,6 +1,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.util.Units;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -32,23 +34,61 @@ public class Constants
 
   public static final class DTConsts
   {
-    public static final int    kL1CANID               = 1;
-    public static final int    kL2CANID               = 2;
-    public static final int    kR3CANID               = 3;
-    public static final int    kR4CANID               = 4;
+    public static final int     kL1CANID               = 1;
+    public static final int     kL2CANID               = 2;
+    public static final int     kR3CANID               = 3;
+    public static final int     kR4CANID               = 4;
 
-    // Kinematics values for 2135 Bebula - 2019 B-bo
-    public static final double ks                     = 0.65; // units
-    public static final double kv                     = 2.84; // units
-    public static final double ka                     = 0.309;
-    public static final double KvAngular              = 1.5;
-    public static final double KaAngular              = 0.3;
+    // Drivetrain specs
+    public static final double  kWheelDiaMeters        = Units.inchesToMeters(4.0); // 4in (39.37 in/meter)
+    public static final double  kGearRatio             = 8.45;          // Gear reduction
+    public static final double  kTrackWidthMeters      = 0.6477;        // Measured track width
+    public static final double  kEncoderMetersPerCount = (kWheelDiaMeters * Math.PI) / (Falcon500.kEncoderCPR) / kGearRatio;
 
-    public static final double kWheelDiaMeters        = 4.0;  // Units library does the conversion
-    public static final double kGearRatio             = 8.45; // Gear reduction
-    public static final double kTrackWidthMeters      = 0.6477; // Measured track width
+    // Measured characterization
+    public static final double  ks                     = 0.65;          // Volts
+    public static final double  kv                     = 2.84;          // Volts / mps
+    public static final double  ka                     = 0.309;         // Volts / (mps^2)
+    public static final double  KvAngular              = 1.5;           // Volts / (rad/sec)
+    public static final double  KaAngular              = 0.3;           // Volts / (rad/sec^2)
 
-    public static final double kEncoderMetersPerCount = (kWheelDiaMeters * Math.PI) / (Falcon500.kEncoderCPR) / kGearRatio;
+    // Joystick tuning
+    public static final double  kDriveXScaling         = 1.0;           // 1.0 is no scaling
+    public static final double  kDriveYScaling         = 1.0;           // 1.0 is no scaling
+    public static final double  kQuickTurnScaling      = 0.5;           // Scale by 50% of full speed
+    public static final double  kSlowClimbScaling      = 0.3;           // Scale by 30% of full speed
+
+    // Teleop riving controls
+    public static final double  kOpenLoopRamp          = 0.5;           // CTRE: full speed in 0.5 sec
+    public static final double  kClosedLoopRamp        = 0.0;           // CTRE: 0 is disabled
+    public static final double  kStopTolerance         = 0.05;          // Target position tolerance (< 5cm)
+
+    // Limelight driving controls
+    public static final double  kTurnConstant          = 0.0;
+    public static final double  kTurnPidKp             = 0.005;
+    public static final double  kTurnPidKi             = 0.0;
+    public static final double  kTurnPidKd             = 0.0;
+    public static final double  kTurnMax               = 0.4;
+    public static final double  kThrottlePidKp         = 0.011;
+    public static final double  kThrottlePidKi         = 0.0;
+    public static final double  kThrottlePidKd         = 0.0;
+    public static final double  kThrottleMax           = 0.2;
+    public static final double  kThrottleShape         = 10.0;
+
+    public static final double  kTargetAngle           = 0.0;           // Optimal shooting angle
+    public static final double  kSetPointDistance      = 60.0;          // Optimal shooting distance
+    public static final double  kAngleThreshold        = 3.5;           // Degrees tolerance around optimal
+    public static final double  kDistThreshold         = 6.0;           // Inches tolerance around optimal
+
+    // Path following controls
+    public static final double  kRamsetePidKf          = 0.0465;
+    public static final double  kRamsetePidKp          = 0.1125;
+    public static final double  kRamsetePidKi          = 0.0;
+    public static final double  kRamsetePidKd          = 0.0;
+
+    public static final double  kRamseteB              = 2.0;           // radians^2 / meters^2
+    public static final double  kRamseteZeta           = 0.7;           // 1 / radians
+    public static final boolean kRamseteTuningMode     = false;
   }
 
   public static final class INConsts

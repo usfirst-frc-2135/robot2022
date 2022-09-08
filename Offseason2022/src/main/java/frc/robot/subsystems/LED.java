@@ -19,10 +19,10 @@ import frc.robot.Constants.LEDConsts.LEDColor;
 public class LED extends SubsystemBase
 {
   // variables
-  private CANdle                    m_candle        = new CANdle(LEDConsts.kCANDdleID);
+  private final CANdle                    m_candle        = new CANdle(LEDConsts.kCANDdleID);
 
-  private SendableChooser<LEDColor> m_ledChooser    = new SendableChooser<LEDColor>( );
-  private LEDColor                  m_previousColor = LEDColor.LEDCOLOR_OFF;
+  private final SendableChooser<LEDColor> m_ledChooser    = new SendableChooser<LEDColor>( );
+  private LEDColor                        m_previousColor = LEDColor.LEDCOLOR_OFF;
 
   /**
    *
@@ -68,6 +68,9 @@ public class LED extends SubsystemBase
     DataLogManager.log(getSubsystem( ) + ": subsystem initialized!");
     setColor(LEDColor.LEDCOLOR_OFF);
   }
+
+  public void faultDump( )
+  {}
 
   public void setColor(LEDColor color)
   {

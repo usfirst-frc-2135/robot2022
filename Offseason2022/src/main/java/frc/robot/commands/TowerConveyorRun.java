@@ -13,11 +13,11 @@ import frc.robot.subsystems.TowerConveyor;
 public class TowerConveyorRun extends CommandBase
 {
   private final TowerConveyor m_towerConveyor;
-  private TCMode              m_mode;
+  private final TCMode        m_mode;
 
-  public TowerConveyorRun(TowerConveyor subsystem, TCMode mode)
+  public TowerConveyorRun(TowerConveyor towerConveyor, TCMode mode)
   {
-    m_towerConveyor = subsystem;
+    m_towerConveyor = towerConveyor;
     m_mode = mode;
     setName("TowerConveyorRun");
     addRequirements(m_towerConveyor);

@@ -94,7 +94,7 @@ public class FloorConveyor extends SubsystemBase
   }
 
   // Dump all Talon faults
-  void faultDump( )
+  public void faultDump( )
   {
     PhoenixUtil.getInstance( ).talonFXFaultDump(m_motorFC8, "FC8");
   }

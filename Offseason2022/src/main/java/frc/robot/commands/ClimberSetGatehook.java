@@ -4,16 +4,18 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Climber;
 
 /**
  *
  */
 public class ClimberSetGatehook extends CommandBase
 {
-  public ClimberSetGatehook( )
+  private final Climber m_climber;
+
+  public ClimberSetGatehook(Climber climber)
   {
-    // m_subsystem = subsystem;
-    // addRequirements(m_subsystem);
+    m_climber = climber;
   }
 
   // Called when the command is initially scheduled.

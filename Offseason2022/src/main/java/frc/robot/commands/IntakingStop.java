@@ -21,11 +21,12 @@ public class IntakingStop extends SequentialCommandGroup
     setName("IntakingStop");
     addCommands(
         // Add Commands here:
-        // Also add parallel commands using the
-        //
-        new IntakeRun(intake, INMode.INTAKE_STOP), new FloorConveyorRun(FCMode.FCONVEYOR_STOP, fConv),
-        new TowerConveyorRun(tConv, TCMode.TCONVEYOR_STOP)
 
+        // @formatter:off
+        new IntakeRun(intake, INMode.INTAKE_STOP), 
+        new FloorConveyorRun(fConv, FCMode.FCONVEYOR_STOP),
+        new TowerConveyorRun(tConv, TCMode.TCONVEYOR_STOP)
+        // @formatter:on
     );
   }
 

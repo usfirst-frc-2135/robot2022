@@ -3,15 +3,24 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.subsystems.Drivetrain;
 
 /**
  *
  */
 public class DriveLimelightStop extends SequentialCommandGroup
 {
-  public DriveLimelightStop( )
+  private final Drivetrain m_drivetrain;
+
+  public DriveLimelightStop(Drivetrain drivetrain)
   {
+    m_drivetrain = drivetrain;
+    setName("DriveLimelightStop");
+
+    DataLogManager.log(getSubsystem( ) + ": DriveLimelightStop");
+
     addCommands(
     // Add Commands here:
     // Also add parallel commands using the

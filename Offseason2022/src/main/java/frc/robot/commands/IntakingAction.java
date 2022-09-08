@@ -22,15 +22,17 @@ public class IntakingAction extends SequentialCommandGroup
     setName("IntakingAction");
     addCommands(
         // Add Commands here:
-        // Also add parallel commands using the
-        //
-        new IntakeDeploy(true), // Deploy intake
-        new IntakeRun(intake, INMode.INTAKE_ACQUIRE), //
-        new FloorConveyorRun(FCMode.FCONVEYOR_EXPEL, fConv),
-        new SequentialCommandGroup(new TowerConveyorRun(tConv, TCMode.TCONVEYOR_ACQUIRE_SLOW), //
+
+        // @formatter:off
+        new IntakeDeploy(intake, true), // Deploy intake
+        new IntakeRun(intake, INMode.INTAKE_ACQUIRE), 
+        new FloorConveyorRun(fConv, FCMode.FCONVEYOR_EXPEL),
+        new SequentialCommandGroup(
+            new TowerConveyorRun(tConv, TCMode.TCONVEYOR_ACQUIRE_SLOW), 
             new WaitUntilCommand(tConv::isCargoDetected),
-            //
-            new TowerConveyorRun(tConv, TCMode.TCONVEYOR_STOP))
+            new TowerConveyorRun(tConv, TCMode.TCONVEYOR_STOP)
+        )
+        // @formatter:on
 
     );
   }

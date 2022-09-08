@@ -12,8 +12,8 @@ import frc.robot.subsystems.Intake;
  */
 public class IntakeRun extends CommandBase
 {
-  private Intake m_intake;
-  private INMode m_mode;
+  private final Intake m_intake;
+  private final INMode m_mode;
 
   public IntakeRun(Intake intake, INMode mode)
   {
