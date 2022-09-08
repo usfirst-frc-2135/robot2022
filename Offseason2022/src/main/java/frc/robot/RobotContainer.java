@@ -179,8 +179,8 @@ public class RobotContainer
     SmartDashboard.putData("DriveResetSensors", new DriveResetSensors(m_drivetrain));
     SmartDashboard.putData("DriveSlowMode", new DriveSlowMode(m_drivetrain, false));
 
-    SmartDashboard.putData("ExhaustingAction", new ExhaustingAction( ));
-    SmartDashboard.putData("ExhaustingStop", new ExhaustingStop( ));
+    SmartDashboard.putData("ExhaustingAction", new ExhaustingAction(m_intake, m_floorConveyor, m_towerConveyor));
+    SmartDashboard.putData("ExhaustingStop", new ExhaustingStop(m_intake, m_floorConveyor, m_towerConveyor));
 
     SmartDashboard.putData("Fconveyor-STOP", new FloorConveyorRun(m_floorConveyor, FCMode.FCONVEYOR_STOP));
     SmartDashboard.putData("Fconveyor-ACQUIRE", new FloorConveyorRun(m_floorConveyor, FCMode.FCONVEYOR_ACQUIRE));
@@ -188,12 +188,13 @@ public class RobotContainer
     SmartDashboard.putData("Fconveyor-EXPELFAST", new FloorConveyorRun(m_floorConveyor, FCMode.FCONVEYOR_EXPEL_FAST));
 
     SmartDashboard.putData("IntakeDeploy", new IntakeDeploy(m_intake, false));
+    SmartDashboard.putData("IntakeStow", new IntakeDeploy(m_intake, false));
+
     SmartDashboard.putData("Intake-STOP", new IntakeRun(m_intake, INMode.INTAKE_STOP));
     SmartDashboard.putData("Intake-ACQUIRE", new IntakeRun(m_intake, INMode.INTAKE_ACQUIRE));
     SmartDashboard.putData("Intake-EXPEL", new IntakeRun(m_intake, INMode.INTAKE_EXPEL));
-
-    SmartDashboard.putData("IntakingAction", new IntakingAction( ));
-    SmartDashboard.putData("IntakingStop", new IntakingStop( ));
+    SmartDashboard.putData("IntakingAction", new IntakingAction(m_intake, m_floorConveyor, m_towerConveyor));
+    SmartDashboard.putData("IntakingStop", new IntakingStop(m_intake, m_floorConveyor, m_towerConveyor));
 
     SmartDashboard.putData("LEDSet", new LEDSet(m_led, LEDColor.LEDCOLOR_OFF));
     SmartDashboard.putData("RobotInitialize", new RobotInitialize( ));
@@ -288,8 +289,8 @@ public class RobotContainer
     driverY.whenPressed(new Dummy(XboxController.Button.kY.value), true);
 
     // Driver - Bumpers, start, back
-    driverLeftBumper.whenPressed(new IntakingAction( ), true);
-    driverLeftBumper.whenReleased(new IntakingStop( ), true);
+    driverLeftBumper.whenPressed(new IntakingAction(m_intake, m_floorConveyor, m_towerConveyor), true);
+    driverLeftBumper.whenReleased(new IntakingStop(m_intake, m_floorConveyor, m_towerConveyor), true);
     driverRightBumper.whenPressed(new ScoringActionLowHub(10.0, m_shooter), true);
     driverRightBumper.whenReleased(new ScoringStop(m_shooter), true);
     driverBack.whenPressed(new Dummy(XboxController.Button.kBack.value), true);
@@ -329,14 +330,14 @@ public class RobotContainer
 
     // Operator - A, B, X, Y
     operA.whenPressed(new IntakeDeploy(m_intake, false), true);
-    operB.whenPressed(new ExhaustingAction( ), true);
-    operB.whenReleased(new ExhaustingStop( ), true);
+    operB.whenPressed(new ExhaustingAction(m_intake, m_floorConveyor, m_towerConveyor), true);
+    operB.whenReleased(new ExhaustingStop(m_intake, m_floorConveyor, m_towerConveyor), true);
     operX.whenPressed(new ScoringStop(m_shooter), true);
     operY.whenPressed(new ClimberTimerOverride(m_climber), true);
 
     // Operator - Bumpers, start, back
-    operLeftBumper.whenPressed(new IntakingAction( ), true);
-    operLeftBumper.whenReleased(new IntakingStop( ), true);
+    operLeftBumper.whenPressed(new IntakingAction(m_intake, m_floorConveyor, m_towerConveyor), true);
+    operLeftBumper.whenReleased(new IntakingStop(m_intake, m_floorConveyor, m_towerConveyor), true);
     operRightBumper.whenPressed(new ScoringPrime(m_shooter), true);
     operBack.whenPressed(new ClimberFullClimb(m_climber), true);
     operStart.whenPressed(new ClimberRun(m_climber), true);
