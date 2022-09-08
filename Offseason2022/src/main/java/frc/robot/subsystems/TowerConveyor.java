@@ -82,7 +82,7 @@ public class TowerConveyor extends SubsystemBase
       SmartDashboard.putNumber("HL_resetCountTC9", m_resetCountTC9);
     }
 
-    m_cargoDetected = m_cargoLimit.get( );
+    m_cargoDetected = isCargoDetected( );
     SmartDashboard.putBoolean("TC_cargoDetected", m_cargoDetected);
   }
 
@@ -144,6 +144,7 @@ public class TowerConveyor extends SubsystemBase
 
   public boolean isCargoDetected( )
   {
+    m_cargoDetected = m_cargoLimit.get( );
     return m_cargoDetected;
   }
 }
