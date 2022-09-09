@@ -43,7 +43,6 @@ import frc.robot.commands.ClimberCalibrate;
 import frc.robot.commands.ClimberFullClimb;
 import frc.robot.commands.ClimberL2ToL3;
 import frc.robot.commands.ClimberL3ToL4;
-import frc.robot.commands.ClimberMoveToHeight;
 import frc.robot.commands.ClimberRun;
 import frc.robot.commands.ClimberSetGatehook;
 import frc.robot.commands.ClimberTimerOverride;
@@ -69,7 +68,6 @@ import frc.robot.commands.ScoringActionHighHub;
 import frc.robot.commands.ScoringActionLowHub;
 import frc.robot.commands.ScoringPrime;
 import frc.robot.commands.ScoringStop;
-import frc.robot.commands.ShooterAimToggle;
 import frc.robot.commands.ShooterReverse;
 import frc.robot.commands.ShooterRun;
 import frc.robot.commands.SimulateLimelight;
@@ -167,13 +165,11 @@ public class RobotContainer
     SmartDashboard.putData("ClimberFullClimb", new ClimberFullClimb(m_climber));
     SmartDashboard.putData("ClimberL2ToL3", new ClimberL2ToL3(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter));
     SmartDashboard.putData("ClimberL3ToL4", new ClimberL3ToL4(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter));
-    SmartDashboard.putData("ClimberMoveToHeight", new ClimberMoveToHeight(m_climber));
-    SmartDashboard.putData("ClimberSetGatehook", new ClimberSetGatehook(m_climber));
-    SmartDashboard.putData("ClimberTimerOverride", new ClimberTimerOverride(m_climber));
-
+    SmartDashboard.putData("ClimberSetGatehook", new ClimberSetGatehook(m_climber, false));
+    SmartDashboard.putData("ClimberTimerOverride", new ClimberTimerOverride(m_climber, m_operator, XboxController.Button.kY));
     SmartDashboard.putData("DriveLimelight", new DriveLimelight(m_drivetrain, m_vision, false));
-    SmartDashboard.putData("DriveLimelightShoot", new DriveLimelightShoot(m_drivetrain));
     SmartDashboard.putData("DriveLimelightStop", new DriveLimelightStop(m_drivetrain));
+    SmartDashboard.putData("DriveLimelightShoot", new DriveLimelightShoot(m_drivetrain));
     SmartDashboard.putData("DriveMotorTest", new DriveMotorTest(m_drivetrain, true));
     SmartDashboard.putData("DriveMotorTest", new DriveQuickturn(m_drivetrain));
     SmartDashboard.putData("DriveResetSensors", new DriveResetSensors(m_drivetrain));
@@ -209,7 +205,6 @@ public class RobotContainer
     SmartDashboard.putData("Shooter-LOW", new ShooterRun(m_shooter, Mode.SHOOTER_LOWERHUB));
     SmartDashboard.putData("Shooter-HIGH", new ShooterRun(m_shooter, Mode.SHOOTER_UPPERHUB));
     SmartDashboard.putData("Shooter-REV", new ShooterRun(m_shooter, Mode.SHOOTER_REVERSE));
-    SmartDashboard.putData("ShooterAimToggle", new ShooterAimToggle( ));
     SmartDashboard.putData("ShooterReverse", new ShooterReverse(m_shooter));
 
     SmartDashboard.putData("SimulateLimelight", new SimulateLimelight( ));
@@ -331,7 +326,7 @@ public class RobotContainer
     operB.whenPressed(new ExhaustingAction(m_intake, m_floorConveyor, m_towerConveyor), true);
     operB.whenReleased(new ExhaustingStop(m_intake, m_floorConveyor, m_towerConveyor), true);
     operX.whenPressed(new ScoringStop(m_shooter), true);
-    operY.whenPressed(new ClimberTimerOverride(m_climber), true);
+    operY.whenPressed(new ClimberTimerOverride(m_climber, m_operator, XboxController.Button.kY), true);
 
     // Operator - Bumpers, start, back
     operLeftBumper.whenPressed(new IntakingAction(m_intake, m_floorConveyor, m_towerConveyor), true);

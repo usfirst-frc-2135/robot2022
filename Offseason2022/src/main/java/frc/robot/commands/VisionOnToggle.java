@@ -4,28 +4,35 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Climber;
+import frc.robot.Constants.VIConsts;
+import frc.robot.RobotContainer;
 
 /**
  *
  */
-public class ClimberSetGatehook extends CommandBase
+public class VisionOnToggle extends CommandBase
 {
-  private final Climber m_climber;
-  private boolean       m_closeHook;
-
-  public ClimberSetGatehook(Climber climber, boolean closeHook)
+  public VisionOnToggle( )
   {
-    m_climber = climber;
-    m_closeHook = closeHook;
-    setName("ClimberSetGateHook");
+    setName("VisionOnToggle");
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize( )
   {
-    m_climber.setGateHook(m_closeHook);
+    RobotContainer robotContainer = RobotContainer.getInstance( );
+
+    if (robotContainer.m_vision.getLEDMode( ) == VIConsts.LED_ON)
+    {
+      robotContainer.m_vision.setLEDMode(VIConsts.LED_OFF);
+      robotContainer.m_vision.setCameraDisplay(VIConsts.PIP_SECONDARY);
+    }
+    else
+    {
+      robotContainer.m_vision.setLEDMode(VIConsts.LED_ON);
+      robotContainer.m_vision.setCameraDisplay(VIConsts.PIP_MAIN);
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -48,6 +55,6 @@ public class ClimberSetGatehook extends CommandBase
   @Override
   public boolean runsWhenDisabled( )
   {
-    return false;
+    return true;
   }
 }
