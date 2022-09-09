@@ -4,13 +4,11 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.filter.MedianFilter;
 import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.VIConsts;
-import frc.robot.frc2135.RobotConfig;
 
 /**
  *
@@ -18,7 +16,7 @@ import frc.robot.frc2135.RobotConfig;
 public class Vision extends SubsystemBase
 {
   // Objects
-  MedianFilter         m_yfilter     = new MedianFilter(5); // median filter y values to remove outliers (5 sample)
+  public MedianFilter  m_yfilter     = new MedianFilter(5); // median filter y values to remove outliers (5 sample)
 
   // Declare module variables
   private double       m_distance1   = VIConsts.kLLDistance1;   // x position in inches for first reference point
@@ -107,7 +105,7 @@ public class Vision extends SubsystemBase
 
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
-  private void initialize( )
+  public void initialize( )
   {
     DataLogManager.log(getSubsystem( ) + ": subsystem initialized!");
 

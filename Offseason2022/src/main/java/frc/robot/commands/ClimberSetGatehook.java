@@ -4,18 +4,20 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.RobotContainer;
+import frc.robot.subsystems.Climber;
 
 /**
  *
  */
 public class ClimberSetGatehook extends CommandBase
 {
-  private boolean m_gateHookClosed;
+  private final Climber m_climber;
+  private boolean       m_closeHook;
 
-  public ClimberSetGatehook(boolean gateHookClosed)
+  public ClimberSetGatehook(Climber climber, boolean closeHook)
   {
-    m_gateHookClosed = gateHookClosed;
+    m_climber = climber;
+    m_closeHook = closeHook;
     setName("ClimberSetGateHook");
   }
 
@@ -23,8 +25,7 @@ public class ClimberSetGatehook extends CommandBase
   @Override
   public void initialize( )
   {
-    RobotContainer robotContainer = RobotContainer.getInstance( );
-    robotContainer.m_climber.setGateHook(m_gateHookClosed);
+    m_climber.setGateHook(m_closeHook);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

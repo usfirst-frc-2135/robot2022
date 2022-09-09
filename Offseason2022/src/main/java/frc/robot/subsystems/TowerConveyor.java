@@ -26,8 +26,8 @@ public class TowerConveyor extends SubsystemBase
   private static final int                CANTIMEOUT            = 30;  // CAN timeout in msec
 
   // Devices and simulation objects
-  private WPI_TalonFX                     m_motorTC9            = new WPI_TalonFX(TCConsts.kTC9CANID);
-  private DigitalInput                    m_cargoLimit          = new DigitalInput(TCConsts.kCargoDIO);
+  private final WPI_TalonFX               m_motorTC9            = new WPI_TalonFX(TCConsts.kTC9CANID);
+  private final DigitalInput              m_cargoLimit          = new DigitalInput(TCConsts.kCargoDIO);
 
   private SupplyCurrentLimitConfiguration m_supplyCurrentLimits = new SupplyCurrentLimitConfiguration(true, 45.0, 45.0, 0.001);
   private StatorCurrentLimitConfiguration m_statorCurrentLimits = new StatorCurrentLimitConfiguration(true, 80.0, 80.0, 0.001);
@@ -82,7 +82,7 @@ public class TowerConveyor extends SubsystemBase
       SmartDashboard.putNumber("HL_resetCountTC9", m_resetCountTC9);
     }
 
-    m_cargoDetected = m_cargoLimit.get( );
+    m_cargoDetected = isCargoDetected( );
     SmartDashboard.putBoolean("TC_cargoDetected", m_cargoDetected);
   }
 
@@ -144,6 +144,7 @@ public class TowerConveyor extends SubsystemBase
 
   public boolean isCargoDetected( )
   {
+    m_cargoDetected = m_cargoLimit.get( );
     return m_cargoDetected;
   }
 }
