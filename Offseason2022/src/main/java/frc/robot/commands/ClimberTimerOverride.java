@@ -44,8 +44,6 @@ public class ClimberTimerOverride extends CommandBase
   @Override
   public boolean isFinished( )
   {
-    // return operatorController->GetRawButtonPressed((int)frc::XboxController::Button::kY);
-
     return m_gamePad.getRawButtonPressed(m_button.value);
   }
 
