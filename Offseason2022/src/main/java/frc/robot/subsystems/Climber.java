@@ -46,7 +46,6 @@ public class Climber extends SubsystemBase
   private static final int                CANTIMEOUT            = 30;  // CAN timeout in msec
   private static final int                PIDINDEX              = 0;   // PID in use (0-primary, 1-aux)
   private static final int                SLOTINDEX             = 0;   // Use first PID slot
-  private static final int                kCANTimeout           = 30;
 
   // Devices and simulation objects
   private WPI_TalonFX                     m_motorCL14           = new WPI_TalonFX(CLConsts.kCL14LeftCANID);
@@ -98,7 +97,6 @@ public class Climber extends SubsystemBase
   private boolean                         m_calibrated          = false;  // Indicates whether the climber has been calibrated
   private double                          m_targetInches        = 0.0;    // Target height in inches requested
   private double                          m_curInches           = 0.0;    // Current elevator height in inches
-  private boolean                         m_isMoving            = false;
 
   private Timer                           m_safetyTimer; // Safety timer for use in elevator
   private double                          m_safetyTimeout; // Seconds that the timer ran before stopping
@@ -469,6 +467,7 @@ public class Climber extends SubsystemBase
         DataLogManager.log(getSubsystem( ) + ": requested height is invalid - " + state);
         return;
     }
+
     if (m_calibrated)
     {
       // Height constraint check/soft limit for max and min height before raising
@@ -526,16 +525,17 @@ public class Climber extends SubsystemBase
     {
       withinTolerance = 0;
     }
+
     if (m_safetyTimer.get( ) >= m_safetyTimeout)
     {
       isFinished = true;
       DataLogManager.log("Climber Move Safety timer has timed out");
     }
+
     if (isFinished)
     {
       withinTolerance = 0;
       m_safetyTimer.stop( );
-      m_isMoving = false;
     }
 
     return isFinished;
@@ -554,9 +554,9 @@ public class Climber extends SubsystemBase
 
       PhoenixUtil.checkError(m_motorCL15.configGetSupplyCurrentLimit(m_supplyCurrentLimits), "CL15 ConfigSupplyCurrentLimit");
       PhoenixUtil.checkError(m_motorCL15.configGetStatorCurrentLimit(m_statorCurrentLimits), "CL15 ConfigStatorCurrentLimit");
-      PhoenixUtil.checkError(m_motorCL15.setStatusFramePeriod(StatusFrame.Status_1_General, 255, kCANTimeout),
+      PhoenixUtil.checkError(m_motorCL15.setStatusFramePeriod(StatusFrame.Status_1_General, 255, CANTIMEOUT),
           "CL15 SetStatusFramePeriod: Status_1");
-      PhoenixUtil.checkError(m_motorCL15.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 255, kCANTimeout),
+      PhoenixUtil.checkError(m_motorCL15.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 255, CANTIMEOUT),
           "CL15 SetStatusFramePeriod: Status_2");
     }
   }
