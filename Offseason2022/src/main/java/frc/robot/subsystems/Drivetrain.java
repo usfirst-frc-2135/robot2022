@@ -132,8 +132,8 @@ public class Drivetrain extends SubsystemBase
   private int                               m_resetCountR4        = 0;    // motor reset count storer
 
   private int                               m_driveDebug          = 0;    // Debug flag to disable extra drive logging calls
-  private final int                         m_ramseteDebug        = 1;    // Debug flag to disable extra ramsete logging calls
-  private final int                         m_limelightDebug      = 0;    // Debug flag to disable extra limelight logging calls
+  private int                               m_limelightDebug      = 0;    // Debug flag to disable extra limelight logging calls
+  private int                               m_ramseteDebug        = 0;    // Debug flag to disable extra ramsete logging calls
 
   private boolean                           m_throttleZeroed      = false; // Throttle joystick zeroed safety check
   private boolean                           m_isQuickTurn         = false; // Quickturn mode active in curvature drive
@@ -162,7 +162,7 @@ public class Drivetrain extends SubsystemBase
   // Ramsete follower objects
   private RamseteController                 m_ramseteController;
   private Trajectory                        m_trajectory;
-  private Timer                             m_trajTimer;
+  private Timer                             m_trajTimer           = new Timer( );
 
   private double                            m_currentl1           = 0.0; // Motor L1 Falcon output current
   private double                            m_currentL2           = 0.0; // Motor L2 Falcon output current
@@ -210,6 +210,7 @@ public class Drivetrain extends SubsystemBase
 
     m_ramseteController = new RamseteController(m_ramseteB, m_ramseteZeta);
 
+    syncFollowerPIDFromDashboard( );
     initialize( );
   }
 
@@ -390,7 +391,7 @@ public class Drivetrain extends SubsystemBase
 
     getYawPitchRoll( );
 
-    if (m_driveDebug != 0)
+    if (m_driveDebug > 0)
     {
       if (m_validL1)
         m_currentl1 = m_driveL1.getStatorCurrent( );
@@ -424,12 +425,18 @@ public class Drivetrain extends SubsystemBase
 
     // Only update indicators every 100 ms to cut down on network traffic
     if ((m_periodicInterval++ % 5 == 0) && (m_driveDebug > 1))
-      DataLogManager.log(getSubsystem( )                              //
-          + ": deg " + getPose( ).getRotation( ).getDegrees( )     //
-          + "LR dist" + m_distanceLeft + " " + m_distanceRight        //
-          + " amps (" + String.format("%.1f", m_currentl1) + " " + String.format("%.1f", m_currentL2) //
-          + " " + String.format("%.1f", m_currentR3) + " " + String.format("%.1f", m_currentR4)       //
-          + ")");
+      DataLogManager.log(getSubsystem( )
+      // @formatter:off
+          + ": deg " + getPose( ).getRotation( ).getDegrees( )
+          + "LR dist" + m_distanceLeft 
+          + " "       + m_distanceRight 
+          + " amps (" + String.format("%.1f", m_currentl1) 
+          + " "       + String.format("%.1f", m_currentL2) 
+          + " "       + String.format("%.1f", m_currentR3) 
+          + " "       + String.format("%.1f", m_currentR4) 
+          + ")"
+          // @formatter:on
+      );
   }
 
   ///////////////////////////////////////////////////////////////////////////////
@@ -446,10 +453,31 @@ public class Drivetrain extends SubsystemBase
       m_driveR3.setSelectedSensorPosition(0);
   }
 
+  // Helper methods to convert between meters and native units
+  private int metersToNativeUnits(double meters)
+  {
+    return (int) (meters / DTConsts.kEncoderMetersPerCount);
+  }
+
+  private double nativeUnitsToMeters(double nativeUnits)
+  {
+    return nativeUnits * DTConsts.kEncoderMetersPerCount;
+  }
+
+  private int mpsToNativeUnits(double velocity)
+  {
+    return (int) (velocity / DTConsts.kEncoderMetersPerCount / 10.0);
+  }
+
+  private double nativeUnitsToMPS(double nativeUnitsVelocity)
+  {
+    return nativeUnitsVelocity * DTConsts.kEncoderMetersPerCount * 10;
+  }
+
   private double getDistanceMetersLeft( )
   {
     if (m_validL1)
-      return DTConsts.kEncoderMetersPerCount * m_driveL1.getSelectedSensorPosition(PIDINDEX);
+      return nativeUnitsToMeters(m_driveL1.getSelectedSensorPosition(PIDINDEX));
 
     return 0;
   }
@@ -457,7 +485,7 @@ public class Drivetrain extends SubsystemBase
   private double getDistanceMetersRight( )
   {
     if (m_validR3)
-      return DTConsts.kEncoderMetersPerCount * m_driveR3.getSelectedSensorPosition(PIDINDEX);
+      return nativeUnitsToMeters(m_driveR3.getSelectedSensorPosition(PIDINDEX));
 
     return 0;
   }
@@ -468,33 +496,12 @@ public class Drivetrain extends SubsystemBase
     double rightVelocity = 0;
 
     if (m_validL1)
-      leftVelocity = DTConsts.kEncoderMetersPerCount * m_driveL1.getSelectedSensorVelocity( ) * 10;
+      leftVelocity = nativeUnitsToMPS(m_driveL1.getSelectedSensorVelocity( ));
 
     if (m_validR3)
-      rightVelocity = DTConsts.kEncoderMetersPerCount * m_driveR3.getSelectedSensorVelocity( ) * 10;
+      rightVelocity = nativeUnitsToMPS(m_driveR3.getSelectedSensorVelocity( ));
 
     return new DifferentialDriveWheelSpeeds(leftVelocity, rightVelocity);
-  }
-
-  // Helper methods to convert between meters and native units
-  private int metersToNativeUnits(double meters)
-  {
-    return (int) (meters / DTConsts.kEncoderMetersPerCount);
-  }
-
-  private double nativeUnitsToMeters(int nativeUnits)
-  {
-    return nativeUnits * DTConsts.kEncoderMetersPerCount;
-  }
-
-  private int mpsToNativeUnits(double velocity)
-  {
-    return (int) (velocity / DTConsts.kEncoderMetersPerCount / 10);
-  }
-
-  private double nativeUnitsToMPS(double nativeUnitsVelocity)
-  {
-    return nativeUnitsVelocity * DTConsts.kEncoderMetersPerCount * 10;
   }
 
   private double joystickOutputToNative(double output)
@@ -584,7 +591,7 @@ public class Drivetrain extends SubsystemBase
     m_diffDrive.feedWatchdog( );
   }
 
-  private void syncTalonPIDFromDashboard( )
+  private void syncFollowerPIDFromDashboard( )
   {
     m_ramsetePidKf = SmartDashboard.getNumber("DTR_ramsetePidKf", m_ramsetePidKf);
     m_ramsetePidKp = SmartDashboard.getNumber("DTR_ramsetePidKp", m_ramsetePidKp);
@@ -754,7 +761,7 @@ public class Drivetrain extends SubsystemBase
     {
       velocityArcadeDrive(0, 0);
       if (m_limelightDebug >= 1)
-        DataLogManager.log(getSubsystem( ) + ": DTL TV-FALSE SO SIT STILL");
+        DataLogManager.log(getSubsystem( ) + ": DTL TV-FALSE - SIT STILL");
       return;
     }
 
@@ -789,15 +796,17 @@ public class Drivetrain extends SubsystemBase
       velocityArcadeDrive(throttleOutput, turnOutput);
 
     if (m_limelightDebug >= 1)
-      DataLogManager.log(getSubsystem( )                             //
-          + ": DTL tv: " + tv                                        //
-          + " tx: " + String.format("%.1f", tx)                      //
-          + " ty: " + String.format("%.1f", ty)                      //
-          + " distErr: " + String.format("%.1f", Math.abs(m_setPointDistance - m_limelightDistance)) //
-          + " lldist: " + String.format("%.1f", m_limelightDistance) //
-          + " stopped: " + driveIsStopped( )                         //
-          + " trnOut: " + String.format("%.2f", turnOutput)          //
-          + " thrOut: " + String.format("%.2f", throttleOutput)      //
+      DataLogManager.log(getSubsystem( )
+      // @formatter:off
+          + ": DTL tv: " + tv 
+          + " tx: "      + String.format("%.1f", tx)
+          + " ty: "      + String.format("%.1f", ty)
+          + " lldist: "  + String.format("%.1f", m_limelightDistance)
+          + " distErr: " + String.format("%.1f", Math.abs(m_setPointDistance - m_limelightDistance))
+          + " stopped: " + driveIsStopped( )
+          + " trnOut: "  + String.format("%.2f", turnOutput)
+          + " thrOut: "  + String.format("%.2f", throttleOutput)
+      // @formatter:on
       );
   }
 
@@ -884,22 +893,27 @@ public class Drivetrain extends SubsystemBase
 
     List<Trajectory.State> trajStates = new ArrayList<Trajectory.State>( );
     trajStates = m_trajectory.getStates( );
-    m_trajTimer.reset( );
-    m_trajTimer.start( );
-
     DataLogManager.log(getSubsystem( ) + ": DTR states: " + trajStates.size( ) + " dur: " + m_trajectory.getTotalTimeSeconds( ));
 
-    if (m_ramseteDebug == 2)
+    if (m_ramseteDebug >= 1)
+      syncFollowerPIDFromDashboard( );
+
+    if (m_ramseteDebug >= 2)
       for (int i = 0; i < trajStates.size( ); i++)
       {
         Trajectory.State curState = trajStates.get(i);
-        DataLogManager.log(getSubsystem( )                                     //
-            + ": DTR state time: " + curState.timeSeconds                        //
-            + " Vel: " + curState.velocityMetersPerSecond                      //
-            + " Accel: " + curState.accelerationMetersPerSecondSq              //
-            + " Rotation: " + curState.poseMeters.getRotation( ).getDegrees( ) //
+        DataLogManager.log(getSubsystem( )
+            // formmater:off
+            + ": DTR state time: " + String.format("%.3f", curState.timeSeconds)                      //
+            + " Vel: " + String.format("%.2f", curState.velocityMetersPerSecond)                      //
+            + " Accel: " + String.format("%.2f", curState.accelerationMetersPerSecondSq)              //
+            + " Rotation: " + String.format("%.1f", curState.poseMeters.getRotation( ).getDegrees( )) //
+        // formatter:on
         );
       }
+
+    m_trajTimer.reset( );
+    m_trajTimer.start( );
 
     // This initializes the odometry (where we are)
     if (resetOdometry)
@@ -916,71 +930,86 @@ public class Drivetrain extends SubsystemBase
     Pose2d currentPose = getPose( );
 
     ChassisSpeeds targetChassisSpeeds = m_ramseteController.calculate(currentPose, trajState);
-    DifferentialDriveWheelSpeeds targetSpeed = m_kinematics.toWheelSpeeds(targetChassisSpeeds);
+    DifferentialDriveWheelSpeeds targetWheelSpeed = m_kinematics.toWheelSpeeds(targetChassisSpeeds);
 
-    double velLeftTarget = mpsToNativeUnits(targetSpeed.leftMetersPerSecond);
-    double velRightTarget = mpsToNativeUnits(targetSpeed.rightMetersPerSecond);
-    double velLeftCurrent = mpsToNativeUnits(m_wheelSpeeds.leftMetersPerSecond);
-    double velRightCurrent = mpsToNativeUnits(m_wheelSpeeds.rightMetersPerSecond);
+    double targetVelLeft = mpsToNativeUnits(targetWheelSpeed.leftMetersPerSecond);
+    double targetVelRight = mpsToNativeUnits(targetWheelSpeed.rightMetersPerSecond);
+    double currentVelLeft = mpsToNativeUnits(m_wheelSpeeds.leftMetersPerSecond);
+    double currentVelRight = mpsToNativeUnits(m_wheelSpeeds.rightMetersPerSecond);
 
-    double xTrajTarget = trajState.poseMeters.getX( );
-    double yTrajTarget = trajState.poseMeters.getY( );
-    double xTrajCurrent = currentPose.getX( );
-    double yTrajCurrent = currentPose.getY( );
+    double targetTrajX = trajState.poseMeters.getX( );
+    double targetTrajY = trajState.poseMeters.getY( );
+    double currentTrajX = currentPose.getX( );
+    double currentTrajY = currentPose.getY( );
 
-    double headingTarget = trajState.poseMeters.getRotation( ).getDegrees( );
-    double headingCurrent = currentPose.getRotation( ).getDegrees( );
+    double targetHeading = trajState.poseMeters.getRotation( ).getDegrees( );
+    double currentHeading = currentPose.getRotation( ).getDegrees( );
 
     if (m_validL1)
-      m_driveL1.set(TalonFXControlMode.Velocity, velLeftTarget);
+      m_driveL1.set(TalonFXControlMode.Velocity, targetVelLeft);
     if (m_validR3)
-      m_driveR3.set(TalonFXControlMode.Velocity, velRightTarget);
-
-    if (m_ramseteDebug == 2)
-    {
-      // target velocity and its error
-      SmartDashboard.putNumber(getSubsystem( ) + ": DTR_velLeftTarget", velLeftTarget);
-      SmartDashboard.putNumber(getSubsystem( ) + ": DTR_velRightTarget", velRightTarget);
-      SmartDashboard.putNumber(getSubsystem( ) + ": DTR_velLeftCurrent", velLeftCurrent);
-      SmartDashboard.putNumber(getSubsystem( ) + ": DTR_velRightCurrent", velRightCurrent);
-
-      SmartDashboard.putNumber(getSubsystem( ) + ": DTR_velLeftError", velLeftTarget - velLeftCurrent);
-      SmartDashboard.putNumber(getSubsystem( ) + ": DTR_velRightError", velRightTarget - velRightCurrent);
-
-      // target distance and its error
-      SmartDashboard.putNumber(getSubsystem( ) + ": DTR_xTrajCurrent", xTrajTarget);
-      SmartDashboard.putNumber(getSubsystem( ) + ": DTR_yTrajCurrent", yTrajTarget);
-      SmartDashboard.putNumber(getSubsystem( ) + ": DTR_xTrajTarget", xTrajCurrent);
-      SmartDashboard.putNumber(getSubsystem( ) + ": DTR_yTrajTarget", yTrajCurrent);
-
-      SmartDashboard.putNumber(getSubsystem( ) + ": DTR_xTrajError", trajState.poseMeters.relativeTo(currentPose).getX( ));
-      SmartDashboard.putNumber(getSubsystem( ) + ": DTR_yTrajError", trajState.poseMeters.relativeTo(currentPose).getY( ));
-
-      // target heading and its error
-      SmartDashboard.putNumber(getSubsystem( ) + ": DTR_headingTarget", headingTarget);
-      SmartDashboard.putNumber(getSubsystem( ) + ": DTR_headingCurrent", headingCurrent);
-      SmartDashboard.putNumber(getSubsystem( ) + ": DTR_headingError",
-          trajState.poseMeters.relativeTo(currentPose).getRotation( ).getDegrees( ));
-    }
+      m_driveR3.set(TalonFXControlMode.Velocity, targetVelRight);
 
     m_diffDrive.feedWatchdog( );
 
     if (m_ramseteDebug >= 1)
-      DataLogManager.log(getSubsystem( )    //
-          + ": DTR time: " + m_trajTimer.get( ) //
-          + " curXYR: " + xTrajCurrent + " " + yTrajCurrent + " " + headingCurrent     //
-          + " targXYR: " + xTrajCurrent + " " + yTrajCurrent + " " + headingCurrent    //
-          + " chasXYO: " + targetChassisSpeeds.vxMetersPerSecond + " " + targetChassisSpeeds.vyMetersPerSecond + " "
-          + targetChassisSpeeds.omegaRadiansPerSecond //
-          + " targVelLR: " + targetSpeed.leftMetersPerSecond + " " + targetSpeed.rightMetersPerSecond + " " //
-          + " curVelLR: " + nativeUnitsToMPS(velLeftCurrent) + " " + nativeUnitsToMPS(velRightCurrent) //
+      DataLogManager.log(getSubsystem( )
+      // @formatter:off
+          + ": DTR time: "     + String.format("%.3f", m_trajTimer.get( ))
+              + " curXYR: "    + String.format("%.2f", currentTrajX) 
+                + " "          + String.format("%.2f", currentTrajY) 
+                + " "          + String.format("%.1f", currentHeading)
+              + " targXYR: "   + String.format("%.2f", targetTrajX) 
+                + " "          + String.format("%.2f", targetTrajY) 
+                + " "          + String.format("%.1f", targetHeading)
+              + " chasXYO: "   + String.format("%.1f", targetChassisSpeeds.vxMetersPerSecond) 
+                + " "          + String.format("%.1f", targetChassisSpeeds.vyMetersPerSecond)
+                + " "          + String.format("%.1f", targetChassisSpeeds.omegaRadiansPerSecond)
+              + " targVelLR: " + String.format("%.1f", targetWheelSpeed.leftMetersPerSecond) 
+                + " "          + String.format("%.1f", targetWheelSpeed.rightMetersPerSecond )
+              + " curVelLR: "  + String.format("%.2f", nativeUnitsToMPS(currentVelLeft)) 
+                + " "          + String.format("%.2f", nativeUnitsToMPS(currentVelRight)) 
+        // @formatter:on
       );
+
+    if (m_ramseteDebug >= 2)
+    {
+      // target velocity and its error
+      SmartDashboard.putNumber(getSubsystem( ) + ": DTR_targetVelLeft", targetVelLeft);
+      SmartDashboard.putNumber(getSubsystem( ) + ": DTR_targetVelRight", targetVelRight);
+      SmartDashboard.putNumber(getSubsystem( ) + ": DTR_currentVelLeft", currentVelLeft);
+      SmartDashboard.putNumber(getSubsystem( ) + ": DTR_currentVelRight", currentVelRight);
+
+      SmartDashboard.putNumber(getSubsystem( ) + ": DTR_velErrorLeft", targetVelLeft - currentVelLeft);
+      SmartDashboard.putNumber(getSubsystem( ) + ": DTR_velErrorRight", targetVelRight - currentVelRight);
+
+      // target distance and its error
+      SmartDashboard.putNumber(getSubsystem( ) + ": DTR_currentTrajX", targetTrajX);
+      SmartDashboard.putNumber(getSubsystem( ) + ": DTR_currentTrajY", targetTrajY);
+      SmartDashboard.putNumber(getSubsystem( ) + ": DTR_targetTrajX", currentTrajX);
+      SmartDashboard.putNumber(getSubsystem( ) + ": DTR_targetTrajY", currentTrajY);
+
+      SmartDashboard.putNumber(getSubsystem( ) + ": DTR_trajErrorX", trajState.poseMeters.relativeTo(currentPose).getX( ));
+      SmartDashboard.putNumber(getSubsystem( ) + ": DTR_trajErrorY", trajState.poseMeters.relativeTo(currentPose).getY( ));
+
+      // target heading and its error
+      SmartDashboard.putNumber(getSubsystem( ) + ": DTR_targetHeading", targetHeading);
+      SmartDashboard.putNumber(getSubsystem( ) + ": DTR_currentHeading", currentHeading);
+      SmartDashboard.putNumber(getSubsystem( ) + ": DTR_headingError",
+          trajState.poseMeters.relativeTo(currentPose).getRotation( ).getDegrees( ));
+    }
   }
 
   public boolean driveWithPathFollowerIsFinished( )
   {
     if (m_trajTimer.get( ) == 0)
       return false;
+
+    if (m_trajTimer.get( ) >= 15.0)
+    {
+      DataLogManager.log(getName( ) + ": path follower timeout!");
+      return true;
+    }
 
     return ((m_trajTimer.get( ) >= m_trajectory.getTotalTimeSeconds( ))
         && (Math.abs(m_wheelSpeeds.leftMetersPerSecond) <= 0 + m_stopTolerance)
