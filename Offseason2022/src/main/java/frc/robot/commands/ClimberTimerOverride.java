@@ -3,6 +3,8 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
 
@@ -11,12 +13,16 @@ import frc.robot.subsystems.Climber;
  */
 public class ClimberTimerOverride extends CommandBase
 {
-  private final Climber m_climber;
+  private Climber        m_climber;
+  private XboxController m_gamePad;
+  private Button         m_button;
 
-  public ClimberTimerOverride(Climber climber)
+  public ClimberTimerOverride(Climber climber, XboxController gamePad, Button button)
   {
     m_climber = climber;
-    // addRequirements(m_subsystem);
+    m_gamePad = gamePad;
+    m_button = button;
+    setName("ClimberTimerOverride");
   }
 
   // Called when the command is initially scheduled.
@@ -38,7 +44,7 @@ public class ClimberTimerOverride extends CommandBase
   @Override
   public boolean isFinished( )
   {
-    return false;
+    return m_gamePad.getRawButtonPressed(m_button.value);
   }
 
   @Override

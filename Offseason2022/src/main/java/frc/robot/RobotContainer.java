@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.FCConsts.FCMode;
 import frc.robot.Constants.INConsts.INMode;
 import frc.robot.Constants.LEDConsts.LEDColor;
-import frc.robot.Constants.SHConsts.Mode;
+import frc.robot.Constants.SHConsts.SHMode;
 import frc.robot.Constants.TCConsts.TCMode;
 import frc.robot.commands.Auto1Ball1OppRight;
 import frc.robot.commands.Auto1Ball2OppLeft;
@@ -43,7 +43,6 @@ import frc.robot.commands.ClimberCalibrate;
 import frc.robot.commands.ClimberFullClimb;
 import frc.robot.commands.ClimberL2ToL3;
 import frc.robot.commands.ClimberL3ToL4;
-import frc.robot.commands.ClimberMoveToHeight;
 import frc.robot.commands.ClimberRun;
 import frc.robot.commands.ClimberSetGatehook;
 import frc.robot.commands.ClimberTimerOverride;
@@ -69,7 +68,6 @@ import frc.robot.commands.ScoringActionHighHub;
 import frc.robot.commands.ScoringActionLowHub;
 import frc.robot.commands.ScoringPrime;
 import frc.robot.commands.ScoringStop;
-import frc.robot.commands.ShooterAimToggle;
 import frc.robot.commands.ShooterReverse;
 import frc.robot.commands.ShooterRun;
 import frc.robot.commands.SimulateLimelight;
@@ -146,7 +144,7 @@ public class RobotContainer
     SmartDashboard.putData("Auto3BallRight", new Auto3BallRight( ));
     SmartDashboard.putData("AutoDrive", new AutoDrive( ));
     SmartDashboard.putData("AutoDriveLimelightShoot", new AutoDriveLimelightShoot( ));
-    SmartDashboard.putData("AutoDrivePath", new AutoDrivePath( ));
+    SmartDashboard.putData("AutoDrivePath", new AutoDrivePath(m_drivetrain, "simCurvePath", true));
     SmartDashboard.putData("AutoDriveShoot", new AutoDriveShoot( ));
     SmartDashboard.putData("AutoPathSequence", new AutoPathSequence( ));
     SmartDashboard.putData("AutoShoot", new AutoShoot( ));
@@ -167,13 +165,11 @@ public class RobotContainer
     SmartDashboard.putData("ClimberFullClimb", new ClimberFullClimb(m_climber));
     SmartDashboard.putData("ClimberL2ToL3", new ClimberL2ToL3(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter));
     SmartDashboard.putData("ClimberL3ToL4", new ClimberL3ToL4(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter));
-    SmartDashboard.putData("ClimberMoveToHeight", new ClimberMoveToHeight(m_climber));
-    SmartDashboard.putData("ClimberSetGatehook", new ClimberSetGatehook(m_climber));
-    SmartDashboard.putData("ClimberTimerOverride", new ClimberTimerOverride(m_climber));
-
+    SmartDashboard.putData("ClimberSetGatehook", new ClimberSetGatehook(m_climber, false));
+    SmartDashboard.putData("ClimberTimerOverride", new ClimberTimerOverride(m_climber, m_operator, XboxController.Button.kY));
     SmartDashboard.putData("DriveLimelight", new DriveLimelight(m_drivetrain, m_vision, false));
-    SmartDashboard.putData("DriveLimelightShoot", new DriveLimelightShoot(m_drivetrain));
     SmartDashboard.putData("DriveLimelightStop", new DriveLimelightStop(m_drivetrain));
+    SmartDashboard.putData("DriveLimelightShoot", new DriveLimelightShoot(m_drivetrain));
     SmartDashboard.putData("DriveMotorTest", new DriveMotorTest(m_drivetrain, true));
     SmartDashboard.putData("DriveMotorTest", new DriveQuickturn(m_drivetrain));
     SmartDashboard.putData("DriveResetSensors", new DriveResetSensors(m_drivetrain));
@@ -202,14 +198,13 @@ public class RobotContainer
     SmartDashboard.putData("ScoringActionHighHub", new ScoringActionHighHub(0, m_shooter));
     SmartDashboard.putData("ScoringActionLowHub", new ScoringActionLowHub(0, m_shooter));
     SmartDashboard.putData("ScoringPrime", new ScoringPrime(m_shooter));
-    SmartDashboard.putData("ScoringStop", new ScoringStop(m_shooter));
+    SmartDashboard.putData("ScoringStop", new ScoringStop(m_intake, m_floorConveyor, m_towerConveyor, m_shooter));
 
-    SmartDashboard.putData("Shooter-OFF", new ShooterRun(m_shooter, Mode.SHOOTER_STOP));
-    SmartDashboard.putData("Shooter-PRIME", new ShooterRun(m_shooter, Mode.SHOOTER_PRIME));
-    SmartDashboard.putData("Shooter-LOW", new ShooterRun(m_shooter, Mode.SHOOTER_LOWERHUB));
-    SmartDashboard.putData("Shooter-HIGH", new ShooterRun(m_shooter, Mode.SHOOTER_UPPERHUB));
-    SmartDashboard.putData("Shooter-REV", new ShooterRun(m_shooter, Mode.SHOOTER_REVERSE));
-    SmartDashboard.putData("ShooterAimToggle", new ShooterAimToggle( ));
+    SmartDashboard.putData("Shooter-OFF", new ShooterRun(m_shooter, SHMode.SHOOTER_STOP));
+    SmartDashboard.putData("Shooter-PRIME", new ShooterRun(m_shooter, SHMode.SHOOTER_PRIME));
+    SmartDashboard.putData("Shooter-LOW", new ShooterRun(m_shooter, SHMode.SHOOTER_LOWERHUB));
+    SmartDashboard.putData("Shooter-HIGH", new ShooterRun(m_shooter, SHMode.SHOOTER_UPPERHUB));
+    SmartDashboard.putData("Shooter-REV", new ShooterRun(m_shooter, SHMode.SHOOTER_REVERSE));
     SmartDashboard.putData("ShooterReverse", new ShooterReverse(m_shooter));
 
     SmartDashboard.putData("SimulateLimelight", new SimulateLimelight( ));
@@ -273,12 +268,14 @@ public class RobotContainer
     final POVButton driverRight = new POVButton(m_driver, 90);
     final POVButton driverDown = new POVButton(m_driver, 180);
     final POVButton driverLeft = new POVButton(m_driver, 270);
+    // @formatter:off
     // Xbox enums { leftX = 0, leftY = 1, leftTrigger = 2, rightTrigger = 3, rightX = 4, rightY = 5}
     final AxisTrigger driverLeftTrigger = new AxisTrigger(m_driver, XboxController.Axis.kLeftTrigger);
     final AxisTrigger driverRightTrigger = new AxisTrigger(m_driver, XboxController.Axis.kRightTrigger);
     // Xbox on MacOS { leftX = 0, leftY = 1, rightX = 2, rightY = 3, leftTrigger = 5, rightTrigger = 4}
     // final AxisTrigger driverLeftTrigger = new AxisTrigger(m_driver, XboxController.Axis.kRightX);
     // final AxisTrigger driverRightTrigger = new AxisTrigger(m_driver, XboxController.Axis.kRightY);
+    // @formatter:on
 
     // Driver - A, B, X, Y
     driverA.whileHeld(new DriveQuickturn(m_drivetrain), true);
@@ -290,10 +287,10 @@ public class RobotContainer
     driverLeftBumper.whenPressed(new IntakingAction(m_intake, m_floorConveyor, m_towerConveyor), true);
     driverLeftBumper.whenReleased(new IntakingStop(m_intake, m_floorConveyor, m_towerConveyor), true);
     driverRightBumper.whenPressed(new ScoringActionLowHub(10.0, m_shooter), true);
-    driverRightBumper.whenReleased(new ScoringStop(m_shooter), true);
+    // driverRightBumper.whenReleased(new ScoringStop(m_shooter), true);
     driverBack.whenPressed(new Dummy(XboxController.Button.kBack.value), true);
-    driverStart.whenPressed(new VisionOn(m_vision, true), true);
-    driverStart.whenReleased(new VisionOn(m_vision, false), true);
+    driverStart.whenPressed(new VisionOn(true), true);
+    driverStart.whenReleased(new VisionOn(false), true);
 
     // Operator - POV buttons
     driverUp.whenPressed(new Dummy(0), true);
@@ -330,8 +327,8 @@ public class RobotContainer
     operA.whenPressed(new IntakeDeploy(m_intake, false), true);
     operB.whenPressed(new ExhaustingAction(m_intake, m_floorConveyor, m_towerConveyor), true);
     operB.whenReleased(new ExhaustingStop(m_intake, m_floorConveyor, m_towerConveyor), true);
-    operX.whenPressed(new ScoringStop(m_shooter), true);
-    operY.whenPressed(new ClimberTimerOverride(m_climber), true);
+    operX.whenPressed(new ScoringStop(m_intake, m_floorConveyor, m_towerConveyor, m_shooter), true);
+    operY.whenPressed(new ClimberTimerOverride(m_climber, m_operator, XboxController.Button.kY), true);
 
     // Operator - Bumpers, start, back
     operLeftBumper.whenPressed(new IntakingAction(m_intake, m_floorConveyor, m_towerConveyor), true);

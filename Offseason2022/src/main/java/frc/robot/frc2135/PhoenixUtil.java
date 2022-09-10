@@ -208,7 +208,7 @@ public class PhoenixUtil
 
   // Deprecated - use methods above
 
-  public void checkError(ErrorCode error, String message)
+  public static void checkError(ErrorCode error, String message)
   {
     if (error != ErrorCode.OK)
       DataLogManager.log("CTRE Error code: " + error + " Message: " + message);
