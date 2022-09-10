@@ -155,7 +155,7 @@ public class RobotContainer
     SmartDashboard.putData("Climber0Stow",
         new Climber0Stow(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_drivetrain));
     SmartDashboard.putData("Climber1Deploy",
-        new Climber1Deploy(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter));
+        new Climber1Deploy(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_drivetrain));
     SmartDashboard.putData("Climber2ClimbToL2", new Climber2ClimbToL2(m_climber));
     SmartDashboard.putData("Climber3RotateToL3", new Climber3RotateToL3(m_climber));
     SmartDashboard.putData("Climber5RotateIntoL3", new Climber5RotateIntoL3(m_climber));
@@ -339,7 +339,7 @@ public class RobotContainer
     operStart.whenPressed(new ClimberRun(m_climber), true);
 
     // Operator - POV buttons
-    operUp.whenPressed(new Climber1Deploy(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter), true);
+    operUp.whenPressed(new Climber1Deploy(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_drivetrain), true);
     operRight.whenPressed(new ClimberL3ToL4(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter), true);
     operDown.whenPressed(new Climber0Stow(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_drivetrain), true);
     operLeft.whenPressed(new ClimberL2ToL3(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter), true);
