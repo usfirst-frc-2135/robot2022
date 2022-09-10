@@ -28,7 +28,7 @@ public class AutoStop extends CommandBase
   @Override
   public void execute( )
   {
-    m_drivetrain.moveStop( );
+    m_drivetrain.driveStopMotors( );
   }
 
   // Called once the command ends or is interrupted.

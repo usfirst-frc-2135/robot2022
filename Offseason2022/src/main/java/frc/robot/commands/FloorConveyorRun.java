@@ -13,11 +13,11 @@ import frc.robot.subsystems.FloorConveyor;
 public class FloorConveyorRun extends CommandBase
 {
   private final FloorConveyor m_floorConveyor;
-  private FCMode              m_mode;
+  private final FCMode        m_mode;
 
-  public FloorConveyorRun(FCMode mode, FloorConveyor subsystem)
+  public FloorConveyorRun(FloorConveyor floorConveyor, FCMode mode)
   {
-    m_floorConveyor = subsystem;
+    m_floorConveyor = floorConveyor;
     m_mode = mode;
     setName("FloorConveyorRun");
     addRequirements(m_floorConveyor);

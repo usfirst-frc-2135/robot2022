@@ -11,7 +11,7 @@ import frc.robot.subsystems.Shooter;
  */
 public class ScoringPrime extends SequentialCommandGroup
 {
-  public ScoringPrime(double waitTime, Shooter shooter)
+  public ScoringPrime(Shooter shooter)
   {
     addCommands(
     // Add Commands here:

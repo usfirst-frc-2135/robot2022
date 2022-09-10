@@ -13,11 +13,11 @@ import frc.robot.subsystems.Shooter;
 public class ShooterRun extends CommandBase
 {
   private final Shooter m_shooter;
-  private Mode          m_mode;
+  private final Mode    m_mode;
 
-  public ShooterRun(Mode mode, Shooter subsystem)
+  public ShooterRun(Shooter shooter, Mode mode)
   {
-    m_shooter = subsystem;
+    m_shooter = shooter;
     m_mode = mode;
     addRequirements(m_shooter);
   }

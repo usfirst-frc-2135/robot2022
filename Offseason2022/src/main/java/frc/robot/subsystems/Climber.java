@@ -4,8 +4,10 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXSimCollection;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
@@ -465,10 +467,97 @@ public class Climber extends SubsystemBase
         DataLogManager.log(getSubsystem( ) + ": requested height is invalid - " + state);
         return;
     }
+
+    if (m_calibrated)
+    {
+      // Height constraint check/soft limit for max and min height before raising
+      if (m_targetInches < m_climberMinHeight)
+      {
+        DataLogManager.log("Target " + m_targetInches + " inches is limited by " + m_climberMinHeight + " inches");
+        m_targetInches = m_climberMinHeight;
+      }
+
+      if (m_targetInches > m_climberMaxHeight)
+      {
+        DataLogManager.log("Target " + m_targetInches + " inches is limited by " + m_climberMaxHeight + " inches");
+        m_targetInches = m_climberMaxHeight;
+      }
+
+      // Start the safety timer
+      m_safetyTimeout = 1.8;
+      m_safetyTimer.reset( );
+      m_safetyTimer.start( );
+
+      m_motorCL14.set(ControlMode.MotionMagic, inchesToCounts(m_targetInches));
+      m_motorCL15.set(ControlMode.MotionMagic, inchesToCounts(m_targetInches));
+
+      DataLogManager.log("Climber moving: " + m_curInches + " -> " + m_targetInches + " inches  |  counts "
+          + inchesToCounts(m_curInches) + " -> " + inchesToCounts(m_targetInches));
+    }
+    else
+    {
+      DataLogManager.log("Climber is not calibrated");
+      if (m_validCL14)
+        m_motorCL14.set(ControlMode.PercentOutput, 0.0);
+
+      if (m_validCL15)
+        m_motorCL15.set(ControlMode.PercentOutput, 0.0);
+    }
   }
 
-  public void moveClimberDistanceIsFinished( )
+  public boolean moveClimberDistanceIsFinished( )
   {
+    int withinTolerance = 0;
+    boolean isFinished = false;
+    double errorInInches = 0.0;
 
+    errorInInches = m_targetInches - m_curInches;
+
+    if (Math.abs(errorInInches) < m_toleranceInches)
+    {
+      if (++withinTolerance >= 5)
+      {
+        isFinished = true;
+        DataLogManager.log("Climber move finished - Time: " + m_safetyTimer.get( ) + "  |  Cur inches: " + m_curInches);
+      }
+    }
+    else
+    {
+      withinTolerance = 0;
+    }
+
+    if (m_safetyTimer.get( ) >= m_safetyTimeout)
+    {
+      isFinished = true;
+      DataLogManager.log("Climber Move Safety timer has timed out");
+    }
+
+    if (isFinished)
+    {
+      withinTolerance = 0;
+      m_safetyTimer.stop( );
+    }
+
+    return isFinished;
+  }
+
+  public void FollowerInitialize( )
+  {
+    if (m_validCL15)
+    {
+      m_motorCL15.set(ControlMode.Follower, 14);
+      m_motorCL15.setInverted(InvertType.OpposeMaster);
+      m_motorCL15.setNeutralMode(NeutralMode.Brake);
+
+      m_motorCL15.configVoltageCompSaturation(12.0, 0);
+      m_motorCL15.enableVoltageCompensation(true);
+
+      PhoenixUtil.checkError(m_motorCL15.configGetSupplyCurrentLimit(m_supplyCurrentLimits), "CL15 ConfigSupplyCurrentLimit");
+      PhoenixUtil.checkError(m_motorCL15.configGetStatorCurrentLimit(m_statorCurrentLimits), "CL15 ConfigStatorCurrentLimit");
+      PhoenixUtil.checkError(m_motorCL15.setStatusFramePeriod(StatusFrame.Status_1_General, 255, CANTIMEOUT),
+          "CL15 SetStatusFramePeriod: Status_1");
+      PhoenixUtil.checkError(m_motorCL15.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 255, CANTIMEOUT),
+          "CL15 SetStatusFramePeriod: Status_2");
+    }
   }
 }
