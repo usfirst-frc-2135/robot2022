@@ -4,8 +4,13 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.FloorConveyor;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.TowerConveyor;
 
 /**
  *
@@ -14,14 +19,14 @@ public class DriveLimelightStop extends SequentialCommandGroup
 {
   private final Drivetrain m_drivetrain;
 
-  public DriveLimelightStop(Drivetrain drivetrain)
+  public DriveLimelightStop(Drivetrain drivetrain, Intake intake, FloorConveyor fConv, TowerConveyor tConv, Shooter shooter)
   {
     m_drivetrain = drivetrain;
     setName("DriveLimelightStop");
 
     DataLogManager.log(getSubsystem( ) + ": DriveLimelightStop");
 
-    addCommands(
+    addCommands(new ParallelDeadlineGroup(new ScoringStop(intake, fConv, tConv, shooter), new AutoStop(drivetrain))
     // Add Commands here:
     // Also add parallel commands using the
     //
@@ -31,8 +36,6 @@ public class DriveLimelightStop extends SequentialCommandGroup
     // new command2(argsN, subsystem),
     // new command3(argsN, subsystem)
     // )
-    // );
-
     );
   }
 

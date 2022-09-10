@@ -168,7 +168,8 @@ public class RobotContainer
     SmartDashboard.putData("ClimberSetGatehook", new ClimberSetGatehook(m_climber, false));
     SmartDashboard.putData("ClimberTimerOverride", new ClimberTimerOverride(m_climber, m_operator, XboxController.Button.kY));
     SmartDashboard.putData("DriveLimelight", new DriveLimelight(m_drivetrain, m_vision, false));
-    SmartDashboard.putData("DriveLimelightStop", new DriveLimelightStop(m_drivetrain));
+    SmartDashboard.putData("DriveLimelightStop",
+        new DriveLimelightStop(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter));
     SmartDashboard.putData("DriveLimelightShoot", new DriveLimelightShoot(m_drivetrain));
     SmartDashboard.putData("DriveMotorTest", new DriveMotorTest(m_drivetrain, true));
     SmartDashboard.putData("DriveMotorTest", new DriveQuickturn(m_drivetrain));
@@ -300,7 +301,7 @@ public class RobotContainer
 
     // Driver - Triggers
     driverLeftTrigger.whenActive(new DriveLimelightShoot(m_drivetrain));
-    driverRightTrigger.whenActive(new DriveLimelightStop(m_drivetrain));
+    driverRightTrigger.whenActive(new DriveLimelightStop(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter));
 
     ///////////////////////////////////////////////////////
     // Operator Controller Assignments
