@@ -4,7 +4,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.Drivetrain;
 
 /**
@@ -12,12 +11,15 @@ import frc.robot.subsystems.Drivetrain;
  */
 public class DriveMotorTest extends CommandBase
 {
-  private Drivetrain m_drivetrain;
-  private boolean    m_left;
+  private final Drivetrain    m_drivetrain;
+  private final boolean       m_left;
 
-  public DriveMotorTest(boolean left, Drivetrain drivetrain)
+  private static final double m_voltsToRun = 3.0;
+
+  public DriveMotorTest(Drivetrain drivetrain, boolean left)
   {
     m_drivetrain = drivetrain;
+    m_left = left;
     setName("DriveMotorTest");
     addRequirements(m_drivetrain);
   }
@@ -31,7 +33,7 @@ public class DriveMotorTest extends CommandBase
   @Override
   public void execute( )
   {
-    RobotContainer.getInstance( ).m_drivetrain.TankDriveVolts(m_left ? (3.0) : (0.0), m_left ? (0.0) : (3.0));
+    m_drivetrain.tankDriveVolts(m_left ? m_voltsToRun : 0.0, m_left ? 0.0 : m_voltsToRun);
   }
 
   // Called once the command ends or is interrupted.

@@ -4,13 +4,14 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.subsystems.Climber;
 
 /**
  *
  */
 public class ClimberFullClimb extends SequentialCommandGroup
 {
-  public ClimberFullClimb( )
+  public ClimberFullClimb(Climber climber)
   {
     addCommands(
     // Add Commands here:

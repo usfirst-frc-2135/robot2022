@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  */
 public class Power extends SubsystemBase
 {
-  private PowerDistribution m_powerDistribution = new PowerDistribution( );;
+  private final PowerDistribution m_powerDistribution = new PowerDistribution( );;
 
   /**
    *
@@ -37,16 +37,14 @@ public class Power extends SubsystemBase
     // This method will be called once per scheduler run when in simulation
   }
 
-  // Put methods for controlling this subsystem
-  // here. Call these from Commands.
+  // Put methods for controlling this subsystem here. Call these from Commands.
 
   public void initialize( )
   {
-    // TODO: round getVoltage()
     DataLogManager.log(getSubsystem( ) + ": Init Voltage is " + String.format("%.1f", m_powerDistribution.getVoltage( )));
   }
 
-  public void FaultDump( )
+  public void faultDump( )
   {
     DataLogManager.log(getSubsystem( ) + ": Temperature is " + m_powerDistribution.getTemperature( ));
     DataLogManager.log(getSubsystem( ) + ": Input Voltage is " + m_powerDistribution.getVoltage( ));
@@ -61,5 +59,4 @@ public class Power extends SubsystemBase
     m_powerDistribution.resetTotalEnergy( );
     m_powerDistribution.clearStickyFaults( );
   }
-
 }

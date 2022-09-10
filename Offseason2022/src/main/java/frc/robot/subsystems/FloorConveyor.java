@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.FCConsts;
 import frc.robot.Constants.FCConsts.FCMode;
 import frc.robot.frc2135.PhoenixUtil;
-import frc.robot.frc2135.RobotConfig;
 
 /**
  *
@@ -25,21 +24,20 @@ public class FloorConveyor extends SubsystemBase
 {
   // Constants
   private static final int                CANTIMEOUT            = 30;  // CAN timeout in msec
-  private static final int                PIDINDEX              = 0;   // PID in use (0-primary, 1-aux)
-  private static final int                SLOTINDEX             = 0;   // Use first PID slot
 
   // Devices and simulation objects
-  private WPI_TalonFX                     m_motorFC8            = new WPI_TalonFX(FCConsts.kCANID);
+  private WPI_TalonFX                     m_motorFC8            = new WPI_TalonFX(FCConsts.kFC8CANID);
 
   private SupplyCurrentLimitConfiguration m_supplyCurrentLimits = new SupplyCurrentLimitConfiguration(true, 45.0, 45.0, 0.001);
   private StatorCurrentLimitConfiguration m_statorCurrentLimits = new StatorCurrentLimitConfiguration(true, 80.0, 80.0, 0.001);
 
   // Declare module variables
-  private boolean                         m_validFC8;  // Health indicator for floor conveyor talon
-  private int                             m_resetCountFC8;  // reset counter for motor
-  private double                          m_acquireSpeed;
-  private double                          m_expelSpeed;
-  private double                          m_expelSpeedFast;
+  private double                          m_acquireSpeed        = FCConsts.kFCAcquireSpeed;
+  private double                          m_acquireSpeedSlow    = FCConsts.kFCAcquireSpeedSlow;
+  private double                          m_expelSpeedFast      = FCConsts.kFCExpelSpeedFast;
+
+  private boolean                         m_validFC8            = false;  // Health indicator for floor conveyor talon
+  private int                             m_resetCountFC8       = 0;      // reset counter for motor
 
   /**
    *
@@ -54,12 +52,7 @@ public class FloorConveyor extends SubsystemBase
     m_validFC8 = PhoenixUtil.getInstance( ).talonFXInitialize(m_motorFC8, "FC8");
     SmartDashboard.putBoolean("HL_validFC8", m_validFC8);
 
-    // Initialize Variables
-
-    m_acquireSpeed = FCConsts.kFCAcquireSpeed;
-    m_expelSpeed = FCConsts.kFCExpelSpeed;
-    m_expelSpeedFast = FCConsts.kFCExpelSpeedFast;
-
+    // Initialize Motor
     if (m_validFC8)
     {
       m_motorFC8.setInverted(false);
@@ -68,7 +61,6 @@ public class FloorConveyor extends SubsystemBase
 
       m_motorFC8.configSupplyCurrentLimit(m_supplyCurrentLimits);
       m_motorFC8.configStatorCurrentLimit(m_statorCurrentLimits);
-
       m_motorFC8.setStatusFramePeriod(StatusFrame.Status_1_General, 255, CANTIMEOUT);
       m_motorFC8.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 255, CANTIMEOUT);
     }
@@ -97,46 +89,44 @@ public class FloorConveyor extends SubsystemBase
   // here. Call these from Commands.
   public void initialize( )
   {
-    DataLogManager.log("FC Init");
+    DataLogManager.log(getSubsystem( ) + ": subsystem intitialized!");
     setFloorConveyorSpeed(FCConsts.FCMode.FCONVEYOR_STOP);
   }
 
   // Dump all Talon faults
-  void faultDump( )
+  public void faultDump( )
   {
-    PhoenixUtil.getInstance( ).talonFXFaultDump(m_motorFC8, "FC 8");
+    PhoenixUtil.getInstance( ).talonFXFaultDump(m_motorFC8, "FC8");
   }
 
   public void setFloorConveyorSpeed(FCMode mode)
   {
     final String strName;
-    double outputFC = 0.0; // Default: off
+    double output = 0.0; // Default: off
 
     switch (mode)
     {
       default :
       case FCONVEYOR_STOP :
         strName = "STOP";
-        outputFC = 0.0;
+        output = 0.0;
         break;
       case FCONVEYOR_ACQUIRE :
         strName = "ACQUIRE";
-        outputFC = m_acquireSpeed;
+        output = m_acquireSpeed;
         break;
       case FCONVEYOR_EXPEL :
         strName = "EXPEL";
-        outputFC = m_expelSpeed;
+        output = m_acquireSpeedSlow;
         break;
       case FCONVEYOR_EXPEL_FAST :
         strName = "EXPEL_FAST";
-        outputFC = m_expelSpeedFast;
+        output = m_expelSpeedFast;
         break;
     }
 
     DataLogManager.log(getSubsystem( ) + ": FC Set Speed - " + strName);
-
     if (m_validFC8)
-      m_motorFC8.set(ControlMode.PercentOutput, outputFC);
+      m_motorFC8.set(ControlMode.PercentOutput, output);
   }
-
 }

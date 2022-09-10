@@ -4,22 +4,30 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.VIConsts;
+import frc.robot.subsystems.Vision;
 
 /**
  *
  */
-public class ShooterAimToggle extends CommandBase
+public class VisionOn extends CommandBase
 {
-  public ShooterAimToggle( )
+  private final Vision  m_vision;
+  private final boolean m_lightOn;
+
+  public VisionOn(Vision vision, boolean lightOn)
   {
-    // m_subsystem = subsystem;
-    // addRequirements(m_subsystem);
+    m_vision = vision;
+    m_lightOn = lightOn;
+    setName("VisionOn");
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize( )
-  {}
+  {
+    m_vision.setLEDMode((m_lightOn) ? VIConsts.LED_ON : VIConsts.LED_OFF);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -35,12 +43,12 @@ public class ShooterAimToggle extends CommandBase
   @Override
   public boolean isFinished( )
   {
-    return false;
+    return true;
   }
 
   @Override
   public boolean runsWhenDisabled( )
   {
-    return false;
+    return true;
   }
 }

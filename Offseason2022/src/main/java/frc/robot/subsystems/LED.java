@@ -19,11 +19,10 @@ import frc.robot.Constants.LEDConsts.LEDColor;
 public class LED extends SubsystemBase
 {
   // variables
-  private CANdle            m_candle        = new CANdle(LEDConsts.kCANDdleID);
+  private final CANdle                    m_candle        = new CANdle(LEDConsts.kCANDdleID);
 
-  SendableChooser<LEDColor> m_ledChooser    = new SendableChooser<LEDColor>( );
-
-  public LEDColor           m_previousColor = LEDColor.LEDCOLOR_OFF;
+  private final SendableChooser<LEDColor> m_ledChooser    = new SendableChooser<LEDColor>( );
+  private LEDColor                        m_previousColor = LEDColor.LEDCOLOR_OFF;
 
   /**
    *
@@ -47,7 +46,7 @@ public class LED extends SubsystemBase
     m_ledChooser.addOption("LED_Purple", LEDColor.LEDCOLOR_PURPLE);
 
     SmartDashboard.putData("LED_Color", m_ledChooser);
-    SmartDashboard.putBoolean("LED_colorMode", false);
+    SmartDashboard.putBoolean("LED_normalMode", false);
   }
 
   @Override
@@ -62,14 +61,16 @@ public class LED extends SubsystemBase
     // This method will be called once per scheduler run when in simulation
   }
 
-  // Put methods for controlling this subsystem
-  // here. Call these from Commands.
+  // Put methods for controlling this subsystem here. Call these from Commands.
 
   public void initialize( )
   {
     DataLogManager.log(getSubsystem( ) + ": subsystem initialized!");
     setColor(LEDColor.LEDCOLOR_OFF);
   }
+
+  public void faultDump( )
+  {}
 
   public void setColor(LEDColor color)
   {
@@ -122,20 +123,19 @@ public class LED extends SubsystemBase
     }
   }
 
-  public void setShooterColor(LEDColor color)
+  public void setNormalColor(LEDColor color)
   {
-    Boolean colorMode = SmartDashboard.getBoolean("LED_colorMode", false);
+    Boolean normalMode = SmartDashboard.getBoolean("LED_normalMode", false);
 
-    if (colorMode)
+    if (normalMode)
       setColor(color);
   }
 
   public void setLLColor(LEDColor color)
   {
-    Boolean colorMode = SmartDashboard.getBoolean("LED_colorMode", false);
+    Boolean normalMode = SmartDashboard.getBoolean("LED_normalMode", false);
 
-    if (!colorMode)
+    if (!normalMode)
       setColor(color);
   }
-
 }

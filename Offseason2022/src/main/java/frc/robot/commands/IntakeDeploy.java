@@ -4,30 +4,28 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.RobotContainer;
+import frc.robot.subsystems.Intake;
 
 /**
  *
  */
 public class IntakeDeploy extends CommandBase
 {
-  private boolean m_intakeExtend;
+  private final Intake  m_intake;
+  private final boolean m_intakeExtend;
 
-  public IntakeDeploy(boolean intakeExtend)
+  public IntakeDeploy(Intake intake, boolean intakeExtend)
   {
+    m_intake = intake;
     m_intakeExtend = intakeExtend;
     setName("IntakeDeploy");
-
-    // m_subsystem = subsystem;
-    // addRequirements(m_subsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize( )
   {
-    RobotContainer rc = RobotContainer.getInstance( );
-    rc.m_intake.setArmSolenoid(m_intakeExtend);
+    m_intake.setArmSolenoid(m_intakeExtend);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
