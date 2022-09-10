@@ -4,6 +4,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.VIConsts;
 import frc.robot.subsystems.Vision;
 
@@ -12,12 +13,11 @@ import frc.robot.subsystems.Vision;
  */
 public class VisionOn extends CommandBase
 {
-  private final Vision  m_vision;
+
   private final boolean m_lightOn;
 
-  public VisionOn(Vision vision, boolean lightOn)
+  public VisionOn(boolean lightOn)
   {
-    m_vision = vision;
     m_lightOn = lightOn;
     setName("VisionOn");
   }
@@ -26,7 +26,7 @@ public class VisionOn extends CommandBase
   @Override
   public void initialize( )
   {
-    m_vision.setLEDMode((m_lightOn) ? VIConsts.LED_ON : VIConsts.LED_OFF);
+    RobotContainer.getInstance( ).m_vision.setLEDMode((m_lightOn) ? VIConsts.LED_ON : VIConsts.LED_OFF);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
