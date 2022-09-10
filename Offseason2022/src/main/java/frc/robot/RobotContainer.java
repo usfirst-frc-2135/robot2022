@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.FCConsts.FCMode;
 import frc.robot.Constants.INConsts.INMode;
 import frc.robot.Constants.LEDConsts.LEDColor;
-import frc.robot.Constants.SHConsts.Mode;
+import frc.robot.Constants.SHConsts.SHMode;
 import frc.robot.Constants.TCConsts.TCMode;
 import frc.robot.commands.Auto1Ball1OppRight;
 import frc.robot.commands.Auto1Ball2OppLeft;
@@ -198,13 +198,13 @@ public class RobotContainer
     SmartDashboard.putData("ScoringActionHighHub", new ScoringActionHighHub(0, m_shooter));
     SmartDashboard.putData("ScoringActionLowHub", new ScoringActionLowHub(0, m_shooter));
     SmartDashboard.putData("ScoringPrime", new ScoringPrime(m_shooter));
-    SmartDashboard.putData("ScoringStop", new ScoringStop(m_shooter));
+    SmartDashboard.putData("ScoringStop", new ScoringStop(m_intake, m_floorConveyor, m_towerConveyor, m_shooter));
 
-    SmartDashboard.putData("Shooter-OFF", new ShooterRun(m_shooter, Mode.SHOOTER_STOP));
-    SmartDashboard.putData("Shooter-PRIME", new ShooterRun(m_shooter, Mode.SHOOTER_PRIME));
-    SmartDashboard.putData("Shooter-LOW", new ShooterRun(m_shooter, Mode.SHOOTER_LOWERHUB));
-    SmartDashboard.putData("Shooter-HIGH", new ShooterRun(m_shooter, Mode.SHOOTER_UPPERHUB));
-    SmartDashboard.putData("Shooter-REV", new ShooterRun(m_shooter, Mode.SHOOTER_REVERSE));
+    SmartDashboard.putData("Shooter-OFF", new ShooterRun(m_shooter, SHMode.SHOOTER_STOP));
+    SmartDashboard.putData("Shooter-PRIME", new ShooterRun(m_shooter, SHMode.SHOOTER_PRIME));
+    SmartDashboard.putData("Shooter-LOW", new ShooterRun(m_shooter, SHMode.SHOOTER_LOWERHUB));
+    SmartDashboard.putData("Shooter-HIGH", new ShooterRun(m_shooter, SHMode.SHOOTER_UPPERHUB));
+    SmartDashboard.putData("Shooter-REV", new ShooterRun(m_shooter, SHMode.SHOOTER_REVERSE));
     SmartDashboard.putData("ShooterReverse", new ShooterReverse(m_shooter));
 
     SmartDashboard.putData("SimulateLimelight", new SimulateLimelight( ));
@@ -287,10 +287,10 @@ public class RobotContainer
     driverLeftBumper.whenPressed(new IntakingAction(m_intake, m_floorConveyor, m_towerConveyor), true);
     driverLeftBumper.whenReleased(new IntakingStop(m_intake, m_floorConveyor, m_towerConveyor), true);
     driverRightBumper.whenPressed(new ScoringActionLowHub(10.0, m_shooter), true);
-    driverRightBumper.whenReleased(new ScoringStop(m_shooter), true);
+    // driverRightBumper.whenReleased(new ScoringStop(m_shooter), true);
     driverBack.whenPressed(new Dummy(XboxController.Button.kBack.value), true);
-    driverStart.whenPressed(new VisionOn(m_vision, true), true);
-    driverStart.whenReleased(new VisionOn(m_vision, false), true);
+    driverStart.whenPressed(new VisionOn(true), true);
+    driverStart.whenReleased(new VisionOn(false), true);
 
     // Operator - POV buttons
     driverUp.whenPressed(new Dummy(0), true);
@@ -327,7 +327,7 @@ public class RobotContainer
     operA.whenPressed(new IntakeDeploy(m_intake, false), true);
     operB.whenPressed(new ExhaustingAction(m_intake, m_floorConveyor, m_towerConveyor), true);
     operB.whenReleased(new ExhaustingStop(m_intake, m_floorConveyor, m_towerConveyor), true);
-    operX.whenPressed(new ScoringStop(m_shooter), true);
+    operX.whenPressed(new ScoringStop(m_intake, m_floorConveyor, m_towerConveyor, m_shooter), true);
     operY.whenPressed(new ClimberTimerOverride(m_climber, m_operator, XboxController.Button.kY), true);
 
     // Operator - Bumpers, start, back

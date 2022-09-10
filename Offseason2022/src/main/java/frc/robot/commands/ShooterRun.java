@@ -4,7 +4,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.SHConsts.Mode;
+import frc.robot.Constants.SHConsts.SHMode;
 import frc.robot.subsystems.Shooter;
 
 /**
@@ -13,9 +13,9 @@ import frc.robot.subsystems.Shooter;
 public class ShooterRun extends CommandBase
 {
   private final Shooter m_shooter;
-  private final Mode    m_mode;
+  private final SHMode  m_mode;
 
-  public ShooterRun(Shooter shooter, Mode mode)
+  public ShooterRun(Shooter shooter, SHMode mode)
   {
     m_shooter = shooter;
     m_mode = mode;
