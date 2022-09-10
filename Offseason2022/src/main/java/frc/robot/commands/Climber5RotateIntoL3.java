@@ -3,7 +3,10 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import frc.robot.Constants.CLConsts.Height;
 import frc.robot.subsystems.Climber;
 
 /**
@@ -13,7 +16,10 @@ public class Climber5RotateIntoL3 extends SequentialCommandGroup
 {
   public Climber5RotateIntoL3(Climber climber)
   {
-    addCommands(
+    setName("ClimberRotateIntoL3");
+
+    addCommands(new ParallelDeadlineGroup(new WaitUntilCommand(climber::moveClimberDistanceIsFinished),
+        new ClimberMoveToHeight(climber, Height.NOCHANGE_HEIGHT), new ClimberSetGatehook(climber, false))
     // Add Commands here:
     // Also add parallel commands using the
     //
