@@ -4,11 +4,13 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.led.CANdle;
+
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.LED.LEDColor;
+import frc.robot.Constants.LEDConsts;
+import frc.robot.Constants.LEDConsts.LEDColor;
 
 /**
  *
@@ -17,9 +19,10 @@ import frc.robot.Constants.LED.LEDColor;
 public class LED extends SubsystemBase
 {
   // variables
-  public LEDColor           previousColor = LEDColor.LEDCOLOR_OFF;
-  private CANdle            candle        = new CANdle(0);
-  SendableChooser<LEDColor> ledChooser    = new SendableChooser<LEDColor>( );
+  private final CANdle                    m_candle        = new CANdle(LEDConsts.kCANDdleID);
+
+  private final SendableChooser<LEDColor> m_ledChooser    = new SendableChooser<LEDColor>( );
+  private LEDColor                        m_previousColor = LEDColor.LEDCOLOR_OFF;
 
   /**
    *
@@ -30,20 +33,20 @@ public class LED extends SubsystemBase
     setSubsystem("LED");
 
     setColor(LEDColor.LEDCOLOR_BLUE);
-    candle.configBrightnessScalar(0.7);
+    m_candle.configBrightnessScalar(0.7);
 
     // Add options for colors in SmartDashboard
-    ledChooser.setDefaultOption("LED_Off", LEDColor.LEDCOLOR_OFF);
-    ledChooser.addOption("LED_White", LEDColor.LEDCOLOR_WHITE);
-    ledChooser.addOption("LED_Red", LEDColor.LEDCOLOR_RED);
-    ledChooser.addOption("LED_Orange", LEDColor.LEDCOLOR_ORANGE);
-    ledChooser.addOption("LED_Yellow", LEDColor.LEDCOLOR_YELLOW);
-    ledChooser.addOption("LED_Green", LEDColor.LEDCOLOR_GREEN);
-    ledChooser.addOption("LED_Blue", LEDColor.LEDCOLOR_BLUE);
-    ledChooser.addOption("LED_Purple", LEDColor.LEDCOLOR_PURPLE);
+    m_ledChooser.setDefaultOption("LED_Off", LEDColor.LEDCOLOR_OFF);
+    m_ledChooser.addOption("LED_White", LEDColor.LEDCOLOR_WHITE);
+    m_ledChooser.addOption("LED_Red", LEDColor.LEDCOLOR_RED);
+    m_ledChooser.addOption("LED_Orange", LEDColor.LEDCOLOR_ORANGE);
+    m_ledChooser.addOption("LED_Yellow", LEDColor.LEDCOLOR_YELLOW);
+    m_ledChooser.addOption("LED_Green", LEDColor.LEDCOLOR_GREEN);
+    m_ledChooser.addOption("LED_Blue", LEDColor.LEDCOLOR_BLUE);
+    m_ledChooser.addOption("LED_Purple", LEDColor.LEDCOLOR_PURPLE);
 
-    SmartDashboard.putData("LED_Color", ledChooser);
-    SmartDashboard.putBoolean("LED_colorMode", false);
+    SmartDashboard.putData("LED_Color", m_ledChooser);
+    SmartDashboard.putBoolean("LED_normalMode", false);
   }
 
   @Override
@@ -58,8 +61,7 @@ public class LED extends SubsystemBase
     // This method will be called once per scheduler run when in simulation
   }
 
-  // Put methods for controlling this subsystem
-  // here. Call these from Commands.
+  // Put methods for controlling this subsystem here. Call these from Commands.
 
   public void initialize( )
   {
@@ -67,71 +69,73 @@ public class LED extends SubsystemBase
     setColor(LEDColor.LEDCOLOR_OFF);
   }
 
+  public void faultDump( )
+  {}
+
   public void setColor(LEDColor color)
   {
     final String strName;
 
-    if (previousColor != color)
+    if (m_previousColor != color)
     {
       if (color == (LEDColor.LEDCOLOR_DASH))
-        color = ledChooser.getSelected( );
+        color = m_ledChooser.getSelected( );
 
       switch (color)
       {
         default :
         case LEDCOLOR_OFF :
           strName = "OFF";
-          candle.setLEDs(0, 0, 0); // black
+          m_candle.setLEDs(0, 0, 0); // black
           break;
         case LEDCOLOR_WHITE :
           strName = "WHITE";
-          candle.setLEDs(255, 255, 255); // white
+          m_candle.setLEDs(255, 255, 255); // white
           break;
         case LEDCOLOR_RED :
           strName = "RED";
-          candle.setLEDs(255, 0, 0); // red
+          m_candle.setLEDs(255, 0, 0); // red
           break;
         case LEDCOLOR_ORANGE :
           strName = "ORANGE";
-          candle.setLEDs(255, 80, 0); // orange
+          m_candle.setLEDs(255, 80, 0); // orange
           break;
         case LEDCOLOR_YELLOW :
           strName = "YELLOW";
-          candle.setLEDs(255, 255, 0); // yellow
+          m_candle.setLEDs(255, 255, 0); // yellow
           break;
         case LEDCOLOR_GREEN :
           strName = "GREEN";
-          candle.setLEDs(0, 255, 0); // green
+          m_candle.setLEDs(0, 255, 0); // green
           break;
         case LEDCOLOR_BLUE :
           strName = "BLUE";
-          candle.setLEDs(0, 0, 255); // blue
+          m_candle.setLEDs(0, 0, 255); // blue
           break;
         case LEDCOLOR_PURPLE :
           strName = "PURPLE";
-          candle.setLEDs(255, 0, 255); // purple
+          m_candle.setLEDs(255, 0, 255); // purple
           break;
       }
 
       DataLogManager.log(getSubsystem( ) + ": color is now " + strName);
-      previousColor = color;
+      m_previousColor = color;
     }
   }
 
-  public void setShooterColor(LEDColor color)
+  public void setNormalColor(LEDColor color)
   {
-    Boolean colorMode = SmartDashboard.getBoolean("LED_colorMode", false);
+    Boolean normalMode = SmartDashboard.getBoolean("LED_normalMode", false);
 
-    if (colorMode)
+    if (normalMode)
       setColor(color);
   }
 
   public void setLLColor(LEDColor color)
   {
-    Boolean colorMode = SmartDashboard.getBoolean("LED_colorMode", false);
+    Boolean normalMode = SmartDashboard.getBoolean("LED_normalMode", false);
 
-    if (!colorMode)
+    if (!normalMode)
       setColor(color);
   }
-
 }

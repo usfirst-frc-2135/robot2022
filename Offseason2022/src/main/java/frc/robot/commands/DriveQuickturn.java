@@ -4,22 +4,27 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Drivetrain;
 
 /**
  *
  */
 public class DriveQuickturn extends CommandBase
 {
-  public DriveQuickturn( )
+  private final Drivetrain m_drivetrain;
+
+  public DriveQuickturn(Drivetrain drivetrain)
   {
-    // m_subsystem = subsystem;
-    // addRequirements(m_subsystem);
+    m_drivetrain = drivetrain;
+    setName("DriveQuickturn");
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize( )
-  {}
+  {
+    m_drivetrain.driveSetQuickTurn(true);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -29,7 +34,9 @@ public class DriveQuickturn extends CommandBase
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted)
-  {}
+  {
+    m_drivetrain.driveSetQuickTurn(false);
+  }
 
   // Returns true when the command should end.
   @Override

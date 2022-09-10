@@ -4,13 +4,14 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.subsystems.Climber;
 
 /**
  *
  */
 public class Climber3RotateToL3 extends SequentialCommandGroup
 {
-  public Climber3RotateToL3( )
+  public Climber3RotateToL3(Climber climber)
   {
     addCommands(
     // Add Commands here:
