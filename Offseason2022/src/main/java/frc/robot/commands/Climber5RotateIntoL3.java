@@ -16,7 +16,7 @@ public class Climber5RotateIntoL3 extends SequentialCommandGroup
 {
   public Climber5RotateIntoL3(Climber climber)
   {
-    setName("ClimberRotateIntoL3");
+    setName("Climber5RotateIntoL3");
 
     addCommands(
         // Add Commands here:
@@ -25,7 +25,7 @@ public class Climber5RotateIntoL3 extends SequentialCommandGroup
       new ParallelDeadlineGroup(
           new WaitUntilCommand(climber::moveClimberDistanceIsFinished),
           new ClimberMoveToHeight(climber, Height.NOCHANGE_HEIGHT), 
-      new ClimberSetGatehook(climber, false)
+          new ClimberSetGatehook(climber, false)
       )
       // @formatter:on
 

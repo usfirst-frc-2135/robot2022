@@ -31,20 +31,14 @@ public class DriveLimelightShoot extends SequentialCommandGroup
     DataLogManager.log(getSubsystem( ) + ": DriveLimelightShoot");
 
     addCommands(
+        // Add Commands here:
 
+        // @formatter:off
         new ParallelCommandGroup(new DriveLimelight(drivetrain, vision, false),
             new SequentialCommandGroup(new ParallelDeadlineGroup(new WaitUntilCommand(drivetrain::driveWithLimelightIsFinished),
                 new ScoringPrime(shooter), new ScoringActionHighHub(120, shooter))))
-    // Add Commands here:
-    // Also add parallel commands using the
-    //
-    // addCommands(
-    // new command1(argsN, subsystem),
-    // parallel(
-    // new command2(argsN, subsystem),
-    // new command3(argsN, subsystem)
-    // )
-    // );
+        
+        // @formatter:on
 
     );
   }

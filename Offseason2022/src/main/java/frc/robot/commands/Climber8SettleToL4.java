@@ -17,7 +17,7 @@ public class Climber8SettleToL4 extends SequentialCommandGroup
 {
   public Climber8SettleToL4(Climber climber)
   {
-    setName("ClimberSettleToL4");
+    setName("Climber8SettleToL4");
 
     addCommands(
         // Add Commands here:
@@ -26,7 +26,7 @@ public class Climber8SettleToL4 extends SequentialCommandGroup
         new ParallelDeadlineGroup(
             new WaitUntilCommand(climber::moveClimberDistanceIsFinished),
             new ClimberMoveToHeight(climber, Height.STOW_HEIGHT), 
-        new ClimberSetGatehook(climber, false)),
+            new ClimberSetGatehook(climber, false)),
         new WaitCommand(0.5), 
         new ParallelDeadlineGroup(
             new WaitUntilCommand(climber::moveClimberDistanceIsFinished),

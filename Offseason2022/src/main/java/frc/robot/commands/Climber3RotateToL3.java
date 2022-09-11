@@ -17,7 +17,7 @@ public class Climber3RotateToL3 extends SequentialCommandGroup
 {
   public Climber3RotateToL3(Climber climber)
   {
-    setName("ClimberRotateToL3");
+    setName("Climber3RotateToL3");
 
     addCommands(
         // Add Commands here:

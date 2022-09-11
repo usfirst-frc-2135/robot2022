@@ -26,7 +26,7 @@ public class Climber1Deploy extends SequentialCommandGroup
   public Climber1Deploy(Climber climber, Intake intake, FloorConveyor fConv, TowerConveyor tConv, Shooter shooter,
       Drivetrain drivetrain)
   {
-    setName("ClimberDeploy");
+    setName("Climber1Deploy");
 
     addCommands(
         // Add Commands here:
