@@ -20,20 +20,19 @@ public class Climber8SettleToL4 extends SequentialCommandGroup
     setName("ClimberSettleToL4");
 
     addCommands(
-        new ParallelDeadlineGroup(new WaitUntilCommand(climber::moveClimberDistanceIsFinished),
-            new ClimberMoveToHeight(climber, Height.STOW_HEIGHT), new ClimberSetGatehook(climber, false)),
-        new WaitCommand(0.5), new ParallelDeadlineGroup(new WaitUntilCommand(climber::moveClimberDistanceIsFinished),
-            new ClimberMoveToHeight(climber, Height.GATEHOOK_REST_HEIGHT))
-    // Add Commands here:
-    // Also add parallel commands using the
-    //
-    // addCommands(
-    // new command1(argsN, subsystem),
-    // parallel(
-    // new command2(argsN, subsystem),
-    // new command3(argsN, subsystem)
-    // )
-    // );
+        // Add Commands here:
+
+        // @formatter:off
+        new ParallelDeadlineGroup(
+            new WaitUntilCommand(climber::moveClimberDistanceIsFinished),
+            new ClimberMoveToHeight(climber, Height.STOW_HEIGHT), 
+        new ClimberSetGatehook(climber, false)),
+        new WaitCommand(0.5), 
+        new ParallelDeadlineGroup(
+            new WaitUntilCommand(climber::moveClimberDistanceIsFinished),
+            new ClimberMoveToHeight(climber, Height.GATEHOOK_REST_HEIGHT)
+        )
+        // @formatter:on
 
     );
   }

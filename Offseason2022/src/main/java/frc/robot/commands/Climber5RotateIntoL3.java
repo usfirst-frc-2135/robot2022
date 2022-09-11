@@ -18,18 +18,16 @@ public class Climber5RotateIntoL3 extends SequentialCommandGroup
   {
     setName("ClimberRotateIntoL3");
 
-    addCommands(new ParallelDeadlineGroup(new WaitUntilCommand(climber::moveClimberDistanceIsFinished),
-        new ClimberMoveToHeight(climber, Height.NOCHANGE_HEIGHT), new ClimberSetGatehook(climber, false))
-    // Add Commands here:
-    // Also add parallel commands using the
-    //
-    // addCommands(
-    // new command1(argsN, subsystem),
-    // parallel(
-    // new command2(argsN, subsystem),
-    // new command3(argsN, subsystem)
-    // )
-    // );
+    addCommands(
+        // Add Commands here:
+
+        // @formatter:off
+      new ParallelDeadlineGroup(
+          new WaitUntilCommand(climber::moveClimberDistanceIsFinished),
+          new ClimberMoveToHeight(climber, Height.NOCHANGE_HEIGHT), 
+      new ClimberSetGatehook(climber, false)
+      )
+      // @formatter:on
 
     );
   }

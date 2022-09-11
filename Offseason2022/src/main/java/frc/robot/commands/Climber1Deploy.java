@@ -28,21 +28,22 @@ public class Climber1Deploy extends SequentialCommandGroup
   {
     setName("ClimberDeploy");
 
-    addCommands(new DriveSlowMode(drivetrain, true), new IntakeDeploy(intake, false), new IntakeRun(intake, INMode.INTAKE_STOP),
-        new FloorConveyorRun(fConv, FCMode.FCONVEYOR_STOP), new TowerConveyorRun(tConv, TCMode.TCONVEYOR_STOP),
-        new ShooterRun(shooter, Mode.SHOOTER_STOP),
-        new ParallelDeadlineGroup(new WaitUntilCommand(climber::moveClimberDistanceIsFinished),
-            new ClimberMoveToHeight(climber, Height.EXTEND_L2_HEIGHT), new ClimberSetGatehook(climber, false))
-    // Add Commands here:
-    // Also add parallel commands using the
-    //
-    // addCommands(
-    // new command1(argsN, subsystem),
-    // parallel(
-    // new command2(argsN, subsystem),
-    // new command3(argsN, subsystem)
-    // )
-    // );
+    addCommands(
+        // Add Commands here:
+
+        // @formatter:off
+      new DriveSlowMode(drivetrain, true), 
+      new IntakeDeploy(intake, false), 
+      new IntakeRun(intake, INMode.INTAKE_STOP),
+      new FloorConveyorRun(fConv, FCMode.FCONVEYOR_STOP), 
+      new TowerConveyorRun(tConv, TCMode.TCONVEYOR_STOP),
+      new ShooterRun(shooter, Mode.SHOOTER_STOP),
+      new ParallelDeadlineGroup(
+          new WaitUntilCommand(climber::moveClimberDistanceIsFinished),
+          new ClimberMoveToHeight(climber, Height.EXTEND_L2_HEIGHT), 
+      new ClimberSetGatehook(climber, false)
+      )
+      // @formatter:on
 
     );
   }
