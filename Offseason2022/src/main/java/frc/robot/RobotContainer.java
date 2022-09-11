@@ -163,7 +163,7 @@ public class RobotContainer
     SmartDashboard.putData("Climber7ClimbToL4", new Climber7ClimbToL4(m_climber));
     SmartDashboard.putData("Climber8SettleToL4", new Climber8SettleToL4(m_climber));
     SmartDashboard.putData("ClimberCalibrate", new ClimberCalibrate(m_climber));
-    SmartDashboard.putData("ClimberFullClimb", new ClimberFullClimb(m_climber));
+    SmartDashboard.putData("ClimberFullClimb", new ClimberFullClimb(m_climber, m_operator, XboxController.Button.kY));
     SmartDashboard.putData("ClimberL2ToL3", new ClimberL2ToL3(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter));
     SmartDashboard.putData("ClimberL3ToL4", new ClimberL3ToL4(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter));
     SmartDashboard.putData("ClimberSetGatehook", new ClimberSetGatehook(m_climber, false));
@@ -224,7 +224,7 @@ public class RobotContainer
   {
     // Configure default commands for these subsystems
     m_drivetrain.setDefaultCommand(new DriveTeleop(m_drivetrain, m_driver));
-    m_climber.setDefaultCommand(new ClimberRun(m_climber));
+    m_climber.setDefaultCommand(new ClimberRun(m_climber, m_operator));
   }
 
   // Create a trigger object that monitors a joystick axis
@@ -335,8 +335,8 @@ public class RobotContainer
     operLeftBumper.whenPressed(new IntakingAction(m_intake, m_floorConveyor, m_towerConveyor), true);
     operLeftBumper.whenReleased(new IntakingStop(m_intake, m_floorConveyor, m_towerConveyor), true);
     operRightBumper.whenPressed(new ScoringPrime(m_shooter), true);
-    operBack.whenPressed(new ClimberFullClimb(m_climber), true);
-    operStart.whenPressed(new ClimberRun(m_climber), true);
+    operBack.whenPressed(new ClimberFullClimb(m_climber, m_operator, XboxController.Button.kY), true);
+    operStart.whenPressed(new ClimberRun(m_climber, m_operator), true);
 
     // Operator - POV buttons
     operUp.whenPressed(new Climber1Deploy(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_drivetrain), true);
