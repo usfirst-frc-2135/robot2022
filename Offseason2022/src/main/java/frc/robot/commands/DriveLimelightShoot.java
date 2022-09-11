@@ -34,9 +34,13 @@ public class DriveLimelightShoot extends SequentialCommandGroup
         // Add Commands here:
 
         // @formatter:off
-        new ParallelCommandGroup(new DriveLimelight(drivetrain, vision, false),
-            new SequentialCommandGroup(new ParallelDeadlineGroup(new WaitUntilCommand(drivetrain::driveWithLimelightIsFinished),
-                new ScoringPrime(shooter), new ScoringActionHighHub(120, shooter))))
+        new ParallelCommandGroup(
+            new DriveLimelight(drivetrain, vision, false),
+            new SequentialCommandGroup(
+                new ParallelDeadlineGroup(
+                    new WaitUntilCommand(drivetrain::driveWithLimelightIsFinished),
+                    new ScoringPrime(shooter)), 
+                new ScoringActionHighHub(120, shooter)))
         
         // @formatter:on
 

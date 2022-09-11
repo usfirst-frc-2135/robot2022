@@ -40,9 +40,8 @@ public class Climber1Deploy extends SequentialCommandGroup
       new ShooterRun(shooter, Mode.SHOOTER_STOP),
       new ParallelDeadlineGroup(
           new WaitUntilCommand(climber::moveClimberDistanceIsFinished),
-          new ClimberMoveToHeight(climber, Height.EXTEND_L2_HEIGHT), 
+          new ClimberMoveToHeight(climber, Height.EXTEND_L2_HEIGHT)), 
       new ClimberSetGatehook(climber, false)
-      )
       // @formatter:on
 
     );
