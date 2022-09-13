@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.Falcon500;
 import frc.robot.Constants.LEDConsts.LEDColor;
 import frc.robot.Constants.SHConsts;
-import frc.robot.Constants.SHConsts.Mode;
+import frc.robot.Constants.SHConsts.SHMode;
 import frc.robot.RobotContainer;
 import frc.robot.frc2135.PhoenixUtil;
 
@@ -38,10 +38,10 @@ public class Shooter extends SubsystemBase
   private static final int                SLOTINDEX                 = 0;   // Use first PID slot
 
   // Devices and simulation objects
-  private WPI_TalonFX                     m_motorSH11               = new WPI_TalonFX(SHConsts.kSH11CANID);
+  private final WPI_TalonFX               m_motorSH11               = new WPI_TalonFX(SHConsts.kSH11CANID);
 
-  private TalonFXSimCollection            m_motorSim                = new TalonFXSimCollection(m_motorSH11);
-  private FlywheelSim                     m_flywheelSim             =
+  private final TalonFXSimCollection      m_motorSim                = new TalonFXSimCollection(m_motorSH11);
+  private final FlywheelSim               m_flywheelSim             =
       new FlywheelSim(DCMotor.getFalcon500(1), SHConsts.kFlywheelGearRatio, 0.01);
   private LinearFilter                    m_flywheelFilter          = LinearFilter.singlePoleIIR(0.1, 0.02);
 
@@ -68,7 +68,7 @@ public class Shooter extends SubsystemBase
   private boolean                         m_atDesiredSpeed          = false; // Indicates flywheel RPM is close to target
   private boolean                         m_atDesiredSpeedPrevious;
 
-  private Mode                            m_curMode;                // Current shooter mode
+  private SHMode                          m_curMode;                // Current shooter mode
   private double                          m_flywheelTargetRPM;      // Requested flywheel RPM
   private double                          m_flywheelRPM;            // Current flywheel RPM
 
@@ -164,19 +164,23 @@ public class Shooter extends SubsystemBase
     SmartDashboard.putBoolean("SH_atDesiredSpeed", m_atDesiredSpeed);
     SmartDashboard.putNumber("SH_currentSH11", currentSH11);
 
+    LEDColor color;
+
     // Control CANdle LEDs based on shooter status
-    if (m_curMode != Mode.SHOOTER_STOP)
+    if (m_curMode != SHMode.SHOOTER_STOP)
     {
       if (!m_atDesiredSpeed)
       {
-        RobotContainer.getInstance( ).m_led.setNormalColor(LEDColor.LEDCOLOR_BLUE);
+        color = LEDColor.LEDCOLOR_BLUE;
         DataLogManager.log(getSubsystem( ) + ": m_flywheelRPM " + m_flywheelRPM);
       }
       else
-        RobotContainer.getInstance( ).m_led.setNormalColor(LEDColor.LEDCOLOR_GREEN);
+        color = LEDColor.LEDCOLOR_GREEN;
     }
     else
-      RobotContainer.getInstance( ).m_led.setNormalColor(LEDColor.LEDCOLOR_OFF);
+      color = LEDColor.LEDCOLOR_OFF;
+
+    RobotContainer.getInstance( ).m_led.setNormalColor(color);
   }
 
   @Override
@@ -235,7 +239,7 @@ public class Shooter extends SubsystemBase
   public void initialize( )
   {
     DataLogManager.log(getSubsystem( ) + ": subsystem initialized!");
-    setShooterMode(Mode.SHOOTER_STOP);
+    setShooterMode(SHMode.SHOOTER_STOP);
   }
 
   public void faultDump( )
@@ -244,7 +248,7 @@ public class Shooter extends SubsystemBase
       PhoenixUtil.getInstance( ).talonFXFaultDump(m_motorSH11, "SH11");
   }
 
-  public void setShooterMode(Mode mode)
+  public void setShooterMode(SHMode mode)
   {
     m_curMode = mode;
 
@@ -302,7 +306,7 @@ public class Shooter extends SubsystemBase
 
   public void setReverseInit( )
   {
-    setShooterMode(Mode.SHOOTER_STOP);
+    setShooterMode(SHMode.SHOOTER_STOP);
   }
 
   public void setReverseExecute( )
@@ -311,13 +315,13 @@ public class Shooter extends SubsystemBase
     {
       m_motorSH11.configPeakOutputReverse(-1.0);
       DataLogManager.log(getSubsystem( ) + ": reverse mode now available");
-      setShooterMode(Mode.SHOOTER_REVERSE);
+      setShooterMode(SHMode.SHOOTER_REVERSE);
     }
   }
 
   public void setReverseEnd( )
   {
     m_motorSH11.configPeakOutputForward(0.0);
-    setShooterMode(Mode.SHOOTER_STOP);
+    setShooterMode(SHMode.SHOOTER_STOP);
   }
 }

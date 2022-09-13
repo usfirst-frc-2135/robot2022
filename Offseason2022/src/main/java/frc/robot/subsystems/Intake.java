@@ -22,19 +22,19 @@ public class Intake extends SubsystemBase
 
   // Devices and simulation objects (intake was moved from CAN bus to PWM1)
   // private WPI_TalonFX m_motorIN6 = new WPI_TalonFX(INConsts.kIN6CANID);
-  private PWMTalonFX m_motorIN6     = new PWMTalonFX(INConsts.kINPWM1);
-  private Solenoid   m_arm          = new Solenoid(0, PneumaticsModuleType.CTREPCM, INConsts.kArmSolenoid);
+  private final PWMTalonFX m_motorIN6     = new PWMTalonFX(INConsts.kINPWM1);
+  private final Solenoid   m_arm          = new Solenoid(0, PneumaticsModuleType.CTREPCM, INConsts.kArmSolenoid);
 
-  // private SupplyCurrentLimitConfiguration m_supplyCurrentLimits = new
-  // SupplyCurrentLimitConfiguration(true, 45.0, 45.0, 0.001);
-  // private StatorCurrentLimitConfiguration m_statorCurrentLimits = new
-  // StatorCurrentLimitConfiguration(true, 80.0, 80.0, 0.001);
+  // @formatter:off
+  // private SupplyCurrentLimitConfiguration m_supplyCurrentLimits = new SupplyCurrentLimitConfiguration(true, 45.0, 45.0, 0.001);
+  // private StatorCurrentLimitConfiguration m_statorCurrentLimits = newStatorCurrentLimitConfiguration(true, 80.0, 80.0, 0.001);
+  // @formatter:on
 
   // Declare module variables
-  private double     m_acquireSpeed = INConsts.kINAcquireSpeed;
-  private double     m_expelSpeed   = INConsts.kINExpelSpeed;
+  private double           m_acquireSpeed = INConsts.kINAcquireSpeed;
+  private double           m_expelSpeed   = INConsts.kINExpelSpeed;
 
-  private boolean    m_validIN6     = false;
+  private boolean          m_validIN6     = false;
 
   /**
    *

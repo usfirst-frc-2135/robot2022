@@ -12,17 +12,21 @@ import frc.robot.subsystems.Climber;
 public class ClimberMoveToHeight extends CommandBase
 {
   private final Climber m_climber;
+  private int           m_state;
 
-  public ClimberMoveToHeight(Climber subsystem)
+  public ClimberMoveToHeight(Climber subsystem, int state)
   {
     m_climber = subsystem;
+    setName("ClimberMoveToHeight");
     addRequirements(m_climber);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize( )
-  {}
+  {
+    // m_climber.moveClimberDistanceInit(m_state);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override

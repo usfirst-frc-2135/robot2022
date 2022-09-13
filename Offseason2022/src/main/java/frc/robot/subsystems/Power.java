@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  */
 public class Power extends SubsystemBase
 {
-  private PowerDistribution m_powerDistribution = new PowerDistribution( );;
+  private final PowerDistribution m_powerDistribution = new PowerDistribution( );;
 
   /**
    *
