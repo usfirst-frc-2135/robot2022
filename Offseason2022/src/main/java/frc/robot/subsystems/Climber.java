@@ -58,7 +58,7 @@ public class Climber extends SubsystemBase
   private final TalonFXSimCollection      m_motorCL14Sim        = new TalonFXSimCollection(m_motorCL14);
   private final TalonFXSimCollection      m_motorCL15Sim        = new TalonFXSimCollection(m_motorCL15);
   private final ElevatorSim               m_climberCL14Sim      =
-      new ElevatorSim(DCMotor.getFalcon500(2), CLConsts.kClimberGearRatio, 1.0, 0.0254, 0.0, 1.0, null);
+      new ElevatorSim(DCMotor.getFalcon500(2), CLConsts.kGearRatio, 1.0, CLConsts.kDrumDiameterMeters / 2, 0.0, 1.0, null);
   // VecBuilder.fill(0.01)
 
   private SupplyCurrentLimitConfiguration m_supplyCurrentLimits = new SupplyCurrentLimitConfiguration(true,
@@ -225,7 +225,9 @@ public class Climber extends SubsystemBase
 
     // Finally, we set our simulated encoder's readings and simulated battery voltage
     m_motorCL14Sim.setIntegratedSensorRawPosition(metersToNativeUnits(m_climberCL14Sim.getPositionMeters( )));
+    m_motorCL14Sim.setIntegratedSensorVelocity(metersToNativeUnits(m_climberCL14Sim.getVelocityMetersPerSecond( )));
     m_motorCL15Sim.setIntegratedSensorRawPosition(metersToNativeUnits(m_climberCL14Sim.getPositionMeters( )));
+    m_motorCL15Sim.setIntegratedSensorVelocity(metersToNativeUnits(m_climberCL14Sim.getVelocityMetersPerSecond( )));
 
     // SimBattery estimates loaded battery voltages
     RoboRioSim.setVInVoltage(BatterySim.calculateDefaultBatteryLoadedVoltage(m_climberCL14Sim.getCurrentDrawAmps( )));

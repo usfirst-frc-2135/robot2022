@@ -205,12 +205,13 @@ public class Constants
     public static final double kClimberMaxHeight    = 36.0;   // Climber maximum allowable height
     public static final double kClimberMinHeight    = 0.0;    // Climber minimum allowable height
 
-    public static final double kClimberRolloutRatio = 0.432;  // inches per shaft rotation
-    public static final double kInchesPerCount      = kClimberRolloutRatio * (1.0 / (double) Falcon500.kEncoderCPR);
+    public static final double kGearRatio           = 10.0;   // Gear reduction
+    public static final double kDrumDiameterInches  = 1.375;  // Drum diameter in inches
+    public static final double kDrumDiameterMeters  = Units.inchesToMeters(kDrumDiameterInches); // Drum diameter-meters
+    public static final double kDrumCircum          = kDrumDiameterInches * Math.PI;             // Drum diameter in inches
+    public static final double kRolloutRatio        = kDrumCircum / kGearRatio; // inches per shaft rotation
+    public static final double kInchesPerCount      = kRolloutRatio / Falcon500.kEncoderCPR;
     public static final double kMetersPerCount      = Units.inchesToMeters(kInchesPerCount);
-
-    public static final double kClimberGearRatio    = 20.0;   // 1/rollout in meters
-    public static final double kClimberCPR          = Falcon500.kEncoderCPR / kClimberGearRatio;
 
     public static final double kClimbL2Time         = 0.5;
     public static final double kRotateExtendL3Time  = 1.5;
