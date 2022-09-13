@@ -26,7 +26,8 @@ public class Climber6ClimbToL3 extends SequentialCommandGroup
       new ClimberSetGatehook(climber, false),
       new ParallelDeadlineGroup(
           new WaitUntilCommand(climber::moveClimberDistanceIsFinished),
-          new ClimberMoveToHeight(climber, Height.STOW_HEIGHT)),
+          new ClimberMoveToHeight(climber, Height.STOW_HEIGHT)
+      ),
       new WaitCommand(1.5), 
       new ParallelDeadlineGroup(
           new WaitUntilCommand(climber::moveClimberDistanceIsFinished),
