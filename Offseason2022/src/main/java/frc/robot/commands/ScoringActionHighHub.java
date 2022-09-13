@@ -31,7 +31,8 @@ public class ScoringActionHighHub extends SequentialCommandGroup
         // @formatter:off
       new ParallelDeadlineGroup(
         new WaitUntilCommand(shooter::isAtDesiredSpeed), 
-        new ShooterRun(shooter, Mode.SHOOTER_UPPERHUB)),
+        new ShooterRun(shooter, Mode.SHOOTER_UPPERHUB)
+      ),
       new ParallelDeadlineGroup(
         new WaitCommand(waitTime),       
         new TowerConveyorRun(tConv, TCMode.TCONVEYOR_ACQUIRE),

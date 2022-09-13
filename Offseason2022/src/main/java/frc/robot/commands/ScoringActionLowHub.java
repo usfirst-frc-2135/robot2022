@@ -23,7 +23,7 @@ public class ScoringActionLowHub extends SequentialCommandGroup
 {
   public ScoringActionLowHub(double waitTime, Intake intake, FloorConveyor fConv, TowerConveyor tConv, Shooter shooter)
   {
-    setName("ScoringActionHighHub");
+    setName("ScoringActionLowHub");
 
     addCommands(
         // Add Commands here:
@@ -31,7 +31,8 @@ public class ScoringActionLowHub extends SequentialCommandGroup
         // @formatter:off
       new ParallelDeadlineGroup(
         new WaitUntilCommand(shooter::isAtDesiredSpeed), 
-        new ShooterRun(shooter, Mode.SHOOTER_UPPERHUB)),
+        new ShooterRun(shooter, Mode.SHOOTER_LOWERHUB)
+      ),
       new ParallelDeadlineGroup(
         new WaitCommand(waitTime),       
         new TowerConveyorRun(tConv, TCMode.TCONVEYOR_ACQUIRE),
