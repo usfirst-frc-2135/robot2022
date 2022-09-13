@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.FCConsts.FCMode;
 import frc.robot.Constants.INConsts.INMode;
 import frc.robot.Constants.LEDConsts.LEDColor;
-import frc.robot.Constants.SHConsts.Mode;
+import frc.robot.Constants.SHConsts.SHMode;
 import frc.robot.Constants.TCConsts.TCMode;
 import frc.robot.commands.Auto1Ball1OppRight;
 import frc.robot.commands.Auto1Ball2OppLeft;
@@ -152,9 +152,10 @@ public class RobotContainer
     SmartDashboard.putData("AutoShootLowHub", new AutoShootLowHub( ));
     SmartDashboard.putData("AutoStop", new AutoStop(m_drivetrain));
 
-    SmartDashboard.putData("Climber0Stow", new Climber0Stow(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter));
+    SmartDashboard.putData("Climber0Stow",
+        new Climber0Stow(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_drivetrain));
     SmartDashboard.putData("Climber1Deploy",
-        new Climber1Deploy(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter));
+        new Climber1Deploy(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_drivetrain));
     SmartDashboard.putData("Climber2ClimbToL2", new Climber2ClimbToL2(m_climber));
     SmartDashboard.putData("Climber3RotateToL3", new Climber3RotateToL3(m_climber));
     SmartDashboard.putData("Climber5RotateIntoL3", new Climber5RotateIntoL3(m_climber));
@@ -162,13 +163,14 @@ public class RobotContainer
     SmartDashboard.putData("Climber7ClimbToL4", new Climber7ClimbToL4(m_climber));
     SmartDashboard.putData("Climber8SettleToL4", new Climber8SettleToL4(m_climber));
     SmartDashboard.putData("ClimberCalibrate", new ClimberCalibrate(m_climber));
-    SmartDashboard.putData("ClimberFullClimb", new ClimberFullClimb(m_climber));
+    SmartDashboard.putData("ClimberFullClimb", new ClimberFullClimb(m_climber, m_operator, XboxController.Button.kY));
     SmartDashboard.putData("ClimberL2ToL3", new ClimberL2ToL3(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter));
     SmartDashboard.putData("ClimberL3ToL4", new ClimberL3ToL4(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter));
     SmartDashboard.putData("ClimberSetGatehook", new ClimberSetGatehook(m_climber, false));
     SmartDashboard.putData("ClimberTimerOverride", new ClimberTimerOverride(m_climber, m_operator, XboxController.Button.kY));
     SmartDashboard.putData("DriveLimelight", new DriveLimelight(m_drivetrain, m_vision, false));
-    SmartDashboard.putData("DriveLimelightStop", new DriveLimelightStop(m_drivetrain));
+    SmartDashboard.putData("DriveLimelightStop",
+        new DriveLimelightStop(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
     SmartDashboard.putData("DriveLimelightShoot", new DriveLimelightShoot(m_drivetrain));
     SmartDashboard.putData("DriveMotorTest", new DriveMotorTest(m_drivetrain, true));
     SmartDashboard.putData("DriveMotorTest", new DriveQuickturn(m_drivetrain));
@@ -197,14 +199,14 @@ public class RobotContainer
 
     SmartDashboard.putData("ScoringActionHighHub", new ScoringActionHighHub(0, m_shooter));
     SmartDashboard.putData("ScoringActionLowHub", new ScoringActionLowHub(0, m_shooter));
-    SmartDashboard.putData("ScoringPrime", new ScoringPrime(m_shooter));
-    SmartDashboard.putData("ScoringStop", new ScoringStop(m_shooter));
+    SmartDashboard.putData("ScoringPrime", new ScoringPrime(m_shooter, m_vision));
+    SmartDashboard.putData("ScoringStop", new ScoringStop(m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
 
-    SmartDashboard.putData("Shooter-OFF", new ShooterRun(m_shooter, Mode.SHOOTER_STOP));
-    SmartDashboard.putData("Shooter-PRIME", new ShooterRun(m_shooter, Mode.SHOOTER_PRIME));
-    SmartDashboard.putData("Shooter-LOW", new ShooterRun(m_shooter, Mode.SHOOTER_LOWERHUB));
-    SmartDashboard.putData("Shooter-HIGH", new ShooterRun(m_shooter, Mode.SHOOTER_UPPERHUB));
-    SmartDashboard.putData("Shooter-REV", new ShooterRun(m_shooter, Mode.SHOOTER_REVERSE));
+    SmartDashboard.putData("Shooter-OFF", new ShooterRun(m_shooter, SHMode.SHOOTER_STOP));
+    SmartDashboard.putData("Shooter-PRIME", new ShooterRun(m_shooter, SHMode.SHOOTER_PRIME));
+    SmartDashboard.putData("Shooter-LOW", new ShooterRun(m_shooter, SHMode.SHOOTER_LOWERHUB));
+    SmartDashboard.putData("Shooter-HIGH", new ShooterRun(m_shooter, SHMode.SHOOTER_UPPERHUB));
+    SmartDashboard.putData("Shooter-REV", new ShooterRun(m_shooter, SHMode.SHOOTER_REVERSE));
     SmartDashboard.putData("ShooterReverse", new ShooterReverse(m_shooter));
 
     SmartDashboard.putData("SimulateLimelight", new SimulateLimelight( ));
@@ -222,7 +224,7 @@ public class RobotContainer
   {
     // Configure default commands for these subsystems
     m_drivetrain.setDefaultCommand(new DriveTeleop(m_drivetrain, m_driver));
-    m_climber.setDefaultCommand(new ClimberRun(m_climber));
+    m_climber.setDefaultCommand(new ClimberRun(m_climber, m_operator));
   }
 
   // Create a trigger object that monitors a joystick axis
@@ -287,7 +289,7 @@ public class RobotContainer
     driverLeftBumper.whenPressed(new IntakingAction(m_intake, m_floorConveyor, m_towerConveyor), true);
     driverLeftBumper.whenReleased(new IntakingStop(m_intake, m_floorConveyor, m_towerConveyor), true);
     driverRightBumper.whenPressed(new ScoringActionLowHub(10.0, m_shooter), true);
-    driverRightBumper.whenReleased(new ScoringStop(m_shooter), true);
+    // driverRightBumper.whenReleased(new ScoringStop(m_shooter), true);
     driverBack.whenPressed(new Dummy(XboxController.Button.kBack.value), true);
     driverStart.whenPressed(new VisionOn(m_vision, true), true);
     driverStart.whenReleased(new VisionOn(m_vision, false), true);
@@ -300,8 +302,9 @@ public class RobotContainer
 
     // Driver - Triggers
     driverLeftTrigger.whenActive(new DriveLimelightShoot(m_drivetrain));
-    driverRightTrigger.whenActive(new DriveLimelightStop(m_drivetrain));
-
+    driverRightTrigger
+        .whenActive(new DriveLimelightStop(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
+        
     ///////////////////////////////////////////////////////
     // Operator Controller Assignments
     final JoystickButton operA = new JoystickButton(m_operator, XboxController.Button.kA.value);
@@ -327,20 +330,20 @@ public class RobotContainer
     operA.whenPressed(new IntakeDeploy(m_intake, false), true);
     operB.whenPressed(new ExhaustingAction(m_intake, m_floorConveyor, m_towerConveyor), true);
     operB.whenReleased(new ExhaustingStop(m_intake, m_floorConveyor, m_towerConveyor), true);
-    operX.whenPressed(new ScoringStop(m_shooter), true);
+    operX.whenPressed(new ScoringStop(m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision), true);
     operY.whenPressed(new ClimberTimerOverride(m_climber, m_operator, XboxController.Button.kY), true);
 
     // Operator - Bumpers, start, back
     operLeftBumper.whenPressed(new IntakingAction(m_intake, m_floorConveyor, m_towerConveyor), true);
     operLeftBumper.whenReleased(new IntakingStop(m_intake, m_floorConveyor, m_towerConveyor), true);
-    operRightBumper.whenPressed(new ScoringPrime(m_shooter), true);
+    operRightBumper.whenPressed(new ScoringPrime(m_shooter, m_vision), true);
     operBack.whenPressed(new ClimberFullClimb(m_climber), true);
     operStart.whenPressed(new ClimberRun(m_climber), true);
 
     // Operator - POV buttons
-    operUp.whenPressed(new Climber1Deploy(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter), true);
+    operUp.whenPressed(new Climber1Deploy(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_drivetrain), true);
     operRight.whenPressed(new ClimberL3ToL4(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter), true);
-    operDown.whenPressed(new Climber0Stow(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter), true);
+    operDown.whenPressed(new Climber0Stow(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_drivetrain), true);
     operLeft.whenPressed(new ClimberL2ToL3(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter), true);
 
     // Operator Left/Right Trigger
