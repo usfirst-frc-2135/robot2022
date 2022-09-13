@@ -41,11 +41,13 @@ public class Climber0Stow extends SequentialCommandGroup
       new ShooterRun(shooter, Mode.SHOOTER_STOP),
       new ParallelDeadlineGroup(
           new WaitUntilCommand(climber::moveClimberDistanceIsFinished),
-          new ClimberMoveToHeight(climber, Height.STOW_HEIGHT)),
+          new ClimberMoveToHeight(climber, Height.STOW_HEIGHT)
+      ),
       new WaitCommand(1.5), 
       new ParallelDeadlineGroup(
           new WaitUntilCommand(climber::moveClimberDistanceIsFinished),
-          new ClimberMoveToHeight(climber, Height.GATEHOOK_REST_HEIGHT)),
+          new ClimberMoveToHeight(climber, Height.GATEHOOK_REST_HEIGHT)
+      ),
       new ClimberSetGatehook(climber, false)
     // @formatter:on
     );

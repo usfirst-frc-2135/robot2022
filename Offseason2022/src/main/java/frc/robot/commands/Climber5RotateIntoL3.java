@@ -24,7 +24,8 @@ public class Climber5RotateIntoL3 extends SequentialCommandGroup
         // @formatter:off
       new ParallelDeadlineGroup(
           new WaitUntilCommand(climber::moveClimberDistanceIsFinished),
-          new ClimberMoveToHeight(climber, Height.NOCHANGE_HEIGHT)), 
+          new ClimberMoveToHeight(climber, Height.NOCHANGE_HEIGHT)
+      ), 
       new ClimberSetGatehook(climber, false)
     
       // @formatter:on

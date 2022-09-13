@@ -40,28 +40,34 @@ public class ClimberFullClimb extends SequentialCommandGroup
         new Climber2ClimbToL2(climber),
         new ParallelRaceGroup(
             new WaitCommand(m_climbL2Timer * 1.0), 
-            new ClimberTimerOverride(climber, gamePad, button)),
+            new ClimberTimerOverride(climber, gamePad, button)
+        ),
         new Climber3RotateToL3(climber),
         new ParallelRaceGroup(
             new WaitCommand(m_rotateExtendL3Timer * 1.0), 
-            new ClimberTimerOverride(climber, gamePad, button)),
+            new ClimberTimerOverride(climber, gamePad, button)
+        ),
         new Climber5RotateIntoL3(climber),
         new ParallelRaceGroup(
             new WaitCommand(m_rotateRetractL3Timer * 1.0), 
-            new ClimberTimerOverride(climber, gamePad, button)),
+            new ClimberTimerOverride(climber, gamePad, button)
+        ),
         new Climber6ClimbToL3(climber),
         new ParallelRaceGroup(
             new WaitCommand(m_climbL3Timer * 1.0), 
-            new ClimberTimerOverride(climber, gamePad, button)),
+            new ClimberTimerOverride(climber, gamePad, button)
+        ),
         // next rung climb!
         new Climber3RotateToL3(climber),
         new ParallelRaceGroup(
             new WaitCommand(m_rotateExtendL3Timer * 1.0), 
-            new ClimberTimerOverride(climber, gamePad, button)),
+            new ClimberTimerOverride(climber, gamePad, button)
+        ),
         new Climber5RotateIntoL3(climber),
         new ParallelRaceGroup(
             new WaitCommand(m_rotateRetractL4Timer * 1.), 
-            new ClimberTimerOverride(climber, gamePad, button)),
+            new ClimberTimerOverride(climber, gamePad, button)
+        ),
         new Climber7ClimbToL4(climber)
       // @formatter:on 
 
