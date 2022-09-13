@@ -198,7 +198,7 @@ public class RobotContainer
 
     SmartDashboard.putData("ScoringActionHighHub", new ScoringActionHighHub(0, m_shooter));
     SmartDashboard.putData("ScoringActionLowHub", new ScoringActionLowHub(0, m_shooter));
-    SmartDashboard.putData("ScoringPrime", new ScoringPrime(m_shooter));
+    SmartDashboard.putData("ScoringPrime", new ScoringPrime(m_shooter, m_vision));
     SmartDashboard.putData("ScoringStop", new ScoringStop(m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
 
     SmartDashboard.putData("Shooter-OFF", new ShooterRun(m_shooter, SHMode.SHOOTER_STOP));
@@ -335,7 +335,7 @@ public class RobotContainer
     // Operator - Bumpers, start, back
     operLeftBumper.whenPressed(new IntakingAction(m_intake, m_floorConveyor, m_towerConveyor), true);
     operLeftBumper.whenReleased(new IntakingStop(m_intake, m_floorConveyor, m_towerConveyor), true);
-    operRightBumper.whenPressed(new ScoringPrime(m_shooter), true);
+    operRightBumper.whenPressed(new ScoringPrime(m_shooter, m_vision), true);
     operBack.whenPressed(new ClimberFullClimb(m_climber), true);
     operStart.whenPressed(new ClimberRun(m_climber), true);
 
