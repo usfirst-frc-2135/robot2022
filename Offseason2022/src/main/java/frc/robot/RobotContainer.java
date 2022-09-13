@@ -144,7 +144,7 @@ public class RobotContainer
     SmartDashboard.putData("Auto3BallRight", new Auto3BallRight( ));
     SmartDashboard.putData("AutoDrive", new AutoDrive( ));
     SmartDashboard.putData("AutoDriveLimelightShoot", new AutoDriveLimelightShoot( ));
-    SmartDashboard.putData("AutoDrivePath", new AutoDrivePath( ));
+    SmartDashboard.putData("AutoDrivePath", new AutoDrivePath(m_drivetrain, "simCurvePath", true));
     SmartDashboard.putData("AutoDriveShoot", new AutoDriveShoot( ));
     SmartDashboard.putData("AutoPathSequence", new AutoPathSequence( ));
     SmartDashboard.putData("AutoShoot", new AutoShoot( ));
@@ -270,12 +270,14 @@ public class RobotContainer
     final POVButton driverRight = new POVButton(m_driver, 90);
     final POVButton driverDown = new POVButton(m_driver, 180);
     final POVButton driverLeft = new POVButton(m_driver, 270);
+    // @formatter:off
     // Xbox enums { leftX = 0, leftY = 1, leftTrigger = 2, rightTrigger = 3, rightX = 4, rightY = 5}
     final AxisTrigger driverLeftTrigger = new AxisTrigger(m_driver, XboxController.Axis.kLeftTrigger);
     final AxisTrigger driverRightTrigger = new AxisTrigger(m_driver, XboxController.Axis.kRightTrigger);
     // Xbox on MacOS { leftX = 0, leftY = 1, rightX = 2, rightY = 3, leftTrigger = 5, rightTrigger = 4}
     // final AxisTrigger driverLeftTrigger = new AxisTrigger(m_driver, XboxController.Axis.kRightX);
     // final AxisTrigger driverRightTrigger = new AxisTrigger(m_driver, XboxController.Axis.kRightY);
+    // @formatter:on
 
     // Driver - A, B, X, Y
     driverA.whileHeld(new DriveQuickturn(m_drivetrain), true);
