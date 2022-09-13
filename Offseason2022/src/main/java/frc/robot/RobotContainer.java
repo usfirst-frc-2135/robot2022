@@ -218,7 +218,7 @@ public class RobotContainer
     SmartDashboard.putData("Tconveyor-EXPEL", new TowerConveyorRun(m_towerConveyor, TCMode.TCONVEYOR_EXPEL));
     SmartDashboard.putData("Tconveyor-EXPELFAST", new TowerConveyorRun(m_towerConveyor, TCMode.TCONVEYOR_EXPEL_FAST));
 
-    SmartDashboard.putData("Dummy", new Dummy(2135)); // TODO: Remove me when all commands/buttons are completed
+    SmartDashboard.putData("Dummy", new Dummy(2135));
   }
 
   private void initDefaultCommands( )

@@ -20,12 +20,9 @@ import frc.robot.subsystems.Vision;
  */
 public class DriveLimelightShoot extends SequentialCommandGroup
 {
-  private final Drivetrain m_drivetrain;
-
   public DriveLimelightShoot(Drivetrain drivetrain, Intake intake, FloorConveyor fConv, TowerConveyor tConv, Shooter shooter,
       Vision vision)
   {
-    m_drivetrain = drivetrain;
     setName("DriveLimelightShoot");
 
     DataLogManager.log(getSubsystem( ) + ": DriveLimelightShoot");
@@ -39,11 +36,12 @@ public class DriveLimelightShoot extends SequentialCommandGroup
             new SequentialCommandGroup(
                 new ParallelDeadlineGroup(
                     new WaitUntilCommand(drivetrain::driveWithLimelightIsFinished),
-                    new ScoringPrime(shooter, vision)), 
-                new ScoringActionHighHub(120, shooter)))
-        
+                    new ScoringPrime(shooter, vision)
+                ), 
+                new ScoringActionHighHub(120, shooter)
+            )
+        )
         // @formatter:on
-
     );
   }
 

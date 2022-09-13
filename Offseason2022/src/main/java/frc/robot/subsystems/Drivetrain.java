@@ -52,9 +52,6 @@ import frc.robot.frc2135.PhoenixUtil;
 /**
  *
  */
-/**
- *
- */
 public class Drivetrain extends SubsystemBase
 {
   // Constants
@@ -662,7 +659,6 @@ public class Drivetrain extends SubsystemBase
   ///////////////////////////////////////////////////////////////////////////////
   //
   // Teleop driving mode
-  // TODO (remove this later): previously named moveWithJoysticks
   //
   public void driveWithJoysticksInit( )
   {
@@ -718,7 +714,6 @@ public class Drivetrain extends SubsystemBase
   ///////////////////////////////////////////////////////////////////////////////
   //
   // Limelight driving mode
-  // TODO (remove this later): previously named moveWithLimelight
   //
   public void driveWithLimelightInit(boolean m_endAtTarget)
   {
@@ -877,7 +872,6 @@ public class Drivetrain extends SubsystemBase
   ///////////////////////////////////////////////////////////////////////////////
   //
   // Autonomous mode - Ramsete path follower
-  // TODO (remove this later): previously called RamseteFollower
   //
   public void driveWithPathFollowerInit(Trajectory trajectory, boolean resetOdometry)
   {

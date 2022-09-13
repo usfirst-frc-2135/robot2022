@@ -15,9 +15,9 @@ public class DriveTeleop extends CommandBase
   private final Drivetrain     m_drivetrain;
   private final XboxController m_driverPad;
 
-  public DriveTeleop(Drivetrain subsystem, XboxController driverPad)
+  public DriveTeleop(Drivetrain drivetrain, XboxController driverPad)
   {
-    m_drivetrain = subsystem;
+    m_drivetrain = drivetrain;
     m_driverPad = driverPad;
     setName("DriveTeleop");
     addRequirements(m_drivetrain);

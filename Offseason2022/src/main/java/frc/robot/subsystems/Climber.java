@@ -13,7 +13,6 @@ import com.ctre.phoenix.motorcontrol.TalonFXSimCollection;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 
-import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -48,17 +47,19 @@ public class Climber extends SubsystemBase
   private static final int                SLOTINDEX             = 0;   // Use first PID slot
 
   // Devices and simulation objects
-  private WPI_TalonFX                     m_motorCL14           = new WPI_TalonFX(CLConsts.kCL14LeftCANID);
-  private WPI_TalonFX                     m_motorCL15           = new WPI_TalonFX(CLConsts.kCL15RightCANID);
-  private DigitalInput                    m_climberDownLeft     = new DigitalInput(CLConsts.kCLLeftLimitDIO);
-  private DigitalInput                    m_climberDownRight    = new DigitalInput(CLConsts.kCLRightLimitDIO);
-  private Solenoid                        m_gateHook            =
+  private final WPI_TalonFX               m_motorCL14           = new WPI_TalonFX(CLConsts.kCL14LeftCANID);
+  private final WPI_TalonFX               m_motorCL15           = new WPI_TalonFX(CLConsts.kCL15RightCANID);
+  private final DigitalInput              m_climberDownLeft     = new DigitalInput(CLConsts.kCLLeftLimitDIO);
+  private final DigitalInput              m_climberDownRight    = new DigitalInput(CLConsts.kCLRightLimitDIO);
+  private final Solenoid                  m_gateHook            =
       new Solenoid(0, PneumaticsModuleType.CTREPCM, CLConsts.kGateHookSolenod);
-  private CANCoder                        m_gateHookAngle       = new CANCoder(CLConsts.kCLCancoderID);
+  private final CANCoder                  m_gateHookAngle       = new CANCoder(CLConsts.kCLCancoderID);
 
-  private TalonFXSimCollection            m_motorCL14Sim        = new TalonFXSimCollection(m_motorCL14);
-  private ElevatorSim                     m_elevatorCL14Sim     =
-      new ElevatorSim(DCMotor.getFalcon500(1), CLConsts.kClimberGearRatio, 1.0, 0.0175, 0.0, 1.0, VecBuilder.fill(0.01));
+  private final TalonFXSimCollection      m_motorCL14Sim        = new TalonFXSimCollection(m_motorCL14);
+  private final TalonFXSimCollection      m_motorCL15Sim        = new TalonFXSimCollection(m_motorCL15);
+  private final ElevatorSim               m_climberCL14Sim      =
+      new ElevatorSim(DCMotor.getFalcon500(2), CLConsts.kClimberGearRatio, 1.0, 0.0254, 0.0, 1.0, null);
+  // VecBuilder.fill(0.01)
 
   private SupplyCurrentLimitConfiguration m_supplyCurrentLimits = new SupplyCurrentLimitConfiguration(true,
       Falcon500.kSupplyCurrentLimit, Falcon500.kSupplyTriggerCurrent, Falcon500.kSupplyTriggerTime);
@@ -96,10 +97,10 @@ public class Climber extends SubsystemBase
   private CLMode                          state                 = CLMode.CLIMBER_INIT;
   private boolean                         m_calibrated          = false;  // Indicates whether the climber has been calibrated
   private double                          m_targetInches        = 0.0;    // Target height in inches requested
-  private double                          m_curInches           = 0.0;    // Current elevator height in inches
+  private double                          m_curInches           = 0.0;    // Current climber height in inches
 
-  private Timer                           m_safetyTimer; // Safety timer for use in elevator
-  private double                          m_safetyTimeout; // Seconds that the timer ran before stopping
+  private Timer                           m_safetyTimer         = new Timer( ); // Safety timer for use in climber
+  private double                          m_safetyTimeout;                // Seconds that the timer ran before stopping
 
   /**
    *
@@ -111,7 +112,7 @@ public class Climber extends SubsystemBase
     setSubsystem("Climber");
     addChild("GateHook", m_gateHook);
     addChild("DownLimitLeft", m_climberDownLeft);
-    addChild("DownLimitLeft", m_climberDownRight);
+    addChild("DownLimitRight", m_climberDownRight);
 
     // Validate Talon SRX controllers, initialize and display firmware versions
     m_validCL14 = PhoenixUtil.getInstance( ).talonFXInitialize(m_motorCL14, "CL14");
@@ -216,20 +217,22 @@ public class Climber extends SubsystemBase
 
     // Set input flywheel voltage from the motor setting
     m_motorCL14Sim.setBusVoltage(RobotController.getInputVoltage( ));
-    m_elevatorCL14Sim.setInput(m_motorCL14Sim.getMotorOutputLeadVoltage( ));
+    m_motorCL15Sim.setBusVoltage(RobotController.getInputVoltage( ));
+    m_climberCL14Sim.setInput(m_motorCL14Sim.getMotorOutputLeadVoltage( ));
 
     // update for 20 msec loop
-    m_elevatorCL14Sim.update(0.020);
+    m_climberCL14Sim.update(0.020);
 
     // Finally, we set our simulated encoder's readings and simulated battery voltage
-    m_motorCL14Sim.setIntegratedSensorVelocity(elevatorRPMToNative(m_elevatorCL14Sim.getVelocityMetersPerSecond( )));
+    m_motorCL14Sim.setIntegratedSensorRawPosition(metersToNativeUnits(m_climberCL14Sim.getPositionMeters( )));
+    m_motorCL15Sim.setIntegratedSensorRawPosition(metersToNativeUnits(m_climberCL14Sim.getPositionMeters( )));
 
     // SimBattery estimates loaded battery voltages
-    RoboRioSim.setVInVoltage(BatterySim.calculateDefaultBatteryLoadedVoltage(m_elevatorCL14Sim.getCurrentDrawAmps( )));
+    RoboRioSim.setVInVoltage(BatterySim.calculateDefaultBatteryLoadedVoltage(m_climberCL14Sim.getCurrentDrawAmps( )));
   }
 
-  // Put methods for controlling this subsystem
-  // here. Call these from Commands.
+  // Put methods for controlling this subsystem here. Call these from Commands.
+
   public void initialize( )
   {
     double curCounts = 0.0;
@@ -254,19 +257,24 @@ public class Climber extends SubsystemBase
     PhoenixUtil.getInstance( ).talonFXFaultDump(m_motorCL15, "CL15");
   }
 
-  private static int elevatorRPMToNative(double rpm)
+  private int inchesToCounts(double inches)
   {
-    return (int) ((rpm * CLConsts.kClimberCPR) / (60.0 * 10.0)); // CTRE native units are (counts per 100ms)
-  }
-
-  private double inchesToCounts(double inches)
-  {
-    return inches / Constants.CLConsts.kInchesPerCount;
+    return (int) (inches / Constants.CLConsts.kInchesPerCount);
   }
 
   private double countsToInches(int counts)
   {
     return counts * Constants.CLConsts.kInchesPerCount;
+  }
+
+  private int metersToNativeUnits(double meters)
+  {
+    return (int) (meters / Constants.CLConsts.kMetersPerCount);
+  }
+
+  private double nativeUnitsToMeters(int counts)
+  {
+    return counts * Constants.CLConsts.kMetersPerCount;
   }
 
   private void climberTalonInitialize(WPI_TalonFX motor, boolean inverted)
@@ -443,24 +451,24 @@ public class Climber extends SubsystemBase
 
     switch (state)
     {
-      case NOCHANGE_HEIGHT : // Do not change from current level!
+      case HEIGHT_NOCHANGE : // Do not change from current level!
         m_targetInches = m_curInches;
         if (m_targetInches < 0.25)
           m_targetInches = 0.25;
         break;
-      case STOW_HEIGHT :
+      case HEIGHT_STOW :
         m_targetInches = SmartDashboard.getNumber("CL_stowHeight", m_stowHeight);
         break;
-      case EXTEND_L2_HEIGHT :
+      case HEIGHT_EXTEND_L2 :
         m_targetInches = SmartDashboard.getNumber("CL_extendL2", m_extendL2);
         break;
-      case ROTATE_L3_HEIGHT :
+      case HEIGHT_ROTATE_L3 :
         m_targetInches = SmartDashboard.getNumber("CL_rotateL3", m_rotateL3);
         break;
-      case GATEHOOK_REST_HEIGHT :
+      case HEIGHT_GATEHOOK_REST :
         m_targetInches = SmartDashboard.getNumber("CL_gatehookRestHeight", m_gatehookRestHeight);
         break;
-      case RAISE_L4_HEIGHT :
+      case HEIGHT_RAISE_L4 :
         m_targetInches = SmartDashboard.getNumber("CL_raiseL4", m_raiseL4);
         break;
       default :
