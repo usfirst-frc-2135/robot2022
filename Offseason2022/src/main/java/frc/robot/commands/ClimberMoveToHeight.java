@@ -27,7 +27,7 @@ public class ClimberMoveToHeight extends CommandBase
   @Override
   public void initialize( )
   {
-    // m_climber.moveClimberDistanceInit(m_state);
+    m_climber.moveClimberDistanceInit(m_state);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
