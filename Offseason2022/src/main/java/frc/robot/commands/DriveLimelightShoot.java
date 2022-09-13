@@ -38,7 +38,7 @@ public class DriveLimelightShoot extends SequentialCommandGroup
                     new WaitUntilCommand(drivetrain::driveWithLimelightIsFinished),
                     new ScoringPrime(shooter, vision)
                 ), 
-                new ScoringActionHighHub(120, shooter)
+                new ScoringActionUpperHub(intake, fConv, tConv, shooter, 120.0)
             )
         )
         // @formatter:on

@@ -64,8 +64,8 @@ import frc.robot.commands.IntakingAction;
 import frc.robot.commands.IntakingStop;
 import frc.robot.commands.LEDSet;
 import frc.robot.commands.RobotInitialize;
-import frc.robot.commands.ScoringActionHighHub;
-import frc.robot.commands.ScoringActionLowHub;
+import frc.robot.commands.ScoringActionUpperHub;
+import frc.robot.commands.ScoringActionLowerHub;
 import frc.robot.commands.ScoringPrime;
 import frc.robot.commands.ScoringStop;
 import frc.robot.commands.ShooterReverse;
@@ -198,8 +198,10 @@ public class RobotContainer
     SmartDashboard.putData("LEDSet", new LEDSet(m_led, LEDColor.LEDCOLOR_OFF));
     SmartDashboard.putData("RobotInitialize", new RobotInitialize( ));
 
-    SmartDashboard.putData("ScoringActionHighHub", new ScoringActionHighHub(0, m_shooter));
-    SmartDashboard.putData("ScoringActionLowHub", new ScoringActionLowHub(0, m_shooter));
+    SmartDashboard.putData("ScoringActionUpperHub",
+        new ScoringActionUpperHub(m_intake, m_floorConveyor, m_towerConveyor, m_shooter, 2.0));
+    SmartDashboard.putData("ScoringActionLowerHub",
+        new ScoringActionLowerHub(m_intake, m_floorConveyor, m_towerConveyor, m_shooter, 2.0));
     SmartDashboard.putData("ScoringPrime", new ScoringPrime(m_shooter, m_vision));
     SmartDashboard.putData("ScoringStop", new ScoringStop(m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
 
@@ -289,7 +291,7 @@ public class RobotContainer
     // Driver - Bumpers, start, back
     driverLeftBumper.whenPressed(new IntakingAction(m_intake, m_floorConveyor, m_towerConveyor), true);
     driverLeftBumper.whenReleased(new IntakingStop(m_intake, m_floorConveyor, m_towerConveyor), true);
-    driverRightBumper.whenPressed(new ScoringActionLowHub(10.0, m_shooter), true);
+    driverRightBumper.whenPressed(new ScoringActionLowerHub(m_intake, m_floorConveyor, m_towerConveyor, m_shooter, 10.0), true);
     // driverRightBumper.whenReleased(new ScoringStop(m_shooter), true);
     driverBack.whenPressed(new Dummy(XboxController.Button.kBack.value), true);
     driverStart.whenPressed(new VisionOn(m_vision, true), true);
