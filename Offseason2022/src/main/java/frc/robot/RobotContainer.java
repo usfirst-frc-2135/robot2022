@@ -171,7 +171,8 @@ public class RobotContainer
     SmartDashboard.putData("DriveLimelight", new DriveLimelight(m_drivetrain, m_vision, false));
     SmartDashboard.putData("DriveLimelightStop",
         new DriveLimelightStop(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
-    SmartDashboard.putData("DriveLimelightShoot", new DriveLimelightShoot(m_drivetrain));
+    SmartDashboard.putData("DriveLimelightShoot",
+        new DriveLimelightShoot(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
     SmartDashboard.putData("DriveMotorTest", new DriveMotorTest(m_drivetrain, true));
     SmartDashboard.putData("DriveMotorTest", new DriveQuickturn(m_drivetrain));
     SmartDashboard.putData("DriveResetSensors", new DriveResetSensors(m_drivetrain));
@@ -301,10 +302,11 @@ public class RobotContainer
     driverLeft.whenPressed(new Dummy(270), true);
 
     // Driver - Triggers
-    driverLeftTrigger.whenActive(new DriveLimelightShoot(m_drivetrain));
+    driverLeftTrigger
+        .whenActive(new DriveLimelightShoot(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
     driverRightTrigger
         .whenActive(new DriveLimelightStop(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
-        
+
     ///////////////////////////////////////////////////////
     // Operator Controller Assignments
     final JoystickButton operA = new JoystickButton(m_operator, XboxController.Button.kA.value);
@@ -337,8 +339,8 @@ public class RobotContainer
     operLeftBumper.whenPressed(new IntakingAction(m_intake, m_floorConveyor, m_towerConveyor), true);
     operLeftBumper.whenReleased(new IntakingStop(m_intake, m_floorConveyor, m_towerConveyor), true);
     operRightBumper.whenPressed(new ScoringPrime(m_shooter, m_vision), true);
-    operBack.whenPressed(new ClimberFullClimb(m_climber), true);
-    operStart.whenPressed(new ClimberRun(m_climber), true);
+    operBack.whenPressed(new ClimberFullClimb(m_climber, m_operator, XboxController.Button.kY), true);
+    operStart.whenPressed(new ClimberRun(m_climber, m_operator), true);
 
     // Operator - POV buttons
     operUp.whenPressed(new Climber1Deploy(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_drivetrain), true);
