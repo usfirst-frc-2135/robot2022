@@ -26,7 +26,8 @@ public class Climber8SettleToL4 extends SequentialCommandGroup
         new ParallelDeadlineGroup(
             new WaitUntilCommand(climber::moveClimberDistanceIsFinished),
             new ClimberMoveToHeight(climber, Height.STOW_HEIGHT), 
-            new ClimberSetGatehook(climber, false)),
+            new ClimberSetGatehook(climber, false)
+        ),
         new WaitCommand(0.5), 
         new ParallelDeadlineGroup(
             new WaitUntilCommand(climber::moveClimberDistanceIsFinished),
