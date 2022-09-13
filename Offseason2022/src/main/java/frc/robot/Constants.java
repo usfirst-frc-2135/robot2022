@@ -166,7 +166,7 @@ public class Constants
     public static final double kReverseRPMThreshold     = 20.0;      // RPM threshold for allowing reverse of motor
     public static final double kFlywheelReverseRPM      = -1000.0;   // RPM for reversing out game pieces
 
-    public enum Mode
+    public enum SHMode
     {
       SHOOTER_REVERSE,    // Shooter runs in reverse direction to handle jams
       SHOOTER_STOP,       // Shooter is stopped
