@@ -12,25 +12,27 @@ import frc.robot.subsystems.FloorConveyor;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.TowerConveyor;
+import frc.robot.subsystems.Vision;
 
 /**
  *
  */
 public class ScoringStop extends SequentialCommandGroup
 {
-  public ScoringStop(Intake intake, FloorConveyor fConv, TowerConveyor tConv, Shooter shooter)
+  public ScoringStop(Intake intake, FloorConveyor fConv, TowerConveyor tConv, Shooter shooter, Vision vision)
   {
     setName("ScoringStop");
 
     addCommands(
-    //@formatter:off
         // Add Commands here:
-        new VisionOn(false), 
+        //@formatter:off
+
+        new VisionOn(vision, false), 
         new IntakeRun(intake,INMode.INTAKE_STOP), 
         new FloorConveyorRun(fConv, FCMode.FCONVEYOR_STOP),
         new TowerConveyorRun(tConv, TCMode.TCONVEYOR_STOP), 
         new ShooterRun(shooter, SHMode.SHOOTER_STOP));
-    //@formatter:on
+       //@formatter:on
 
   }
 
