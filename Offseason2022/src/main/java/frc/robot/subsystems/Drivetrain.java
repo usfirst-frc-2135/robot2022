@@ -336,11 +336,11 @@ public class Drivetrain extends SubsystemBase
 
     motor.set(ControlMode.PercentOutput, 0.0);
     PhoenixUtil.getInstance( ).checkTalonError(motor, "set");
-    motor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, PIDINDEX, CANTIMEOUT);
+    motor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
     PhoenixUtil.getInstance( ).checkTalonError(motor, "configSelectedFeedbackSensor");
     motor.setSensorPhase(false);
     PhoenixUtil.getInstance( ).checkTalonError(motor, "setSensorPhase");
-    motor.setSelectedSensorPosition(0, PIDINDEX, CANTIMEOUT);
+    motor.setSelectedSensorPosition(0.0);
     PhoenixUtil.getInstance( ).checkTalonError(motor, "setSelectedSensorPosition");
 
     motor.configOpenloopRamp(m_openLoopRamp, CANTIMEOUT);
@@ -445,9 +445,9 @@ public class Drivetrain extends SubsystemBase
   public void resetEncoders( )
   {
     if (m_validL1)
-      m_driveL1.setSelectedSensorPosition(0);
+      m_driveL1.setSelectedSensorPosition(0.0);
     if (m_validR3)
-      m_driveR3.setSelectedSensorPosition(0);
+      m_driveR3.setSelectedSensorPosition(0.0);
   }
 
   // Helper methods to convert between meters and native units
@@ -754,7 +754,7 @@ public class Drivetrain extends SubsystemBase
 
     if (!tv)
     {
-      velocityArcadeDrive(0, 0);
+      velocityArcadeDrive(0.0, 0.0);
       if (m_limelightDebug >= 1)
         DataLogManager.log(getSubsystem( ) + ": DTL TV-FALSE - SIT STILL");
       return;

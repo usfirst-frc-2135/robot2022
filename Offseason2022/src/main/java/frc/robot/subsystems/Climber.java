@@ -77,22 +77,21 @@ public class Climber extends SubsystemBase
   private int                             m_CLAllowedError      = CLConsts.kCLAllowedError;    // PID allowable closed loop error
   private double                          m_toleranceInches     = CLConsts.kCLToleranceInches; // PID tolerance in inches
 
-  private double                          m_climberMaxHeight    = CLConsts.kClimberMaxHeight;  // maximum allowable height
-  private double                          m_climberMinHeight    = CLConsts.kClimberMinHeight;  // minimum allowable height
-
   private double                          m_stowHeight          = CLConsts.kStowHeight;         // Stow height
   private double                          m_extendL2            = CLConsts.kExtendL2;           // Extend to layout 2
   private double                          m_rotateL3            = CLConsts.kRotateL3;           // Rotate to layout 3
   private double                          m_raiseL4             = CLConsts.kRaiseL4;            // Raise to layout 4
   private double                          m_gatehookRestHeight  = CLConsts.kGatehookRestHeight; // Gate hook resting height
+  private double                          m_climberMinHeight    = CLConsts.kClimberMinHeight;  // minimum allowable height
+  private double                          m_climberMaxHeight    = CLConsts.kClimberMaxHeight;  // maximum allowable height
 
-  private int                             m_climberDebug        = 0; // DEBUG flag to disable/enable extra logging calls
+  private double                          m_stickDeadband       = CLConsts.kStickDeadband;     // joystick deadband
+
+  private int                             m_climberDebug        = 1; // DEBUG flag to disable/enable extra logging calls
   private boolean                         m_validCL14;               // Health indicator for climber Talon 14
   private boolean                         m_validCL15;               // Health indicator for climber Talon 15
   private int                             m_resetCountCL14;          // reset counter for motor
   private int                             m_resetCountCL15;          // reset counter for motor
-
-  private double                          m_stickDeadband       = 0.2;
 
   private CLMode                          state                 = CLMode.CLIMBER_INIT;
   private boolean                         m_calibrated          = false;  // Indicates whether the climber has been calibrated
@@ -218,14 +217,14 @@ public class Climber extends SubsystemBase
     // Set input flywheel voltage from the motor setting
     m_motorCL14Sim.setBusVoltage(RobotController.getInputVoltage( ));
     m_motorCL15Sim.setBusVoltage(RobotController.getInputVoltage( ));
-    m_climberCL14Sim.setInput(m_motorCL14Sim.getMotorOutputLeadVoltage( ));
+    m_climberCL14Sim.setInput(-m_motorCL14Sim.getMotorOutputLeadVoltage( ));
 
     // update for 20 msec loop
     m_climberCL14Sim.update(0.020);
 
     // Finally, we set our simulated encoder's readings and simulated battery voltage
-    m_motorCL14Sim.setIntegratedSensorRawPosition(metersToNativeUnits(m_climberCL14Sim.getPositionMeters( )));
-    m_motorCL14Sim.setIntegratedSensorVelocity(metersToNativeUnits(m_climberCL14Sim.getVelocityMetersPerSecond( )));
+    m_motorCL14Sim.setIntegratedSensorRawPosition(metersToNativeUnits(-m_climberCL14Sim.getPositionMeters( )));
+    m_motorCL14Sim.setIntegratedSensorVelocity(metersToNativeUnits(-m_climberCL14Sim.getVelocityMetersPerSecond( )));
     m_motorCL15Sim.setIntegratedSensorRawPosition(metersToNativeUnits(m_climberCL14Sim.getPositionMeters( )));
     m_motorCL15Sim.setIntegratedSensorVelocity(metersToNativeUnits(m_climberCL14Sim.getVelocityMetersPerSecond( )));
 
@@ -288,7 +287,7 @@ public class Climber extends SubsystemBase
     motor.setSafetyEnabled(false);
     PhoenixUtil.getInstance( ).checkTalonError(motor, "setSafetyEnabled");
 
-    motor.configVoltageCompSaturation(12.0, 0);
+    motor.configVoltageCompSaturation(12.0);
     PhoenixUtil.getInstance( ).checkTalonError(motor, "configVoltageCompSaturation");
     motor.enableVoltageCompensation(true);
     PhoenixUtil.getInstance( ).checkTalonError(motor, "enableVoltageCompensation");
@@ -299,9 +298,9 @@ public class Climber extends SubsystemBase
     PhoenixUtil.getInstance( ).checkTalonError(motor, "configStatorCurrentLimits");
 
     // Configure sensor settings
-    motor.setSelectedSensorPosition(0, 0, CANTIMEOUT);
+    motor.setSelectedSensorPosition(0.0);
     PhoenixUtil.getInstance( ).checkTalonError(motor, "setSelectedSensorPosition");
-    motor.configAllowableClosedloopError(0, m_CLAllowedError, CANTIMEOUT);
+    motor.configAllowableClosedloopError(SLOTINDEX, m_CLAllowedError, CANTIMEOUT);
     PhoenixUtil.getInstance( ).checkTalonError(motor, "configAllowableClosedloopError");
 
     motor.configMotionCruiseVelocity(m_velocity, CANTIMEOUT);
@@ -328,13 +327,12 @@ public class Climber extends SubsystemBase
 
   public void moveClimberWithJoysticks(XboxController joystick)
   {
-
     double yCLValue = 0.0;
     double motorOutput = 0.0;
-    double manualSpeedMax = 0.3;
+    double manualSpeedMax = CLConsts.kSpeedMaxManual;
 
     yCLValue = -joystick.getLeftY( );
-    if (yCLValue > -0.1 && yCLValue < 0.1)
+    if (yCLValue > -m_stickDeadband && yCLValue < m_stickDeadband)
     {
       if (state != Constants.CLConsts.CLMode.CLIMBER_STOPPED)
         DataLogManager.log(getSubsystem( ) + "CL Climber Stopped");
@@ -378,10 +376,10 @@ public class Climber extends SubsystemBase
     DataLogManager.log(getSubsystem( ) + ": CL Set Climber Stopped");
 
     if (m_validCL14)
-      m_motorCL14.set(ControlMode.PercentOutput, 0);
+      m_motorCL14.set(ControlMode.PercentOutput, 0.0);
 
     if (m_validCL15)
-      m_motorCL15.set(ControlMode.PercentOutput, 0);
+      m_motorCL15.set(ControlMode.PercentOutput, 0.0);
   }
 
   public void setGateHook(boolean hookClosed)
@@ -397,7 +395,7 @@ public class Climber extends SubsystemBase
 
   public void moveToCalibrate( )
   {
-    double motorCalibrateSpeed = -0.1;
+    double motorCalibrateSpeed = CLConsts.kSpeedCalibrate;
 
     if (m_validCL14)
       m_motorCL14.set(ControlMode.PercentOutput, motorCalibrateSpeed);
@@ -409,10 +407,10 @@ public class Climber extends SubsystemBase
   public void calibrate( )
   {
     if (m_validCL14)
-      m_motorCL14.setSelectedSensorPosition(0, 0, CANTIMEOUT);
+      m_motorCL14.setSelectedSensorPosition(0.0);
 
     if (m_validCL15)
-      m_motorCL15.setSelectedSensorPosition(0, 0, CANTIMEOUT);
+      m_motorCL15.setSelectedSensorPosition(0.0);
 
     m_targetInches = 0;
     m_curInches = 0;
@@ -434,21 +432,21 @@ public class Climber extends SubsystemBase
       m_pidKi = SmartDashboard.getNumber("CL_pidKi", m_pidKi);
       m_pidKd = SmartDashboard.getNumber("CL_pidKd", m_pidKd);
 
-      m_motorCL14.configMotionCruiseVelocity(m_velocity, 0);
-      m_motorCL14.configMotionAcceleration(m_acceleration, 0);
-      m_motorCL14.configMotionSCurveStrength(m_sCurveStrength, 0);
-      m_motorCL14.config_kF(0, m_pidKf, 0);
-      m_motorCL14.config_kP(0, m_pidKp, 0);
-      m_motorCL14.config_kI(0, m_pidKi, 0);
-      m_motorCL14.config_kD(0, m_pidKd, 0);
+      m_motorCL14.configMotionCruiseVelocity(m_velocity);
+      m_motorCL14.configMotionAcceleration(m_acceleration);
+      m_motorCL14.configMotionSCurveStrength(m_sCurveStrength);
+      m_motorCL14.config_kF(SLOTINDEX, m_pidKf);
+      m_motorCL14.config_kP(SLOTINDEX, m_pidKp);
+      m_motorCL14.config_kI(SLOTINDEX, m_pidKi);
+      m_motorCL14.config_kD(SLOTINDEX, m_pidKd);
 
-      m_motorCL15.configMotionCruiseVelocity(m_velocity, 0);
-      m_motorCL15.configMotionAcceleration(m_acceleration, 0);
-      m_motorCL15.configMotionSCurveStrength(m_sCurveStrength, 0);
-      m_motorCL15.config_kF(0, m_pidKf, 0);
-      m_motorCL15.config_kP(0, m_pidKp, 0);
-      m_motorCL15.config_kI(0, m_pidKi, 0);
-      m_motorCL15.config_kD(0, m_pidKd, 0);
+      m_motorCL15.configMotionCruiseVelocity(m_velocity);
+      m_motorCL15.configMotionAcceleration(m_acceleration);
+      m_motorCL15.configMotionSCurveStrength(m_sCurveStrength);
+      m_motorCL15.config_kF(SLOTINDEX, m_pidKf);
+      m_motorCL15.config_kP(SLOTINDEX, m_pidKp);
+      m_motorCL15.config_kI(SLOTINDEX, m_pidKi);
+      m_motorCL15.config_kD(SLOTINDEX, m_pidKd);
     }
 
     switch (state)
@@ -559,7 +557,7 @@ public class Climber extends SubsystemBase
       m_motorCL15.setInverted(InvertType.OpposeMaster);
       m_motorCL15.setNeutralMode(NeutralMode.Brake);
 
-      m_motorCL15.configVoltageCompSaturation(12.0, 0);
+      m_motorCL15.configVoltageCompSaturation(12.0);
       m_motorCL15.enableVoltageCompensation(true);
 
       PhoenixUtil.checkError(m_motorCL15.configGetSupplyCurrentLimit(m_supplyCurrentLimits), "CL15 ConfigSupplyCurrentLimit");

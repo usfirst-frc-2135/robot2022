@@ -166,7 +166,8 @@ public class RobotContainer
     SmartDashboard.putData("ClimberFullClimb", new ClimberFullClimb(m_climber, m_operator, XboxController.Button.kY));
     SmartDashboard.putData("ClimberL2ToL3", new ClimberL2ToL3(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter));
     SmartDashboard.putData("ClimberL3ToL4", new ClimberL3ToL4(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter));
-    SmartDashboard.putData("ClimberSetGatehook", new ClimberSetGatehook(m_climber, false));
+    SmartDashboard.putData("ClimberRun", new ClimberRun(m_climber, m_operator));
+    SmartDashboard.putData("ClimberSetGatehook", new ClimberSetGatehook(m_climber, true));
     SmartDashboard.putData("ClimberTimerOverride", new ClimberTimerOverride(m_climber, m_operator, XboxController.Button.kY));
     SmartDashboard.putData("DriveLimelight", new DriveLimelight(m_drivetrain, m_vision, false));
     SmartDashboard.putData("DriveLimelightStop",

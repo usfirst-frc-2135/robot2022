@@ -119,7 +119,7 @@ public class Shooter extends SubsystemBase
       PhoenixUtil.getInstance( ).checkTalonError(m_motorSH11, "configStatorCurrentLimits");
 
       // Configure sensor settings
-      m_motorSH11.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, PIDINDEX, CANTIMEOUT);
+      m_motorSH11.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
       PhoenixUtil.getInstance( ).checkTalonError(m_motorSH11, "configSelectedFeedbackSensor");
       m_motorSH11.setSensorPhase(true);
       PhoenixUtil.getInstance( ).checkTalonError(m_motorSH11, "setSensorPhase");
