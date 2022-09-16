@@ -13,13 +13,11 @@ import frc.robot.subsystems.Climber;
  */
 public class ClimberTimerOverride extends CommandBase
 {
-  private Climber        m_climber;
   private XboxController m_gamePad;
   private Button         m_button;
 
   public ClimberTimerOverride(Climber climber, XboxController gamePad, Button button)
   {
-    m_climber = climber;
     m_gamePad = gamePad;
     m_button = button;
     setName("ClimberTimerOverride");

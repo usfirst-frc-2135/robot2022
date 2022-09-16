@@ -17,21 +17,21 @@ import frc.robot.subsystems.Climber;
  */
 public class ClimberFullClimb extends SequentialCommandGroup
 {
-  private double m_climbL2Timer         = CLConsts.kClimbL2Timer;
-  private double m_rotateExtendL3Timer  = CLConsts.kRotateExtendL3Timer;
-  private double m_rotateRetractL3Timer = CLConsts.kRotateRetractL3Timer;
-  private double m_climbL3Timer         = CLConsts.kClimbL3Timer;
-  private double m_rotateRetractL4Timer = CLConsts.kRotateRetractL4Timer;
+  private double m_climbL2Time         = CLConsts.kClimbL2Time;
+  private double m_rotateExtendL3Time  = CLConsts.kRotateExtendL3Time;
+  private double m_rotateRetractL3Time = CLConsts.kRotateRetractL3Time;
+  private double m_climbL3Time         = CLConsts.kClimbL3Time;
+  private double m_rotateRetractL4Time = CLConsts.kRotateRetractL4Time;
 
   public ClimberFullClimb(Climber climber, XboxController gamePad, Button button)
   {
     setName("ClimberFullClimb");
 
-    SmartDashboard.putNumber("CL_ClimbL2Timer", m_climbL2Timer);
-    SmartDashboard.putNumber("CL_RotateExtendL3Timer", m_rotateExtendL3Timer);
-    SmartDashboard.putNumber("CL_RotateRetractL3Timer", m_rotateRetractL3Timer);
-    SmartDashboard.putNumber("CL_ClimbL3Timer", m_climbL3Timer);
-    SmartDashboard.putNumber("CL_RotateRetractL4Timer", m_rotateRetractL4Timer);
+    SmartDashboard.putNumber("CL_climbL2Time", m_climbL2Time);
+    SmartDashboard.putNumber("CL_rotateExtendL3Time", m_rotateExtendL3Time);
+    SmartDashboard.putNumber("CL_rotateRetractL3Time", m_rotateRetractL3Time);
+    SmartDashboard.putNumber("CL_climbL3Time", m_climbL3Time);
+    SmartDashboard.putNumber("CL_rotateRetractL4Time", m_rotateRetractL4Time);
 
     addCommands(
         // Add Commands here:
@@ -39,38 +39,38 @@ public class ClimberFullClimb extends SequentialCommandGroup
         // @formatter:off
         new Climber2ClimbToL2(climber),
         new ParallelRaceGroup(
-            new WaitCommand(m_climbL2Timer * 1.0), 
+            new WaitCommand(m_climbL2Time), 
             new ClimberTimerOverride(climber, gamePad, button)
         ),
         new Climber3RotateToL3(climber),
         new ParallelRaceGroup(
-            new WaitCommand(m_rotateExtendL3Timer * 1.0), 
+            new WaitCommand(m_rotateExtendL3Time), 
             new ClimberTimerOverride(climber, gamePad, button)
         ),
         new Climber5RotateIntoL3(climber),
         new ParallelRaceGroup(
-            new WaitCommand(m_rotateRetractL3Timer * 1.0), 
+            new WaitCommand(m_rotateRetractL3Time), 
             new ClimberTimerOverride(climber, gamePad, button)
         ),
         new Climber6ClimbToL3(climber),
         new ParallelRaceGroup(
-            new WaitCommand(m_climbL3Timer * 1.0), 
+            new WaitCommand(m_climbL3Time), 
             new ClimberTimerOverride(climber, gamePad, button)
         ),
+
         // next rung climb!
         new Climber3RotateToL3(climber),
         new ParallelRaceGroup(
-            new WaitCommand(m_rotateExtendL3Timer * 1.0), 
+            new WaitCommand(m_rotateExtendL3Time), 
             new ClimberTimerOverride(climber, gamePad, button)
         ),
         new Climber5RotateIntoL3(climber),
         new ParallelRaceGroup(
-            new WaitCommand(m_rotateRetractL4Timer * 1.), 
+            new WaitCommand(m_rotateRetractL4Time), 
             new ClimberTimerOverride(climber, gamePad, button)
         ),
         new Climber7ClimbToL4(climber)
-      // @formatter:on 
-
+        // @formatter:on 
     );
   }
 

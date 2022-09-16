@@ -17,10 +17,10 @@ import frc.robot.subsystems.TowerConveyor;
  */
 public class ClimberL2ToL3 extends SequentialCommandGroup
 {
-  private double m_climbL2Timer         = CLConsts.kClimbL2Timer;
-  private double m_rotateExtendL3Timer  = CLConsts.kRotateExtendL3Timer;
-  private double m_rotateRetractL3Timer = CLConsts.kRotateRetractL3Timer;
-  private double m_climbL3Timer         = CLConsts.kClimbL3Timer;
+  private double m_climbL2Time         = CLConsts.kClimbL2Time;
+  private double m_rotateExtendL3Time  = CLConsts.kRotateExtendL3Time;
+  private double m_rotateRetractL3Time = CLConsts.kRotateRetractL3Time;
+  private double m_climbL3Time         = CLConsts.kClimbL3Time;
 
   public ClimberL2ToL3(Climber climber, Intake intake, FloorConveyor fConv, TowerConveyor tConv, Shooter shooter)
   {
@@ -30,17 +30,15 @@ public class ClimberL2ToL3 extends SequentialCommandGroup
         // Add Commands here:
 
         // @formatter:off
-      new Climber2ClimbToL2(climber),
-      new WaitCommand(m_climbL2Timer), // check to see if timer is necessary here
-      new Climber3RotateToL3(climber),
-      new WaitCommand(m_rotateExtendL3Timer),
-      new Climber5RotateIntoL3(climber),
-      new WaitCommand(m_rotateRetractL3Timer),
-      new Climber6ClimbToL3(climber),
-      new WaitCommand(m_climbL3Timer)
-      
-      // @formatter:on
-
+        new Climber2ClimbToL2(climber),
+        new WaitCommand(m_climbL2Time), // check to see if timer is necessary here
+        new Climber3RotateToL3(climber),
+        new WaitCommand(m_rotateExtendL3Time),
+        new Climber5RotateIntoL3(climber),
+        new WaitCommand(m_rotateRetractL3Time),
+        new Climber6ClimbToL3(climber),
+        new WaitCommand(m_climbL3Time) 
+        // @formatter:on
     );
   }
 

@@ -32,19 +32,18 @@ public class Climber1Deploy extends SequentialCommandGroup
         // Add Commands here:
 
         // @formatter:off
-      new DriveSlowMode(drivetrain, true), 
-      new IntakeDeploy(intake, false), 
-      new IntakeRun(intake, INMode.INTAKE_STOP),
-      new FloorConveyorRun(fConv, FCMode.FCONVEYOR_STOP), 
-      new TowerConveyorRun(tConv, TCMode.TCONVEYOR_STOP),
-      new ShooterRun(shooter, SHMode.SHOOTER_STOP),
-      new ParallelDeadlineGroup(
-          new WaitUntilCommand(climber::moveClimberDistanceIsFinished),
-          new ClimberMoveToHeight(climber, Height.EXTEND_L2_HEIGHT)
-      ), 
-      new ClimberSetGatehook(climber, false)
-      // @formatter:on
-
+        new DriveSlowMode(drivetrain, true), 
+        new IntakeDeploy(intake, false), 
+        new IntakeRun(intake, INMode.INTAKE_STOP),
+        new FloorConveyorRun(fConv, FCMode.FCONVEYOR_STOP), 
+        new TowerConveyorRun(tConv, TCMode.TCONVEYOR_STOP),
+        new ShooterRun(shooter, SHMode.SHOOTER_STOP),
+        new ParallelDeadlineGroup(
+            new WaitUntilCommand(climber::moveClimberDistanceIsFinished),
+            new ClimberMoveToHeight(climber, Height.HEIGHT_EXTEND_L2)
+        ), 
+        new ClimberSetGatehook(climber, false)
+        // @formatter:on
     );
   }
 
