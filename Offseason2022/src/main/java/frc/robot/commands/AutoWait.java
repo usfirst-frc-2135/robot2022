@@ -12,9 +12,9 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
  */
 public class AutoWait extends CommandBase
 {
+  private Timer  m_timer = new Timer( );
   private int    m_timerNum;
   private double m_waitTime;
-  private Timer  m_timer;
 
   public AutoWait(int timerNum)
   {

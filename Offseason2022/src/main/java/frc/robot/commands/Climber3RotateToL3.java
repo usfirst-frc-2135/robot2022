@@ -23,15 +23,14 @@ public class Climber3RotateToL3 extends SequentialCommandGroup
         // Add Commands here:
 
         // @formatter:off
-      new ParallelCommandGroup(
-          new ParallelDeadlineGroup(
-              new WaitUntilCommand(climber::moveClimberDistanceIsFinished),
-              new ClimberMoveToHeight(climber, Height.ROTATE_L3_HEIGHT)
-          ), 
-          new ClimberSetGatehook(climber, true)
-      )
-      // @formatter:on
-
+        new ParallelCommandGroup(
+            new ParallelDeadlineGroup(
+                new WaitUntilCommand(climber::moveClimberDistanceIsFinished),
+                new ClimberMoveToHeight(climber, Height.HEIGHT_ROTATE_L3)
+            ), 
+            new ClimberSetGatehook(climber, true)
+        )
+        // @formatter:on
     );
   }
 

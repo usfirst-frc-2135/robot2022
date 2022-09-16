@@ -784,50 +784,6 @@
         "vgap": 16.0,
         "titleType": 0,
         "tiles": {
-          "14,2": {
-            "size": [
-              3,
-              2
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/CL_ClimbL3Timer",
-              "_title": "ClimbL3Timer"
-            }
-          },
-          "11,2": {
-            "size": [
-              3,
-              2
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/CL_RotateExtendL3Timer",
-              "_title": "RotateExtendL3Timer"
-            }
-          },
-          "17,2": {
-            "size": [
-              3,
-              2
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/CL_RotateRetractL3Timer",
-              "_title": "RotateRetractL3Timer"
-            }
-          },
-          "20,2": {
-            "size": [
-              3,
-              2
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/CL_RotateRetractL4Timer",
-              "_title": "RotateRetractL4Timer"
-            }
-          },
           "5,6": {
             "size": [
               2,
@@ -839,17 +795,6 @@
               "_title": "Hook_Closed",
               "Colors/Color when true": "#7CFC00FF",
               "Colors/Color when false": "#8B0000FF"
-            }
-          },
-          "8,2": {
-            "size": [
-              3,
-              2
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/CL_ClimbL2Timer",
-              "_title": "ClimbL2Timer"
             }
           },
           "28,0": {
@@ -1226,6 +1171,61 @@
               "_type": "Command",
               "_source0": "network_table:///SmartDashboard/ClimberTimerOverride",
               "_title": "/SmartDashboard/ClimberTimerOverride"
+            }
+          },
+          "17,2": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/CL_rotateRetractL3Time",
+              "_title": "rotateRetractL3Time"
+            }
+          },
+          "14,2": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/CL_rotateExtendL3Time",
+              "_title": "rotateExtendL3Time"
+            }
+          },
+          "20,2": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/CL_rotateRetractL4Time",
+              "_title": "rotateRetractL4Time"
+            }
+          },
+          "11,2": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/CL_climbL2Time",
+              "_title": "climbL2Time"
+            }
+          },
+          "30,0": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/CL_climbL3Time",
+              "_title": "climbL3Time"
             }
           }
         }

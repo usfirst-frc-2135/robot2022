@@ -19,11 +19,11 @@ import frc.robot.subsystems.TowerConveyor;
 /**
  *
  */
-public class ScoringActionHighHub extends SequentialCommandGroup
+public class ScoringActionUpperHub extends SequentialCommandGroup
 {
-  public ScoringActionHighHub(double waitTime, Intake intake, FloorConveyor fConv, TowerConveyor tConv, Shooter shooter)
+  public ScoringActionUpperHub(Intake intake, FloorConveyor fConv, TowerConveyor tConv, Shooter shooter, double waitTime)
   {
-    setName("ScoringActionHighHub");
+    setName("ScoringActionUpperHub");
 
     addCommands(
         // Add Commands here:

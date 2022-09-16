@@ -25,15 +25,14 @@ public class ScoringStop extends SequentialCommandGroup
 
     addCommands(
         // Add Commands here:
-        //@formatter:off
 
+        //@formatter:off
         new VisionOn(vision, false), 
         new IntakeRun(intake,INMode.INTAKE_STOP), 
         new FloorConveyorRun(fConv, FCMode.FCONVEYOR_STOP),
         new TowerConveyorRun(tConv, TCMode.TCONVEYOR_STOP), 
         new ShooterRun(shooter, SHMode.SHOOTER_STOP));
        //@formatter:on
-
   }
 
   @Override

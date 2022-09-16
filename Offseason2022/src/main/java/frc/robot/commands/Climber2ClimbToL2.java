@@ -21,19 +21,17 @@ public class Climber2ClimbToL2 extends SequentialCommandGroup
         // Add Commands here:
 
         // @formatter:off
-      new ParallelDeadlineGroup(
-          new WaitUntilCommand(climber::moveClimberDistanceIsFinished),
-          new ClimberMoveToHeight(climber, Height.STOW_HEIGHT) 
-      ),
-      new ClimberSetGatehook(climber, false),
-      new WaitCommand(1.5), // see if necessary
-      new ParallelDeadlineGroup(
-          new WaitUntilCommand(climber::moveClimberDistanceIsFinished),
-          new ClimberMoveToHeight(climber, Height.GATEHOOK_REST_HEIGHT) 
-      )
-          
-      // @formatter:on
-
+        new ParallelDeadlineGroup(
+            new WaitUntilCommand(climber::moveClimberDistanceIsFinished),
+            new ClimberMoveToHeight(climber, Height.HEIGHT_STOW) 
+        ),
+        new ClimberSetGatehook(climber, false),
+        new WaitCommand(1.5), // see if necessary
+        new ParallelDeadlineGroup(
+            new WaitUntilCommand(climber::moveClimberDistanceIsFinished),
+            new ClimberMoveToHeight(climber, Height.HEIGHT_GATEHOOK_REST) 
+        )   
+        // @formatter:on
     );
   }
 

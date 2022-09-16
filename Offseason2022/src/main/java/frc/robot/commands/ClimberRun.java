@@ -15,9 +15,9 @@ public class ClimberRun extends CommandBase
   private final Climber  m_climber;
   private XboxController m_gamePad;
 
-  public ClimberRun(Climber subsystem, XboxController gamePad)
+  public ClimberRun(Climber climber, XboxController gamePad)
   {
-    m_climber = subsystem;
+    m_climber = climber;
     m_gamePad = gamePad;
     addRequirements(m_climber);
   }

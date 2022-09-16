@@ -22,13 +22,12 @@ public class Climber7ClimbToL4 extends SequentialCommandGroup
         // Add Commands here:
 
         // @formatter:off
-      new ParallelDeadlineGroup(
-          new WaitUntilCommand(climber::moveClimberDistanceIsFinished),
-          new ClimberMoveToHeight(climber, Height.RAISE_L4_HEIGHT)
-      ), 
-      new ClimberSetGatehook(climber, false)
-      // @formatter:on
-
+        new ParallelDeadlineGroup(
+            new WaitUntilCommand(climber::moveClimberDistanceIsFinished),
+            new ClimberMoveToHeight(climber, Height.HEIGHT_RAISE_L4)
+        ), 
+        new ClimberSetGatehook(climber, false)
+        // @formatter:on
     );
   }
 

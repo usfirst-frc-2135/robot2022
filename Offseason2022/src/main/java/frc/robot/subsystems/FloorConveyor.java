@@ -85,8 +85,8 @@ public class FloorConveyor extends SubsystemBase
     // This method will be called once per scheduler run when in simulation
   }
 
-  // Put methods for controlling this subsystem
-  // here. Call these from Commands.
+  // Put methods for controlling this subsystem here. Call these from Commands.
+
   public void initialize( )
   {
     DataLogManager.log(getSubsystem( ) + ": subsystem intitialized!");
