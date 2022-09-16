@@ -332,7 +332,7 @@ public class RobotContainer
     // final AxisTrigger operRightTrigger = new AxisTrigger(m_operator, XboxController.Axis.rightY);
 
     // Operator - A, B, X, Y
-    operA.whenPressed(new IntakeDeploy(m_intake, true), true);
+    operA.whenPressed(new IntakeDeploy(m_intake, false), true);
     operB.whenPressed(new ExhaustingAction(m_intake, m_floorConveyor, m_towerConveyor), true);
     operB.whenReleased(new ExhaustingStop(m_intake, m_floorConveyor, m_towerConveyor), true);
     operX.whenPressed(new ScoringStop(m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision), true);
