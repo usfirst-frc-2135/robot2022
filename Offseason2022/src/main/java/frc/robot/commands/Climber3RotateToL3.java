@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
-import frc.robot.Constants.CLConsts.Height;
+import frc.robot.Constants.CLConsts.CLHeight;
 import frc.robot.subsystems.Climber;
 
 /**
@@ -26,7 +26,7 @@ public class Climber3RotateToL3 extends SequentialCommandGroup
         new ParallelCommandGroup(
             new ParallelDeadlineGroup(
                 new WaitUntilCommand(climber::moveClimberDistanceIsFinished),
-                new ClimberMoveToHeight(climber, Height.HEIGHT_ROTATE_L3)
+                new ClimberMoveToHeight(climber, CLHeight.HEIGHT_ROTATE_L3)
             ), 
             new ClimberSetGatehook(climber, true)
         )

@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.CLConsts.CLHeight;
 import frc.robot.Constants.FCConsts.FCMode;
 import frc.robot.Constants.INConsts.INMode;
 import frc.robot.Constants.LEDConsts.LEDColor;
@@ -43,6 +44,7 @@ import frc.robot.commands.ClimberCalibrate;
 import frc.robot.commands.ClimberFullClimb;
 import frc.robot.commands.ClimberL2ToL3;
 import frc.robot.commands.ClimberL3ToL4;
+import frc.robot.commands.ClimberMoveToHeight;
 import frc.robot.commands.ClimberRun;
 import frc.robot.commands.ClimberSetGatehook;
 import frc.robot.commands.ClimberTimerOverride;
@@ -64,8 +66,8 @@ import frc.robot.commands.IntakingAction;
 import frc.robot.commands.IntakingStop;
 import frc.robot.commands.LEDSet;
 import frc.robot.commands.RobotInitialize;
-import frc.robot.commands.ScoringActionUpperHub;
 import frc.robot.commands.ScoringActionLowerHub;
+import frc.robot.commands.ScoringActionUpperHub;
 import frc.robot.commands.ScoringPrime;
 import frc.robot.commands.ScoringStop;
 import frc.robot.commands.ShooterReverse;
@@ -228,7 +230,7 @@ public class RobotContainer
   {
     // Configure default commands for these subsystems
     m_drivetrain.setDefaultCommand(new DriveTeleop(m_drivetrain, m_driver));
-    m_climber.setDefaultCommand(new ClimberRun(m_climber, m_operator));
+    m_climber.setDefaultCommand(new ClimberMoveToHeight(m_climber, CLHeight.HEIGHT_NOCHANGE));
   }
 
   // Create a trigger object that monitors a joystick axis

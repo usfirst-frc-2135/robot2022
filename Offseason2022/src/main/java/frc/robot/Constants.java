@@ -222,7 +222,7 @@ public class Constants
     public static final double kClimbL3Time         = 0.5;
     public static final double kRotateRetractL4Time = 2.5;
 
-    public enum Height
+    public enum CLHeight
     {                       // Climber subsystem movement states
       HEIGHT_NOCHANGE,      // No change in climber height--maintain current position
       HEIGHT_STOW,          // Move to stow height

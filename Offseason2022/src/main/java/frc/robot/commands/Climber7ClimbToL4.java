@@ -6,7 +6,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
-import frc.robot.Constants.CLConsts.Height;
+import frc.robot.Constants.CLConsts.CLHeight;
 import frc.robot.subsystems.Climber;
 
 /**
@@ -24,7 +24,7 @@ public class Climber7ClimbToL4 extends SequentialCommandGroup
         // @formatter:off
         new ParallelDeadlineGroup(
             new WaitUntilCommand(climber::moveClimberDistanceIsFinished),
-            new ClimberMoveToHeight(climber, Height.HEIGHT_RAISE_L4)
+            new ClimberMoveToHeight(climber, CLHeight.HEIGHT_RAISE_L4)
         ), 
         new ClimberSetGatehook(climber, false)
         // @formatter:on
