@@ -27,10 +27,9 @@ import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.CLConsts;
+import frc.robot.Constants.CLConsts.CLHeight;
 import frc.robot.Constants.CLConsts.CLMode;
-import frc.robot.Constants.CLConsts.Height;
 import frc.robot.Constants.Falcon500;
 import frc.robot.Constants.LEDConsts.LEDColor;
 import frc.robot.RobotContainer;
@@ -58,8 +57,7 @@ public class Climber extends SubsystemBase
   private final TalonFXSimCollection      m_motorCL14Sim        = new TalonFXSimCollection(m_motorCL14);
   private final TalonFXSimCollection      m_motorCL15Sim        = new TalonFXSimCollection(m_motorCL15);
   private final ElevatorSim               m_climberCL14Sim      =
-      new ElevatorSim(DCMotor.getFalcon500(2), CLConsts.kGearRatio, 1.0, CLConsts.kDrumDiameterMeters / 2, 0.0, 1.0, null);
-  // VecBuilder.fill(0.01)
+      new ElevatorSim(DCMotor.getFalcon500(2), CLConsts.kGearRatio, 2.0, CLConsts.kDrumDiameterMeters / 2, 0.0, 1.0);
 
   private SupplyCurrentLimitConfiguration m_supplyCurrentLimits = new SupplyCurrentLimitConfiguration(true,
       Falcon500.kSupplyCurrentLimit, Falcon500.kSupplyTriggerCurrent, Falcon500.kSupplyTriggerTime);
@@ -82,10 +80,11 @@ public class Climber extends SubsystemBase
   private double                          m_rotateL3            = CLConsts.kRotateL3;           // Rotate to layout 3
   private double                          m_raiseL4             = CLConsts.kRaiseL4;            // Raise to layout 4
   private double                          m_gatehookRestHeight  = CLConsts.kGatehookRestHeight; // Gate hook resting height
-  private double                          m_climberMinHeight    = CLConsts.kClimberMinHeight;  // minimum allowable height
-  private double                          m_climberMaxHeight    = CLConsts.kClimberMaxHeight;  // maximum allowable height
+  private double                          m_climberMinHeight    = CLConsts.kClimberMinHeight;   // minimum allowable height
+  private double                          m_climberMaxHeight    = CLConsts.kClimberMaxHeight;   // maximum allowable height
 
-  private double                          m_stickDeadband       = CLConsts.kStickDeadband;     // joystick deadband
+  private double                          m_stickDeadband       = CLConsts.kStickDeadband;      // joystick deadband
+  private CLMode                          m_mode                = CLMode.CLIMBER_INIT;          // Mode active with joysticks
 
   private int                             m_climberDebug        = 1; // DEBUG flag to disable/enable extra logging calls
   private boolean                         m_validCL14;               // Health indicator for climber Talon 14
@@ -93,10 +92,10 @@ public class Climber extends SubsystemBase
   private int                             m_resetCountCL14;          // reset counter for motor
   private int                             m_resetCountCL15;          // reset counter for motor
 
-  private CLMode                          state                 = CLMode.CLIMBER_INIT;
   private boolean                         m_calibrated          = false;  // Indicates whether the climber has been calibrated
   private double                          m_targetInches        = 0.0;    // Target height in inches requested
   private double                          m_curInches           = 0.0;    // Current climber height in inches
+  private int                             m_withinTolerance     = 0;      // Counter for consecutive readings within tolerance
 
   private Timer                           m_safetyTimer         = new Timer( ); // Safety timer for use in climber
   private double                          m_safetyTimeout;                // Seconds that the timer ran before stopping
@@ -260,22 +259,22 @@ public class Climber extends SubsystemBase
 
   private int inchesToCounts(double inches)
   {
-    return (int) (inches / Constants.CLConsts.kInchesPerCount);
+    return (int) (inches / CLConsts.kInchesPerCount);
   }
 
   private double countsToInches(int counts)
   {
-    return counts * Constants.CLConsts.kInchesPerCount;
+    return counts * CLConsts.kInchesPerCount;
   }
 
   private int metersToNativeUnits(double meters)
   {
-    return (int) (meters / Constants.CLConsts.kMetersPerCount);
+    return (int) (meters / CLConsts.kMetersPerCount);
   }
 
   private double nativeUnitsToMeters(int counts)
   {
-    return counts * Constants.CLConsts.kMetersPerCount;
+    return counts * CLConsts.kMetersPerCount;
   }
 
   private void climberTalonInitialize(WPI_TalonFX motor, boolean inverted)
@@ -334,18 +333,18 @@ public class Climber extends SubsystemBase
     yCLValue = -joystick.getLeftY( );
     if (yCLValue > -m_stickDeadband && yCLValue < m_stickDeadband)
     {
-      if (state != Constants.CLConsts.CLMode.CLIMBER_STOPPED)
+      if (m_mode != CLMode.CLIMBER_STOPPED)
         DataLogManager.log(getSubsystem( ) + "CL Climber Stopped");
-      state = Constants.CLConsts.CLMode.CLIMBER_STOPPED;
+      m_mode = CLMode.CLIMBER_STOPPED;
     }
     else
     {
       // If joystick is above a value, climber will move up
       if (yCLValue > m_stickDeadband)
       {
-        if (state != Constants.CLConsts.CLMode.CLIMBER_UP)
+        if (m_mode != CLMode.CLIMBER_UP)
           DataLogManager.log(getSubsystem( ) + ("CL Climber Up"));
-        state = Constants.CLConsts.CLMode.CLIMBER_UP;
+        m_mode = CLMode.CLIMBER_UP;
 
         yCLValue -= m_stickDeadband;
         yCLValue *= (1.0 / (1.0 - m_stickDeadband));
@@ -354,9 +353,9 @@ public class Climber extends SubsystemBase
       // If joystick is below a value, climber will move down
       else if (yCLValue < -m_stickDeadband)
       {
-        if (state != Constants.CLConsts.CLMode.CLIMBER_DOWN)
+        if (m_mode != CLMode.CLIMBER_DOWN)
           DataLogManager.log(getSubsystem( ) + "CL Climber Down");
-        state = Constants.CLConsts.CLMode.CLIMBER_DOWN;
+        m_mode = CLMode.CLIMBER_DOWN;
 
         yCLValue += m_stickDeadband;
         yCLValue *= (1.0 / (1.0 - m_stickDeadband));
@@ -420,7 +419,7 @@ public class Climber extends SubsystemBase
 
   ///////////////////////// MOTION MAGIC ///////////////////////////////////
 
-  public void moveClimberDistanceInit(Height state)
+  public void moveClimberDistanceInit(CLHeight height)
   {
     if (m_climberDebug != 0)
     {
@@ -449,7 +448,7 @@ public class Climber extends SubsystemBase
       m_motorCL15.config_kD(SLOTINDEX, m_pidKd);
     }
 
-    switch (state)
+    switch (height)
     {
       case HEIGHT_NOCHANGE : // Do not change from current level!
         m_targetInches = m_curInches;
@@ -472,7 +471,7 @@ public class Climber extends SubsystemBase
         m_targetInches = SmartDashboard.getNumber("CL_raiseL4", m_raiseL4);
         break;
       default :
-        DataLogManager.log(getSubsystem( ) + ": requested height is invalid - " + state);
+        DataLogManager.log(getSubsystem( ) + ": requested height is invalid - " + height);
         return;
     }
 
@@ -515,7 +514,6 @@ public class Climber extends SubsystemBase
 
   public boolean moveClimberDistanceIsFinished( )
   {
-    int withinTolerance = 0;
     boolean isFinished = false;
     double errorInInches = 0.0;
 
@@ -523,7 +521,7 @@ public class Climber extends SubsystemBase
 
     if (Math.abs(errorInInches) < m_toleranceInches)
     {
-      if (++withinTolerance >= 5)
+      if (++m_withinTolerance >= 5)
       {
         isFinished = true;
         DataLogManager.log("Climber move finished - Time: " + m_safetyTimer.get( ) + "  |  Cur inches: " + m_curInches);
@@ -531,7 +529,7 @@ public class Climber extends SubsystemBase
     }
     else
     {
-      withinTolerance = 0;
+      m_withinTolerance = 0;
     }
 
     if (m_safetyTimer.get( ) >= m_safetyTimeout)
@@ -542,7 +540,7 @@ public class Climber extends SubsystemBase
 
     if (isFinished)
     {
-      withinTolerance = 0;
+      m_withinTolerance = 0;
       m_safetyTimer.stop( );
     }
 
