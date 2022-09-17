@@ -5,15 +5,18 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.VIConsts;
-import frc.robot.RobotContainer;
+import frc.robot.subsystems.Vision;
 
 /**
  *
  */
 public class VisionOnToggle extends CommandBase
 {
-  public VisionOnToggle( )
+  private final Vision m_vision;
+
+  public VisionOnToggle(Vision vision)
   {
+    m_vision = vision;
     setName("VisionOnToggle");
   }
 
@@ -21,17 +24,15 @@ public class VisionOnToggle extends CommandBase
   @Override
   public void initialize( )
   {
-    RobotContainer robotContainer = RobotContainer.getInstance( );
-
-    if (robotContainer.m_vision.getLEDMode( ) == VIConsts.LED_ON)
+    if (m_vision.getLEDMode( ) == VIConsts.LED_ON)
     {
-      robotContainer.m_vision.setLEDMode(VIConsts.LED_OFF);
-      robotContainer.m_vision.setCameraDisplay(VIConsts.PIP_SECONDARY);
+      m_vision.setLEDMode(VIConsts.LED_OFF);
+      m_vision.setCameraDisplay(VIConsts.PIP_SECONDARY);
     }
     else
     {
-      robotContainer.m_vision.setLEDMode(VIConsts.LED_ON);
-      robotContainer.m_vision.setCameraDisplay(VIConsts.PIP_MAIN);
+      m_vision.setLEDMode(VIConsts.LED_ON);
+      m_vision.setCameraDisplay(VIConsts.PIP_MAIN);
     }
   }
 
