@@ -295,10 +295,9 @@ public class RobotContainer
     driverLeftBumper.whenPressed(new IntakingAction(m_intake, m_floorConveyor, m_towerConveyor), true);
     driverLeftBumper.whenReleased(new IntakingStop(m_intake, m_floorConveyor, m_towerConveyor), true);
     driverRightBumper.whenPressed(new ScoringActionLowerHub(m_intake, m_floorConveyor, m_towerConveyor, m_shooter, 10.0), true);
-    // driverRightBumper.whenReleased(new ScoringStop(m_shooter), true);
+    driverRightBumper.whenReleased(new ScoringStop(m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision), true);
     driverBack.whenPressed(new Dummy(XboxController.Button.kBack.value), true);
-    driverStart.whenPressed(new VisionOn(m_vision, true), true);
-    driverStart.whenReleased(new VisionOn(m_vision, false), true);
+    driverStart.toggleWhenPressed(new VisionOn(m_vision, true), true);
 
     // Operator - POV buttons
     driverUp.whenPressed(new Dummy(0), true);
@@ -344,7 +343,7 @@ public class RobotContainer
     operLeftBumper.whenPressed(new IntakingAction(m_intake, m_floorConveyor, m_towerConveyor), true);
     operLeftBumper.whenReleased(new IntakingStop(m_intake, m_floorConveyor, m_towerConveyor), true);
     operRightBumper.whenPressed(new ScoringPrime(m_shooter, m_vision), true);
-    operBack.whenPressed(new ClimberFullClimb(m_climber, m_operator, XboxController.Button.kY), true);
+    operBack.toggleWhenPressed(new ClimberFullClimb(m_climber, m_operator, XboxController.Button.kY), true);
     operStart.whenPressed(new ClimberRun(m_climber, m_operator), true);
 
     // Operator - POV buttons
