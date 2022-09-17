@@ -17,8 +17,8 @@ import frc.robot.subsystems.TowerConveyor;
  */
 public class ClimberL3ToL4 extends SequentialCommandGroup
 {
-  private double m_rotateExtendL3Timer  = CLConsts.kRotateExtendL3Timer;
-  private double m_rotateRetractL4Timer = CLConsts.kRotateRetractL4Timer;
+  private double m_rotateExtendL3Time  = CLConsts.kRotateExtendL3Time;
+  private double m_rotateRetractL4Time = CLConsts.kRotateRetractL4Time;
 
   public ClimberL3ToL4(Climber climber, Intake intake, FloorConveyor fConv, TowerConveyor tConv, Shooter shooter)
   {
@@ -28,13 +28,12 @@ public class ClimberL3ToL4 extends SequentialCommandGroup
         // Add Commands here:
 
         // @formatter:off
-      new Climber3RotateToL3(climber),
-      new WaitCommand(m_rotateExtendL3Timer),
-      new Climber5RotateIntoL3(climber),
-      new WaitCommand(m_rotateRetractL4Timer),
-      new Climber7ClimbToL4(climber)
-      // @formatter:on
-
+        new Climber3RotateToL3(climber),
+        new WaitCommand(m_rotateExtendL3Time),
+        new Climber5RotateIntoL3(climber),
+        new WaitCommand(m_rotateRetractL4Time),
+        new Climber7ClimbToL4(climber)
+        // @formatter:on
     );
   }
 

@@ -15,9 +15,9 @@ public class ClimberMoveToHeight extends CommandBase
   private final Climber m_climber;
   private Height        m_state;
 
-  public ClimberMoveToHeight(Climber subsystem, Height state)
+  public ClimberMoveToHeight(Climber climber, Height state)
   {
-    m_climber = subsystem;
+    m_climber = climber;
     m_state = state;
     setName("ClimberMoveToHeight");
     addRequirements(m_climber);

@@ -12,12 +12,12 @@ import frc.robot.subsystems.Climber;
  */
 public class ClimberCalibrate extends CommandBase
 {
+  private Timer         m_calibrateTimer = new Timer( );
   private final Climber m_climber;
-  private Timer         m_calibrateTimer;
 
-  public ClimberCalibrate(Climber subsystem)
+  public ClimberCalibrate(Climber climber)
   {
-    m_climber = subsystem;
+    m_climber = climber;
     setName("ClimberCalibrate");
     addRequirements(m_climber);
   }

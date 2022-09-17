@@ -18,14 +18,11 @@ public class ScoringPrime extends SequentialCommandGroup
     setName("ScoringPrime");
     addCommands(
         // Add Commands here:
+
         //@formatter:off
-    
-      new VisionOn(vision, true),
-      new ShooterRun(shooter, SHMode.SHOOTER_PRIME)
-
-
-    //@formatter:on
-
+        new VisionOn(vision, true),
+        new ShooterRun(shooter, SHMode.SHOOTER_PRIME)
+        //@formatter:on
     );
   }
 

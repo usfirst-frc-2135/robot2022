@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.FCConsts.FCMode;
 import frc.robot.Constants.INConsts.INMode;
-import frc.robot.Constants.SHConsts.Mode;
+import frc.robot.Constants.SHConsts.SHMode;
 import frc.robot.Constants.TCConsts.TCMode;
 import frc.robot.subsystems.FloorConveyor;
 import frc.robot.subsystems.Intake;
@@ -19,9 +19,9 @@ import frc.robot.subsystems.TowerConveyor;
 /**
  *
  */
-public class ScoringActionLowHub extends SequentialCommandGroup
+public class ScoringActionLowerHub extends SequentialCommandGroup
 {
-  public ScoringActionLowHub(double waitTime, Intake intake, FloorConveyor fConv, TowerConveyor tConv, Shooter shooter)
+  public ScoringActionLowerHub(Intake intake, FloorConveyor fConv, TowerConveyor tConv, Shooter shooter, double waitTime)
   {
     setName("ScoringActionLowHub");
 
@@ -31,7 +31,7 @@ public class ScoringActionLowHub extends SequentialCommandGroup
         // @formatter:off
       new ParallelDeadlineGroup(
         new WaitUntilCommand(shooter::isAtDesiredSpeed), 
-        new ShooterRun(shooter, Mode.SHOOTER_LOWERHUB)
+        new ShooterRun(shooter, SHMode.SHOOTER_LOWERHUB)
       ),
       new ParallelDeadlineGroup(
         new WaitCommand(waitTime),       

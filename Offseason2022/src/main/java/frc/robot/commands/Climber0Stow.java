@@ -33,23 +33,23 @@ public class Climber0Stow extends SequentialCommandGroup
         // Add Commands here:
 
         // @formatter:off
-      new DriveSlowMode(drivetrain, false), 
-      new IntakeDeploy(intake, false), 
-      new IntakeRun(intake, INMode.INTAKE_STOP),
-      new FloorConveyorRun(fConv, FCMode.FCONVEYOR_STOP), 
-      new TowerConveyorRun(tConv, TCMode.TCONVEYOR_STOP),
-      new ShooterRun(shooter, SHMode.SHOOTER_STOP),
-      new ParallelDeadlineGroup(
-          new WaitUntilCommand(climber::moveClimberDistanceIsFinished),
-          new ClimberMoveToHeight(climber, Height.STOW_HEIGHT)
-      ),
-      new WaitCommand(1.5), 
-      new ParallelDeadlineGroup(
-          new WaitUntilCommand(climber::moveClimberDistanceIsFinished),
-          new ClimberMoveToHeight(climber, Height.GATEHOOK_REST_HEIGHT)
-      ),
-      new ClimberSetGatehook(climber, false)
-    // @formatter:on
+        new DriveSlowMode(drivetrain, false), 
+        new IntakeDeploy(intake, false), 
+        new IntakeRun(intake, INMode.INTAKE_STOP),
+        new FloorConveyorRun(fConv, FCMode.FCONVEYOR_STOP), 
+        new TowerConveyorRun(tConv, TCMode.TCONVEYOR_STOP),
+        new ShooterRun(shooter, SHMode.SHOOTER_STOP),
+        new ParallelDeadlineGroup(
+            new WaitUntilCommand(climber::moveClimberDistanceIsFinished),
+            new ClimberMoveToHeight(climber, Height.HEIGHT_STOW)
+        ),
+        new WaitCommand(1.5), 
+        new ParallelDeadlineGroup(
+            new WaitUntilCommand(climber::moveClimberDistanceIsFinished),
+            new ClimberMoveToHeight(climber, Height.HEIGHT_GATEHOOK_REST)
+        ),
+        new ClimberSetGatehook(climber, false)
+        // @formatter:on
     );
   }
 
