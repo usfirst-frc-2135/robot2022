@@ -43,7 +43,7 @@ public class VisionOn extends CommandBase
   @Override
   public boolean isFinished( )
   {
-    return true;
+    return false;
   }
 
   @Override

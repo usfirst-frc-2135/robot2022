@@ -4,7 +4,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.CLConsts.Height;
+import frc.robot.Constants.CLConsts.CLHeight;
 import frc.robot.subsystems.Climber;
 
 /**
@@ -13,12 +13,12 @@ import frc.robot.subsystems.Climber;
 public class ClimberMoveToHeight extends CommandBase
 {
   private final Climber m_climber;
-  private Height        m_state;
+  private CLHeight      m_height;
 
-  public ClimberMoveToHeight(Climber climber, Height state)
+  public ClimberMoveToHeight(Climber climber, CLHeight height)
   {
     m_climber = climber;
-    m_state = state;
+    m_height = height;
     setName("ClimberMoveToHeight");
     addRequirements(m_climber);
   }
@@ -27,7 +27,7 @@ public class ClimberMoveToHeight extends CommandBase
   @Override
   public void initialize( )
   {
-    m_climber.moveClimberDistanceInit(m_state);
+    m_climber.moveClimberDistanceInit(m_height);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
