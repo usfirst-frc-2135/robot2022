@@ -3,12 +3,17 @@
 
 package frc.robot;
 
+import edu.wpi.first.hal.HALUtil;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -115,6 +120,18 @@ public class RobotContainer
   // A chooser for autonomous commands
   SendableChooser<Command>      m_chooser        = new SendableChooser<>( );
 
+  private SimulateLimelight     m_simulateLimelightCommand =
+  // @formatter:off
+      new SimulateLimelight(m_drivetrain, 
+                            new Translation2d(Units.feetToMeters(54.0) / 2, Units.feetToMeters(27.0) / 2), // Field dimensions
+                            Units.inchesToMeters(102.81),                                                  // goal height
+                            new Translation2d(Units.inchesToMeters(0.0), Units.inchesToMeters(0.0)),       // camera translation on robot
+                            new Rotation2d(Units.degreesToRadians(0.0)),                                   // camera rotation on robot
+                            Units.inchesToMeters(41.0),                                                    // camera lens height
+                            Units.degreesToRadians(32.8));                                                 // camera back tilt
+  // @formatter:on
+  public Command                m_climberCalibrate         = new ClimberCalibrate(m_climber);
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -215,8 +232,6 @@ public class RobotContainer
     SmartDashboard.putData("Shooter-REV", new ShooterRun(m_shooter, SHMode.SHOOTER_REVERSE));
     SmartDashboard.putData("ShooterReverse", new ShooterReverse(m_shooter));
 
-    SmartDashboard.putData("SimulateLimelight", new SimulateLimelight( ));
-
     SmartDashboard.putData("Tconveyor-STOP", new TowerConveyorRun(m_towerConveyor, TCMode.TCONVEYOR_STOP));
     SmartDashboard.putData("Tconveyor-ACQUIRE", new TowerConveyorRun(m_towerConveyor, TCMode.TCONVEYOR_ACQUIRE));
     SmartDashboard.putData("Tconveyor-ACQUIRESLOW", new TowerConveyorRun(m_towerConveyor, TCMode.TCONVEYOR_ACQUIRE_SLOW));
@@ -224,6 +239,9 @@ public class RobotContainer
     SmartDashboard.putData("Tconveyor-EXPELFAST", new TowerConveyorRun(m_towerConveyor, TCMode.TCONVEYOR_EXPEL_FAST));
 
     SmartDashboard.putData("Dummy", new Dummy(2135));
+
+    if (HALUtil.getHALRuntimeType( ) == HALUtil.RUNTIME_SIMULATION)
+      CommandScheduler.getInstance( ).schedule(m_simulateLimelightCommand);
   }
 
   private void initDefaultCommands( )
