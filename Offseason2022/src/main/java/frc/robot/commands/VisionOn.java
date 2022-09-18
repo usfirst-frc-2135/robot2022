@@ -27,6 +27,17 @@ public class VisionOn extends CommandBase
   public void initialize( )
   {
     m_vision.setLEDMode((m_lightOn) ? VIConsts.LED_ON : VIConsts.LED_OFF);
+
+    if (m_vision.getLEDMode( ) == VIConsts.LED_ON)
+    {
+      m_vision.setLEDMode(VIConsts.LED_OFF);
+      m_vision.setCameraDisplay(VIConsts.PIP_SECONDARY);
+    }
+    else
+    {
+      m_vision.setLEDMode(VIConsts.LED_ON);
+      m_vision.setCameraDisplay(VIConsts.PIP_MAIN);
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
