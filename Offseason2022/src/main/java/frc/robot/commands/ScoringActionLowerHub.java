@@ -31,7 +31,7 @@ public class ScoringActionLowerHub extends SequentialCommandGroup
         // @formatter:off
       new ParallelDeadlineGroup(
         new WaitUntilCommand(shooter::isAtDesiredSpeed), 
-        new ShooterRun(shooter,SHMode.SHOOTER_LOWERHUB)
+        new ShooterRun(shooter, SHMode.SHOOTER_LOWERHUB)
       ),
       new ParallelDeadlineGroup(
         new WaitCommand(waitTime),       
