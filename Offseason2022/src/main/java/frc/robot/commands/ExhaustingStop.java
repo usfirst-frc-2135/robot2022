@@ -22,11 +22,10 @@ public class ExhaustingStop extends SequentialCommandGroup
         // Add Commands here:
 
         // @formatter:off
-    new IntakeRun(intake, INMode.INTAKE_STOP), 
-    new FloorConveyorRun( fConv, FCMode.FCONVEYOR_STOP), 
-    new TowerConveyorRun(tConv, TCMode.TCONVEYOR_STOP) 
-    // @formatter:on
-
+        new IntakeRun(intake, INMode.INTAKE_STOP), 
+        new FloorConveyorRun( fConv, FCMode.FCONVEYOR_STOP), 
+        new TowerConveyorRun(tConv, TCMode.TCONVEYOR_STOP) 
+        // @formatter:on
     );
   }
 

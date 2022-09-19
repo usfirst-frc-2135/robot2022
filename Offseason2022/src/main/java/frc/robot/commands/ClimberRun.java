@@ -3,8 +3,8 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.Climber;
 
 /**
@@ -12,11 +12,13 @@ import frc.robot.subsystems.Climber;
  */
 public class ClimberRun extends CommandBase
 {
-  private final Climber m_climber;
+  private final Climber  m_climber;
+  private XboxController m_gamePad;
 
-  public ClimberRun(Climber subsystem)
+  public ClimberRun(Climber climber, XboxController gamePad)
   {
-    m_climber = subsystem;
+    m_climber = climber;
+    m_gamePad = gamePad;
     addRequirements(m_climber);
   }
 
@@ -29,7 +31,7 @@ public class ClimberRun extends CommandBase
   @Override
   public void execute( )
   {
-    m_climber.moveClimberWithJoysticks(RobotContainer.getInstance( ).getOperator( ));
+    m_climber.moveClimberWithJoysticks(m_gamePad);
   }
 
   // Called once the command ends or is interrupted.

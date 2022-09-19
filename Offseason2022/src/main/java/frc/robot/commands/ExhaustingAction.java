@@ -24,7 +24,6 @@ public class ExhaustingAction extends SequentialCommandGroup
         new IntakeDeploy(intake, true), 
         new IntakeRun(intake, INMode.INTAKE_EXPEL),
         new FloorConveyorRun(fConv, FCMode.FCONVEYOR_EXPEL_FAST)
-
         // @formatter:on
     );
   }

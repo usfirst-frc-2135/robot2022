@@ -4,7 +4,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.RobotContainer;
 import frc.robot.Constants.VIConsts;
 import frc.robot.subsystems.Vision;
 
@@ -44,7 +43,7 @@ public class VisionOn extends CommandBase
   @Override
   public boolean isFinished( )
   {
-    return true;
+    return false;
   }
 
   @Override

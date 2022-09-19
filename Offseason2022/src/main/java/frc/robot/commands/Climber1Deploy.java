@@ -3,8 +3,16 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import frc.robot.Constants.CLConsts.CLHeight;
+import frc.robot.Constants.FCConsts.FCMode;
+import frc.robot.Constants.INConsts.INMode;
+import frc.robot.Constants.SHConsts.SHMode;
+import frc.robot.Constants.TCConsts.TCMode;
 import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.FloorConveyor;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -15,20 +23,27 @@ import frc.robot.subsystems.TowerConveyor;
  */
 public class Climber1Deploy extends SequentialCommandGroup
 {
-  public Climber1Deploy(Climber climber, Intake intake, FloorConveyor fConv, TowerConveyor tConv, Shooter shooter)
+  public Climber1Deploy(Climber climber, Intake intake, FloorConveyor fConv, TowerConveyor tConv, Shooter shooter,
+      Drivetrain drivetrain)
   {
-    addCommands(
-    // Add Commands here:
-    // Also add parallel commands using the
-    //
-    // addCommands(
-    // new command1(argsN, subsystem),
-    // parallel(
-    // new command2(argsN, subsystem),
-    // new command3(argsN, subsystem)
-    // )
-    // );
+    setName("Climber1Deploy");
 
+    addCommands(
+        // Add Commands here:
+
+        // @formatter:off
+        new DriveSlowMode(drivetrain, true), 
+        new IntakeDeploy(intake, false), 
+        new IntakeRun(intake, INMode.INTAKE_STOP),
+        new FloorConveyorRun(fConv, FCMode.FCONVEYOR_STOP), 
+        new TowerConveyorRun(tConv, TCMode.TCONVEYOR_STOP),
+        new ShooterRun(shooter, SHMode.SHOOTER_STOP),
+        new ParallelDeadlineGroup(
+            new WaitUntilCommand(climber::moveClimberDistanceIsFinished),
+            new ClimberMoveToHeight(climber, CLHeight.HEIGHT_EXTEND_L2)
+        ), 
+        new ClimberSetGatehook(climber, false)
+        // @formatter:on
     );
   }
 

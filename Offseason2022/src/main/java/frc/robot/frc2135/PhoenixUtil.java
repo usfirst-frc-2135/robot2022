@@ -9,7 +9,7 @@ import com.ctre.phoenix.sensors.PigeonIMU_Faults;
 
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.Timer;
-import frc.robot.Constants;
+import frc.robot.Constants.Falcon500;
 
 public class PhoenixUtil
 {
@@ -54,7 +54,7 @@ public class PhoenixUtil
 
         if (error == ErrorCode.OK)
         {
-          if (fwVersion >= Constants.Falcon500.kTalonReqVersion)
+          if (fwVersion >= Falcon500.kTalonReqVersion)
           {
             talonValid = true;
             break;
@@ -123,7 +123,7 @@ public class PhoenixUtil
 
         if (error == ErrorCode.OK)
         {
-          if (fwVersion <= Constants.Falcon500.kPigeonReqVersion)
+          if (fwVersion <= Falcon500.kPigeonReqVersion)
           {
             pigeonValid = true;
             break;

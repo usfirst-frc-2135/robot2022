@@ -33,7 +33,6 @@ public class IntakingAction extends SequentialCommandGroup
             new TowerConveyorRun(tConv, TCMode.TCONVEYOR_STOP)
         )
         // @formatter:on
-
     );
   }
 
