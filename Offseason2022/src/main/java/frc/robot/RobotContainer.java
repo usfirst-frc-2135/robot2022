@@ -317,7 +317,7 @@ public class RobotContainer
     driverBack.whenPressed(new Dummy(XboxController.Button.kBack.value), true);
     driverStart.toggleWhenPressed(new VisionOn(m_vision, true), true);
 
-    // Operator - POV buttons
+    // Driver - POV buttons
     driverUp.whenPressed(new Dummy(0), true);
     driverRight.whenPressed(new Dummy(90), true);
     driverDown.whenPressed(new Dummy(180), true);
