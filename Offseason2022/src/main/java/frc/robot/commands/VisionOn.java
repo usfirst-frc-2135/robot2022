@@ -13,11 +13,12 @@ import frc.robot.subsystems.Vision;
  */
 public class VisionOn extends CommandBase
 {
-
+  private final Vision  m_vision;
   private final boolean m_lightOn;
 
-  public VisionOn(boolean lightOn)
+  public VisionOn(Vision vision, boolean lightOn)
   {
+    m_vision = vision;
     m_lightOn = lightOn;
     setName("VisionOn");
   }
@@ -26,7 +27,7 @@ public class VisionOn extends CommandBase
   @Override
   public void initialize( )
   {
-    RobotContainer.getInstance( ).m_vision.setLEDMode((m_lightOn) ? VIConsts.LED_ON : VIConsts.LED_OFF);
+    m_vision.setLEDMode((m_lightOn) ? VIConsts.LED_ON : VIConsts.LED_OFF);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
