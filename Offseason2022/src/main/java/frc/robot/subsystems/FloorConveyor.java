@@ -89,7 +89,7 @@ public class FloorConveyor extends SubsystemBase
 
   public void initialize( )
   {
-    DataLogManager.log(getSubsystem( ) + ": subsystem intitialized!");
+    DataLogManager.log(getSubsystem( ) + ": subsystem initialized!");
     setFloorConveyorSpeed(FCConsts.FCMode.FCONVEYOR_STOP);
   }
 

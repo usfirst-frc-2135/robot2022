@@ -361,8 +361,8 @@ public class RobotContainer
     operLeftBumper.whenPressed(new IntakingAction(m_intake, m_floorConveyor, m_towerConveyor), true);
     operLeftBumper.whenReleased(new IntakingStop(m_intake, m_floorConveyor, m_towerConveyor), true);
     operRightBumper.whenPressed(new ScoringPrime(m_shooter, m_vision), true);
-    operStart.toggleWhenPressed(new ClimberRun(m_climber, m_operator), true);
     operBack.whenPressed(new ClimberFullClimb(m_climber, m_operator, XboxController.Button.kY), true);
+    operStart.toggleWhenPressed(new ClimberRun(m_climber, m_operator), true);
 
     // Operator - POV buttons
     operUp.whenPressed(new Climber1Deploy(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_drivetrain), true);
