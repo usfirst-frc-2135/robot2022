@@ -21,7 +21,7 @@ public class ScoringPrime extends SequentialCommandGroup
         // Add Commands here:
 
         //@formatter:off
-        new VisionOn(vision, VI_LLRequests.LED_ON),
+        new VisionOn(vision, VI_LLRequests.VISION_ON),
         new ShooterRun(shooter, SHMode.SHOOTER_PRIME)
         //@formatter:on
     );

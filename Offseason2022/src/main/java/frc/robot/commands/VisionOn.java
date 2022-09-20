@@ -32,15 +32,15 @@ public class VisionOn extends CommandBase
     {
 
       default :
-      case LED_ON :
+      case VISION_ON :
         m_vision.setLEDMode(VIConsts.LL_LED_ON);
         m_vision.setCameraDisplay(VIConsts.PIP_MAIN);
         break;
-      case LED_OFF :
+      case VISION_OFF :
         m_vision.setLEDMode(VIConsts.LL_LED_OFF);
         m_vision.setCameraDisplay(VIConsts.PIP_SECONDARY);
         break;
-      case LED_TOGGLE :
+      case VISION_TOGGLE :
         if (m_vision.getLEDMode( ) == VIConsts.LL_LED_ON)
         {
           m_vision.setLEDMode(VIConsts.LL_LED_OFF);

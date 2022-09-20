@@ -28,7 +28,7 @@ public class ScoringStop extends SequentialCommandGroup
         // Add Commands here:
 
         //@formatter:off
-        new VisionOn(vision, VI_LLRequests.LED_OFF), 
+        new VisionOn(vision, VI_LLRequests.VISION_OFF), 
         new IntakeRun(intake,INMode.INTAKE_STOP), 
         new FloorConveyorRun(fConv, FCMode.FCONVEYOR_STOP),
         new TowerConveyorRun(tConv, TCMode.TCONVEYOR_STOP), 

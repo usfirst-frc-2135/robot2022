@@ -256,7 +256,7 @@ public class Constants
 
     public enum VI_LLRequests
     {
-      LED_OFF, LED_ON, LED_BLINK, LED_CUR_MODE, LED_TOGGLE
+      VISION_OFF, VISION_ON, VISION_BLINK, VISION_CUR_MODE, VISION_TOGGLE
     }
 
     public static final double kLLDistance1   = 48;    // distance from bumper in inches for first reference point

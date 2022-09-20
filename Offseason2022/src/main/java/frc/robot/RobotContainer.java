@@ -302,7 +302,7 @@ public class RobotContainer
     driverRightBumper.whenPressed(new ScoringActionLowerHub(m_intake, m_floorConveyor, m_towerConveyor, m_shooter, 10.0), true);
     driverRightBumper.whenReleased(new ScoringStop(m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision), true);
     driverBack.whenPressed(new Dummy(XboxController.Button.kBack.value), true);
-    driverStart.whenPressed(new VisionOn(m_vision, VI_LLRequests.LED_TOGGLE), true);
+    driverStart.whenPressed(new VisionOn(m_vision, VI_LLRequests.VISION_TOGGLE), true);
 
     // Operator - POV buttons
     driverUp.whenPressed(new Dummy(0), true);
