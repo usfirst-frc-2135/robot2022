@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.VIConsts;
-import frc.robot.Constants.VIConsts.VI_LLRequests;
 
 /**
  *
@@ -154,7 +153,7 @@ public class Vision extends SubsystemBase
 
   public int getLEDMode( )
   {
-    int mode = (int) table.getEntry("ledMode").getNumber(0.0);
+    int mode = table.getEntry("ledMode").getNumber(0.0).intValue( );
 
     DataLogManager.log(getSubsystem( ) + "getLedMode :" + mode);
     return mode;
