@@ -3,8 +3,10 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.VIConsts;
+import frc.robot.Constants.VIConsts.VI_LLRequests;
 import frc.robot.subsystems.Vision;
 
 /**
@@ -12,13 +14,13 @@ import frc.robot.subsystems.Vision;
  */
 public class VisionOn extends CommandBase
 {
-  private final Vision  m_vision;
-  private final boolean m_lightOn;
+  private final Vision        m_vision;
+  private final VI_LLRequests m_mode;
 
-  public VisionOn(Vision vision, boolean lightOn)
+  public VisionOn(Vision vision, VI_LLRequests mode)
   {
     m_vision = vision;
-    m_lightOn = lightOn;
+    m_mode = mode;
     setName("VisionOn");
   }
 
@@ -26,17 +28,32 @@ public class VisionOn extends CommandBase
   @Override
   public void initialize( )
   {
-    m_vision.setLEDMode((m_lightOn) ? VIConsts.LED_ON : VIConsts.LED_OFF);
 
-    if (m_vision.getLEDMode( ) == VIConsts.LED_ON)
+    switch (m_mode)
     {
-      m_vision.setLEDMode(VIConsts.LED_OFF);
-      m_vision.setCameraDisplay(VIConsts.PIP_SECONDARY);
-    }
-    else
-    {
-      m_vision.setLEDMode(VIConsts.LED_ON);
-      m_vision.setCameraDisplay(VIConsts.PIP_MAIN);
+
+      default :
+      case LED_ON :
+        m_vision.setLEDMode(VIConsts.LL_LED_ON);
+        m_vision.setCameraDisplay(VIConsts.PIP_MAIN);
+        break;
+      case LED_OFF :
+        m_vision.setLEDMode(VIConsts.LL_LED_OFF);
+        m_vision.setCameraDisplay(VIConsts.PIP_SECONDARY);
+        break;
+      case LED_TOGGLE :
+        if (m_vision.getLEDMode( ) == VIConsts.LL_LED_ON)
+        {
+          m_vision.setLEDMode(VIConsts.LL_LED_OFF);
+          m_vision.setCameraDisplay(VIConsts.PIP_SECONDARY);
+        }
+        else
+        {
+          m_vision.setLEDMode(VIConsts.LL_LED_ON);
+          m_vision.setCameraDisplay(VIConsts.PIP_MAIN);
+        }
+        break;
+
     }
   }
 

@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.VIConsts;
+import frc.robot.Constants.VIConsts.VI_LLRequests;
 
 /**
  *
@@ -46,7 +47,7 @@ public class Vision extends SubsystemBase
     table = NetworkTableInstance.getDefault( ).getTable("limelight");
 
     // Set camera and LED display
-    setLEDMode(VIConsts.LED_ON);
+    setLEDMode(VIConsts.LL_LED_ON);
 
     // Put all the needed widgets on the dashboard
     SmartDashboard.putNumber("VI_distance1", m_distance1);
@@ -109,7 +110,7 @@ public class Vision extends SubsystemBase
   {
     DataLogManager.log(getSubsystem( ) + ": subsystem initialized!");
 
-    setLEDMode(VIConsts.LED_OFF);
+    setLEDMode(VIConsts.LL_LED_OFF);
     setCameraDisplay(VIConsts.PIP_SECONDARY);
 
     syncStateFromDashboard( );

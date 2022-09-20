@@ -244,15 +244,20 @@ public class Constants
   public static final class VIConsts
   {
     // Limelight-defined streaming states
-    public static final int    STANDARD       = 0;  // Both cameras side-by-side
-    public static final int    PIP_MAIN       = 1;  // Limelight with second camera inset
-    public static final int    PIP_SECONDARY  = 2;  // Second camera with limelight inset
+    public static final int STANDARD        = 0;  // Both cameras side-by-side
+    public static final int PIP_MAIN        = 1;  // Limelight with second camera inset
+    public static final int PIP_SECONDARY   = 2;  // Second camera with limelight inset
 
     // Limelight-defined LED mode states
-    public static final int    LED_CUR_MODE   = 0;
-    public static final int    LED_OFF        = 1;
-    public static final int    LED_BLINK      = 2;
-    public static final int    LED_ON         = 3;
+    public static final int LL_LED_CUR_MODE = 0;
+    public static final int LL_LED_OFF      = 1;
+    public static final int LL_LED_BLINK    = 2;
+    public static final int LL_LED_ON       = 3;
+
+    public enum VI_LLRequests
+    {
+      LED_OFF, LED_ON, LED_BLINK, LED_CUR_MODE, LED_TOGGLE
+    }
 
     public static final double kLLDistance1   = 48;    // distance from bumper in inches for first reference point
     public static final double kLLVertOffset1 = 0.42;  // LL y reading in degrees for first reference point

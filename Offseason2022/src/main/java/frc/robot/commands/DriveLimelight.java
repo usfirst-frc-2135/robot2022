@@ -32,7 +32,7 @@ public class DriveLimelight extends CommandBase
   public void initialize( )
   {
     DataLogManager.log(getSubsystem( ) + "DriveLimelight - Init");
-    m_vision.setLEDMode(VIConsts.LED_ON);
+    m_vision.setLEDMode(VIConsts.LL_LED_ON);
     m_vision.setCameraDisplay(VIConsts.PIP_MAIN);
     m_drivetrain.driveWithLimelightInit(m_endAtTarget);
   }
