@@ -143,13 +143,16 @@ public class RobotContainer
     // SmartDashboard Buttons
     SmartDashboard.putData("Auto1Ball1OppRight", new Auto1Ball1OppRight( ));
     SmartDashboard.putData("Auto1Ball2OppLeft", new Auto1Ball2OppLeft( ));
-    SmartDashboard.putData("Auto1BallLimelight", new Auto1BallLimelight( ));
+    SmartDashboard.putData("Auto1BallLimelight",
+        new Auto1BallLimelight(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
     SmartDashboard.putData("Auto3BallLeft", new Auto3BallLeft( ));
     SmartDashboard.putData("Auto3BallRight", new Auto3BallRight( ));
-    SmartDashboard.putData("AutoDrive", new AutoDrive( ));
-    SmartDashboard.putData("AutoDriveLimelightShoot", new AutoDriveLimelightShoot( ));
+    SmartDashboard.putData("AutoDrive", new AutoDrive(m_drivetrain, m_intake));
+    SmartDashboard.putData("AutoDriveLimelightShoot",
+        new AutoDriveLimelightShoot(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
     SmartDashboard.putData("AutoDrivePath", new AutoDrivePath(m_drivetrain, "simCurvePath", true));
-    SmartDashboard.putData("AutoDriveShoot", new AutoDriveShoot( ));
+    SmartDashboard.putData("AutoDriveShoot",
+        new AutoDriveShoot(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
     SmartDashboard.putData("AutoPathSequence", new AutoPathSequence( ));
     SmartDashboard.putData("AutoShoot", new AutoShoot( ));
     SmartDashboard.putData("AutoShootDriveShoot", new AutoShootDriveShoot( ));
@@ -364,7 +367,8 @@ public class RobotContainer
     // Configure autonomous sendable chooser
     m_chooser.addOption("Auto1Ball1OppRight", new Auto1Ball1OppRight( ));
     m_chooser.addOption("Auto1Ball2OppLeft", new Auto1Ball2OppLeft( ));
-    m_chooser.addOption("Auto1BallLimelight", new Auto1BallLimelight( ));
+    m_chooser.addOption("Auto1BallLimelight",
+        new Auto1BallLimelight(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
     m_chooser.addOption("Auto3BallLeft", new Auto3BallLeft( ));
     m_chooser.addOption("Auto3BallRight", new Auto3BallRight( ));
     m_chooser.addOption("AutoShootDriveShoot", new AutoShootDriveShoot( ));
