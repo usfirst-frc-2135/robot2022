@@ -128,7 +128,7 @@ public class RobotContainer
                             new Translation2d(Units.inchesToMeters(0.0), Units.inchesToMeters(0.0)),       // camera translation on robot
                             new Rotation2d(Units.degreesToRadians(0.0)),                                   // camera rotation on robot
                             Units.inchesToMeters(41.0),                                                    // camera lens height
-                            Units.degreesToRadians(32.8));                                                 // camera back tilt
+                            Units.degreesToRadians(40.0));                                                 // camera back tilt
   // @formatter:on
   public Command                m_climberCalibrate         = new ClimberCalibrate(m_climber);
 
