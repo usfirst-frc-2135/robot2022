@@ -153,7 +153,7 @@ public class Vision extends SubsystemBase
 
   public int getLEDMode( )
   {
-    int mode = table.getEntry("ledMode").getNumber(0.0).intValue( );
+    int mode = m_table.getEntry("ledMode").getNumber(0.0).intValue( );
 
     DataLogManager.log(getSubsystem( ) + "getLedMode :" + mode);
     return mode;
