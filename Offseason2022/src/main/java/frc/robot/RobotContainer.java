@@ -251,7 +251,8 @@ public class RobotContainer
   private void initDefaultCommands( )
   {
     // Configure default commands for these subsystems
-    m_drivetrain.setDefaultCommand(new DriveTeleop(m_drivetrain, m_driver));
+      m_drivetrain.setDefaultCommand(
+          new DriveTeleop(m_drivetrain, m_driver, XboxController.Axis.kLeftY.value, XboxController.Axis.kRightX.value));
     m_climber.setDefaultCommand(new ClimberMoveToHeight(m_climber, CLHeight.HEIGHT_NOCHANGE));
   }
 

@@ -14,11 +14,15 @@ public class DriveTeleop extends CommandBase
 {
   private final Drivetrain     m_drivetrain;
   private final XboxController m_driverPad;
+  private final int            m_speedAxis;
+  private final int            m_rotationAxis;
 
-  public DriveTeleop(Drivetrain drivetrain, XboxController driverPad)
+  public DriveTeleop(Drivetrain drivetrain, XboxController driverPad, int speedAxis, int rotationAxis)
   {
     m_drivetrain = drivetrain;
     m_driverPad = driverPad;
+    m_speedAxis = speedAxis;
+    m_rotationAxis = rotationAxis;
     setName("DriveTeleop");
     addRequirements(m_drivetrain);
   }
@@ -34,7 +38,10 @@ public class DriveTeleop extends CommandBase
   @Override
   public void execute( )
   {
-    m_drivetrain.driveWithJoysticksExecute(m_driverPad);
+    double rotation = m_driverPad.getRawAxis(m_rotationAxis);
+    double speed = m_driverPad.getRawAxis(m_speedAxis);
+
+    m_drivetrain.driveWithJoysticksExecute(speed, rotation);
   }
 
   // Called once the command ends or is interrupted.
