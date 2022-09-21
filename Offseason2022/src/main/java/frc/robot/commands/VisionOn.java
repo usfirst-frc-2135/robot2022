@@ -5,6 +5,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.VIConsts;
+import frc.robot.Constants.VIConsts.VIRequests;
 import frc.robot.subsystems.Vision;
 
 /**
@@ -12,13 +13,13 @@ import frc.robot.subsystems.Vision;
  */
 public class VisionOn extends CommandBase
 {
-  private final Vision  m_vision;
-  private final boolean m_lightOn;
+  private final Vision     m_vision;
+  private final VIRequests m_mode;
 
-  public VisionOn(Vision vision, boolean lightOn)
+  public VisionOn(Vision vision, VIRequests mode)
   {
     m_vision = vision;
-    m_lightOn = lightOn;
+    m_mode = mode;
     setName("VisionOn");
   }
 
@@ -26,7 +27,33 @@ public class VisionOn extends CommandBase
   @Override
   public void initialize( )
   {
-    m_vision.setLEDMode((m_lightOn) ? VIConsts.LED_ON : VIConsts.LED_OFF);
+
+    switch (m_mode)
+    {
+
+      default :
+      case VISION_ON :
+        m_vision.setLEDMode(VIConsts.LED_ON);
+        m_vision.setCameraDisplay(VIConsts.PIP_MAIN);
+        break;
+      case VISION_OFF :
+        m_vision.setLEDMode(VIConsts.LED_OFF);
+        m_vision.setCameraDisplay(VIConsts.PIP_SECONDARY);
+        break;
+      case VISION_TOGGLE :
+        if (m_vision.getLEDMode( ) == VIConsts.LED_ON)
+        {
+          m_vision.setLEDMode(VIConsts.LED_OFF);
+          m_vision.setCameraDisplay(VIConsts.PIP_SECONDARY);
+        }
+        else
+        {
+          m_vision.setLEDMode(VIConsts.LED_ON);
+          m_vision.setCameraDisplay(VIConsts.PIP_MAIN);
+        }
+        break;
+
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -43,7 +70,7 @@ public class VisionOn extends CommandBase
   @Override
   public boolean isFinished( )
   {
-    return false;
+    return true;
   }
 
   @Override

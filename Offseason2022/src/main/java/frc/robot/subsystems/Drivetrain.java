@@ -858,6 +858,11 @@ public class Drivetrain extends SubsystemBase
 
   // TODO (remove this later): Previously called LimelightSanityCheck
 
+  public boolean useLLValid( )
+  {
+    return isLimelightValid(40, 25);
+  }
+
   public boolean isLimelightValid(double horizAngleRange, double distRange)
   {
     // check whether target is valid
