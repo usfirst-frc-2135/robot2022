@@ -173,7 +173,6 @@ public class Drivetrain extends SubsystemBase
     setSubsystem("Drivetrain");
     addChild("DiffDrive", m_diffDrive);
 
-    m_diffDrive.setSafetyEnabled(true);
     m_diffDrive.setExpiration(0.250);
     m_diffDrive.setMaxOutput(1.0);
 
