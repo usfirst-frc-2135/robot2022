@@ -12,14 +12,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.VIConsts;
 import frc.robot.Constants.CLConsts.CLHeight;
 import frc.robot.Constants.FCConsts.FCMode;
 import frc.robot.Constants.INConsts.INMode;
 import frc.robot.Constants.LEDConsts.LEDColor;
 import frc.robot.Constants.SHConsts.SHMode;
 import frc.robot.Constants.TCConsts.TCMode;
-import frc.robot.Constants.VIConsts.VI_LLRequests;
+import frc.robot.Constants.VIConsts.VIRequests;
 import frc.robot.commands.Auto1Ball1OppRight;
 import frc.robot.commands.Auto1Ball2OppLeft;
 import frc.robot.commands.Auto1BallLimelight;
@@ -302,7 +301,7 @@ public class RobotContainer
     driverRightBumper.whenPressed(new ScoringActionLowerHub(m_intake, m_floorConveyor, m_towerConveyor, m_shooter, 10.0), true);
     driverRightBumper.whenReleased(new ScoringStop(m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision), true);
     driverBack.whenPressed(new Dummy(XboxController.Button.kBack.value), true);
-    driverStart.whenPressed(new VisionOn(m_vision, VI_LLRequests.VISION_TOGGLE), true);
+    driverStart.whenPressed(new VisionOn(m_vision, VIRequests.VISION_TOGGLE), true);
 
     // Operator - POV buttons
     driverUp.whenPressed(new Dummy(0), true);

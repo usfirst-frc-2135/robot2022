@@ -244,19 +244,17 @@ public class Constants
   public static final class VIConsts
   {
     // Limelight-defined streaming states
-    public static final int STANDARD        = 0;  // Both cameras side-by-side
-    public static final int PIP_MAIN        = 1;  // Limelight with second camera inset
-    public static final int PIP_SECONDARY   = 2;  // Second camera with limelight inset
+    public static final int STANDARD      = 0;  // Both cameras side-by-side
+    public static final int PIP_MAIN      = 1;  // Limelight with second camera inset
+    public static final int PIP_SECONDARY = 2;  // Second camera with limelight inset
 
     // Limelight-defined LED mode states
-    public static final int LL_LED_CUR_MODE = 0;
-    public static final int LL_LED_OFF      = 1;
-    public static final int LL_LED_BLINK    = 2;
-    public static final int LL_LED_ON       = 3;
+    public static final int LED_OFF       = 1;
+    public static final int LED_ON        = 3;
 
-    public enum VI_LLRequests
+    public enum VIRequests
     {
-      VISION_OFF, VISION_ON, VISION_BLINK, VISION_CUR_MODE, VISION_TOGGLE
+      VISION_OFF, VISION_ON, VISION_TOGGLE
     }
 
     public static final double kLLDistance1   = 48;    // distance from bumper in inches for first reference point
@@ -282,4 +280,58 @@ public class Constants
       LEDCOLOR_DASH     // CANdle color taken from dashboard
     }
   }
+
+  public static final class AUTOConstants
+  {
+    public static final String  kOneBallLimelight_path1    = "fenderToOffTarmac";
+    public static final String  kOneBallLimelight_path2    = "shootingPosToOffTarmac";
+
+    public static final String  kDrive_path                = "startToOffTarmac";
+
+    public static final String  kDriveShoot_path1          = "startToShootingPos";
+    public static final String  kDriveShoot_path2          = "shootingPosToOffTarmac";
+
+    public static final String  kShootDriveShoot_path1     = "startToShootingPos";
+    public static final String  kShootDriveShoot_path2     = "shootingPosToBall";
+    public static final String  kShootDriveShoot_path3     = "ballToShootingPos";
+    public static final String  kShootDriveShoot_path4     = "shootingPosToOffTarmac";
+
+    public static final String  k3BallLeft_path1           = "startToShootingPos";
+    public static final String  k3BallLeft_path2           = "shootingPosToBall";
+    public static final String  k3BallLeft_path3           = "ballToShootingPos";
+    public static final String  k3BallLeft_path4           = "shootingPosToLeftBall";
+    public static final String  k3BallLeft_path5           = "leftBallToLeftShootingPos";
+
+    public static final String  k3BallRight_path1          = "startToShootingPos";
+    public static final String  k3BallRight_path2          = "shootingPosToBall";
+    public static final String  k3BallRight_path3          = "ballToShootingPos";
+    public static final String  k3BallRight_path4          = "shootingPosToRightBall";
+    public static final String  k3BallRight_path5          = "rightBallToRightShootingPos";
+    public static final String  k3BallRight_path6          = "shootingPosToOffTarmac";
+
+    public static final String  k1BallLimelight_path1      = "fenderToOffTarmac";
+    public static final String  k1BallLimelight_path2      = "shootingPosToOffTarmac";
+
+    public static final String  k1Ball2OppLeft_path1       = "startToShootingPos";
+    public static final String  k1Ball2OppLeft_path2       = "shootingPosToLeftOppBall1";
+    public static final String  k1Ball2OppLeft_path3       = "leftOppBall1ToBall2";
+    public static final String  k1Ball2OppLeft_path4       = "leftOppBall2ToShootingPos";
+
+    public static final String  k1Ball1OppRight_path1      = "rightstarttoSP";
+    public static final String  k1Ball1OppRight_path2      = "rightSPtoball";
+
+    public static final boolean k_ShootOppBall             = true;
+
+    public static final double  k_WaitTime1                = 0.0;
+    public static final double  k_WaitTime2                = 0.0;
+
+    public static final String  path1                      = "forward39";
+    public static final String  path2                      = "backward39";
+    public static final String  path3                      = "rightAngleTurn";
+    public static final String  kDriveLimelightShoot_path1 = "forward39";
+    public static final String  kDriveLimelightShoot_path2 = "backward39";
+    public static final String  kShoot_path                = "startToShootingPos";
+
+  }
+
 }

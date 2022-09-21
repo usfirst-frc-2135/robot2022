@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
+import frc.robot.Constants.AUTOConstants;
 
 /**
  *
@@ -19,7 +20,7 @@ public class AutoDrive extends SequentialCommandGroup
   {
     setName("AutoDrive");
 
-    String m_pathname = "startToOffTarmac";
+    String m_pathname = AUTOConstants.kDrive_path;
 
     DataLogManager.log("AutoDriveShoot pathname 1 : " + m_pathname);
 

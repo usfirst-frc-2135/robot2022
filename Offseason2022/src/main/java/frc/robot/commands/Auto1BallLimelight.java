@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import frc.robot.Constants.AUTOConstants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.FloorConveyor;
 import frc.robot.subsystems.Intake;
@@ -26,8 +27,8 @@ public class Auto1BallLimelight extends SequentialCommandGroup
   {
     setName("Auto1BallLimelight");
 
-    String m_pathname1 = "fenderToOffTarmac";
-    String m_pathname2 = "shootingPosToOffTarmac";
+    String m_pathname1 = AUTOConstants.k1BallLimelight_path1;
+    String m_pathname2 = AUTOConstants.k1BallLimelight_path2;
 
     DataLogManager.log("Auto1BallLimelight pathname 1 : " + m_pathname1);
     DataLogManager.log("Auto1BallLimelight pathname 2 : " + m_pathname2);
