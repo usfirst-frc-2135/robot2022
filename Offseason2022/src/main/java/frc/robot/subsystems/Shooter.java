@@ -92,7 +92,7 @@ public class Shooter extends SubsystemBase
     SmartDashboard.putNumber("SH_flywheelPidKd", m_flywheelPidKd);
     SmartDashboard.putNumber("SH_flywheelNeutralDeadband", m_flywheelNeutralDeadband);
 
-    SmartDashboard.putNumber("SH_flywheelLowerTargetRPM", m_flywheelPrimeRPM);
+    SmartDashboard.putNumber("SH_flywheelPrimeRPM", m_flywheelPrimeRPM);
     SmartDashboard.putNumber("SH_flywheelLowerTargetRPM", m_flywheelLowerTargetRPM);
     SmartDashboard.putNumber("SH_flywheelUpperTargetRPM", m_flywheelUpperTargetRPM);
     SmartDashboard.putNumber("SH_flywheelToleranceRPM", m_flywheelToleranceRPM);
@@ -255,7 +255,7 @@ public class Shooter extends SubsystemBase
     DataLogManager.log(getSubsystem( ) + ": set shooter mode " + mode);
 
     // Get latest flywheel settings from dashboard
-    m_flywheelPrimeRPM = SmartDashboard.getNumber("SH_flywheelLowerTargetRPM", m_flywheelPrimeRPM);
+    m_flywheelPrimeRPM = SmartDashboard.getNumber("SH_flywheelPrimeRPM", m_flywheelPrimeRPM);
     m_flywheelLowerTargetRPM = SmartDashboard.getNumber("SH_flywheelLowerTargetRPM", m_flywheelLowerTargetRPM);
     m_flywheelUpperTargetRPM = SmartDashboard.getNumber("SH_flywheelUpperTargetRPM", m_flywheelUpperTargetRPM);
     m_flywheelToleranceRPM = SmartDashboard.getNumber("SH_flywheelToleranceRPM", m_flywheelToleranceRPM);
