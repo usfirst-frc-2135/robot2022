@@ -10,6 +10,7 @@ import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXSimCollection;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 
 import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -92,7 +93,7 @@ public class Shooter extends SubsystemBase
     SmartDashboard.putNumber("SH_flywheelPidKd", m_flywheelPidKd);
     SmartDashboard.putNumber("SH_flywheelNeutralDeadband", m_flywheelNeutralDeadband);
 
-    SmartDashboard.putNumber("SH_flywheelLowerTargetRPM", m_flywheelPrimeRPM);
+    SmartDashboard.putNumber("SH_flywheelPrimeRPM", m_flywheelPrimeRPM);
     SmartDashboard.putNumber("SH_flywheelLowerTargetRPM", m_flywheelLowerTargetRPM);
     SmartDashboard.putNumber("SH_flywheelUpperTargetRPM", m_flywheelUpperTargetRPM);
     SmartDashboard.putNumber("SH_flywheelToleranceRPM", m_flywheelToleranceRPM);
@@ -123,6 +124,10 @@ public class Shooter extends SubsystemBase
       PhoenixUtil.getInstance( ).checkTalonError(m_motorSH11, "configSelectedFeedbackSensor");
       m_motorSH11.setSensorPhase(true);
       PhoenixUtil.getInstance( ).checkTalonError(m_motorSH11, "setSensorPhase");
+      m_motorSH11.configVelocityMeasurementWindow(8);
+      PhoenixUtil.getInstance( ).checkTalonError(m_motorSH11, "configVelocityMeasurementWindow");
+      m_motorSH11.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_10Ms);
+      PhoenixUtil.getInstance( ).checkTalonError(m_motorSH11, "configVelocityMeasurementPeriod");
 
       configFlywheelPid(CANTIMEOUT);
 
@@ -255,7 +260,7 @@ public class Shooter extends SubsystemBase
     DataLogManager.log(getSubsystem( ) + ": set shooter mode " + mode);
 
     // Get latest flywheel settings from dashboard
-    m_flywheelPrimeRPM = SmartDashboard.getNumber("SH_flywheelLowerTargetRPM", m_flywheelPrimeRPM);
+    m_flywheelPrimeRPM = SmartDashboard.getNumber("SH_flywheelPrimeRPM", m_flywheelPrimeRPM);
     m_flywheelLowerTargetRPM = SmartDashboard.getNumber("SH_flywheelLowerTargetRPM", m_flywheelLowerTargetRPM);
     m_flywheelUpperTargetRPM = SmartDashboard.getNumber("SH_flywheelUpperTargetRPM", m_flywheelUpperTargetRPM);
     m_flywheelToleranceRPM = SmartDashboard.getNumber("SH_flywheelToleranceRPM", m_flywheelToleranceRPM);

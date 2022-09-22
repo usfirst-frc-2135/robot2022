@@ -129,7 +129,7 @@ public class RobotContainer
                             new Translation2d(Units.inchesToMeters(0.0), Units.inchesToMeters(0.0)),       // camera translation on robot
                             new Rotation2d(Units.degreesToRadians(0.0)),                                   // camera rotation on robot
                             Units.inchesToMeters(41.0),                                                    // camera lens height
-                            Units.degreesToRadians(32.8));                                                 // camera back tilt
+                            Units.degreesToRadians(40.0));                                                 // camera back tilt
   // @formatter:on
   public Command                m_climberCalibrate         = new ClimberCalibrate(m_climber);
 
@@ -251,7 +251,8 @@ public class RobotContainer
   private void initDefaultCommands( )
   {
     // Configure default commands for these subsystems
-    m_drivetrain.setDefaultCommand(new DriveTeleop(m_drivetrain, m_driver));
+      m_drivetrain.setDefaultCommand(
+          new DriveTeleop(m_drivetrain, m_driver, XboxController.Axis.kLeftY.value, XboxController.Axis.kRightX.value));
     m_climber.setDefaultCommand(new ClimberMoveToHeight(m_climber, CLHeight.HEIGHT_NOCHANGE));
   }
 
@@ -365,8 +366,8 @@ public class RobotContainer
     operLeftBumper.whenPressed(new IntakingAction(m_intake, m_floorConveyor, m_towerConveyor), true);
     operLeftBumper.whenReleased(new IntakingStop(m_intake, m_floorConveyor, m_towerConveyor), true);
     operRightBumper.whenPressed(new ScoringPrime(m_shooter, m_vision), true);
-    operStart.toggleWhenPressed(new ClimberRun(m_climber, m_operator), true);
     operBack.whenPressed(new ClimberFullClimb(m_climber, m_operator, XboxController.Button.kY), true);
+    operStart.toggleWhenPressed(new ClimberRun(m_climber, m_operator), true);
 
     // Operator - POV buttons
     operUp.whenPressed(new Climber1Deploy(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_drivetrain), true);
