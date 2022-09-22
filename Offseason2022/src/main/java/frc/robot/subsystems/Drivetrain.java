@@ -18,6 +18,7 @@ import com.ctre.phoenix.motorcontrol.TalonFXSimCollection;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.BasePigeonSimCollection;
 import com.ctre.phoenix.sensors.PigeonIMU;
+import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -339,6 +340,10 @@ public class Drivetrain extends SubsystemBase
     PhoenixUtil.getInstance( ).checkTalonError(motor, "setSensorPhase");
     motor.setSelectedSensorPosition(0.0);
     PhoenixUtil.getInstance( ).checkTalonError(motor, "setSelectedSensorPosition");
+    motor.configVelocityMeasurementWindow(8);
+    PhoenixUtil.getInstance( ).checkTalonError(motor, "configVelocityMeasurementWindow");
+    motor.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_10Ms);
+    PhoenixUtil.getInstance( ).checkTalonError(motor, "configVelocityMeasurementPeriod");
 
     motor.configOpenloopRamp(m_openLoopRamp, CANTIMEOUT);
     PhoenixUtil.getInstance( ).checkTalonError(motor, "configOpenloopRamp");
