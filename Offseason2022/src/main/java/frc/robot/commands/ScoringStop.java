@@ -8,6 +8,7 @@ import frc.robot.Constants.FCConsts.FCMode;
 import frc.robot.Constants.INConsts.INMode;
 import frc.robot.Constants.SHConsts.SHMode;
 import frc.robot.Constants.TCConsts.TCMode;
+import frc.robot.Constants.VIConsts.VIRequests;
 import frc.robot.subsystems.FloorConveyor;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -27,7 +28,7 @@ public class ScoringStop extends SequentialCommandGroup
         // Add Commands here:
 
         //@formatter:off
-        new VisionOn(vision, false), 
+        new VisionOn(vision, VIRequests.VISION_OFF), 
         new IntakeRun(intake,INMode.INTAKE_STOP), 
         new FloorConveyorRun(fConv, FCMode.FCONVEYOR_STOP),
         new TowerConveyorRun(tConv, TCMode.TCONVEYOR_STOP), 

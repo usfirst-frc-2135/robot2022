@@ -551,7 +551,7 @@ public class Drivetrain extends SubsystemBase
     m_odometry.resetPosition(pose, Rotation2d.fromDegrees(0.0));
   }
 
-  private Pose2d getPose( )
+  public Pose2d getPose( )
   {
     return m_odometry.getPoseMeters( );
   }
@@ -663,8 +663,10 @@ public class Drivetrain extends SubsystemBase
   public void driveWithJoysticksInit( )
   {
     setBrakeMode(true);
-    m_driveL1.configOpenloopRamp(m_openLoopRamp);
-    m_driveR3.configOpenloopRamp(m_openLoopRamp);
+    if (m_validL1)
+      m_driveL1.configOpenloopRamp(m_openLoopRamp);
+    if (m_validR3)
+      m_driveR3.configOpenloopRamp(m_openLoopRamp);
   }
 
   public void driveWithJoysticksExecute(XboxController driverPad)
@@ -707,8 +709,10 @@ public class Drivetrain extends SubsystemBase
   public void driveWithJoysticksEnd( )
   {
     setBrakeMode(false);
-    m_driveL1.configOpenloopRamp(0.0);
-    m_driveR3.configOpenloopRamp(0.0);
+    if (m_validL1)
+      m_driveL1.configOpenloopRamp(0.0);
+    if (m_validR3)
+      m_driveR3.configOpenloopRamp(0.0);
   }
 
   ///////////////////////////////////////////////////////////////////////////////
@@ -739,6 +743,12 @@ public class Drivetrain extends SubsystemBase
     // load in Pid constants to controller
     m_turnPid = new PIDController(m_turnPidKp, m_turnPidKi, m_turnPidKd);
     m_throttlePid = new PIDController(m_throttlePidKp, m_throttlePidKi, m_throttlePidKd);
+
+    // TODO: Add this to eliminate robot lurch
+    // if (m_validL1)
+    // m_driveL1.configOpenloopRamp(m_openLoopRamp);
+    // if (m_validR3)
+    // m_driveR3.configOpenloopRamp(m_openLoopRamp);
 
     RobotContainer rc = RobotContainer.getInstance( );
     rc.m_vision.m_yfilter.reset( );
@@ -837,10 +847,21 @@ public class Drivetrain extends SubsystemBase
     if (m_validL1 || m_validR3)
       velocityArcadeDrive(0.0, 0.0);
 
+    // TODO: return settings back when command ends
+    // if (m_validL1)
+    // m_driveL1.configOpenloopRamp(0.0);
+    // if (m_validR3)
+    // m_driveR3.configOpenloopRamp(0.0);
+
     RobotContainer.getInstance( ).m_led.setLLColor(LEDColor.LEDCOLOR_OFF);
   }
 
   // TODO (remove this later): Previously called LimelightSanityCheck
+
+  public boolean useLLValid( )
+  {
+    return isLimelightValid(40, 25);
+  }
 
   public boolean isLimelightValid(double horizAngleRange, double distRange)
   {
