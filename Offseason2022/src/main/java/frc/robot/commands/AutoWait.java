@@ -40,7 +40,8 @@ public class AutoWait extends CommandBase
   public void execute( )
   {}
 
-  public boolean IsFinished( )
+  @Override
+  public boolean isFinished( )
   {
     return m_timer.hasElapsed(m_waitTime);
   }
