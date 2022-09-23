@@ -100,28 +100,28 @@ import frc.robot.subsystems.Vision;
  */
 public class RobotContainer
 {
-  private static RobotContainer m_robotContainer = new RobotContainer( );
+  private static RobotContainer m_robotContainer      = new RobotContainer( );
 
   // The robot's subsystems
-  public final Drivetrain       m_drivetrain     = new Drivetrain( );
-  public final Intake           m_intake         = new Intake( );
-  public final FloorConveyor    m_floorConveyor  = new FloorConveyor( );
-  public final TowerConveyor    m_towerConveyor  = new TowerConveyor( );
-  public final Shooter          m_shooter        = new Shooter( );
-  public final Climber          m_climber        = new Climber( );
-  public final Vision           m_vision         = new Vision( );
-  public final LED              m_led            = new LED( );
-  public final Pneumatics       m_pneumatics     = new Pneumatics( );
-  public final Power            m_power          = new Power( );
+  public final Drivetrain       m_drivetrain          = new Drivetrain( );
+  public final Intake           m_intake              = new Intake( );
+  public final FloorConveyor    m_floorConveyor       = new FloorConveyor( );
+  public final TowerConveyor    m_towerConveyor       = new TowerConveyor( );
+  public final Shooter          m_shooter             = new Shooter( );
+  public final Climber          m_climber             = new Climber( );
+  public final Vision           m_vision              = new Vision( );
+  public final LED              m_led                 = new LED( );
+  public final Pneumatics       m_pneumatics          = new Pneumatics( );
+  public final Power            m_power               = new Power( );
 
   // Joysticks
-  private final XboxController  m_driver         = new XboxController(0);
-  private final XboxController  m_operator       = new XboxController(1);
+  private final XboxController  m_driver              = new XboxController(0);
+  private final XboxController  m_operator            = new XboxController(1);
 
   // A chooser for autonomous commands
-  SendableChooser<Command>      m_chooser        = new SendableChooser<>( );
+  SendableChooser<Command>      m_chooser             = new SendableChooser<>( );
 
-  private SimulateLimelight     m_simulateLimelightCommand =
+  private SimulateLimelight     m_simLimelightCommand =
   // @formatter:off
       new SimulateLimelight(m_drivetrain, 
                             new Translation2d(Units.feetToMeters(54.0) / 2, Units.feetToMeters(27.0) / 2), // Field dimensions
@@ -131,7 +131,7 @@ public class RobotContainer
                             Units.inchesToMeters(41.0),                                                    // camera lens height
                             Units.degreesToRadians(40.0));                                                 // camera back tilt
   // @formatter:on
-  public Command                m_climberCalibrate         = new ClimberCalibrate(m_climber);
+  public Command                m_climberCalibrate    = new ClimberCalibrate(m_climber);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -245,7 +245,7 @@ public class RobotContainer
     SmartDashboard.putData("Dummy", new Dummy(2135));
 
     if (HALUtil.getHALRuntimeType( ) == HALUtil.RUNTIME_SIMULATION)
-      CommandScheduler.getInstance( ).schedule(m_simulateLimelightCommand);
+      CommandScheduler.getInstance( ).schedule(m_simLimelightCommand);
   }
 
   private void initDefaultCommands( )
@@ -390,6 +390,8 @@ public class RobotContainer
     m_chooser.addOption("Auto3BallLeft", new Auto3BallLeft( ));
     m_chooser.addOption("Auto3BallRight", new Auto3BallRight( ));
     m_chooser.addOption("AutoShootDriveShoot", new AutoShootDriveShoot( ));
+    m_chooser.addOption("AutoDriveShoot",
+        new AutoDriveShoot(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
     m_chooser.setDefaultOption("AutoStop", new AutoStop(m_drivetrain));
 
     SmartDashboard.putData("Auto Mode", m_chooser);

@@ -322,8 +322,8 @@ public class Constants
 
     public static final boolean k_ShootOppBall             = true;
 
-    public static final double  k_WaitTime1                = 0.0;
-    public static final double  k_WaitTime2                = 0.0;
+    public static final double  k_WaitTime1                = 0.0; // First wait timer - time to wait
+    public static final double  k_WaitTime2                = 0.0; // Second wait timer - time to wait
 
     public static final String  path1                      = "forward39";
     public static final String  path2                      = "backward39";
@@ -332,6 +332,11 @@ public class Constants
     public static final String  kDriveLimelightShoot_path2 = "backward39";
     public static final String  kShoot_path                = "startToShootingPos";
 
+    public enum AutoTimer
+    {
+      TIMER1,     // Select first auto wait timer for use
+      TIMER2      // Select second auto wait timer for use
+    };
   }
 
 }
