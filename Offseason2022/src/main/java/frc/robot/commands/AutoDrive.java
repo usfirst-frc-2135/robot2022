@@ -27,14 +27,13 @@ public class AutoDrive extends SequentialCommandGroup
     addCommands(
         // Add Commands here:
         //@formatter:off
-    new AutoWait(1),
-    new ParallelDeadlineGroup(
-      new WaitUntilCommand(drivetrain::driveWithPathFollowerIsFinished), 
-      new AutoDrivePath(drivetrain, m_pathname, true)
-    ),
-    new AutoStop(drivetrain)
-    //@formatter:on
-
+        new AutoWait(1),
+        new ParallelDeadlineGroup(
+          new WaitUntilCommand(drivetrain::driveWithPathFollowerIsFinished), 
+          new AutoDrivePath(drivetrain, m_pathname, true)
+        ),
+        new AutoStop(drivetrain)
+        //@formatter:on
     );
   }
 

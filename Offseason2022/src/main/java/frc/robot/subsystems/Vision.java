@@ -24,7 +24,7 @@ public class Vision extends SubsystemBase
   private double       m_distance2   = VIConsts.kLLDistance2;   // x position in inches for second reference point
   private double       m_vertOffset2 = VIConsts.kLLVertOffset2; // y reading in degrees for second reference point
 
-  private NetworkTable m_table;              // Network table reference for getting LL values
+  private NetworkTable m_table;            // Network table reference for getting LL values
 
   private double       m_targetHorizAngle; // LL Target horizontal Offset from Crosshair to Target (-27 to 27 deg)
   private double       m_targetVertAngle;  // LL Target vertical Offset from Crosshair to Target (-20.5 to 20.5 deg)
