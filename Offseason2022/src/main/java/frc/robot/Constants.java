@@ -281,6 +281,20 @@ public class Constants
     }
   }
 
+  public static final class SIMLLConsts
+  {
+    public static final double kFieldLength        = Units.feetToMeters(54.0);      // Field dimensions are 54ft x 27ft
+    public static final double kFieldWidth         = Units.feetToMeters(27.0);
+    public static final double kGoalPostionX       = kFieldLength / 2 - Units.feetToMeters(2.0); // Goal target on field
+    public static final double kGoalPostionY       = kFieldWidth / 2;
+    public static final double kGoalHeight         = Units.inchesToMeters(102.81);  // Upper hub height from floor
+    public static final double kCameraPositionX    = Units.inchesToMeters(0.0);     // Camera position on robot (X, Y)
+    public static final double kCameraPositionY    = Units.inchesToMeters(0.0);
+    public static final double kCameraRotation     = Units.degreesToRadians(180.0); // Camera rotation on robot
+    public static final double kCameraLensHeight   = Units.inchesToMeters(41.0);    // Camera lens height from floor
+    public static final double kCameraLensBackTilt = Units.degreesToRadians(40.0);  // Camera backward tilt from normal
+  }
+
   public static final class AUTOConstants
   {
     public static final String  kOneBallLimelight_path1    = "fenderToOffTarmac";
@@ -322,8 +336,8 @@ public class Constants
 
     public static final boolean k_ShootOppBall             = true;
 
-    public static final double  k_WaitTime1                = 0.0;
-    public static final double  k_WaitTime2                = 0.0;
+    public static final double  k_WaitTime1                = 0.0; // First wait timer - time to wait
+    public static final double  k_WaitTime2                = 0.0; // Second wait timer - time to wait
 
     public static final String  path1                      = "forward39";
     public static final String  path2                      = "backward39";
@@ -332,6 +346,11 @@ public class Constants
     public static final String  kDriveLimelightShoot_path2 = "backward39";
     public static final String  kShoot_path                = "startToShootingPos";
 
+    public enum AutoTimer
+    {
+      TIMER1,     // Select first auto wait timer for use
+      TIMER2      // Select second auto wait timer for use
+    };
   }
 
 }

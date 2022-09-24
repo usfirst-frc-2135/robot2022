@@ -4,6 +4,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.subsystems.Drivetrain;
@@ -27,6 +28,7 @@ public class AutoDriveLimelightShoot extends SequentialCommandGroup
         // Add Commands here:
 
         //@formatter:off
+        new PrintCommand("AUTO: Drive using limelight and score"),
         new ParallelDeadlineGroup(
           new SequentialCommandGroup(
             new ParallelDeadlineGroup(
@@ -35,7 +37,8 @@ public class AutoDriveLimelightShoot extends SequentialCommandGroup
             ), 
             new ScoringActionUpperHub(intake, fConv, tConv, shooter, 3)
           ), 
-          new DriveLimelight(drivetrain, vision, false))
+          new DriveLimelight(drivetrain, vision, false)
+        )
         //@formatter:on
     );
   }

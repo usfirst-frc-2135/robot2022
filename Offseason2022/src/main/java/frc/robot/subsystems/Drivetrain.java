@@ -18,6 +18,7 @@ import com.ctre.phoenix.motorcontrol.TalonFXSimCollection;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.BasePigeonSimCollection;
 import com.ctre.phoenix.sensors.PigeonIMU;
+import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -36,7 +37,6 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -45,7 +45,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DTConsts;
 import frc.robot.Constants.Falcon500;
 import frc.robot.Constants.LEDConsts.LEDColor;
-import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.frc2135.PhoenixUtil;
 
@@ -175,7 +174,6 @@ public class Drivetrain extends SubsystemBase
     setSubsystem("Drivetrain");
     addChild("DiffDrive", m_diffDrive);
 
-    m_diffDrive.setSafetyEnabled(true);
     m_diffDrive.setExpiration(0.250);
     m_diffDrive.setMaxOutput(1.0);
 
@@ -342,6 +340,10 @@ public class Drivetrain extends SubsystemBase
     PhoenixUtil.getInstance( ).checkTalonError(motor, "setSensorPhase");
     motor.setSelectedSensorPosition(0.0);
     PhoenixUtil.getInstance( ).checkTalonError(motor, "setSelectedSensorPosition");
+    motor.configVelocityMeasurementWindow(8);
+    PhoenixUtil.getInstance( ).checkTalonError(motor, "configVelocityMeasurementWindow");
+    motor.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_10Ms);
+    PhoenixUtil.getInstance( ).checkTalonError(motor, "configVelocityMeasurementPeriod");
 
     motor.configOpenloopRamp(m_openLoopRamp, CANTIMEOUT);
     PhoenixUtil.getInstance( ).checkTalonError(motor, "configOpenloopRamp");
@@ -669,17 +671,13 @@ public class Drivetrain extends SubsystemBase
       m_driveR3.configOpenloopRamp(m_openLoopRamp);
   }
 
-  public void driveWithJoysticksExecute(XboxController driverPad)
+  public void driveWithJoysticksExecute(double speed, double rotation)
   {
-    double xValue;
-
-    xValue = (Robot.isReal( )) ? driverPad.getRightX( ) : driverPad.getLeftTriggerAxis( );
-    double yValue = driverPad.getLeftY( );
     double xOutput = 0.0;
     double yOutput = 0.0;
 
     // If joysticks report a very small value, then stick has been centered
-    if (Math.abs(yValue) < 0.05 && Math.abs(xValue) < 0.05)
+    if (Math.abs(speed) < 0.05 && Math.abs(rotation) < 0.05)
       m_throttleZeroed = true;
 
     // If throttle and steering not centered, use zero outputs until they do
@@ -687,18 +685,18 @@ public class Drivetrain extends SubsystemBase
     {
       if (m_isQuickTurn)
       {
-        xOutput = m_driveQTScaling * (xValue * Math.abs(xValue));
-        yOutput = m_driveQTScaling * (yValue * Math.abs(yValue));
+        xOutput = m_driveQTScaling * (rotation * Math.abs(rotation));
+        yOutput = m_driveQTScaling * (speed * Math.abs(speed));
       }
       else if (m_driveSlowMode)
       {
-        xOutput = m_driveCLScaling * (xValue * Math.abs(xValue));
-        yOutput = m_driveCLScaling * (yValue * Math.abs(yValue));
+        xOutput = m_driveCLScaling * (rotation * Math.abs(rotation));
+        yOutput = m_driveCLScaling * (speed * Math.abs(speed));
       }
       else
       {
-        xOutput = m_driveXScaling * (xValue * Math.abs(xValue));
-        yOutput = m_driveYScaling * (yValue * Math.abs(yValue));
+        xOutput = m_driveXScaling * (rotation * Math.abs(rotation));
+        yOutput = m_driveYScaling * (speed * Math.abs(speed));
       }
     }
 
