@@ -158,10 +158,10 @@ public class Constants
     public static final double kFlywheelPidKd           = 0.025;
     public static final double kFlywheelNeutralDeadband = 0.004;
 
-    public static final double kFlywheelToleranceRPM    = 200.0;     // Tolerance band around target RPM
-    public static final double kFlywheelPrimeRPM        = 1000.0;    // RPM for priming the shooter
+    public static final double kFlywheelToleranceRPM    = 150.0;     // Tolerance band around target RPM
     public static final double kFlywheelLowerTargetRPM  = 1000.0;    // RPM for lower hub
-    public static final double kFlywheelUpperTargetRPM  = 2200.0;    // RPM for upper hub
+    public static final double kFlywheelUpperTargetRPM  = 2150.0;    // RPM for upper hub
+    public static final double kFlywheelPrimeRPM        = kFlywheelUpperTargetRPM; // RPM for priming the shooter
 
     public static final double kReverseRPMThreshold     = 20.0;      // RPM threshold for allowing reverse of motor
     public static final double kFlywheelReverseRPM      = -1000.0;   // RPM for reversing out game pieces
@@ -222,7 +222,7 @@ public class Constants
     public static final double kClimbL3Time         = 0.5;
     public static final double kRotateRetractL4Time = 2.5;
 
-    public enum Height
+    public enum CLHeight
     {                       // Climber subsystem movement states
       HEIGHT_NOCHANGE,      // No change in climber height--maintain current position
       HEIGHT_STOW,          // Move to stow height
@@ -244,15 +244,18 @@ public class Constants
   public static final class VIConsts
   {
     // Limelight-defined streaming states
-    public static final int    STANDARD       = 0;  // Both cameras side-by-side
-    public static final int    PIP_MAIN       = 1;  // Limelight with second camera inset
-    public static final int    PIP_SECONDARY  = 2;  // Second camera with limelight inset
+    public static final int STANDARD      = 0;  // Both cameras side-by-side
+    public static final int PIP_MAIN      = 1;  // Limelight with second camera inset
+    public static final int PIP_SECONDARY = 2;  // Second camera with limelight inset
 
     // Limelight-defined LED mode states
-    public static final int    LED_CUR_MODE   = 0;
-    public static final int    LED_OFF        = 1;
-    public static final int    LED_BLINK      = 2;
-    public static final int    LED_ON         = 3;
+    public static final int LED_OFF       = 1;
+    public static final int LED_ON        = 3;
+
+    public enum VIRequests
+    {
+      VISION_OFF, VISION_ON, VISION_TOGGLE
+    }
 
     public static final double kLLDistance1   = 48;    // distance from bumper in inches for first reference point
     public static final double kLLVertOffset1 = 0.42;  // LL y reading in degrees for first reference point
@@ -277,4 +280,77 @@ public class Constants
       LEDCOLOR_DASH     // CANdle color taken from dashboard
     }
   }
+
+  public static final class SIMLLConsts
+  {
+    public static final double kFieldLength        = Units.feetToMeters(54.0);      // Field dimensions are 54ft x 27ft
+    public static final double kFieldWidth         = Units.feetToMeters(27.0);
+    public static final double kGoalPostionX       = kFieldLength / 2 - Units.feetToMeters(2.0); // Goal target on field
+    public static final double kGoalPostionY       = kFieldWidth / 2;
+    public static final double kGoalHeight         = Units.inchesToMeters(102.81);  // Upper hub height from floor
+    public static final double kCameraPositionX    = Units.inchesToMeters(0.0);     // Camera position on robot (X, Y)
+    public static final double kCameraPositionY    = Units.inchesToMeters(0.0);
+    public static final double kCameraRotation     = Units.degreesToRadians(180.0); // Camera rotation on robot
+    public static final double kCameraLensHeight   = Units.inchesToMeters(41.0);    // Camera lens height from floor
+    public static final double kCameraLensBackTilt = Units.degreesToRadians(40.0);  // Camera backward tilt from normal
+  }
+
+  public static final class AUTOConstants
+  {
+    public static final String  kOneBallLimelight_path1    = "fenderToOffTarmac";
+    public static final String  kOneBallLimelight_path2    = "shootingPosToOffTarmac";
+
+    public static final String  kDrive_path                = "startToOffTarmac";
+
+    public static final String  kDriveShoot_path1          = "startToShootingPos";
+    public static final String  kDriveShoot_path2          = "shootingPosToOffTarmac";
+
+    public static final String  kShootDriveShoot_path1     = "startToShootingPos";
+    public static final String  kShootDriveShoot_path2     = "shootingPosToBall";
+    public static final String  kShootDriveShoot_path3     = "ballToShootingPos";
+    public static final String  kShootDriveShoot_path4     = "shootingPosToOffTarmac";
+
+    public static final String  k3BallLeft_path1           = "startToShootingPos";
+    public static final String  k3BallLeft_path2           = "shootingPosToBall";
+    public static final String  k3BallLeft_path3           = "ballToShootingPos";
+    public static final String  k3BallLeft_path4           = "shootingPosToLeftBall";
+    public static final String  k3BallLeft_path5           = "leftBallToLeftShootingPos";
+
+    public static final String  k3BallRight_path1          = "startToShootingPos";
+    public static final String  k3BallRight_path2          = "shootingPosToBall";
+    public static final String  k3BallRight_path3          = "ballToShootingPos";
+    public static final String  k3BallRight_path4          = "shootingPosToRightBall";
+    public static final String  k3BallRight_path5          = "rightBallToRightShootingPos";
+    public static final String  k3BallRight_path6          = "shootingPosToOffTarmac";
+
+    public static final String  k1BallLimelight_path1      = "fenderToOffTarmac";
+    public static final String  k1BallLimelight_path2      = "shootingPosToOffTarmac";
+
+    public static final String  k1Ball2OppLeft_path1       = "startToShootingPos";
+    public static final String  k1Ball2OppLeft_path2       = "shootingPosToLeftOppBall1";
+    public static final String  k1Ball2OppLeft_path3       = "leftOppBall1ToBall2";
+    public static final String  k1Ball2OppLeft_path4       = "leftOppBall2ToShootingPos";
+
+    public static final String  k1Ball1OppRight_path1      = "rightstarttoSP";
+    public static final String  k1Ball1OppRight_path2      = "rightSPtoball";
+
+    public static final boolean k_ShootOppBall             = true;
+
+    public static final double  k_WaitTime1                = 0.0; // First wait timer - time to wait
+    public static final double  k_WaitTime2                = 0.0; // Second wait timer - time to wait
+
+    public static final String  path1                      = "forward39";
+    public static final String  path2                      = "backward39";
+    public static final String  path3                      = "rightAngleTurn";
+    public static final String  kDriveLimelightShoot_path1 = "forward39";
+    public static final String  kDriveLimelightShoot_path2 = "backward39";
+    public static final String  kShoot_path                = "startToShootingPos";
+
+    public enum AutoTimer
+    {
+      TIMER1,     // Select first auto wait timer for use
+      TIMER2      // Select second auto wait timer for use
+    };
+  }
+
 }

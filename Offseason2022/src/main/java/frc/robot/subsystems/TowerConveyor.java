@@ -96,7 +96,7 @@ public class TowerConveyor extends SubsystemBase
 
   public void initialize( )
   {
-    DataLogManager.log(getSubsystem( ) + ": subsystem intitialized!");
+    DataLogManager.log(getSubsystem( ) + ": subsystem initialized!");
     setTowerConveyorSpeed(TCMode.TCONVEYOR_STOP);
   }
 

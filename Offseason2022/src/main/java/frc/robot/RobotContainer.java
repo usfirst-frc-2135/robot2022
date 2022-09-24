@@ -3,20 +3,27 @@
 
 package frc.robot;
 
+import edu.wpi.first.hal.HALUtil;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.CLConsts.CLHeight;
 import frc.robot.Constants.FCConsts.FCMode;
 import frc.robot.Constants.INConsts.INMode;
 import frc.robot.Constants.LEDConsts.LEDColor;
 import frc.robot.Constants.SHConsts.SHMode;
+import frc.robot.Constants.SIMLLConsts;
 import frc.robot.Constants.TCConsts.TCMode;
+import frc.robot.Constants.VIConsts.VIRequests;
 import frc.robot.commands.Auto1Ball1OppRight;
 import frc.robot.commands.Auto1Ball2OppLeft;
 import frc.robot.commands.Auto1BallLimelight;
@@ -43,6 +50,7 @@ import frc.robot.commands.ClimberCalibrate;
 import frc.robot.commands.ClimberFullClimb;
 import frc.robot.commands.ClimberL2ToL3;
 import frc.robot.commands.ClimberL3ToL4;
+import frc.robot.commands.ClimberMoveToHeight;
 import frc.robot.commands.ClimberRun;
 import frc.robot.commands.ClimberSetGatehook;
 import frc.robot.commands.ClimberTimerOverride;
@@ -64,8 +72,8 @@ import frc.robot.commands.IntakingAction;
 import frc.robot.commands.IntakingStop;
 import frc.robot.commands.LEDSet;
 import frc.robot.commands.RobotInitialize;
-import frc.robot.commands.ScoringActionUpperHub;
 import frc.robot.commands.ScoringActionLowerHub;
+import frc.robot.commands.ScoringActionUpperHub;
 import frc.robot.commands.ScoringPrime;
 import frc.robot.commands.ScoringStop;
 import frc.robot.commands.ShooterReverse;
@@ -92,26 +100,38 @@ import frc.robot.subsystems.Vision;
  */
 public class RobotContainer
 {
-  private static RobotContainer m_robotContainer = new RobotContainer( );
+  private static RobotContainer m_robotContainer      = new RobotContainer( );
 
   // The robot's subsystems
-  public final Drivetrain       m_drivetrain     = new Drivetrain( );
-  public final Intake           m_intake         = new Intake( );
-  public final FloorConveyor    m_floorConveyor  = new FloorConveyor( );
-  public final TowerConveyor    m_towerConveyor  = new TowerConveyor( );
-  public final Shooter          m_shooter        = new Shooter( );
-  public final Climber          m_climber        = new Climber( );
-  public final Vision           m_vision         = new Vision( );
-  public final LED              m_led            = new LED( );
-  public final Pneumatics       m_pneumatics     = new Pneumatics( );
-  public final Power            m_power          = new Power( );
+  public final Drivetrain       m_drivetrain          = new Drivetrain( );
+  public final Intake           m_intake              = new Intake( );
+  public final FloorConveyor    m_floorConveyor       = new FloorConveyor( );
+  public final TowerConveyor    m_towerConveyor       = new TowerConveyor( );
+  public final Shooter          m_shooter             = new Shooter( );
+  public final Climber          m_climber             = new Climber( );
+  public final Vision           m_vision              = new Vision( );
+  public final LED              m_led                 = new LED( );
+  public final Pneumatics       m_pneumatics          = new Pneumatics( );
+  public final Power            m_power               = new Power( );
 
   // Joysticks
-  private final XboxController  m_driver         = new XboxController(0);
-  private final XboxController  m_operator       = new XboxController(1);
+  private final XboxController  m_driver              = new XboxController(0);
+  private final XboxController  m_operator            = new XboxController(1);
 
   // A chooser for autonomous commands
-  SendableChooser<Command>      m_chooser        = new SendableChooser<>( );
+  SendableChooser<Command>      m_chooser             = new SendableChooser<>( );
+
+  private SimulateLimelight     m_simLimelightCommand =
+  // @formatter:off
+      new SimulateLimelight(m_drivetrain, 
+                            new Translation2d(SIMLLConsts.kGoalPostionX, SIMLLConsts.kGoalPostionY),       // Goal location mid field (X, Y)
+                            SIMLLConsts.kGoalHeight,                                                       // goal height
+                            new Translation2d(SIMLLConsts.kCameraPositionX, SIMLLConsts.kCameraPositionY), // camera translation on robot
+                            new Rotation2d(SIMLLConsts.kCameraRotation),                                   // camera rotation on robot
+                            SIMLLConsts.kCameraLensHeight,                                                 // camera lens height
+                            SIMLLConsts.kCameraLensBackTilt);                                              // camera back tilt
+  // @formatter:on
+  public Command                m_climberCalibrate    = new ClimberCalibrate(m_climber);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -139,13 +159,16 @@ public class RobotContainer
     // SmartDashboard Buttons
     SmartDashboard.putData("Auto1Ball1OppRight", new Auto1Ball1OppRight( ));
     SmartDashboard.putData("Auto1Ball2OppLeft", new Auto1Ball2OppLeft( ));
-    SmartDashboard.putData("Auto1BallLimelight", new Auto1BallLimelight( ));
+    SmartDashboard.putData("Auto1BallLimelight",
+        new Auto1BallLimelight(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
     SmartDashboard.putData("Auto3BallLeft", new Auto3BallLeft( ));
     SmartDashboard.putData("Auto3BallRight", new Auto3BallRight( ));
-    SmartDashboard.putData("AutoDrive", new AutoDrive( ));
-    SmartDashboard.putData("AutoDriveLimelightShoot", new AutoDriveLimelightShoot( ));
+    SmartDashboard.putData("AutoDrive", new AutoDrive(m_drivetrain, m_intake));
+    SmartDashboard.putData("AutoDriveLimelightShoot",
+        new AutoDriveLimelightShoot(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
     SmartDashboard.putData("AutoDrivePath", new AutoDrivePath(m_drivetrain, "simCurvePath", true));
-    SmartDashboard.putData("AutoDriveShoot", new AutoDriveShoot( ));
+    SmartDashboard.putData("AutoDriveShoot",
+        new AutoDriveShoot(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
     SmartDashboard.putData("AutoPathSequence", new AutoPathSequence( ));
     SmartDashboard.putData("AutoShoot", new AutoShoot( ));
     SmartDashboard.putData("AutoShootDriveShoot", new AutoShootDriveShoot( ));
@@ -213,8 +236,6 @@ public class RobotContainer
     SmartDashboard.putData("Shooter-REV", new ShooterRun(m_shooter, SHMode.SHOOTER_REVERSE));
     SmartDashboard.putData("ShooterReverse", new ShooterReverse(m_shooter));
 
-    SmartDashboard.putData("SimulateLimelight", new SimulateLimelight( ));
-
     SmartDashboard.putData("Tconveyor-STOP", new TowerConveyorRun(m_towerConveyor, TCMode.TCONVEYOR_STOP));
     SmartDashboard.putData("Tconveyor-ACQUIRE", new TowerConveyorRun(m_towerConveyor, TCMode.TCONVEYOR_ACQUIRE));
     SmartDashboard.putData("Tconveyor-ACQUIRESLOW", new TowerConveyorRun(m_towerConveyor, TCMode.TCONVEYOR_ACQUIRE_SLOW));
@@ -222,13 +243,17 @@ public class RobotContainer
     SmartDashboard.putData("Tconveyor-EXPELFAST", new TowerConveyorRun(m_towerConveyor, TCMode.TCONVEYOR_EXPEL_FAST));
 
     SmartDashboard.putData("Dummy", new Dummy(2135));
+
+    if (HALUtil.getHALRuntimeType( ) == HALUtil.RUNTIME_SIMULATION)
+      CommandScheduler.getInstance( ).schedule(m_simLimelightCommand);
   }
 
   private void initDefaultCommands( )
   {
     // Configure default commands for these subsystems
-    m_drivetrain.setDefaultCommand(new DriveTeleop(m_drivetrain, m_driver));
-    m_climber.setDefaultCommand(new ClimberRun(m_climber, m_operator));
+      m_drivetrain.setDefaultCommand(
+          new DriveTeleop(m_drivetrain, m_driver, XboxController.Axis.kLeftY.value, XboxController.Axis.kRightX.value));
+    m_climber.setDefaultCommand(new ClimberMoveToHeight(m_climber, CLHeight.HEIGHT_NOCHANGE));
   }
 
   // Create a trigger object that monitors a joystick axis
@@ -293,22 +318,21 @@ public class RobotContainer
     driverLeftBumper.whenPressed(new IntakingAction(m_intake, m_floorConveyor, m_towerConveyor), true);
     driverLeftBumper.whenReleased(new IntakingStop(m_intake, m_floorConveyor, m_towerConveyor), true);
     driverRightBumper.whenPressed(new ScoringActionLowerHub(m_intake, m_floorConveyor, m_towerConveyor, m_shooter, 10.0), true);
-    // driverRightBumper.whenReleased(new ScoringStop(m_shooter), true);
+    driverRightBumper.whenReleased(new ScoringStop(m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision), true);
     driverBack.whenPressed(new Dummy(XboxController.Button.kBack.value), true);
-    driverStart.whenPressed(new VisionOn(m_vision, true), true);
-    driverStart.whenReleased(new VisionOn(m_vision, false), true);
+    driverStart.whenPressed(new VisionOn(m_vision, VIRequests.VISION_TOGGLE), true);
 
-    // Operator - POV buttons
+    // Driver - POV buttons
     driverUp.whenPressed(new Dummy(0), true);
     driverRight.whenPressed(new Dummy(90), true);
     driverDown.whenPressed(new Dummy(180), true);
     driverLeft.whenPressed(new Dummy(270), true);
 
     // Driver - Triggers
-    driverLeftTrigger
+    driverRightTrigger
         .whenActive(new DriveLimelightShoot(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
     driverRightTrigger
-        .whenActive(new DriveLimelightStop(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
+        .whenInactive(new DriveLimelightStop(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
 
     ///////////////////////////////////////////////////////
     // Operator Controller Assignments
@@ -343,7 +367,7 @@ public class RobotContainer
     operLeftBumper.whenReleased(new IntakingStop(m_intake, m_floorConveyor, m_towerConveyor), true);
     operRightBumper.whenPressed(new ScoringPrime(m_shooter, m_vision), true);
     operBack.whenPressed(new ClimberFullClimb(m_climber, m_operator, XboxController.Button.kY), true);
-    operStart.whenPressed(new ClimberRun(m_climber, m_operator), true);
+    operStart.toggleWhenPressed(new ClimberRun(m_climber, m_operator), true);
 
     // Operator - POV buttons
     operUp.whenPressed(new Climber1Deploy(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_drivetrain), true);
@@ -361,10 +385,13 @@ public class RobotContainer
     // Configure autonomous sendable chooser
     m_chooser.addOption("Auto1Ball1OppRight", new Auto1Ball1OppRight( ));
     m_chooser.addOption("Auto1Ball2OppLeft", new Auto1Ball2OppLeft( ));
-    m_chooser.addOption("Auto1BallLimelight", new Auto1BallLimelight( ));
+    m_chooser.addOption("Auto1BallLimelight",
+        new Auto1BallLimelight(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
     m_chooser.addOption("Auto3BallLeft", new Auto3BallLeft( ));
     m_chooser.addOption("Auto3BallRight", new Auto3BallRight( ));
     m_chooser.addOption("AutoShootDriveShoot", new AutoShootDriveShoot( ));
+    m_chooser.addOption("AutoDriveShoot",
+        new AutoDriveShoot(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
     m_chooser.setDefaultOption("AutoStop", new AutoStop(m_drivetrain));
 
     SmartDashboard.putData("Auto Mode", m_chooser);

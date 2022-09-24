@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
-import frc.robot.Constants.CLConsts.Height;
+import frc.robot.Constants.CLConsts.CLHeight;
 import frc.robot.Constants.FCConsts.FCMode;
 import frc.robot.Constants.INConsts.INMode;
 import frc.robot.Constants.SHConsts.SHMode;
@@ -41,12 +41,12 @@ public class Climber0Stow extends SequentialCommandGroup
         new ShooterRun(shooter, SHMode.SHOOTER_STOP),
         new ParallelDeadlineGroup(
             new WaitUntilCommand(climber::moveClimberDistanceIsFinished),
-            new ClimberMoveToHeight(climber, Height.HEIGHT_STOW)
+            new ClimberMoveToHeight(climber, CLHeight.HEIGHT_STOW)
         ),
         new WaitCommand(1.5), 
         new ParallelDeadlineGroup(
             new WaitUntilCommand(climber::moveClimberDistanceIsFinished),
-            new ClimberMoveToHeight(climber, Height.HEIGHT_GATEHOOK_REST)
+            new ClimberMoveToHeight(climber, CLHeight.HEIGHT_GATEHOOK_REST)
         ),
         new ClimberSetGatehook(climber, false)
         // @formatter:on
