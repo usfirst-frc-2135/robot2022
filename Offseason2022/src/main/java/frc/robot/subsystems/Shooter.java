@@ -235,7 +235,7 @@ public class Shooter extends SubsystemBase
     m_motorSH11.selectProfileSlot(SLOTINDEX, PIDINDEX);
     PhoenixUtil.getInstance( ).checkTalonError(m_motorSH11, "selectProfileSlot");
 
-    DataLogManager.log(getSubsystem( ) + ": kF " + m_flywheelPidKf + " kP " + m_flywheelPidKp + " kI " + m_flywheelPidKi + " kD"
+    DataLogManager.log(getSubsystem( ) + ": kF " + m_flywheelPidKf + " kP " + m_flywheelPidKp + " kI " + m_flywheelPidKi + " kD "
         + m_flywheelPidKd);
   }
 
