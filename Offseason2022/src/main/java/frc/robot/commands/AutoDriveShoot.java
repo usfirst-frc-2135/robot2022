@@ -83,7 +83,10 @@ public class AutoDriveShoot extends SequentialCommandGroup
         new ParallelDeadlineGroup(
           new WaitUntilCommand(drivetrain::driveWithPathFollowerIsFinished),
           new AutoDrivePath(drivetrain, m_pathname2, false)
-        )
+        ),
+
+        new PrintCommand("AUTO: Sit still while feeding motors"),
+        new AutoStop(drivetrain)
         //@formatter:on
 
     );
