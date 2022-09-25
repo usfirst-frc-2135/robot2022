@@ -3,6 +3,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
@@ -22,6 +23,7 @@ import frc.robot.subsystems.Vision;
  */
 public class Auto1Ball1OppRight extends SequentialCommandGroup
 {
+
   public Auto1Ball1OppRight(Drivetrain drivetrain, Intake intake, FloorConveyor fConv, TowerConveyor tConv, Shooter shooter,
       Vision vision)
   {
@@ -78,11 +80,15 @@ public class Auto1Ball1OppRight extends SequentialCommandGroup
             new PrintCommand("Shoot opponent's ball") 
           ), 
           new AutoStop(drivetrain),
+          new WaitUntilCommand(p->SmartDashboard.getBoolean("AUTO_ShootOppBall", false))
         ),
    //smartdashboard return get boolean shootOppBall 
-          new PrintCommand("stop shooitng"), new ParallelDeadlineGroup( new ScoringStop(intake, fConv, tConv,
-     shooter, vision), new AutoStop(drivetrain) ), new PrintCommand("AUTO 1 BALL 1 OPP RIGHT - END")
-     
+        new PrintCommand("stop shooitng"), 
+        new ParallelDeadlineGroup( 
+          new ScoringStop(intake, fConv, tConv, shooter, vision), 
+          new AutoStop(drivetrain) 
+        ), 
+        new PrintCommand("AUTO 1 BALL 1 OPP RIGHT - END")
     // @formatter:on
     );
   }
