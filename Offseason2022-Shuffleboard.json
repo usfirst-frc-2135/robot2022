@@ -354,7 +354,7 @@
         "vgap": 16.0,
         "titleType": 0,
         "tiles": {
-          "9,0": {
+          "8,0": {
             "size": [
               3,
               2
@@ -365,7 +365,7 @@
               "_title": "SmartDashboard/Intake Deploy: INTAKE_EXTEND"
             }
           },
-          "9,2": {
+          "8,2": {
             "size": [
               3,
               2
@@ -376,7 +376,7 @@
               "_title": "SmartDashboard/Intake Deploy: INTAKE_STOW"
             }
           },
-          "12,0": {
+          "11,0": {
             "size": [
               3,
               2
@@ -387,7 +387,7 @@
               "_title": "/SmartDashboard/Intake-STOP"
             }
           },
-          "12,2": {
+          "11,2": {
             "size": [
               3,
               2
@@ -398,7 +398,7 @@
               "_title": "/SmartDashboard/Intake-ACQUIRE"
             }
           },
-          "12,4": {
+          "11,4": {
             "size": [
               3,
               2
@@ -453,7 +453,7 @@
               "_title": "/SmartDashboard/Fconveyor-STOP"
             }
           },
-          "18,0": {
+          "19,0": {
             "size": [
               3,
               2
@@ -464,7 +464,7 @@
               "_title": "/SmartDashboard/Tconveyor-STOP"
             }
           },
-          "18,2": {
+          "19,2": {
             "size": [
               3,
               2
@@ -475,7 +475,7 @@
               "_title": "/SmartDashboard/Tconveyor-ACQUIRE"
             }
           },
-          "18,4": {
+          "19,4": {
             "size": [
               3,
               2
@@ -486,7 +486,7 @@
               "_title": "/SmartDashboard/Tconveyor-ACQUIRESLOW"
             }
           },
-          "21,2": {
+          "22,2": {
             "size": [
               3,
               2
@@ -497,7 +497,7 @@
               "_title": "/SmartDashboard/Tconveyor-EXPEL"
             }
           },
-          "21,4": {
+          "22,4": {
             "size": [
               3,
               2
@@ -552,7 +552,7 @@
               "_title": "/SmartDashboard/ExhaustingAction"
             }
           },
-          "9,5": {
+          "8,5": {
             "size": [
               3,
               2
@@ -565,7 +565,7 @@
               "Colors/Color when false": "#8B0000FF"
             }
           },
-          "21,0": {
+          "22,0": {
             "size": [
               3,
               2
@@ -769,6 +769,17 @@
               "_source0": "network_table:///SmartDashboard/Shooter-REV",
               "_title": "/SmartDashboard/Shooter-REV"
             }
+          },
+          "2,0": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/SH_flywheelPrimeRPM",
+              "_title": "flywheelPrimeRPM"
+            }
           }
         }
       }
@@ -830,9 +841,9 @@
               "_title": "extendL2"
             }
           },
-          "13,0": {
+          "11,0": {
             "size": [
-              2,
+              3,
               2
             ],
             "content": {
@@ -841,9 +852,9 @@
               "_title": "stowHeight"
             }
           },
-          "15,0": {
+          "14,0": {
             "size": [
-              2,
+              3,
               2
             ],
             "content": {
@@ -997,7 +1008,7 @@
               "_title": "/SmartDashboard/CL_pidKd"
             }
           },
-          "23,0": {
+          "7,0": {
             "size": [
               2,
               2
@@ -1008,7 +1019,7 @@
               "_title": "/SmartDashboard/CL_outputCL14"
             }
           },
-          "23,2": {
+          "7,2": {
             "size": [
               2,
               2
@@ -1226,6 +1237,28 @@
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/CL_climbL3Time",
               "_title": "climbL3Time"
+            }
+          },
+          "9,0": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/CL_currentCL14",
+              "_title": "currentCL14"
+            }
+          },
+          "9,2": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/CL_currentCL15",
+              "_title": "currentCL15"
             }
           }
         }
@@ -1822,7 +1855,7 @@
         "vgap": 16.0,
         "titleType": 0,
         "tiles": {
-          "16,4": {
+          "16,3": {
             "size": [
               3,
               2
@@ -1833,7 +1866,7 @@
               "_title": "TurnOutput"
             }
           },
-          "16,6": {
+          "16,5": {
             "size": [
               3,
               2
@@ -1844,7 +1877,7 @@
               "_title": "ThrottleOutput"
             }
           },
-          "19,4": {
+          "19,3": {
             "size": [
               4,
               2
@@ -1855,7 +1888,7 @@
               "_title": "TurnOutputClamped"
             }
           },
-          "19,6": {
+          "19,5": {
             "size": [
               4,
               2
@@ -1866,7 +1899,7 @@
               "_title": "ThrottleOutputClamped"
             }
           },
-          "12,4": {
+          "12,0": {
             "size": [
               3,
               2
@@ -1877,7 +1910,7 @@
               "_title": "LimeLightDist"
             }
           },
-          "12,6": {
+          "12,2": {
             "size": [
               3,
               2
@@ -1910,7 +1943,7 @@
               "_title": "turnMax"
             }
           },
-          "4,6": {
+          "4,5": {
             "size": [
               3,
               2
@@ -2009,7 +2042,7 @@
               "_title": "turnPidKp"
             }
           },
-          "7,6": {
+          "7,5": {
             "size": [
               3,
               2
@@ -2293,7 +2326,7 @@
           "3,3": {
             "size": [
               3,
-              3
+              4
             ],
             "content": {
               "_type": "Text View",
@@ -2351,7 +2384,7 @@
           "19,2": {
             "size": [
               3,
-              3
+              2
             ],
             "content": {
               "_type": "Text View",
@@ -2409,7 +2442,7 @@
           "0,0": {
             "size": [
               5,
-              5
+              4
             ],
             "content": {
               "_type": "ComboBox Chooser",
@@ -2428,31 +2461,7 @@
               "_title": "/SmartDashboard/AUTO_WaitTime"
             }
           },
-          "14,2": {
-            "size": [
-              3,
-              2
-            ],
-            "content": {
-              "_type": "Boolean Box",
-              "_source0": "network_table:///SmartDashboard/CL_CL15FollowerMode",
-              "_title": "/SmartDashboard/CL_CL15FollowerMode",
-              "Colors/Color when true": "#7CFC00FF",
-              "Colors/Color when false": "#8B0000FF"
-            }
-          },
-          "14,0": {
-            "size": [
-              3,
-              2
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/Climber Follower Initialize",
-              "_title": "/SmartDashboard/Climber Follower Initialize"
-            }
-          },
-          "5,2": {
+          "8,0": {
             "size": [
               3,
               3
@@ -2466,33 +2475,7 @@
               "Visuals/Show value": true
             }
           },
-          "8,2": {
-            "size": [
-              3,
-              2
-            ],
-            "content": {
-              "_type": "Boolean Box",
-              "_source0": "network_table:///SmartDashboard/CL_CL14Valid",
-              "_title": "/SmartDashboard/CL_CL14Valid",
-              "Colors/Color when true": "#7CFC00FF",
-              "Colors/Color when false": "#8B0000FF"
-            }
-          },
-          "11,2": {
-            "size": [
-              3,
-              2
-            ],
-            "content": {
-              "_type": "Boolean Box",
-              "_source0": "network_table:///SmartDashboard/CL_CL15Valid",
-              "_title": "/SmartDashboard/CL_CL15Valid",
-              "Colors/Color when true": "#7CFC00FF",
-              "Colors/Color when false": "#8B0000FF"
-            }
-          },
-          "2,5": {
+          "2,4": {
             "size": [
               3,
               2
@@ -2503,7 +2486,7 @@
               "_title": "SmartDashboard/Climber 1Deploy"
             }
           },
-          "5,5": {
+          "5,4": {
             "size": [
               3,
               2
@@ -2514,7 +2497,7 @@
               "_title": "SmartDashboard/Climber 2ClimbToL2"
             }
           },
-          "8,5": {
+          "8,4": {
             "size": [
               3,
               2
@@ -2525,7 +2508,7 @@
               "_title": "SmartDashboard/Climber 3RotateToL3"
             }
           },
-          "11,5": {
+          "11,4": {
             "size": [
               3,
               2
@@ -2536,7 +2519,7 @@
               "_title": "SmartDashboard/Climber 5RotateIntoL3"
             }
           },
-          "14,5": {
+          "14,4": {
             "size": [
               3,
               2
@@ -2547,7 +2530,7 @@
               "_title": "SmartDashboard/Climber 7ClimbToL4"
             }
           },
-          "0,5": {
+          "0,4": {
             "size": [
               2,
               2
@@ -2558,7 +2541,7 @@
               "_title": "SmartDashboard/Climber Calibrate"
             }
           },
-          "8,0": {
+          "11,0": {
             "size": [
               3,
               2
@@ -2831,7 +2814,7 @@
   ],
   "windowGeometry": {
     "x": -6.0,
-    "y": 25.0,
+    "y": 25.33333396911621,
     "width": 1346.0,
     "height": 494.0
   }
