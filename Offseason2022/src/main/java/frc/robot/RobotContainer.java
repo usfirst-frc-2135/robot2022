@@ -169,8 +169,9 @@ public class RobotContainer
     SmartDashboard.putData("AutoDrivePath", new AutoDrivePath(m_drivetrain, "simCurvePath", true));
     SmartDashboard.putData("AutoDriveShoot",
         new AutoDriveShoot(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
-    SmartDashboard.putData("AutoPathSequence", new AutoPathSequence( ));
-    SmartDashboard.putData("AutoShoot", new AutoShoot( ));
+    SmartDashboard.putData("AutoPathSequence", new AutoPathSequence(m_drivetrain));
+    SmartDashboard.putData("AutoShoot",
+        new AutoShoot(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
     SmartDashboard.putData("AutoShootDriveShoot", new AutoShootDriveShoot( ));
     SmartDashboard.putData("AutoShootLowHub", new AutoShootLowHub( ));
     SmartDashboard.putData("AutoStop", new AutoStop(m_drivetrain));
@@ -251,8 +252,8 @@ public class RobotContainer
   private void initDefaultCommands( )
   {
     // Configure default commands for these subsystems
-      m_drivetrain.setDefaultCommand(
-          new DriveTeleop(m_drivetrain, m_driver, XboxController.Axis.kLeftY.value, XboxController.Axis.kRightX.value));
+    m_drivetrain.setDefaultCommand(
+        new DriveTeleop(m_drivetrain, m_driver, XboxController.Axis.kLeftY.value, XboxController.Axis.kRightX.value));
     m_climber.setDefaultCommand(new ClimberMoveToHeight(m_climber, CLHeight.HEIGHT_NOCHANGE));
   }
 
