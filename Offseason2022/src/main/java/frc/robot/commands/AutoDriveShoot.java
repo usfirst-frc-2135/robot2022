@@ -88,7 +88,6 @@ public class AutoDriveShoot extends SequentialCommandGroup
         new PrintCommand("AUTO: Sit still while feeding motors"),
         new AutoStop(drivetrain)
         //@formatter:on
-
     );
   }
 

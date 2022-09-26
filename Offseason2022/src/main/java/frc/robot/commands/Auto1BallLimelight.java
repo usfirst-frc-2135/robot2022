@@ -36,40 +36,46 @@ public class Auto1BallLimelight extends SequentialCommandGroup
 
     addCommands(
         // Add Commands here:
+
         //@formatter:off
-    new AutoWait(AutoTimer.TIMER1), 
+        new PrintCommand("AUTO: Use programmable delay from dashboard before starting"),
+        new ParallelDeadlineGroup(
+          new AutoWait(AutoTimer.TIMER1), 
+          new AutoStop(drivetrain)
+        ),
 
-    // new ParallelDeadlineGroup(
-    //   new IntakeDeploy(intake, true), 
-    //   new AutoStop(drivetrain)
-    // ),
-
-
-    new ParallelDeadlineGroup(
-      new ParallelDeadlineGroup(
-        new WaitUntilCommand(drivetrain::driveWithPathFollowerIsFinished), 
-        new AutoDrivePath(drivetrain, m_pathname1, true)
+        // new PrintCommand("AUTO: Deploy intake if desired"),
+        // new ParallelDeadlineGroup(
+        //   new IntakeDeploy(intake, true), 
+        //   new AutoStop(drivetrain)
+        // ),
+        
+        new PrintCommand("AUTO: Run the first path while priming shooter"),
+        new ParallelDeadlineGroup(
+          new ParallelDeadlineGroup(
+            new WaitUntilCommand(drivetrain::driveWithPathFollowerIsFinished), 
+            new AutoDrivePath(drivetrain, m_pathname1, true)
+            ), 
+          new ScoringPrime(shooter, vision)
         ), 
-      new ScoringPrime(shooter, vision)
-    ), 
-    new PrintCommand("Run limelight shooting routine for 3rd ball"), 
-    new ConditionalCommand(
-      new AutoDriveLimelightShoot(drivetrain, intake, fConv, tConv, shooter, vision), 
-      new ParallelDeadlineGroup(
-        new ScoringStop(intake, fConv, tConv, shooter, vision), 
-        new AutoStop(drivetrain)
-      ), 
-      drivetrain::useLLValid  //TODO: replace with a method to give a BooleanSupplier parameters
-    ), 
-    new ParallelDeadlineGroup(
-      new WaitUntilCommand(drivetrain::driveWithPathFollowerIsFinished), 
-      new AutoDrivePath(drivetrain, m_pathname2, false),
-      new ScoringStop(intake, fConv, tConv, shooter, vision)
-    )
 
+        new PrintCommand("AUTO: Run limelight shooting routine for pre-loaded ball"), 
+        new ConditionalCommand(
+          new AutoDriveLimelightShoot(drivetrain, intake, fConv, tConv, shooter, vision), 
+          new ParallelDeadlineGroup(
+            new ScoringStop(intake, fConv, tConv, shooter, vision), 
+            new AutoStop(drivetrain)
+          ), 
+          drivetrain::useLLValid  //TODO: replace with a method to give a BooleanSupplier parameters
+        ), 
 
-    //@formatter:on
-
+        new PrintCommand("AUTO: Run the second path off the tarmac"), 
+        new ParallelDeadlineGroup(
+          new WaitUntilCommand(drivetrain::driveWithPathFollowerIsFinished), 
+          new AutoDrivePath(drivetrain, m_pathname2, false),
+          new ScoringStop(intake, fConv, tConv, shooter, vision)
+        )
+        //@formatter:on
     );
   }
 
