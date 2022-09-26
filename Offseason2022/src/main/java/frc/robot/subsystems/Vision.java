@@ -24,7 +24,7 @@ public class Vision extends SubsystemBase
   private double       m_distance2   = VIConsts.kLLDistance2;   // x position in inches for second reference point
   private double       m_vertOffset2 = VIConsts.kLLVertOffset2; // y reading in degrees for second reference point
 
-  private NetworkTable table;              // Network table reference for getting LL values
+  private NetworkTable m_table;            // Network table reference for getting LL values
 
   private double       m_targetHorizAngle; // LL Target horizontal Offset from Crosshair to Target (-27 to 27 deg)
   private double       m_targetVertAngle;  // LL Target vertical Offset from Crosshair to Target (-20.5 to 20.5 deg)
@@ -43,7 +43,7 @@ public class Vision extends SubsystemBase
     setSubsystem("Vision");
 
     // Get the Network table reference once for all methods
-    table = NetworkTableInstance.getDefault( ).getTable("limelight");
+    m_table = NetworkTableInstance.getDefault( ).getTable("limelight");
 
     // Set camera and LED display
     setLEDMode(VIConsts.LED_ON);
@@ -79,11 +79,11 @@ public class Vision extends SubsystemBase
     }
     else
     {
-      m_targetHorizAngle = table.getEntry("tx").getDouble(0.0);
-      m_targetVertAngle = m_yfilter.calculate(table.getEntry("ty").getDouble(0.0));
-      m_targetArea = table.getEntry("ta").getDouble(0.0);
-      m_targetSkew = table.getEntry("ts").getDouble(0.0);
-      m_targetValid = table.getEntry("tv").getBoolean(false);
+      m_targetHorizAngle = m_table.getEntry("tx").getDouble(0.0);
+      m_targetVertAngle = m_yfilter.calculate(m_table.getEntry("ty").getDouble(0.0));
+      m_targetArea = m_table.getEntry("ta").getDouble(0.0);
+      m_targetSkew = m_table.getEntry("ts").getDouble(0.0);
+      m_targetValid = m_table.getEntry("tv").getBoolean(false);
     }
 
     m_distLL = calculateDist(m_targetVertAngle);
@@ -148,12 +148,12 @@ public class Vision extends SubsystemBase
   public void setLEDMode(int mode)
   {
     DataLogManager.log(getSubsystem( ) + ": setLedMode " + mode);
-    table.getEntry("ledMode").setValue(mode);
+    m_table.getEntry("ledMode").setValue(mode);
   }
 
   public int getLEDMode( )
   {
-    int mode = (int) table.getEntry("ledMode").getNumber(0.0);
+    int mode = m_table.getEntry("ledMode").getNumber(0.0).intValue( );
 
     DataLogManager.log(getSubsystem( ) + "getLedMode :" + mode);
     return mode;
@@ -162,7 +162,7 @@ public class Vision extends SubsystemBase
   public void setCameraDisplay(int stream)
   {
     DataLogManager.log(getSubsystem( ) + ": setCameraDisplay " + stream);
-    table.getEntry("stream").setValue(stream);
+    m_table.getEntry("stream").setValue(stream);
   }
 
   private double calculateDist(double vertAngle)

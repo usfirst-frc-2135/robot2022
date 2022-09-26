@@ -18,6 +18,7 @@ import com.ctre.phoenix.motorcontrol.TalonFXSimCollection;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.BasePigeonSimCollection;
 import com.ctre.phoenix.sensors.PigeonIMU;
+import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -36,7 +37,6 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -45,7 +45,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DTConsts;
 import frc.robot.Constants.Falcon500;
 import frc.robot.Constants.LEDConsts.LEDColor;
-import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.frc2135.PhoenixUtil;
 
@@ -175,7 +174,6 @@ public class Drivetrain extends SubsystemBase
     setSubsystem("Drivetrain");
     addChild("DiffDrive", m_diffDrive);
 
-    m_diffDrive.setSafetyEnabled(true);
     m_diffDrive.setExpiration(0.250);
     m_diffDrive.setMaxOutput(1.0);
 
@@ -342,6 +340,10 @@ public class Drivetrain extends SubsystemBase
     PhoenixUtil.getInstance( ).checkTalonError(motor, "setSensorPhase");
     motor.setSelectedSensorPosition(0.0);
     PhoenixUtil.getInstance( ).checkTalonError(motor, "setSelectedSensorPosition");
+    motor.configVelocityMeasurementWindow(8);
+    PhoenixUtil.getInstance( ).checkTalonError(motor, "configVelocityMeasurementWindow");
+    motor.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_10Ms);
+    PhoenixUtil.getInstance( ).checkTalonError(motor, "configVelocityMeasurementPeriod");
 
     motor.configOpenloopRamp(m_openLoopRamp, CANTIMEOUT);
     PhoenixUtil.getInstance( ).checkTalonError(motor, "configOpenloopRamp");
@@ -551,7 +553,7 @@ public class Drivetrain extends SubsystemBase
     m_odometry.resetPosition(pose, Rotation2d.fromDegrees(0.0));
   }
 
-  private Pose2d getPose( )
+  public Pose2d getPose( )
   {
     return m_odometry.getPoseMeters( );
   }
@@ -663,21 +665,19 @@ public class Drivetrain extends SubsystemBase
   public void driveWithJoysticksInit( )
   {
     setBrakeMode(true);
-    m_driveL1.configOpenloopRamp(m_openLoopRamp);
-    m_driveR3.configOpenloopRamp(m_openLoopRamp);
+    if (m_validL1)
+      m_driveL1.configOpenloopRamp(m_openLoopRamp);
+    if (m_validR3)
+      m_driveR3.configOpenloopRamp(m_openLoopRamp);
   }
 
-  public void driveWithJoysticksExecute(XboxController driverPad)
+  public void driveWithJoysticksExecute(double speed, double rotation)
   {
-    double xValue;
-
-    xValue = (Robot.isReal( )) ? driverPad.getRightX( ) : driverPad.getLeftTriggerAxis( );
-    double yValue = driverPad.getLeftY( );
     double xOutput = 0.0;
     double yOutput = 0.0;
 
     // If joysticks report a very small value, then stick has been centered
-    if (Math.abs(yValue) < 0.05 && Math.abs(xValue) < 0.05)
+    if (Math.abs(speed) < 0.05 && Math.abs(rotation) < 0.05)
       m_throttleZeroed = true;
 
     // If throttle and steering not centered, use zero outputs until they do
@@ -685,18 +685,18 @@ public class Drivetrain extends SubsystemBase
     {
       if (m_isQuickTurn)
       {
-        xOutput = m_driveQTScaling * (xValue * Math.abs(xValue));
-        yOutput = m_driveQTScaling * (yValue * Math.abs(yValue));
+        xOutput = m_driveQTScaling * (rotation * Math.abs(rotation));
+        yOutput = m_driveQTScaling * (speed * Math.abs(speed));
       }
       else if (m_driveSlowMode)
       {
-        xOutput = m_driveCLScaling * (xValue * Math.abs(xValue));
-        yOutput = m_driveCLScaling * (yValue * Math.abs(yValue));
+        xOutput = m_driveCLScaling * (rotation * Math.abs(rotation));
+        yOutput = m_driveCLScaling * (speed * Math.abs(speed));
       }
       else
       {
-        xOutput = m_driveXScaling * (xValue * Math.abs(xValue));
-        yOutput = m_driveYScaling * (yValue * Math.abs(yValue));
+        xOutput = m_driveXScaling * (rotation * Math.abs(rotation));
+        yOutput = m_driveYScaling * (speed * Math.abs(speed));
       }
     }
 
@@ -707,8 +707,10 @@ public class Drivetrain extends SubsystemBase
   public void driveWithJoysticksEnd( )
   {
     setBrakeMode(false);
-    m_driveL1.configOpenloopRamp(0.0);
-    m_driveR3.configOpenloopRamp(0.0);
+    if (m_validL1)
+      m_driveL1.configOpenloopRamp(0.0);
+    if (m_validR3)
+      m_driveR3.configOpenloopRamp(0.0);
   }
 
   ///////////////////////////////////////////////////////////////////////////////
@@ -739,6 +741,12 @@ public class Drivetrain extends SubsystemBase
     // load in Pid constants to controller
     m_turnPid = new PIDController(m_turnPidKp, m_turnPidKi, m_turnPidKd);
     m_throttlePid = new PIDController(m_throttlePidKp, m_throttlePidKi, m_throttlePidKd);
+
+    // TODO: Add this to eliminate robot lurch
+    // if (m_validL1)
+    // m_driveL1.configOpenloopRamp(m_openLoopRamp);
+    // if (m_validR3)
+    // m_driveR3.configOpenloopRamp(m_openLoopRamp);
 
     RobotContainer rc = RobotContainer.getInstance( );
     rc.m_vision.m_yfilter.reset( );
@@ -837,10 +845,21 @@ public class Drivetrain extends SubsystemBase
     if (m_validL1 || m_validR3)
       velocityArcadeDrive(0.0, 0.0);
 
+    // TODO: return settings back when command ends
+    // if (m_validL1)
+    // m_driveL1.configOpenloopRamp(0.0);
+    // if (m_validR3)
+    // m_driveR3.configOpenloopRamp(0.0);
+
     RobotContainer.getInstance( ).m_led.setLLColor(LEDColor.LEDCOLOR_OFF);
   }
 
   // TODO (remove this later): Previously called LimelightSanityCheck
+
+  public boolean useLLValid( )
+  {
+    return isLimelightValid(40, 25);
+  }
 
   public boolean isLimelightValid(double horizAngleRange, double distRange)
   {

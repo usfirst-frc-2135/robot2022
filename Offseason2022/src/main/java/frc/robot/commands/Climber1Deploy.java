@@ -6,7 +6,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
-import frc.robot.Constants.CLConsts.Height;
+import frc.robot.Constants.CLConsts.CLHeight;
 import frc.robot.Constants.FCConsts.FCMode;
 import frc.robot.Constants.INConsts.INMode;
 import frc.robot.Constants.SHConsts.SHMode;
@@ -40,7 +40,7 @@ public class Climber1Deploy extends SequentialCommandGroup
         new ShooterRun(shooter, SHMode.SHOOTER_STOP),
         new ParallelDeadlineGroup(
             new WaitUntilCommand(climber::moveClimberDistanceIsFinished),
-            new ClimberMoveToHeight(climber, Height.HEIGHT_EXTEND_L2)
+            new ClimberMoveToHeight(climber, CLHeight.HEIGHT_EXTEND_L2)
         ), 
         new ClimberSetGatehook(climber, false)
         // @formatter:on

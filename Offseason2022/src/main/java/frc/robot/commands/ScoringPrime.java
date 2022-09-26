@@ -5,6 +5,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.SHConsts.SHMode;
+import frc.robot.Constants.VIConsts.VIRequests;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Vision;
 
@@ -20,7 +21,7 @@ public class ScoringPrime extends SequentialCommandGroup
         // Add Commands here:
 
         //@formatter:off
-        new VisionOn(vision, true),
+        new VisionOn(vision, VIRequests.VISION_ON),
         new ShooterRun(shooter, SHMode.SHOOTER_PRIME)
         //@formatter:on
     );
