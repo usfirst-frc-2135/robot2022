@@ -165,7 +165,8 @@ public class RobotContainer
         new Auto1BallLimelight(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
     SmartDashboard.putData("Auto3BallLeft",
         new Auto3BallLeft(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
-    SmartDashboard.putData("Auto3BallRight", new Auto3BallRight( ));
+    SmartDashboard.putData("Auto3BallRight",
+        new Auto3BallRight(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
     SmartDashboard.putData("AutoDrive", new AutoDrive(m_drivetrain, m_intake));
     SmartDashboard.putData("AutoDriveLimelightShoot",
         new AutoDriveLimelightShoot(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
@@ -215,6 +216,7 @@ public class RobotContainer
 
     SmartDashboard.putData("IntakeDeploy", new IntakeDeploy(m_intake, false));
     SmartDashboard.putData("IntakeStow", new IntakeDeploy(m_intake, false));
+    // SmartDashboard.putData("isLimelightValid", new )
 
     SmartDashboard.putData("Intake-STOP", new IntakeRun(m_intake, INMode.INTAKE_STOP));
     SmartDashboard.putData("Intake-ACQUIRE", new IntakeRun(m_intake, INMode.INTAKE_ACQUIRE));
@@ -394,7 +396,8 @@ public class RobotContainer
         new Auto1BallLimelight(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
     m_chooser.addOption("Auto3BallLeft",
         new Auto3BallLeft(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
-    m_chooser.addOption("Auto3BallRight", new Auto3BallRight( ));
+    m_chooser.addOption("Auto3BallRight",
+        new Auto3BallRight(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
     m_chooser.addOption("AutoShootDriveShoot", new AutoShootDriveShoot( ));
     m_chooser.addOption("AutoDriveShoot",
         new AutoDriveShoot(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
