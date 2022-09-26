@@ -163,7 +163,8 @@ public class RobotContainer
         new Auto1Ball2OppLeft(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
     SmartDashboard.putData("Auto1BallLimelight",
         new Auto1BallLimelight(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
-    SmartDashboard.putData("Auto3BallLeft", new Auto3BallLeft( ));
+    SmartDashboard.putData("Auto3BallLeft",
+        new Auto3BallLeft(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
     SmartDashboard.putData("Auto3BallRight", new Auto3BallRight( ));
     SmartDashboard.putData("AutoDrive", new AutoDrive(m_drivetrain, m_intake));
     SmartDashboard.putData("AutoDriveLimelightShoot",
@@ -391,7 +392,8 @@ public class RobotContainer
         new Auto1Ball2OppLeft(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
     m_chooser.addOption("Auto1BallLimelight",
         new Auto1BallLimelight(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
-    m_chooser.addOption("Auto3BallLeft", new Auto3BallLeft( ));
+    m_chooser.addOption("Auto3BallLeft",
+        new Auto3BallLeft(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
     m_chooser.addOption("Auto3BallRight", new Auto3BallRight( ));
     m_chooser.addOption("AutoShootDriveShoot", new AutoShootDriveShoot( ));
     m_chooser.addOption("AutoDriveShoot",
