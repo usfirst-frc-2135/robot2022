@@ -3,6 +3,8 @@
 
 package frc.robot.commands;
 
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
@@ -23,6 +25,10 @@ import frc.robot.subsystems.Vision;
  */
 public class Auto1Ball1OppRight extends SequentialCommandGroup
 {
+  private boolean autoSelector( )
+  {
+    return SmartDashboard.getBoolean("AUTO_ShootOppBall", false);
+  }
 
   public Auto1Ball1OppRight(Drivetrain drivetrain, Intake intake, FloorConveyor fConv, TowerConveyor tConv, Shooter shooter,
       Vision vision)
@@ -80,7 +86,7 @@ public class Auto1Ball1OppRight extends SequentialCommandGroup
             new PrintCommand("Shoot opponent's ball") 
           ), 
           new AutoStop(drivetrain),
-          new WaitUntilCommand(p->SmartDashboard.getBoolean("AUTO_ShootOppBall", false))
+          this::autoSelector
         ),
    //smartdashboard return get boolean shootOppBall 
         new PrintCommand("stop shooitng"), 
