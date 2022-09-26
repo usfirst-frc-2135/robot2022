@@ -52,7 +52,6 @@ public class VisionOn extends CommandBase
           m_vision.setCameraDisplay(VIConsts.PIP_MAIN);
         }
         break;
-
     }
   }
 

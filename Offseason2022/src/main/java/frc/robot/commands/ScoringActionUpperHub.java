@@ -4,6 +4,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
@@ -29,18 +30,19 @@ public class ScoringActionUpperHub extends SequentialCommandGroup
         // Add Commands here:
 
         // @formatter:off
-      new ParallelDeadlineGroup(
-        new WaitUntilCommand(shooter::isAtDesiredSpeed), 
-        new ShooterRun(shooter, SHMode.SHOOTER_UPPERHUB)
-      ),
-      new ParallelDeadlineGroup(
-        new WaitCommand(waitTime),       
-        new TowerConveyorRun(tConv, TCMode.TCONVEYOR_ACQUIRE),
-        new FloorConveyorRun(fConv, FCMode.FCONVEYOR_ACQUIRE),
-        new IntakeRun(intake, INMode.INTAKE_ACQUIRE) 
-      )
-      // @formatter:on
-
+        new PrintCommand("ScoringActionUpperHub"), 
+        new ParallelDeadlineGroup(
+          new WaitUntilCommand(shooter::isAtDesiredSpeed), 
+          new ShooterRun(shooter, SHMode.SHOOTER_UPPERHUB)
+        ),
+        
+        new ParallelDeadlineGroup(
+          new WaitCommand(waitTime),       
+          new TowerConveyorRun(tConv, TCMode.TCONVEYOR_ACQUIRE),
+          new FloorConveyorRun(fConv, FCMode.FCONVEYOR_ACQUIRE),
+          new IntakeRun(intake, INMode.INTAKE_ACQUIRE) 
+        )
+        // @formatter:on
     );
   }
 
