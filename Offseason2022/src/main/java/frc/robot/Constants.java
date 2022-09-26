@@ -1,6 +1,8 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
+
 import edu.wpi.first.math.util.Units;
 
 /**
@@ -147,24 +149,26 @@ public class Constants
 
   public static final class SHConsts
   {
-    public static final int    kSH11CANID               = 11;
+    public static final int                      kSH11CANID               = 11;
 
-    public static final double kFlywheelGearRatio       = (18.0 / 12.0);
-    public static final double kFlywheelCPR             = Falcon500.kEncoderCPR * kFlywheelGearRatio;
+    public static final double                   kFlywheelGearRatio       = (18.0 / 12.0);
+    public static final double                   kFlywheelCPR             = Falcon500.kEncoderCPR * kFlywheelGearRatio;
 
-    public static final double kFlywheelPidKf           = 0.04775;
-    public static final double kFlywheelPidKp           = 1.0;
-    public static final double kFlywheelPidKi           = 0.0;
-    public static final double kFlywheelPidKd           = 0.025;
-    public static final double kFlywheelNeutralDeadband = 0.004;
+    public static final int                      kVelocityMeasWindow      = 1;
+    public static final SensorVelocityMeasPeriod kVelocityMeasPeriod      = SensorVelocityMeasPeriod.Period_10Ms;
+    public static final double                   kFlywheelPidKf           = 0.04775;
+    public static final double                   kFlywheelPidKp           = 0.1;
+    public static final double                   kFlywheelPidKi           = 0.0;
+    public static final double                   kFlywheelPidKd           = 0.0;
+    public static final double                   kFlywheelNeutralDeadband = 0.01;
 
-    public static final double kFlywheelToleranceRPM    = 150.0;     // Tolerance band around target RPM
-    public static final double kFlywheelLowerTargetRPM  = 1000.0;    // RPM for lower hub
-    public static final double kFlywheelUpperTargetRPM  = 2150.0;    // RPM for upper hub
-    public static final double kFlywheelPrimeRPM        = kFlywheelUpperTargetRPM; // RPM for priming the shooter
+    public static final double                   kFlywheelToleranceRPM    = 150.0;     // Tolerance band around target RPM
+    public static final double                   kFlywheelLowerTargetRPM  = 1000.0;    // RPM for lower hub
+    public static final double                   kFlywheelUpperTargetRPM  = 2150.0;    // RPM for upper hub
+    public static final double                   kFlywheelPrimeRPM        = kFlywheelUpperTargetRPM; // RPM for shooter priming
 
-    public static final double kReverseRPMThreshold     = 20.0;      // RPM threshold for allowing reverse of motor
-    public static final double kFlywheelReverseRPM      = -1000.0;   // RPM for reversing out game pieces
+    public static final double                   kReverseRPMThreshold     = 20.0;      // RPM threshold for allowing reverse
+    public static final double                   kFlywheelReverseRPM      = -1000.0;   // RPM for reversing out game pieces
 
     public enum SHMode
     {
