@@ -18,11 +18,11 @@ import frc.robot.subsystems.Intake;
  */
 public class AutoDrive extends SequentialCommandGroup
 {
+  private String m_pathname = AUTOConstants.kDrive_path;
+
   public AutoDrive(Drivetrain drivetrain, Intake intake)
   {
     setName("AutoDrive");
-
-    String m_pathname = AUTOConstants.kDrive_path;
 
     DataLogManager.log("AutoDriveShoot pathname 1 : " + m_pathname);
 

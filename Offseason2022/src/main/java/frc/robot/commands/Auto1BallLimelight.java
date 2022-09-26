@@ -23,13 +23,14 @@ import frc.robot.subsystems.Vision;
  */
 public class Auto1BallLimelight extends SequentialCommandGroup
 {
+
+  private String m_pathname1 = AUTOConstants.k1BallLimelight_path1;
+  private String m_pathname2 = AUTOConstants.k1BallLimelight_path2;
+
   public Auto1BallLimelight(Drivetrain drivetrain, Intake intake, FloorConveyor fConv, TowerConveyor tConv, Shooter shooter,
       Vision vision)
   {
     setName("Auto1BallLimelight");
-
-    String m_pathname1 = AUTOConstants.k1BallLimelight_path1;
-    String m_pathname2 = AUTOConstants.k1BallLimelight_path2;
 
     DataLogManager.log("Auto1BallLimelight pathname 1 : " + m_pathname1);
     DataLogManager.log("Auto1BallLimelight pathname 2 : " + m_pathname2);
