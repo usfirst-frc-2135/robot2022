@@ -3,26 +3,41 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants.AUTOConstants.AutoTimer;
+import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.FloorConveyor;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.TowerConveyor;
+import frc.robot.subsystems.Vision;
 
 /**
  *
  */
 public class AutoShootLowHub extends SequentialCommandGroup
 {
-  public AutoShootLowHub( )
+
+  public AutoShootLowHub(Drivetrain drivetrain, Intake intake, FloorConveyor fConv, TowerConveyor tConv, Shooter shooter,
+      Vision vision)
   {
+    setName("AutoShootLowHub");
     addCommands(
-    // Add Commands here:
-    // Also add parallel commands using the
-    //
-    // addCommands(
-    // new command1(argsN, subsystem),
-    // parallel(
-    // new command2(argsN, subsystem),
-    // new command3(argsN, subsystem)
-    // )
-    // );
+        // Add Commands here:
+
+        //@formatter:off
+        new AutoWait(AutoTimer.TIMER1),
+        new ParallelDeadlineGroup(
+          new IntakeDeploy(intake, true), 
+          new AutoShoot(drivetrain, intake, fConv, tConv, shooter, vision)
+        ),
+        new ParallelDeadlineGroup(
+          new ScoringActionLowerHub(intake, fConv,tConv,shooter, 2.0), 
+          new AutoStop(drivetrain)
+        ),
+        new ScoringStop(intake, fConv, tConv, shooter, vision)
+        //@formatter:on
 
     );
   }
