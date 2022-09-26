@@ -6,6 +6,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.AUTOConstants;
@@ -31,13 +32,30 @@ public class AutoShoot extends SequentialCommandGroup
     addCommands(
         // Add Commands here:
         //@formatter:off
-        new ParallelDeadlineGroup(new IntakeDeploy(intake, true), new AutoStop(drivetrain)),
-        new ParallelCommandGroup(new ParallelDeadlineGroup(new WaitUntilCommand(drivetrain::driveWithPathFollowerIsFinished),
-            new AutoDrivePath(drivetrain, m_pathname1, true)), new ScoringPrime(shooter, vision)),
-        new ParallelDeadlineGroup(new ScoringActionUpperHub(intake, fConv, tConv, shooter, 5.0), new AutoStop(drivetrain)),
+        new PrintCommand("AUTO: Deply intake at start"),
+        new ParallelDeadlineGroup(
+          new IntakeDeploy(intake, true), 
+          new AutoStop(drivetrain)
+        ),
+
+        new PrintCommand("AUTO: Run the path and prime the shooter"),
+        new ParallelCommandGroup(
+          new ParallelDeadlineGroup(
+            new WaitUntilCommand(drivetrain::driveWithPathFollowerIsFinished),
+            new AutoDrivePath(drivetrain, m_pathname1, true)
+          ), 
+          new ScoringPrime(shooter, vision)
+        ),
+
+        new PrintCommand("AUTO: Shoot the cargo"),
+        new ParallelDeadlineGroup(
+          new ScoringActionUpperHub(intake, fConv, tConv, shooter, 5.0), 
+          new AutoStop(drivetrain)
+        ),
+
+        new PrintCommand("AUTO: Stop the shooter"),
         new ScoringStop(intake, fConv, tConv, shooter, vision)
         //@formatter:on
-
     );
   }
 
