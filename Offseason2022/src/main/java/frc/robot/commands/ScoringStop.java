@@ -3,6 +3,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.FCConsts.FCMode;
 import frc.robot.Constants.INConsts.INMode;
@@ -28,6 +29,7 @@ public class ScoringStop extends SequentialCommandGroup
         // Add Commands here:
 
         //@formatter:off
+        new PrintCommand("ScoringStop"), 
         new VisionOn(vision, VIRequests.VISION_OFF), 
         new IntakeRun(intake,INMode.INTAKE_STOP), 
         new FloorConveyorRun(fConv, FCMode.FCONVEYOR_STOP),

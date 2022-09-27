@@ -3,6 +3,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.FCConsts.FCMode;
@@ -24,6 +25,7 @@ public class IntakingAction extends SequentialCommandGroup
         // Add Commands here:
 
         // @formatter:off
+        new PrintCommand("IntakingAction"), 
         new IntakeDeploy(intake, true), // Deploy intake
         new IntakeRun(intake, INMode.INTAKE_ACQUIRE), 
         new FloorConveyorRun(fConv, FCMode.FCONVEYOR_EXPEL),

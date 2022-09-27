@@ -178,7 +178,8 @@ public class RobotContainer
         new AutoShoot(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
     SmartDashboard.putData("AutoShootDriveShoot",
         new AutoShootDriveShoot(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
-    SmartDashboard.putData("AutoShootLowHub", new AutoShootLowHub( ));
+    SmartDashboard.putData("AutoShootLowHub",
+        new AutoShootLowHub(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
     SmartDashboard.putData("AutoStop", new AutoStop(m_drivetrain));
 
     SmartDashboard.putData("Climber0Stow",
