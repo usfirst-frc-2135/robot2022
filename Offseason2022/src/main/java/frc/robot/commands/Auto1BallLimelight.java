@@ -24,12 +24,19 @@ import frc.robot.subsystems.Vision;
 public class Auto1BallLimelight extends SequentialCommandGroup
 {
 
-  private String m_pathname1 = AUTOConstants.k1BallLimelight_path1;
-  private String m_pathname2 = AUTOConstants.k1BallLimelight_path2;
+  private Drivetrain dt;
+  private String     m_pathname1 = AUTOConstants.k1BallLimelight_path1;
+  private String     m_pathname2 = AUTOConstants.k1BallLimelight_path2;
+
+  private boolean useLLValid( )
+  {
+    return dt.isLimelightValid(40, 25);
+  }
 
   public Auto1BallLimelight(Drivetrain drivetrain, Intake intake, FloorConveyor fConv, TowerConveyor tConv, Shooter shooter,
       Vision vision)
   {
+    dt = drivetrain;
     setName("Auto1BallLimelight");
 
     DataLogManager.log("Auto1BallLimelight pathname 1 : " + m_pathname1);
@@ -67,7 +74,7 @@ public class Auto1BallLimelight extends SequentialCommandGroup
             new ScoringStop(intake, fConv, tConv, shooter, vision), 
             new AutoStop(drivetrain)
           ), 
-          drivetrain::useLLValid  //TODO: replace with a method to give a BooleanSupplier parameters
+          this::useLLValid  
         ), 
 
         new PrintCommand("AUTO: Run the second path off the tarmac"), 
