@@ -33,6 +33,7 @@ public class Auto1BallLimelight extends SequentialCommandGroup
       Vision vision)
   {
     m_drivetrain = drivetrain;
+
     setName("Auto1BallLimelight");
 
     addCommands(
