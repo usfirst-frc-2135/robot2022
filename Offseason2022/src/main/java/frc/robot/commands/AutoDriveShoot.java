@@ -3,7 +3,6 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
@@ -29,17 +28,11 @@ public class AutoDriveShoot extends SequentialCommandGroup
   {
     setName("AutoDriveShoot");
 
-    String m_pathname1 = AUTOConstants.kDriveShoot_path1;
-    String m_pathname2 = AUTOConstants.kDriveShoot_path2;
-
-    DataLogManager.log("AutoDriveShoot pathname 1 : " + m_pathname1);
-    DataLogManager.log("AutoDriveShoot pathname 2 : " + m_pathname2);
-
     addCommands(
         // Add Commands here:
 
-        //@formatter:off
-        new PrintCommand("AUTO: Use programmable delay from dashboard before starting"),
+        // @formatter:off
+        new PrintCommand("AUTO DRIVE SHOOT: Use programmable delay from dashboard before starting"),
         new ParallelDeadlineGroup(
           new AutoWait(AutoTimer.TIMER1), 
           new AutoStop(drivetrain)
@@ -55,7 +48,7 @@ public class AutoDriveShoot extends SequentialCommandGroup
         new ParallelCommandGroup(
           new ParallelDeadlineGroup(
             new WaitUntilCommand(drivetrain::driveWithPathFollowerIsFinished),
-            new AutoDrivePath(drivetrain, m_pathname1, true)
+            new AutoDrivePath(drivetrain, AUTOConstants.kDriveShoot_path1, true)
             ), 
           new ScoringPrime(shooter, vision)
         ),
@@ -82,12 +75,12 @@ public class AutoDriveShoot extends SequentialCommandGroup
         new ScoringStop(intake, fConv, tConv, shooter, vision), 
         new ParallelDeadlineGroup(
           new WaitUntilCommand(drivetrain::driveWithPathFollowerIsFinished),
-          new AutoDrivePath(drivetrain, m_pathname2, false)
+          new AutoDrivePath(drivetrain, AUTOConstants.kDriveShoot_path2, false)
         ),
 
         new PrintCommand("AUTO: Sit still while feeding motors"),
         new AutoStop(drivetrain)
-        //@formatter:on
+        // @formatter:on
     );
   }
 

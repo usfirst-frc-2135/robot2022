@@ -337,6 +337,7 @@ public class RobotContainer
     driverLeft.whenPressed(new Dummy(270), true);
 
     // Driver - Triggers
+    driverLeftTrigger.whenActive(new Dummy(256));
     driverRightTrigger
         .whenActive(new DriveLimelightShoot(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
     driverRightTrigger

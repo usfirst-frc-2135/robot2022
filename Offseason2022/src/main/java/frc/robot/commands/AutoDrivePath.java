@@ -29,6 +29,7 @@ public class AutoDrivePath extends CommandBase
   {
     m_drivetrain = drivetrain;
     m_resetOdometry = resetOdometry;
+
     setName("AutoDrivePath");
     addRequirements(m_drivetrain);
 

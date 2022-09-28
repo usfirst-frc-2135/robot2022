@@ -19,6 +19,7 @@ public class TowerConveyorRun extends CommandBase
   {
     m_towerConveyor = towerConveyor;
     m_mode = mode;
+
     setName("TowerConveyorRun");
     addRequirements(m_towerConveyor);
   }

@@ -16,6 +16,8 @@ public class ShooterReverse extends CommandBase
   public ShooterReverse(Shooter shooter)
   {
     m_shooter = shooter;
+
+    setName("ShooterReverse");
     addRequirements(m_shooter);
   }
 

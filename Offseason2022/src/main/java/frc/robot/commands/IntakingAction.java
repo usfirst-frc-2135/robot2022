@@ -21,12 +21,13 @@ public class IntakingAction extends SequentialCommandGroup
   public IntakingAction(Intake intake, FloorConveyor fConv, TowerConveyor tConv)
   {
     setName("IntakingAction");
+
     addCommands(
         // Add Commands here:
 
         // @formatter:off
         new PrintCommand("IntakingAction"), 
-        new IntakeDeploy(intake, true), // Deploy intake
+        new IntakeDeploy(intake, true),
         new IntakeRun(intake, INMode.INTAKE_ACQUIRE), 
         new FloorConveyorRun(fConv, FCMode.FCONVEYOR_EXPEL),
         new SequentialCommandGroup(

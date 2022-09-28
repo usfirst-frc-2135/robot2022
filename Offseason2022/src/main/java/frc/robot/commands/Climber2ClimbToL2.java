@@ -17,6 +17,8 @@ public class Climber2ClimbToL2 extends SequentialCommandGroup
 {
   public Climber2ClimbToL2(Climber climber)
   {
+    setName("Climber2ClimbToL2");
+
     addCommands(
         // Add Commands here:
 

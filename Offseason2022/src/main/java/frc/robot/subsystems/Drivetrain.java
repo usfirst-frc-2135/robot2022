@@ -854,13 +854,6 @@ public class Drivetrain extends SubsystemBase
     RobotContainer.getInstance( ).m_led.setLLColor(LEDColor.LEDCOLOR_OFF);
   }
 
-  // TODO (remove this later): Previously called LimelightSanityCheck
-
-  public boolean useLLValid( )
-  {
-    return isLimelightValid(40, 25);
-  }
-
   public boolean isLimelightValid(double horizAngleRange, double distRange)
   {
     // check whether target is valid

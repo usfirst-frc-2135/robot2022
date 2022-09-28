@@ -20,6 +20,7 @@ public class IntakingStop extends SequentialCommandGroup
   public IntakingStop(Intake intake, FloorConveyor fConv, TowerConveyor tConv)
   {
     setName("IntakingStop");
+
     addCommands(
         // Add Commands here:
 

@@ -20,6 +20,7 @@ public class DriveMotorTest extends CommandBase
   {
     m_drivetrain = drivetrain;
     m_left = left;
+
     setName("DriveMotorTest");
     addRequirements(m_drivetrain);
   }

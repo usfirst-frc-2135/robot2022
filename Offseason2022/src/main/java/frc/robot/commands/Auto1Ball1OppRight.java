@@ -3,8 +3,6 @@
 
 package frc.robot.commands;
 
-import java.util.function.BooleanSupplier;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
@@ -37,35 +35,41 @@ public class Auto1Ball1OppRight extends SequentialCommandGroup
 
     // get values as string part of code
 
-    addCommands(new PrintCommand("AUTO 1 BALL 1 OPP RIGHT - START"),
-    // @formatter:off   
-    // Wait timer set in SmartDashboard
-        new PrintCommand("WAIT"), 
-        new AutoWait(AutoTimer.TIMER1),
-        // deploy intake
-        new PrintCommand("Deploy intake"), 
+    addCommands(
+        // Add Commands here:
+
+        // @formatter:off   
+        new PrintCommand("AUTO 1 BALL 1 OPP RIGHT: Use programmable delay from dashboard"),
+        new ParallelDeadlineGroup(
+          new AutoWait(AutoTimer.TIMER1), 
+          new AutoStop(drivetrain)
+        ),
+
+        new PrintCommand("AUTO: Deploy intake"), 
         new ParallelDeadlineGroup(
           new IntakeDeploy(intake, true), 
           new AutoStop(drivetrain)
         ),
-        // drive to a shooting position
-        new PrintCommand("drive to a shooitng position"),
+
+        new PrintCommand("AUTO: Run path to a shooitng position"),
         new ParallelDeadlineGroup(
           new WaitUntilCommand(drivetrain::driveWithPathFollowerIsFinished),
-          new AutoDrivePath(
-            drivetrain, AUTOConstants.k1Ball1OppRight_path1, true), 
-            new ScoringPrime(shooter, vision)
-          ),
-        // shoot preloaded ball
-        new PrintCommand("shoot preloaded ball"),
+          new AutoDrivePath(drivetrain, AUTOConstants.k1Ball1OppRight_path1, true), 
+          new ScoringPrime(shooter, vision)
+        ),
+
+        new PrintCommand("AUTO: shoot preloaded ball"),
         new ParallelDeadlineGroup(
           new ScoringActionUpperHub(intake, fConv, tConv, shooter, 1), 
           new AutoStop(drivetrain)
         ),
-        // wait time set in SmartDashboard
-        new PrintCommand("WAIT"), 
-        new AutoWait(AutoTimer.TIMER2),
-        // drive to opponent's ball and intake
+
+        new PrintCommand("AUTO: delay before next phase"), 
+        new ParallelDeadlineGroup(
+          new AutoWait(AutoTimer.TIMER2), 
+          new AutoStop(drivetrain)
+        ),
+
         new PrintCommand("drive to opponent's ball and intake"),
         new ParallelDeadlineGroup(
           new WaitUntilCommand(drivetrain::driveWithPathFollowerIsFinished),
@@ -73,29 +77,31 @@ public class Auto1Ball1OppRight extends SequentialCommandGroup
           new IntakingAction(intake, fConv, tConv),
           new ScoringPrime(shooter, vision)
         ),
-        new PrintCommand("Stow intake"), 
+
+        new PrintCommand("AUTO: Stow intake"), 
         new ParallelDeadlineGroup(
           new IntakeDeploy(intake, false), 
           new AutoStop(drivetrain)
         ),
-    // shoot opponent's ball
+
+        new PrintCommand("AUTO: Shoot opponents ball, if selected"),
         new ConditionalCommand(
           new ParallelDeadlineGroup(
             new ScoringActionLowerHub(intake, fConv, tConv, shooter, 2), 
-            new AutoStop(drivetrain), 
-            new PrintCommand("Shoot opponent's ball") 
+            new AutoStop(drivetrain)
           ), 
           new AutoStop(drivetrain),
           this::autoSelector
         ),
-   //smartdashboard return get boolean shootOppBall 
-        new PrintCommand("stop shooitng"), 
+
+        new PrintCommand("AUTO: stop shooitng and hold positin"), 
         new ParallelDeadlineGroup( 
           new ScoringStop(intake, fConv, tConv, shooter, vision), 
           new AutoStop(drivetrain) 
-        ), 
-        new PrintCommand("AUTO 1 BALL 1 OPP RIGHT - END")
-    // @formatter:on
+        ),
+        
+        new AutoStop(drivetrain) 
+        // @formatter:on
     );
   }
 
