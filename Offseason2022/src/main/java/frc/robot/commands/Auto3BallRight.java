@@ -4,6 +4,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -104,7 +105,10 @@ public class Auto3BallRight extends SequentialCommandGroup
         new PrintCommand("AUTO: Run limelight shooting routine for 3rd ball"),
         new ConditionalCommand( 
           new AutoDriveLimelightShoot(drivetrain, intake, fConv, tConv, shooter, vision),
-          new ScoringActionUpperHub(intake, fConv, tConv, shooter, 2),
+          new ParallelCommandGroup(
+            new ScoringActionUpperHub(intake, fConv, tConv, shooter, 2),
+            new AutoStop(drivetrain)      
+          ),
           this::isLLValid
         ),
 
