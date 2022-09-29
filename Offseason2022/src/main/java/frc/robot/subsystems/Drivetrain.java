@@ -1013,7 +1013,7 @@ public class Drivetrain extends SubsystemBase
 
     if (m_trajTimer.get( ) >= 15.0)
     {
-      DataLogManager.log(getName( ) + ": path follower timeout!");
+      DataLogManager.log(getSubsystem( ) + ": path follower timeout!");
       return true;
     }
 
