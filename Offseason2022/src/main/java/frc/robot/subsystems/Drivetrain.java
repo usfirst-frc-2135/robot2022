@@ -854,8 +854,6 @@ public class Drivetrain extends SubsystemBase
     RobotContainer.getInstance( ).m_led.setLLColor(LEDColor.LEDCOLOR_OFF);
   }
 
-  // TODO (remove this later): Previously called LimelightSanityCheck
-
   public boolean isLimelightValid(double horizAngleRange, double distRange)
   {
     // check whether target is valid
@@ -1015,7 +1013,7 @@ public class Drivetrain extends SubsystemBase
 
     if (m_trajTimer.get( ) >= 15.0)
     {
-      DataLogManager.log(getName( ) + ": path follower timeout!");
+      DataLogManager.log(getSubsystem( ) + ": path follower timeout!");
       return true;
     }
 

@@ -20,6 +20,7 @@ public class VisionOn extends CommandBase
   {
     m_vision = vision;
     m_mode = mode;
+
     setName("VisionOn");
   }
 

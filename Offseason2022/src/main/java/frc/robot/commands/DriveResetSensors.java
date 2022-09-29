@@ -16,6 +16,7 @@ public class DriveResetSensors extends CommandBase
   public DriveResetSensors(Drivetrain drivetrain)
   {
     m_drivetrain = drivetrain;
+
     setName("ResetDriveSensors");
   }
 

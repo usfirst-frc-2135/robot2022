@@ -19,6 +19,8 @@ public class ExhaustingStop extends SequentialCommandGroup
 {
   public ExhaustingStop(Intake intake, FloorConveyor fConv, TowerConveyor tConv)
   {
+    setName("ExhaustingStop");
+
     addCommands(
         // Add Commands here:
 
