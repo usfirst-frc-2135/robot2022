@@ -18,6 +18,7 @@ public class ClimberSetGatehook extends CommandBase
   {
     m_climber = climber;
     m_closeHook = closeHook;
+
     setName("ClimberSetGateHook");
   }
 

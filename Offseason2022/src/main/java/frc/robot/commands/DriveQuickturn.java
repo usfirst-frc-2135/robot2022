@@ -16,6 +16,7 @@ public class DriveQuickturn extends CommandBase
   public DriveQuickturn(Drivetrain drivetrain)
   {
     m_drivetrain = drivetrain;
+
     setName("DriveQuickturn");
   }
 

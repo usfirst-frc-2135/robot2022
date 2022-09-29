@@ -23,7 +23,7 @@ import frc.robot.subsystems.Vision;
  */
 public class Auto1Ball2OppLeft extends SequentialCommandGroup
 {
-  private boolean dummy( )
+  private boolean autoSelector( )
   {
     return SmartDashboard.getBoolean("AUTO_ShootOppBall", false);
   }
@@ -33,71 +33,81 @@ public class Auto1Ball2OppLeft extends SequentialCommandGroup
   {
     setName("AutoBall2OppLeft");
 
-    // @formatter:off
     addCommands(
-      new PrintCommand("AUTO 1 BALL 2 OPP LEFT - START"),
-      // wait timer set in SmarDashboard new PrintCommand("WAIT"), new AutoWait(1), // Deploy Intake
-      new PrintCommand("Deply intake"), 
+        // Add Commands here:
+
+        // @formatter:off
+        new PrintCommand("AUTO 1 BALL 2 OPP LEFT: Use programmable delay from dashboard"),
+        new ParallelDeadlineGroup(
+          new AutoWait(AutoTimer.TIMER1), 
+          new AutoStop(drivetrain)
+        ),
+
+        new PrintCommand("AUTO: Deply intake"), 
+        new ParallelDeadlineGroup(
+          new IntakeDeploy(intake, true), 
+          new AutoStop(drivetrain)
+        ),
+
+      new PrintCommand("AUTO: Run path to a shooting position"), 
       new ParallelDeadlineGroup(
-       new IntakeDeploy(intake, true), 
-       new AutoStop(drivetrain)
-       ), 
-      // Drive to a shooting position 
-      new PrintCommand("drive to a shooting position"), 
-      new ParallelDeadlineGroup(
-        new WaitUntilCommand(drivetrain::driveWithPathFollowerIsFinished
+        new WaitUntilCommand(drivetrain::driveWithPathFollowerIsFinished), 
+        new AutoDrivePath(drivetrain, AUTOConstants.k1Ball2OppLeft_path1, true), 
+        new ScoringPrime(shooter, vision)
       ), 
-      new AutoDrivePath(drivetrain, AUTOConstants.k1Ball2OppLeft_path2, true), 
-      new ScoringPrime(shooter, vision)
-      ), 
-      // Shoot preloaded ball 
-      new PrintCommand("Shoot preloaded ball"), 
+
+      new PrintCommand("AUTO: Shoot preloaded ball"), 
       new ParallelDeadlineGroup(
         new ScoringActionUpperHub(intake, fConv, tConv, shooter, 1.0), 
         new AutoStop(drivetrain)
       ), 
-      // Drive to 1st opponent's ball and intake 
-      new PrintCommand("Drive to 1st opponent's ball and intake"), 
+
+      new PrintCommand("AUTO: Drive to 1st opponent's ball and intake"), 
       new ParallelDeadlineGroup(
         new WaitUntilCommand(drivetrain::driveWithPathFollowerIsFinished), 
         new AutoDrivePath(drivetrain, AUTOConstants.k1Ball2OppLeft_path2, false), 
         new IntakingAction(intake, fConv, tConv)
       ), 
-      // Second wait timer set in SmartDashboard 
-      new PrintCommand("WAIT"), 
-      new AutoWait(AutoTimer.TIMER2), 
-      // Drive to 2cnd opponent's ball and intake 
-      new PrintCommand("Drive to 2cnd opponent's ball and intake"), 
+
+      new PrintCommand("AUTO: Use programmable delay from dashboard before next phase"),
+      new ParallelDeadlineGroup(
+        new AutoWait(AutoTimer.TIMER2), 
+        new AutoStop(drivetrain)
+      ),
+
+      new PrintCommand("AUTO: Drive to 2nd opponent's ball and intake"), 
       new ParallelDeadlineGroup(
         new WaitUntilCommand(drivetrain::driveWithPathFollowerIsFinished), 
         new AutoDrivePath(drivetrain, AUTOConstants.k1Ball2OppLeft_path3, false), 
         new ScoringPrime(shooter, vision), 
         new IntakingAction(intake, fConv, tConv)
       ), 
-      // stow intake new PrintCommand("Stow intake"), 
+
+      new PrintCommand("AUTO: Stow intake"),
       new ParallelDeadlineGroup(
         new IntakeDeploy(intake, false), 
         new AutoStop(drivetrain)
       ),
-      //PUT IN CONDITIONAL COMMAND: LITERALLY IF THIS RETURN THIS OR LIKE RETURN THE BOOLEAN 
-      // Shoot opponent's ball
+
+      new PrintCommand("AUTO: Shoot low hub, if selected"),
       new ConditionalCommand(
         new ParallelDeadlineGroup(
           new ScoringActionLowerHub(intake, fConv, tConv, shooter, 2), 
-          new AutoStop(drivetrain), 
-          new PrintCommand("Shoot opponent's ball")
+          new AutoStop(drivetrain)
         ), 
-      new AutoStop(drivetrain),
-      this::dummy
-      ), 
-       // Stop shooting and driving 
-      new PrintCommand("Stop shooting"), 
-      new ParallelDeadlineGroup(
+        new AutoStop(drivetrain),
+        this::autoSelector
+      ),
+
+      new PrintCommand("AUTO: stop shooitng and hold positin"), 
+      new ParallelDeadlineGroup( 
         new ScoringStop(intake, fConv, tConv, shooter, vision), 
-        new PrintCommand("AUTO 3 BALL LEFT - END")
-      )
-    );
+        new AutoStop(drivetrain) 
+      ),
+      
+      new AutoStop(drivetrain) 
       // @formatter:on
+    );
   }
 
   @Override

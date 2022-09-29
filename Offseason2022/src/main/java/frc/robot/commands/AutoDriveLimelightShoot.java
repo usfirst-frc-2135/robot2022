@@ -27,8 +27,8 @@ public class AutoDriveLimelightShoot extends SequentialCommandGroup
     addCommands(
         // Add Commands here:
 
-        //@formatter:off
-        new PrintCommand("AUTO: Drive using limelight and score"),
+        // @formatter:off
+        new PrintCommand("AUTO DRIVE LL SHOOT: Drive using limelight and score"),
         new ParallelDeadlineGroup(
           new SequentialCommandGroup(
             new ParallelDeadlineGroup(
@@ -39,7 +39,7 @@ public class AutoDriveLimelightShoot extends SequentialCommandGroup
           ), 
           new DriveLimelight(drivetrain, vision, false)
         )
-        //@formatter:on
+        // @formatter:on
     );
   }
 

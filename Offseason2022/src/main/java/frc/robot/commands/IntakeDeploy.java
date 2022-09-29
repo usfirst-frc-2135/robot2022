@@ -18,6 +18,7 @@ public class IntakeDeploy extends CommandBase
   {
     m_intake = intake;
     m_intakeExtend = intakeExtend;
+
     setName("IntakeDeploy");
   }
 

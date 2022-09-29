@@ -19,6 +19,7 @@ public class FloorConveyorRun extends CommandBase
   {
     m_floorConveyor = floorConveyor;
     m_mode = mode;
+
     setName("FloorConveyorRun");
     addRequirements(m_floorConveyor);
   }

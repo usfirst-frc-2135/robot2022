@@ -13,7 +13,6 @@ public class RobotInitialize extends CommandBase
 {
   public RobotInitialize( )
   {
-    // m_subsystem = subsystem;
     setName("RobotInitialize");
   }
 

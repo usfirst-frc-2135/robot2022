@@ -16,6 +16,7 @@ public class AutoStop extends CommandBase
   public AutoStop(Drivetrain drivetrain)
   {
     m_drivetrain = drivetrain;
+
     addRequirements(m_drivetrain);
   }
 
