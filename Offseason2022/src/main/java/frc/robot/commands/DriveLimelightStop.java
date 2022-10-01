@@ -3,8 +3,8 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.FloorConveyor;
@@ -23,12 +23,11 @@ public class DriveLimelightStop extends SequentialCommandGroup
   {
     setName("DriveLimelightStop");
 
-    DataLogManager.log(getSubsystem( ) + ": DriveLimelightStop");
-
     addCommands(
         // Add Commands here:
 
         // @formatter:off
+        new PrintCommand("Limelight drive stop"), 
         new ParallelDeadlineGroup(
             new ScoringStop(intake, fConv, tConv, shooter, vision), 
             new AutoStop(drivetrain)

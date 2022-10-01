@@ -19,6 +19,8 @@ public class ShooterRun extends CommandBase
   {
     m_shooter = shooter;
     m_mode = mode;
+
+    setName("ShooterRun");
     addRequirements(m_shooter);
   }
 

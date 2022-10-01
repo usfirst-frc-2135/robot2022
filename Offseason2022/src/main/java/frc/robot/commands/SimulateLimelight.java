@@ -50,6 +50,7 @@ public class SimulateLimelight extends CommandBase
     m_cameraHeightMeters = cameraHeightMeters;
     m_cameraPitchRadians = cameraPitchRadians;
 
+    setName("SimulateLimelight");
     SmartDashboard.putData("Limelight (Sim)", m_mech);
   }
 

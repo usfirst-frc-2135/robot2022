@@ -3,7 +3,6 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.VIConsts;
 import frc.robot.subsystems.Drivetrain;
@@ -23,6 +22,7 @@ public class DriveLimelight extends CommandBase
     m_drivetrain = drivetrain;
     m_vision = vision;
     m_endAtTarget = endAtTarget;
+
     setName("DriveLimelight");
     addRequirements(m_drivetrain);
   }
@@ -31,7 +31,6 @@ public class DriveLimelight extends CommandBase
   @Override
   public void initialize( )
   {
-    DataLogManager.log(getSubsystem( ) + "DriveLimelight - Init");
     m_vision.setLEDMode(VIConsts.LED_ON);
     m_vision.setCameraDisplay(VIConsts.PIP_MAIN);
     m_drivetrain.driveWithLimelightInit(m_endAtTarget);

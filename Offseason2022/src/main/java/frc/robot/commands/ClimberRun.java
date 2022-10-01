@@ -19,6 +19,7 @@ public class ClimberRun extends CommandBase
   {
     m_climber = climber;
     m_gamePad = gamePad;
+
     addRequirements(m_climber);
   }
 

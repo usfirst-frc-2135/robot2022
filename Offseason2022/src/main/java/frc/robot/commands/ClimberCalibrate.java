@@ -18,6 +18,7 @@ public class ClimberCalibrate extends CommandBase
   public ClimberCalibrate(Climber climber)
   {
     m_climber = climber;
+
     setName("ClimberCalibrate");
     addRequirements(m_climber);
   }

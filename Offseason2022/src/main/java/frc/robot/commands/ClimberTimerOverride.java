@@ -20,6 +20,7 @@ public class ClimberTimerOverride extends CommandBase
   {
     m_gamePad = gamePad;
     m_button = button;
+
     setName("ClimberTimerOverride");
   }
 
