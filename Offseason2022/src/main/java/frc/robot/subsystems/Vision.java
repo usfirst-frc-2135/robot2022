@@ -83,7 +83,7 @@ public class Vision extends SubsystemBase
       m_targetVertAngle = m_yfilter.calculate(m_table.getEntry("ty").getDouble(0.0));
       m_targetArea = m_table.getEntry("ta").getDouble(0.0);
       m_targetSkew = m_table.getEntry("ts").getDouble(0.0);
-      m_targetValid = m_table.getEntry("tv").getBoolean(false);
+      m_targetValid = (m_table.getEntry("tv").getDouble(0.0) > 0);
     }
 
     m_distLL = calculateDist(m_targetVertAngle);
