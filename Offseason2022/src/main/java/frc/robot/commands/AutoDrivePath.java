@@ -29,6 +29,7 @@ public class AutoDrivePath extends CommandBase
   {
     m_drivetrain = drivetrain;
     m_resetOdometry = resetOdometry;
+
     setName("AutoDrivePath");
     addRequirements(m_drivetrain);
 
@@ -37,15 +38,15 @@ public class AutoDrivePath extends CommandBase
 
     try
     {
-      DataLogManager.log(getName( ) + ": Trajectory pathname is: " + m_trajectoryJSON);
+      DataLogManager.log(String.format("%s: TrajPath %s", getName( ), m_trajectoryJSON));
       Path trajectoryPath = Filesystem.getDeployDirectory( ).toPath( ).resolve(m_trajectoryJSON);
       m_trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-      DataLogManager.log(getName( ) + ": Num states " + m_trajectory.getStates( ).size( ) + " Total time "
-          + m_trajectory.getTotalTimeSeconds( ));
+      DataLogManager.log(String.format("%s: Num states %2d Total time %.3f secs", getName( ), m_trajectory.getStates( ).size( ),
+          m_trajectory.getTotalTimeSeconds( )));
     }
     catch (IOException ex)
     {
-      DataLogManager.log(getName( ) + ": Unable to open trajectory: " + m_trajectoryJSON);
+      DataLogManager.log(String.format("%s: Unable to open %s", getName( ), m_trajectoryJSON));
       DriverStation.reportError("Unable to open trajectory: " + m_trajectoryJSON, ex.getStackTrace( ));
     }
 
@@ -55,7 +56,7 @@ public class AutoDrivePath extends CommandBase
   @Override
   public void initialize( )
   {
-    DataLogManager.log(getName( ) + ": Running " + m_trajectoryJSON);
+    DataLogManager.log(String.format("%s: Running", getName( ), m_trajectoryJSON));
     m_drivetrain.driveWithPathFollowerInit(m_trajectory, m_resetOdometry);
   }
 

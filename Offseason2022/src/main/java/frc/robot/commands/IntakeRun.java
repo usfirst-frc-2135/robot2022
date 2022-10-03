@@ -19,6 +19,7 @@ public class IntakeRun extends CommandBase
   {
     m_intake = intake;
     m_mode = mode;
+
     setName("IntakeRun");
     addRequirements(m_intake);
   }

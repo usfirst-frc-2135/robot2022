@@ -19,6 +19,7 @@ public class LEDSet extends CommandBase
   {
     m_led = led;
     m_color = color;
+
     setName("LEDSet");
     addRequirements(m_led);
   }

@@ -157,97 +157,98 @@ public class RobotContainer
     // Smartdashboard Subsystems
 
     // SmartDashboard Buttons
-    SmartDashboard.putData("Auto1Ball1OppRight",
-        new Auto1Ball1OppRight(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
-    SmartDashboard.putData("Auto1Ball2OppLeft",
-        new Auto1Ball2OppLeft(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
-    SmartDashboard.putData("Auto1BallLimelight",
-        new Auto1BallLimelight(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
-    SmartDashboard.putData("Auto3BallLeft",
-        new Auto3BallLeft(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
-    SmartDashboard.putData("Auto3BallRight",
-        new Auto3BallRight(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
+    // SmartDashboard.putData("Auto1Ball1OppRight",
+    //     new Auto1Ball1OppRight(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
+    // SmartDashboard.putData("Auto1Ball2OppLeft",
+    //     new Auto1Ball2OppLeft(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
+    // SmartDashboard.putData("Auto1BallLimelight",
+    //     new Auto1BallLimelight(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
+    // SmartDashboard.putData("Auto3BallLeft",
+    //     new Auto3BallLeft(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
+    // SmartDashboard.putData("Auto3BallRight",
+    //     new Auto3BallRight(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
     SmartDashboard.putData("AutoDrive", new AutoDrive(m_drivetrain, m_intake));
-    SmartDashboard.putData("AutoDriveLimelightShoot",
-        new AutoDriveLimelightShoot(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
-    SmartDashboard.putData("AutoDrivePath", new AutoDrivePath(m_drivetrain, "simCurvePath", true));
+    // SmartDashboard.putData("AutoDriveLimelightShoot",
+    //     new AutoDriveLimelightShoot(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
+    // SmartDashboard.putData("AutoDrivePath", new AutoDrivePath(m_drivetrain, "simCurvePath", true));
     SmartDashboard.putData("AutoDriveShoot",
         new AutoDriveShoot(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
     SmartDashboard.putData("AutoPathSequence", new AutoPathSequence(m_drivetrain));
-    SmartDashboard.putData("AutoShoot",
-        new AutoShoot(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
-    SmartDashboard.putData("AutoShootDriveShoot",
-        new AutoShootDriveShoot(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
-    SmartDashboard.putData("AutoShootLowHub", new AutoShootLowHub( ));
-    SmartDashboard.putData("AutoStop", new AutoStop(m_drivetrain));
+    // SmartDashboard.putData("AutoShoot",
+    //     new AutoShoot(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
+    // SmartDashboard.putData("AutoShootDriveShoot",
+    //     new AutoShootDriveShoot(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
+    // SmartDashboard.putData("AutoShootLowHub",
+    //     new AutoShootLowHub(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
+    // SmartDashboard.putData("AutoStop", new AutoStop(m_drivetrain));
 
     SmartDashboard.putData("Climber0Stow",
         new Climber0Stow(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_drivetrain));
     SmartDashboard.putData("Climber1Deploy",
         new Climber1Deploy(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_drivetrain));
-    SmartDashboard.putData("Climber2ClimbToL2", new Climber2ClimbToL2(m_climber));
-    SmartDashboard.putData("Climber3RotateToL3", new Climber3RotateToL3(m_climber));
-    SmartDashboard.putData("Climber5RotateIntoL3", new Climber5RotateIntoL3(m_climber));
-    SmartDashboard.putData("Climber6ClimbToL3", new Climber6ClimbToL3(m_climber));
-    SmartDashboard.putData("Climber7ClimbToL4", new Climber7ClimbToL4(m_climber));
-    SmartDashboard.putData("Climber8SettleToL4", new Climber8SettleToL4(m_climber));
-    SmartDashboard.putData("ClimberCalibrate", new ClimberCalibrate(m_climber));
-    SmartDashboard.putData("ClimberFullClimb", new ClimberFullClimb(m_climber, m_operator, XboxController.Button.kY));
-    SmartDashboard.putData("ClimberL2ToL3", new ClimberL2ToL3(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter));
-    SmartDashboard.putData("ClimberL3ToL4", new ClimberL3ToL4(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter));
-    SmartDashboard.putData("ClimberRun", new ClimberRun(m_climber, m_operator));
+    // SmartDashboard.putData("Climber2ClimbToL2", new Climber2ClimbToL2(m_climber));
+    // SmartDashboard.putData("Climber3RotateToL3", new Climber3RotateToL3(m_climber));
+    // SmartDashboard.putData("Climber5RotateIntoL3", new Climber5RotateIntoL3(m_climber));
+    // SmartDashboard.putData("Climber6ClimbToL3", new Climber6ClimbToL3(m_climber));
+    // SmartDashboard.putData("Climber7ClimbToL4", new Climber7ClimbToL4(m_climber));
+    // SmartDashboard.putData("Climber8SettleToL4", new Climber8SettleToL4(m_climber));
+    // SmartDashboard.putData("ClimberCalibrate", new ClimberCalibrate(m_climber));
+    // SmartDashboard.putData("ClimberFullClimb", new ClimberFullClimb(m_climber, m_operator, XboxController.Button.kY));
+    // SmartDashboard.putData("ClimberL2ToL3", new ClimberL2ToL3(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter));
+    // SmartDashboard.putData("ClimberL3ToL4", new ClimberL3ToL4(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter));
+    // SmartDashboard.putData("ClimberRun", new ClimberRun(m_climber, m_operator));
     SmartDashboard.putData("ClimberSetGatehook", new ClimberSetGatehook(m_climber, true));
-    SmartDashboard.putData("ClimberTimerOverride", new ClimberTimerOverride(m_climber, m_operator, XboxController.Button.kY));
-    SmartDashboard.putData("DriveLimelight", new DriveLimelight(m_drivetrain, m_vision, false));
-    SmartDashboard.putData("DriveLimelightStop",
-        new DriveLimelightStop(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
-    SmartDashboard.putData("DriveLimelightShoot",
-        new DriveLimelightShoot(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
+    // SmartDashboard.putData("ClimberTimerOverride", new ClimberTimerOverride(m_climber, m_operator, XboxController.Button.kY));
+    // SmartDashboard.putData("DriveLimelight", new DriveLimelight(m_drivetrain, m_vision, false));
+    // SmartDashboard.putData("DriveLimelightStop",
+    //     new DriveLimelightStop(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
+    // SmartDashboard.putData("DriveLimelightShoot",
+    //     new DriveLimelightShoot(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
     SmartDashboard.putData("DriveMotorTest", new DriveMotorTest(m_drivetrain, true));
-    SmartDashboard.putData("DriveMotorTest", new DriveQuickturn(m_drivetrain));
+    // SmartDashboard.putData("DriveQuickTurn", new DriveQuickturn(m_drivetrain));
     SmartDashboard.putData("DriveResetSensors", new DriveResetSensors(m_drivetrain));
-    SmartDashboard.putData("DriveSlowMode", new DriveSlowMode(m_drivetrain, false));
+    // SmartDashboard.putData("DriveSlowMode", new DriveSlowMode(m_drivetrain, false));
 
-    SmartDashboard.putData("ExhaustingAction", new ExhaustingAction(m_intake, m_floorConveyor, m_towerConveyor));
-    SmartDashboard.putData("ExhaustingStop", new ExhaustingStop(m_intake, m_floorConveyor, m_towerConveyor));
+    // SmartDashboard.putData("ExhaustingAction", new ExhaustingAction(m_intake, m_floorConveyor, m_towerConveyor));
+    // SmartDashboard.putData("ExhaustingStop", new ExhaustingStop(m_intake, m_floorConveyor, m_towerConveyor));
 
-    SmartDashboard.putData("Fconveyor-STOP", new FloorConveyorRun(m_floorConveyor, FCMode.FCONVEYOR_STOP));
-    SmartDashboard.putData("Fconveyor-ACQUIRE", new FloorConveyorRun(m_floorConveyor, FCMode.FCONVEYOR_ACQUIRE));
-    SmartDashboard.putData("Fconveyor-EXPEL", new FloorConveyorRun(m_floorConveyor, FCMode.FCONVEYOR_EXPEL));
-    SmartDashboard.putData("Fconveyor-EXPELFAST", new FloorConveyorRun(m_floorConveyor, FCMode.FCONVEYOR_EXPEL_FAST));
+    // SmartDashboard.putData("Fconveyor-STOP", new FloorConveyorRun(m_floorConveyor, FCMode.FCONVEYOR_STOP));
+    // SmartDashboard.putData("Fconveyor-ACQUIRE", new FloorConveyorRun(m_floorConveyor, FCMode.FCONVEYOR_ACQUIRE));
+    // SmartDashboard.putData("Fconveyor-EXPEL", new FloorConveyorRun(m_floorConveyor, FCMode.FCONVEYOR_EXPEL));
+    // SmartDashboard.putData("Fconveyor-EXPELFAST", new FloorConveyorRun(m_floorConveyor, FCMode.FCONVEYOR_EXPEL_FAST));
 
     SmartDashboard.putData("IntakeDeploy", new IntakeDeploy(m_intake, false));
     SmartDashboard.putData("IntakeStow", new IntakeDeploy(m_intake, false));
     // SmartDashboard.putData("isLimelightValid", new )
 
-    SmartDashboard.putData("Intake-STOP", new IntakeRun(m_intake, INMode.INTAKE_STOP));
-    SmartDashboard.putData("Intake-ACQUIRE", new IntakeRun(m_intake, INMode.INTAKE_ACQUIRE));
-    SmartDashboard.putData("Intake-EXPEL", new IntakeRun(m_intake, INMode.INTAKE_EXPEL));
-    SmartDashboard.putData("IntakingAction", new IntakingAction(m_intake, m_floorConveyor, m_towerConveyor));
-    SmartDashboard.putData("IntakingStop", new IntakingStop(m_intake, m_floorConveyor, m_towerConveyor));
+    // SmartDashboard.putData("Intake-STOP", new IntakeRun(m_intake, INMode.INTAKE_STOP));
+    // SmartDashboard.putData("Intake-ACQUIRE", new IntakeRun(m_intake, INMode.INTAKE_ACQUIRE));
+    // SmartDashboard.putData("Intake-EXPEL", new IntakeRun(m_intake, INMode.INTAKE_EXPEL));
+    // SmartDashboard.putData("IntakingAction", new IntakingAction(m_intake, m_floorConveyor, m_towerConveyor));
+    // SmartDashboard.putData("IntakingStop", new IntakingStop(m_intake, m_floorConveyor, m_towerConveyor));
 
     SmartDashboard.putData("LEDSet", new LEDSet(m_led, LEDColor.LEDCOLOR_OFF));
     SmartDashboard.putData("RobotInitialize", new RobotInitialize( ));
 
-    SmartDashboard.putData("ScoringActionUpperHub",
-        new ScoringActionUpperHub(m_intake, m_floorConveyor, m_towerConveyor, m_shooter, 2.0));
-    SmartDashboard.putData("ScoringActionLowerHub",
-        new ScoringActionLowerHub(m_intake, m_floorConveyor, m_towerConveyor, m_shooter, 2.0));
-    SmartDashboard.putData("ScoringPrime", new ScoringPrime(m_shooter, m_vision));
-    SmartDashboard.putData("ScoringStop", new ScoringStop(m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
+    // SmartDashboard.putData("ScoringActionUpperHub",
+    //     new ScoringActionUpperHub(m_intake, m_floorConveyor, m_towerConveyor, m_shooter, 2.0));
+    // SmartDashboard.putData("ScoringActionLowerHub",
+    //     new ScoringActionLowerHub(m_intake, m_floorConveyor, m_towerConveyor, m_shooter, 2.0));
+    // SmartDashboard.putData("ScoringPrime", new ScoringPrime(m_shooter, m_vision));
+    // SmartDashboard.putData("ScoringStop", new ScoringStop(m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
 
     SmartDashboard.putData("Shooter-OFF", new ShooterRun(m_shooter, SHMode.SHOOTER_STOP));
-    SmartDashboard.putData("Shooter-PRIME", new ShooterRun(m_shooter, SHMode.SHOOTER_PRIME));
-    SmartDashboard.putData("Shooter-LOW", new ShooterRun(m_shooter, SHMode.SHOOTER_LOWERHUB));
+    // SmartDashboard.putData("Shooter-PRIME", new ShooterRun(m_shooter, SHMode.SHOOTER_PRIME));
+    // SmartDashboard.putData("Shooter-LOW", new ShooterRun(m_shooter, SHMode.SHOOTER_LOWERHUB));
     SmartDashboard.putData("Shooter-HIGH", new ShooterRun(m_shooter, SHMode.SHOOTER_UPPERHUB));
-    SmartDashboard.putData("Shooter-REV", new ShooterRun(m_shooter, SHMode.SHOOTER_REVERSE));
-    SmartDashboard.putData("ShooterReverse", new ShooterReverse(m_shooter));
+    // SmartDashboard.putData("Shooter-REV", new ShooterRun(m_shooter, SHMode.SHOOTER_REVERSE));
+    // SmartDashboard.putData("ShooterReverse", new ShooterReverse(m_shooter));
 
-    SmartDashboard.putData("Tconveyor-STOP", new TowerConveyorRun(m_towerConveyor, TCMode.TCONVEYOR_STOP));
-    SmartDashboard.putData("Tconveyor-ACQUIRE", new TowerConveyorRun(m_towerConveyor, TCMode.TCONVEYOR_ACQUIRE));
-    SmartDashboard.putData("Tconveyor-ACQUIRESLOW", new TowerConveyorRun(m_towerConveyor, TCMode.TCONVEYOR_ACQUIRE_SLOW));
-    SmartDashboard.putData("Tconveyor-EXPEL", new TowerConveyorRun(m_towerConveyor, TCMode.TCONVEYOR_EXPEL));
-    SmartDashboard.putData("Tconveyor-EXPELFAST", new TowerConveyorRun(m_towerConveyor, TCMode.TCONVEYOR_EXPEL_FAST));
+    // SmartDashboard.putData("Tconveyor-STOP", new TowerConveyorRun(m_towerConveyor, TCMode.TCONVEYOR_STOP));
+    // SmartDashboard.putData("Tconveyor-ACQUIRE", new TowerConveyorRun(m_towerConveyor, TCMode.TCONVEYOR_ACQUIRE));
+    // SmartDashboard.putData("Tconveyor-ACQUIRESLOW", new TowerConveyorRun(m_towerConveyor, TCMode.TCONVEYOR_ACQUIRE_SLOW));
+    // SmartDashboard.putData("Tconveyor-EXPEL", new TowerConveyorRun(m_towerConveyor, TCMode.TCONVEYOR_EXPEL));
+    // SmartDashboard.putData("Tconveyor-EXPELFAST", new TowerConveyorRun(m_towerConveyor, TCMode.TCONVEYOR_EXPEL_FAST));
 
     SmartDashboard.putData("Dummy", new Dummy(2135));
 
@@ -336,6 +337,7 @@ public class RobotContainer
     driverLeft.whenPressed(new Dummy(270), true);
 
     // Driver - Triggers
+    driverLeftTrigger.whenActive(new Dummy(256));
     driverRightTrigger
         .whenActive(new DriveLimelightShoot(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
     driverRightTrigger

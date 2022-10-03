@@ -18,6 +18,7 @@ public class DriveSlowMode extends CommandBase
   {
     m_drivetrain = drivetrain;
     m_driveSlow = driveSlow;
+
     setName("DriveSlowMode");
   }
 

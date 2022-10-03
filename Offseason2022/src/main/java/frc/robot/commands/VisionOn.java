@@ -20,6 +20,7 @@ public class VisionOn extends CommandBase
   {
     m_vision = vision;
     m_mode = mode;
+
     setName("VisionOn");
   }
 
@@ -52,7 +53,6 @@ public class VisionOn extends CommandBase
           m_vision.setCameraDisplay(VIConsts.PIP_MAIN);
         }
         break;
-
     }
   }
 

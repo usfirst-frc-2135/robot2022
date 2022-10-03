@@ -19,6 +19,7 @@ public class ClimberMoveToHeight extends CommandBase
   {
     m_climber = climber;
     m_height = height;
+
     setName("ClimberMoveToHeight");
     addRequirements(m_climber);
   }

@@ -3,7 +3,6 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
@@ -23,54 +22,64 @@ import frc.robot.subsystems.Vision;
  */
 public class Auto1BallLimelight extends SequentialCommandGroup
 {
+  private Drivetrain m_drivetrain;
 
-  private String m_pathname1 = AUTOConstants.k1BallLimelight_path1;
-  private String m_pathname2 = AUTOConstants.k1BallLimelight_path2;
+  private boolean isLLValid( )
+  {
+    return m_drivetrain.isLimelightValid(40, 25);
+  }
 
   public Auto1BallLimelight(Drivetrain drivetrain, Intake intake, FloorConveyor fConv, TowerConveyor tConv, Shooter shooter,
       Vision vision)
   {
-    setName("Auto1BallLimelight");
+    m_drivetrain = drivetrain;
 
-    DataLogManager.log("Auto1BallLimelight pathname 1 : " + m_pathname1);
-    DataLogManager.log("Auto1BallLimelight pathname 2 : " + m_pathname2);
+    setName("Auto1BallLimelight");
 
     addCommands(
         // Add Commands here:
-        //@formatter:off
-    new AutoWait(AutoTimer.TIMER1), 
 
-    // new ParallelDeadlineGroup(
-    //   new IntakeDeploy(intake, true), 
-    //   new AutoStop(drivetrain)
-    // ),
+        // @formatter:off
+        new PrintCommand("AUTO 1 BALL LL: Use programmable delay from dashboard"),
+        new ParallelDeadlineGroup(
+          new AutoWait(AutoTimer.TIMER1), 
+          new AutoStop(drivetrain)
+        ),
 
-
-    new ParallelDeadlineGroup(
-      new ParallelDeadlineGroup(
-        new WaitUntilCommand(drivetrain::driveWithPathFollowerIsFinished), 
-        new AutoDrivePath(drivetrain, m_pathname1, true)
+        // new PrintCommand("AUTO: Deploy intake if desired"),
+        // new ParallelDeadlineGroup(
+        //   new IntakeDeploy(intake, true), 
+        //   new AutoStop(drivetrain)
+        // ),
+        
+        new PrintCommand("AUTO: Run the first path while priming shooter"),
+        new ParallelDeadlineGroup(
+          new ParallelDeadlineGroup(
+            new WaitUntilCommand(drivetrain::driveWithPathFollowerIsFinished), 
+            new AutoDrivePath(drivetrain, AUTOConstants.k1BallLimelight_path1, true)
+            ), 
+          new ScoringPrime(shooter, vision)
         ), 
-      new ScoringPrime(shooter, vision)
-    ), 
-    new PrintCommand("Run limelight shooting routine for 3rd ball"), 
-    new ConditionalCommand(
-      new AutoDriveLimelightShoot(drivetrain, intake, fConv, tConv, shooter, vision), 
-      new ParallelDeadlineGroup(
-        new ScoringStop(intake, fConv, tConv, shooter, vision), 
-        new AutoStop(drivetrain)
-      ), 
-      drivetrain::useLLValid  //TODO: replace with a method to give a BooleanSupplier parameters
-    ), 
-    new ParallelDeadlineGroup(
-      new WaitUntilCommand(drivetrain::driveWithPathFollowerIsFinished), 
-      new AutoDrivePath(drivetrain, m_pathname2, false),
-      new ScoringStop(intake, fConv, tConv, shooter, vision)
-    )
 
+        new PrintCommand("AUTO: Run limelight shooting routine for pre-loaded ball"), 
+        new ConditionalCommand(
+          new AutoDriveLimelightShoot(drivetrain, intake, fConv, tConv, shooter, vision), 
+          new ParallelDeadlineGroup(
+            new ScoringStop(intake, fConv, tConv, shooter, vision), 
+            new AutoStop(drivetrain)
+          ), 
+          this::isLLValid
+        ), 
 
-    //@formatter:on
+        new PrintCommand("AUTO: Run the second path off the tarmac"), 
+        new ParallelDeadlineGroup(
+          new WaitUntilCommand(drivetrain::driveWithPathFollowerIsFinished), 
+          new AutoDrivePath(drivetrain, AUTOConstants.k1BallLimelight_path2, false),
+          new ScoringStop(intake, fConv, tConv, shooter, vision)
+        ),
 
+        new AutoStop(drivetrain) 
+        // @formatter:on
     );
   }
 

@@ -10,7 +10,6 @@ import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXSimCollection;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 
 import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -124,9 +123,9 @@ public class Shooter extends SubsystemBase
       PhoenixUtil.getInstance( ).checkTalonError(m_motorSH11, "configSelectedFeedbackSensor");
       m_motorSH11.setSensorPhase(true);
       PhoenixUtil.getInstance( ).checkTalonError(m_motorSH11, "setSensorPhase");
-      m_motorSH11.configVelocityMeasurementWindow(8);
+      m_motorSH11.configVelocityMeasurementWindow(SHConsts.kVelocityMeasWindow);
       PhoenixUtil.getInstance( ).checkTalonError(m_motorSH11, "configVelocityMeasurementWindow");
-      m_motorSH11.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_10Ms);
+      m_motorSH11.configVelocityMeasurementPeriod(SHConsts.kVelocityMeasPeriod);
       PhoenixUtil.getInstance( ).checkTalonError(m_motorSH11, "configVelocityMeasurementPeriod");
 
       configFlywheelPid(CANTIMEOUT);

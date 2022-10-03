@@ -3,9 +3,9 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.subsystems.Drivetrain;
@@ -25,12 +25,11 @@ public class DriveLimelightShoot extends SequentialCommandGroup
   {
     setName("DriveLimelightShoot");
 
-    DataLogManager.log(getSubsystem( ) + ": DriveLimelightShoot");
-
     addCommands(
         // Add Commands here:
 
         // @formatter:off
+        new PrintCommand("Limelight drive and then shoot"), 
         new ParallelCommandGroup(
             new DriveLimelight(drivetrain, vision, false),
             new SequentialCommandGroup(
