@@ -216,6 +216,7 @@ public class Drivetrain extends SubsystemBase
     updateOdometry( );
     updateDashboardValues( );
     m_field.setRobotPose(m_odometry.getPoseMeters( ));
+    SmartDashboard.putBoolean("DT_throttleZeroed", m_throttleZeroed);
 
     if (m_validL1 && m_driveL1.hasResetOccurred( ))
       SmartDashboard.putNumber("HL_resetCountL1", ++m_resetCountL1);
@@ -308,6 +309,7 @@ public class Drivetrain extends SubsystemBase
     SmartDashboard.putNumber("DTL_throttlePidKd", m_throttlePidKd);
     SmartDashboard.putNumber("DTL_throttleMax", m_throttleMax);
     SmartDashboard.putNumber("DTL_throttleShape", m_throttleShape);
+    SmartDashboard.putBoolean("DT_throttleZeroed", m_throttleZeroed);
 
     SmartDashboard.putNumber("DTL_targetAngle", m_targetAngle);
     SmartDashboard.putNumber("DTL_setPointDistance", m_setPointDistance);
@@ -677,7 +679,7 @@ public class Drivetrain extends SubsystemBase
     double yOutput = 0.0;
 
     // If joysticks report a very small value, then stick has been centered
-    if (Math.abs(speed) < 0.05 && Math.abs(rotation) < 0.05)
+    if (Math.abs(speed) < 0.1 && Math.abs(rotation) < 0.1)
       m_throttleZeroed = true;
 
     // If throttle and steering not centered, use zero outputs until they do
