@@ -216,7 +216,6 @@ public class Drivetrain extends SubsystemBase
     updateOdometry( );
     updateDashboardValues( );
     m_field.setRobotPose(m_odometry.getPoseMeters( ));
-    SmartDashboard.putBoolean("DT_throttleZeroed", m_throttleZeroed);
 
     if (m_validL1 && m_driveL1.hasResetOccurred( ))
       SmartDashboard.putNumber("HL_resetCountL1", ++m_resetCountL1);
@@ -297,6 +296,7 @@ public class Drivetrain extends SubsystemBase
     SmartDashboard.putNumber("HL_resetCountR4", m_resetCountR4);
 
     SmartDashboard.putNumber("DT_stopTolerance", m_stopTolerance);
+    SmartDashboard.putBoolean("DT_throttleZeroed", m_throttleZeroed);
 
     // Put tunable items to dashboard
     SmartDashboard.putNumber("DTL_turnConstant", m_turnConstant);
@@ -309,7 +309,6 @@ public class Drivetrain extends SubsystemBase
     SmartDashboard.putNumber("DTL_throttlePidKd", m_throttlePidKd);
     SmartDashboard.putNumber("DTL_throttleMax", m_throttleMax);
     SmartDashboard.putNumber("DTL_throttleShape", m_throttleShape);
-    SmartDashboard.putBoolean("DT_throttleZeroed", m_throttleZeroed);
 
     SmartDashboard.putNumber("DTL_targetAngle", m_targetAngle);
     SmartDashboard.putNumber("DTL_setPointDistance", m_setPointDistance);
@@ -407,6 +406,8 @@ public class Drivetrain extends SubsystemBase
 
   private void updateDashboardValues( )
   {
+    SmartDashboard.putBoolean("DT_throttleZeroed", m_throttleZeroed);
+
     SmartDashboard.putNumber("DT_distanceLeft", m_distanceLeft);
     SmartDashboard.putNumber("DT_distanceRight", m_distanceRight);
     SmartDashboard.putNumber("DT_wheelSpeedLeft", m_wheelSpeeds.leftMetersPerSecond);
