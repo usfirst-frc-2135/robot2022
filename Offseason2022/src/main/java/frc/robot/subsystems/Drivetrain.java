@@ -450,10 +450,8 @@ public class Drivetrain extends SubsystemBase
   {
     if (m_validL1)
       m_offset1 = -m_driveL1.getSelectedSensorVelocity( );
-    //m_driveL1.setSelectedSensorPosition(0.0);
     if (m_validR3)
       m_offset2 = -m_driveR3.getSelectedSensorVelocity( );
-    //m_driveR3.setSelectedSensorPosition(0.0);
   }
 
   // Helper methods to convert between meters and native units
