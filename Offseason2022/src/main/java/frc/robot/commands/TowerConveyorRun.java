@@ -3,6 +3,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.TCConsts.TCMode;
 import frc.robot.subsystems.TowerConveyor;
@@ -29,6 +30,7 @@ public class TowerConveyorRun extends CommandBase
   public void initialize( )
   {
     m_towerConveyor.setTowerConveyorSpeed(m_mode);
+    DataLogManager.log("TowerCONVERYORSHOOTBALL");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
