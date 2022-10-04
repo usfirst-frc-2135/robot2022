@@ -15,30 +15,31 @@ import frc.robot.commands.*;
  */
 public class Intake extends SubsystemBase
 {
-    private WPI_TalonFX motorIN12;
-    private Solenoid arm;
+  private WPI_TalonFX motorIN12;
+  private Solenoid    arm;
 
-    /**
-    *
-    */
-    public Intake()
-    {
-        motorIN12 = new WPI_TalonFX(12);
+  /**
+  *
+  */
+  public Intake( )
+  {
+    motorIN12 = new WPI_TalonFX(12);
 
-        arm = new Solenoid(0, PneumaticsModuleType.CTREPCM, 0);
-        addChild("Arm", arm);
-    }
+    arm = new Solenoid(0, PneumaticsModuleType.CTREPCM, 0);
+    addChild("Arm", arm);
+  }
 
-    @Override public void periodic()
-    {
-        // This method will be called once per scheduler run
-    }
+  @Override
+  public void periodic( )
+  {
+    // This method will be called once per scheduler run
+  }
 
-    @Override public void simulationPeriodic()
-    {
-        // This method will be called once per scheduler run when in simulation
-    }
+  @Override
+  public void simulationPeriodic( )
+  {
+    // This method will be called once per scheduler run when in simulation
+  }
 
-    // Put methods for controlling this subsystem
-    // here. Call these from Commands.
+  // Put methods for controlling this subsystem here. Call these from Commands.
 }
