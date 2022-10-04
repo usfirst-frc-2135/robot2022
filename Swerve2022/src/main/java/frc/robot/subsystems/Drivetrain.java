@@ -23,10 +23,10 @@ public class Drivetrain extends SubsystemBase
 {
   private WPI_TalonFX                 driveLF1;
   private WPI_TalonFX                 steerLF2;
-  private WPI_TalonFX                 steerRF5;
-  private WPI_TalonFX                 steerRF6;
   private WPI_TalonFX                 driveLR3;
   private WPI_TalonFX                 steerLR4;
+  private WPI_TalonFX                 driveRF5;
+  private WPI_TalonFX                 steerRF6;
   private WPI_TalonFX                 driveRR7;
   private WPI_TalonFX                 steerRR8;
   private Pigeon2                     pigeonIMU;
@@ -39,10 +39,8 @@ public class Drivetrain extends SubsystemBase
   private final SlewRateLimiter       m_yspeedLimiter      = new SlewRateLimiter(3);
   private final SlewRateLimiter       m_rotLimiter         = new SlewRateLimiter(3);
 
-  public static final double          kMaxSpeed            = 3.0;                                   // 3 meters per
-                                             // second
-  public static final double          kMaxAngularSpeed     = Math.PI;                               // 1/2 rotation per
-                                                        // second
+  public static final double          kMaxSpeed            = 3.0;             // 3 meters per second
+  public static final double          kMaxAngularSpeed     = Math.PI;         // 1/2 rotation per second
 
   private final Translation2d         m_frontLeftLocation  = new Translation2d(0.381, 0.381);
   private final Translation2d         m_frontRightLocation = new Translation2d(0.381, -0.381);
@@ -68,11 +66,11 @@ public class Drivetrain extends SubsystemBase
   {
     driveLF1 = new WPI_TalonFX(1);
     steerLF2 = new WPI_TalonFX(2);
-    driveLR3 = new WPI_TalonFX(5);
-    steerLR4 = new WPI_TalonFX(6);
+    driveLR3 = new WPI_TalonFX(3);
+    steerLR4 = new WPI_TalonFX(4);
 
-    steerRF5 = new WPI_TalonFX(3);
-    steerRF6 = new WPI_TalonFX(4);
+    driveRF5 = new WPI_TalonFX(5);
+    steerRF6 = new WPI_TalonFX(6);
     driveRR7 = new WPI_TalonFX(7);
     steerRR8 = new WPI_TalonFX(8);
 
