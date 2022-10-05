@@ -298,6 +298,7 @@ public class Drivetrain extends SubsystemBase
     SmartDashboard.putNumber("HL_resetCountR4", m_resetCountR4);
 
     SmartDashboard.putNumber("DT_stopTolerance", m_stopTolerance);
+    SmartDashboard.putBoolean("DT_throttleZeroed", m_throttleZeroed);
 
     // Put tunable items to dashboard
     SmartDashboard.putNumber("DTL_turnConstant", m_turnConstant);
@@ -407,6 +408,8 @@ public class Drivetrain extends SubsystemBase
 
   private void updateDashboardValues( )
   {
+    SmartDashboard.putBoolean("DT_throttleZeroed", m_throttleZeroed);
+
     SmartDashboard.putNumber("DT_distanceLeft", m_distanceLeft);
     SmartDashboard.putNumber("DT_distanceRight", m_distanceRight);
     SmartDashboard.putNumber("DT_wheelSpeedLeft", m_wheelSpeeds.leftMetersPerSecond);
@@ -675,7 +678,7 @@ public class Drivetrain extends SubsystemBase
     double yOutput = 0.0;
 
     // If joysticks report a very small value, then stick has been centered
-    if (Math.abs(speed) < 0.05 && Math.abs(rotation) < 0.05)
+    if (Math.abs(speed) < 0.1 && Math.abs(rotation) < 0.1)
       m_throttleZeroed = true;
 
     // If throttle and steering not centered, use zero outputs until they do
