@@ -305,7 +305,6 @@ public class Shooter extends SubsystemBase
 
   public boolean isAtDesiredSpeed( )
   {
-    DataLogManager.log("Shooter: " + m_atDesiredSpeed);
     return m_atDesiredSpeed;
   }
 

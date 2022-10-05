@@ -135,8 +135,8 @@ public class Drivetrain extends SubsystemBase
   private boolean                           m_isQuickTurn         = false; // Quickturn mode active in curvature drive
   private boolean                           m_driveSlowMode       = false; // Slow drive mode active when climbing
   private double                            m_limelightDistance;
-  private double                            m_offset1;
-  private double                            m_offset2;
+  private double                            m_offsetLeft;
+  private double                            m_offsetRight;
 
   private int                               m_periodicInterval    = 0;
 
@@ -449,9 +449,9 @@ public class Drivetrain extends SubsystemBase
   public void resetEncoders( )
   {
     if (m_validL1)
-      m_offset1 = -m_driveL1.getSelectedSensorVelocity( );
+      m_offsetLeft = -m_driveL1.getSelectedSensorVelocity( );
     if (m_validR3)
-      m_offset2 = -m_driveR3.getSelectedSensorVelocity( );
+      m_offsetRight = -m_driveR3.getSelectedSensorVelocity( );
   }
 
   // Helper methods to convert between meters and native units
@@ -478,13 +478,13 @@ public class Drivetrain extends SubsystemBase
   private double getDistanceMetersLeft( )
   {
 
-    return (m_validL1) ? (m_offset1 + nativeUnitsToMeters(m_driveL1.getSelectedSensorPosition(PIDINDEX))) : 0;
+    return (m_validL1) ? (m_offsetLeft + nativeUnitsToMeters(m_driveL1.getSelectedSensorPosition(PIDINDEX))) : 0;
 
   }
 
   private double getDistanceMetersRight( )
   {
-    return (m_validR3) ? (m_offset2 + nativeUnitsToMeters(m_driveR3.getSelectedSensorPosition(PIDINDEX))) : 0;
+    return (m_validR3) ? (m_offsetRight + nativeUnitsToMeters(m_driveR3.getSelectedSensorPosition(PIDINDEX))) : 0;
   }
 
   private DifferentialDriveWheelSpeeds getWheelSpeedsMPS( )
