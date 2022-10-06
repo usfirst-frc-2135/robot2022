@@ -80,8 +80,8 @@ public class SimulateLimelight extends CommandBase
     NetworkTable table = NetworkTableInstance.getDefault( ).getTable("limelight");
     table.getEntry("tx").setValue(tx);
     table.getEntry("ty").setValue(ty);
-    table.getEntry("tv").setBoolean((tx >= -LL2_HORIZ_HALF_FOV_DEG && tx <= LL2_HORIZ_HALF_FOV_DEG)
-        && (ty >= -LL2_VERT_HALF_FOV_DEG && ty <= LL2_VERT_HALF_FOV_DEG));
+    table.getEntry("tv").setValue(((tx >= -LL2_HORIZ_HALF_FOV_DEG && tx <= LL2_HORIZ_HALF_FOV_DEG)
+        && (ty >= -LL2_VERT_HALF_FOV_DEG && ty <= LL2_VERT_HALF_FOV_DEG)) ? 1.0 : 0.0);
     m_mechRoot.setPosition(tx / LL2_HORIZ_HALF_FOV_DEG + (1.2 - 0.05), ty / LL2_VERT_HALF_FOV_DEG + 1);
   }
 

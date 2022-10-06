@@ -42,7 +42,7 @@ public class Shooter extends SubsystemBase
 
   private final TalonFXSimCollection      m_motorSim                = new TalonFXSimCollection(m_motorSH11);
   private final FlywheelSim               m_flywheelSim             =
-      new FlywheelSim(DCMotor.getFalcon500(1), SHConsts.kFlywheelGearRatio, 0.01);
+      new FlywheelSim(DCMotor.getFalcon500(1), SHConsts.kFlywheelGearRatio, 0.005);
   private LinearFilter                    m_flywheelFilter          = LinearFilter.singlePoleIIR(0.1, 0.02);
 
   private SupplyCurrentLimitConfiguration m_supplyCurrentLimits     = new SupplyCurrentLimitConfiguration(true,
@@ -150,7 +150,7 @@ public class Shooter extends SubsystemBase
     {
       m_flywheelRPM = m_flywheelFilter.calculate(flywheelNativeToRPM((m_motorSH11.getSelectedSensorVelocity(PIDINDEX))));
 
-      m_atDesiredSpeed = Math.abs(m_flywheelTargetRPM - m_flywheelRPM) < m_flywheelToleranceRPM;
+      m_atDesiredSpeed = (m_flywheelRPM > 30.0) && (Math.abs(m_flywheelTargetRPM - m_flywheelRPM) < m_flywheelToleranceRPM);
 
       if (m_atDesiredSpeed != m_atDesiredSpeedPrevious)
       {
@@ -176,7 +176,7 @@ public class Shooter extends SubsystemBase
       if (!m_atDesiredSpeed)
       {
         color = LEDColor.LEDCOLOR_BLUE;
-        DataLogManager.log(getSubsystem( ) + ": m_flywheelRPM " + m_flywheelRPM);
+        DataLogManager.log(String.format("%s: flywheelRPM %6.1f", getSubsystem( ), m_flywheelRPM));
       }
       else
         color = LEDColor.LEDCOLOR_GREEN;
