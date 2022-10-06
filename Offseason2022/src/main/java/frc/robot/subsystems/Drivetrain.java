@@ -135,6 +135,8 @@ public class Drivetrain extends SubsystemBase
   private boolean                           m_isQuickTurn         = false; // Quickturn mode active in curvature drive
   private boolean                           m_driveSlowMode       = false; // Slow drive mode active when climbing
   private double                            m_limelightDistance;
+  private double                            m_offsetLeft;
+  private double                            m_offsetRight;
 
   private int                               m_periodicInterval    = 0;
 
@@ -296,6 +298,7 @@ public class Drivetrain extends SubsystemBase
     SmartDashboard.putNumber("HL_resetCountR4", m_resetCountR4);
 
     SmartDashboard.putNumber("DT_stopTolerance", m_stopTolerance);
+    SmartDashboard.putBoolean("DT_throttleZeroed", m_throttleZeroed);
 
     // Put tunable items to dashboard
     SmartDashboard.putNumber("DTL_turnConstant", m_turnConstant);
@@ -405,6 +408,8 @@ public class Drivetrain extends SubsystemBase
 
   private void updateDashboardValues( )
   {
+    SmartDashboard.putBoolean("DT_throttleZeroed", m_throttleZeroed);
+
     SmartDashboard.putNumber("DT_distanceLeft", m_distanceLeft);
     SmartDashboard.putNumber("DT_distanceRight", m_distanceRight);
     SmartDashboard.putNumber("DT_wheelSpeedLeft", m_wheelSpeeds.leftMetersPerSecond);
@@ -447,9 +452,9 @@ public class Drivetrain extends SubsystemBase
   public void resetEncoders( )
   {
     if (m_validL1)
-      m_driveL1.setSelectedSensorPosition(0.0);
+      m_offsetLeft = -m_driveL1.getSelectedSensorVelocity( );
     if (m_validR3)
-      m_driveR3.setSelectedSensorPosition(0.0);
+      m_offsetRight = -m_driveR3.getSelectedSensorVelocity( );
   }
 
   // Helper methods to convert between meters and native units
@@ -475,18 +480,14 @@ public class Drivetrain extends SubsystemBase
 
   private double getDistanceMetersLeft( )
   {
-    if (m_validL1)
-      return nativeUnitsToMeters(m_driveL1.getSelectedSensorPosition(PIDINDEX));
 
-    return 0;
+    return (m_validL1) ? (m_offsetLeft + nativeUnitsToMeters(m_driveL1.getSelectedSensorPosition(PIDINDEX))) : 0;
+
   }
 
   private double getDistanceMetersRight( )
   {
-    if (m_validR3)
-      return nativeUnitsToMeters(m_driveR3.getSelectedSensorPosition(PIDINDEX));
-
-    return 0;
+    return (m_validR3) ? (m_offsetRight + nativeUnitsToMeters(m_driveR3.getSelectedSensorPosition(PIDINDEX))) : 0;
   }
 
   private DifferentialDriveWheelSpeeds getWheelSpeedsMPS( )
@@ -677,7 +678,7 @@ public class Drivetrain extends SubsystemBase
     double yOutput = 0.0;
 
     // If joysticks report a very small value, then stick has been centered
-    if (Math.abs(speed) < 0.05 && Math.abs(rotation) < 0.05)
+    if (Math.abs(speed) < 0.1 && Math.abs(rotation) < 0.1)
       m_throttleZeroed = true;
 
     // If throttle and steering not centered, use zero outputs until they do
@@ -885,7 +886,7 @@ public class Drivetrain extends SubsystemBase
   //
   // Autonomous mode - Ramsete path follower
   //
-  public void driveWithPathFollowerInit(Trajectory trajectory, boolean resetOdometry)
+  public void driveWithPathFollowerInit(Trajectory trajectory, boolean useInitialPose)
   {
     m_stopTolerance = SmartDashboard.getNumber("DT_stopTolerance", m_stopTolerance);
     m_ramseteB = SmartDashboard.getNumber("DTR_ramseteB", m_ramseteB);
@@ -922,7 +923,7 @@ public class Drivetrain extends SubsystemBase
     m_trajTimer.start( );
 
     // This initializes the odometry (where we are)
-    if (resetOdometry)
+    if (useInitialPose)
       resetOdometry(m_trajectory.getInitialPose( ));
 
     m_field.setRobotPose(getPose( ));

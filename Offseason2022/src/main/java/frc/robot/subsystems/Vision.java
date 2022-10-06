@@ -59,7 +59,7 @@ public class Vision extends SubsystemBase
     SmartDashboard.putNumber("VI_OVERRIDE_TY", 0.0);
     SmartDashboard.putNumber("VI_OVERRIDE_TA", 0.0);
     SmartDashboard.putNumber("VI_OVERRIDE_TS", 0.0);
-    SmartDashboard.putBoolean("VI_OVERRIDE_TV", false);
+    SmartDashboard.putNumber("VI_OVERRIDE_TV", 0.0);
 
     initialize( );
   }
@@ -75,7 +75,7 @@ public class Vision extends SubsystemBase
       m_targetVertAngle = SmartDashboard.getNumber("VI_OVERRIDE_TY", 0.0);
       m_targetArea = SmartDashboard.getNumber("VI_OVERRIDE_TA", 0.0);
       m_targetSkew = SmartDashboard.getNumber("VI_OVERRIDE_TS", 0.0);
-      m_targetValid = SmartDashboard.getBoolean("VI_OVERRIDE_TV", true);
+      m_targetValid = SmartDashboard.getNumber("VI_OVERRIDE_TV", 0.0) > 0.5;
     }
     else
     {
@@ -83,7 +83,7 @@ public class Vision extends SubsystemBase
       m_targetVertAngle = m_yfilter.calculate(m_table.getEntry("ty").getDouble(0.0));
       m_targetArea = m_table.getEntry("ta").getDouble(0.0);
       m_targetSkew = m_table.getEntry("ts").getDouble(0.0);
-      m_targetValid = (m_table.getEntry("tv").getDouble(0.0) > 0);
+      m_targetValid = (m_table.getEntry("tv").getDouble(0.0) > 0.5);
     }
 
     m_distLL = calculateDist(m_targetVertAngle);

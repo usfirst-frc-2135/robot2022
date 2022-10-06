@@ -13,26 +13,27 @@ import frc.robot.commands.*;
  */
 public class FloorConveyor extends SubsystemBase
 {
-    private WPI_TalonFX motorFC13;
+  private WPI_TalonFX motorFC13;
 
-    /**
-    *
-    */
-    public FloorConveyor()
-    {
-        motorFC13 = new WPI_TalonFX(13);
-    }
+  /**
+  *
+  */
+  public FloorConveyor( )
+  {
+    motorFC13 = new WPI_TalonFX(13);
+  }
 
-    @Override public void periodic()
-    {
-        // This method will be called once per scheduler run
-    }
+  @Override
+  public void periodic( )
+  {
+    // This method will be called once per scheduler run
+  }
 
-    @Override public void simulationPeriodic()
-    {
-        // This method will be called once per scheduler run when in simulation
-    }
+  @Override
+  public void simulationPeriodic( )
+  {
+    // This method will be called once per scheduler run when in simulation
+  }
 
-    // Put methods for controlling this subsystem
-    // here. Call these from Commands.
+  // Put methods for controlling this subsystem here. Call these from Commands.
 }
