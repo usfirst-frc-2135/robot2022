@@ -60,7 +60,7 @@ public class Constants
     public static final double  kQuickTurnScaling      = 0.5;           // Scale by 50% of full speed
     public static final double  kSlowClimbScaling      = 0.3;           // Scale by 30% of full speed
 
-    // Teleop riving controls
+    // Teleop driving controls
     public static final double  kOpenLoopRamp          = 0.5;           // CTRE: full speed in 0.5 sec
     public static final double  kClosedLoopRamp        = 0.0;           // CTRE: 0 is disabled
     public static final double  kStopTolerance         = 0.05;          // Target position tolerance (< 5cm)

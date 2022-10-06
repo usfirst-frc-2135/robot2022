@@ -36,6 +36,7 @@ public class ScoringActionUpperHub extends SequentialCommandGroup
           new ShooterRun(shooter, SHMode.SHOOTER_UPPERHUB)
         ),
         
+        new PrintCommand("ScoringActionUpperHub: BALL RELEASED"),
         new ParallelDeadlineGroup(
           new WaitCommand(waitTime),       
           new TowerConveyorRun(tConv, TCMode.TCONVEYOR_ACQUIRE),
