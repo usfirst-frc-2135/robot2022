@@ -20,15 +20,15 @@ import frc.robot.subsystems.Drivetrain;
 public class AutoDrivePath extends CommandBase
 {
   private final Drivetrain m_drivetrain;
-  private final boolean    m_resetOdometry;
+  private final boolean    m_useInitialPose;
 
   private String           m_trajectoryJSON;
   private Trajectory       m_trajectory;
 
-  public AutoDrivePath(Drivetrain drivetrain, String pathName, boolean resetOdometry)
+  public AutoDrivePath(Drivetrain drivetrain, String pathName, boolean useInitialPose)
   {
     m_drivetrain = drivetrain;
-    m_resetOdometry = resetOdometry;
+    m_useInitialPose = useInitialPose;
 
     setName("AutoDrivePath");
     addRequirements(m_drivetrain);
@@ -57,7 +57,7 @@ public class AutoDrivePath extends CommandBase
   public void initialize( )
   {
     DataLogManager.log(String.format("%s: Running", getName( ), m_trajectoryJSON));
-    m_drivetrain.driveWithPathFollowerInit(m_trajectory, m_resetOdometry);
+    m_drivetrain.driveWithPathFollowerInit(m_trajectory, m_useInitialPose);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

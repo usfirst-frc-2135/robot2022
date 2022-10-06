@@ -888,7 +888,7 @@ public class Drivetrain extends SubsystemBase
   //
   // Autonomous mode - Ramsete path follower
   //
-  public void driveWithPathFollowerInit(Trajectory trajectory, boolean resetOdometry)
+  public void driveWithPathFollowerInit(Trajectory trajectory, boolean useInitialPose)
   {
     m_stopTolerance = SmartDashboard.getNumber("DT_stopTolerance", m_stopTolerance);
     m_ramseteB = SmartDashboard.getNumber("DTR_ramseteB", m_ramseteB);
@@ -925,7 +925,7 @@ public class Drivetrain extends SubsystemBase
     m_trajTimer.start( );
 
     // This initializes the odometry (where we are)
-    if (resetOdometry)
+    if (useInitialPose)
       resetOdometry(m_trajectory.getInitialPose( ));
 
     m_field.setRobotPose(getPose( ));
