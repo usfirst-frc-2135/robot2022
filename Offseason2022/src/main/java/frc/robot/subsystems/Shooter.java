@@ -108,6 +108,11 @@ public class Shooter extends SubsystemBase
       PhoenixUtil.getInstance( ).checkTalonError(m_motorSH11, "setSafetyEnabled");
 
       // Enable voltage compensation
+      m_motorSH11.configVoltageCompSaturation(12.0);
+      PhoenixUtil.getInstance( ).checkTalonError(m_motorSH11, "configVoltageCompSaturation");
+      m_motorSH11.enableVoltageCompensation(true);
+      PhoenixUtil.getInstance( ).checkTalonError(m_motorSH11, "enableVoltageCompensation");
+
       m_motorSH11.configNeutralDeadband(m_flywheelNeutralDeadband, CANTIMEOUT);
       PhoenixUtil.getInstance( ).checkTalonError(m_motorSH11, "configNeutralDeadband");
       m_motorSH11.configPeakOutputReverse(0.0, CANTIMEOUT);
