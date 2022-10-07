@@ -229,7 +229,10 @@ public class Drivetrain extends SubsystemBase
       SmartDashboard.putNumber("HL_resetCountR4", ++m_resetCountR4);
 
     if (RobotState.isDisabled( ))
+    {
       resetGyro( );
+      resetEncoders( );
+    }
   }
 
   @Override
@@ -267,9 +270,7 @@ public class Drivetrain extends SubsystemBase
 
     driveStopMotors( );
 
-    resetGyro( );
     resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
-    m_driveSim.setPose(getPose( ));
   }
 
   public void faultDump( )
@@ -452,9 +453,13 @@ public class Drivetrain extends SubsystemBase
   public void resetEncoders( )
   {
     if (m_validL1)
-      m_offsetLeft = -m_driveL1.getSelectedSensorVelocity( );
+    {
+      m_offsetLeft = -m_driveL1.getSelectedSensorPosition( );
+    }
     if (m_validR3)
-      m_offsetRight = -m_driveR3.getSelectedSensorVelocity( );
+    {
+      m_offsetRight = -m_driveR3.getSelectedSensorPosition( );
+    }
   }
 
   // Helper methods to convert between meters and native units
@@ -551,7 +556,7 @@ public class Drivetrain extends SubsystemBase
     resetEncoders( );
     resetGyro( );
     m_driveSim.setPose(pose);
-    m_odometry.resetPosition(pose, Rotation2d.fromDegrees(0.0));
+    m_odometry.resetPosition(pose, pose.getRotation( ));
   }
 
   public Pose2d getPose( )
