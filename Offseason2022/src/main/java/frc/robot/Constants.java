@@ -157,7 +157,7 @@ public class Constants
     public static final int                      kVelocityMeasWindow      = 1;
     public static final SensorVelocityMeasPeriod kVelocityMeasPeriod      = SensorVelocityMeasPeriod.Period_10Ms;
     public static final double                   kFlywheelPidKf           = 0.04775;
-    public static final double                   kFlywheelPidKp           = 0.1;
+    public static final double                   kFlywheelPidKp           = 0.2;
     public static final double                   kFlywheelPidKi           = 0.0;
     public static final double                   kFlywheelPidKd           = 0.0;
     public static final double                   kFlywheelNeutralDeadband = 0.01;
