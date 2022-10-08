@@ -155,8 +155,18 @@ public class Drivetrain extends SubsystemBase
     return nativeUnitsToMeters(driveMotor.getSelectedSensorPosition( ));
   }
 
+  private double getVelocityMPS(WPI_TalonFX driveMotor)
+  {
+    return nativeUnitsToMPS(driveMotor.getSelectedSensorVelocity( ));
+  }
+
   private double nativeUnitsToMeters(double nativeUnits)
   {
     return nativeUnits * DTConsts.kEncoderMetersPerCount;
+  }
+
+  private double nativeUnitsToMPS(double nativeUnitsVelocity)
+  {
+    return nativeUnitsVelocity * DTConsts.kEncoderMetersPerCount * 10;
   }
 }
