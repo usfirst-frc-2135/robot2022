@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.crypto.Data;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.InvertType;
@@ -454,11 +456,11 @@ public class Drivetrain extends SubsystemBase
   {
     if (m_validL1)
     {
-      m_offsetLeft = -m_driveL1.getSelectedSensorPosition( );
+      m_offsetLeft = -nativeUnitsToMeters(m_driveL1.getSelectedSensorPosition( ));
     }
     if (m_validR3)
     {
-      m_offsetRight = -m_driveR3.getSelectedSensorPosition( );
+      m_offsetRight = -nativeUnitsToMeters(m_driveR3.getSelectedSensorPosition( ));
     }
   }
 
