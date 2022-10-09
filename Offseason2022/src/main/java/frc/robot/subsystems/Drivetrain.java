@@ -755,7 +755,8 @@ public class Drivetrain extends SubsystemBase
     // m_driveR3.configOpenloopRamp(m_openLoopRamp);
 
     RobotContainer rc = RobotContainer.getInstance( );
-    rc.m_vision.m_yfilter.reset( );
+    rc.m_vision.m_tvfilter.reset( );
+    rc.m_vision.m_tyfilter.reset( );
     rc.m_vision.syncStateFromDashboard( );
   }
 
