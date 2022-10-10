@@ -4,7 +4,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.ctre.phoenix.sensors.Pigeon2;
+import com.ctre.phoenix.sensors.WPI_Pigeon2;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -15,6 +15,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.Constants.DTConsts;
 
 /**
  *
@@ -29,7 +31,7 @@ public class Drivetrain extends SubsystemBase
   private WPI_TalonFX                 steerRF6;
   private WPI_TalonFX                 driveRR7;
   private WPI_TalonFX                 steerRR8;
-  private Pigeon2                     pigeonIMU;
+  private WPI_Pigeon2                 m_pigeonIMU;
 
   private final XboxController        m_controller         = new XboxController(0);
   private final Drivetrain            m_swerve             = new Drivetrain( );
@@ -47,17 +49,19 @@ public class Drivetrain extends SubsystemBase
   private final Translation2d         m_backLeftLocation   = new Translation2d(-0.381, 0.381);
   private final Translation2d         m_backRightLocation  = new Translation2d(-0.381, -0.381);
 
-  private final SwerveModule          m_frontLeft          = new SwerveModule(1, 2, 0, 1, 2, 3);
-  private final SwerveModule          m_frontRight         = new SwerveModule(3, 4, 4, 5, 6, 7);
-  private final SwerveModule          m_backLeft           = new SwerveModule(5, 6, 8, 9, 10, 11);
-  private final SwerveModule          m_backRight          = new SwerveModule(7, 8, 12, 13, 14, 15);
-
-  private final AnalogGyro            m_gyro               = new AnalogGyro(0);
+  private final SwerveModule          m_frontLeft          =
+      new SwerveModule(DTConsts.kLFDrive1CANID, DTConsts.kLFSteer2CANID, 0, 1, 2, 3);
+  private final SwerveModule          m_frontRight         =
+      new SwerveModule(DTConsts.kRFDrive3CANID, DTConsts.kRFSteer4CANID, 4, 5, 6, 7);
+  private final SwerveModule          m_backLeft           =
+      new SwerveModule(DTConsts.kLRDrive5CANID, DTConsts.kLRSteer6CANID, 8, 9, 10, 11);
+  private final SwerveModule          m_backRight          =
+      new SwerveModule(DTConsts.kRRDrive7CANID, DTConsts.kRRSteer8CANID, 12, 13, 14, 15);
 
   private final SwerveDriveKinematics m_kinematics         =
       new SwerveDriveKinematics(m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
 
-  private final SwerveDriveOdometry   m_odometry           = new SwerveDriveOdometry(m_kinematics, m_gyro.getRotation2d( ));
+  private final SwerveDriveOdometry   m_odometry           = new SwerveDriveOdometry(m_kinematics, m_pigeonIMU.getRotation2d( ));
 
   /**
   *
@@ -74,9 +78,9 @@ public class Drivetrain extends SubsystemBase
     driveRR7 = new WPI_TalonFX(7);
     steerRR8 = new WPI_TalonFX(8);
 
-    pigeonIMU = new Pigeon2(0);
+    m_pigeonIMU = new WPI_Pigeon2(0);
 
-    m_gyro.reset( );
+    m_pigeonIMU.reset( );
   }
 
   @Override
@@ -109,8 +113,8 @@ public class Drivetrain extends SubsystemBase
   @SuppressWarnings("ParameterName")
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative)
   {
-    var swerveModuleStates = m_kinematics
-        .toSwerveModuleStates(fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_gyro.getRotation2d( ))
+    var swerveModuleStates = m_kinematics.toSwerveModuleStates(
+        fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_pigeonIMU.getRotation2d( ))
             : new ChassisSpeeds(xSpeed, ySpeed, rot));
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
     m_frontLeft.setDesiredState(swerveModuleStates[0]);
@@ -122,7 +126,7 @@ public class Drivetrain extends SubsystemBase
   /** Updates the field relative position of the robot. */
   public void updateOdometry( )
   {
-    m_odometry.update(m_gyro.getRotation2d( ), m_frontLeft.getState( ), m_frontRight.getState( ), m_backLeft.getState( ),
+    m_odometry.update(m_pigeonIMU.getRotation2d( ), m_frontLeft.getState( ), m_frontRight.getState( ), m_backLeft.getState( ),
         m_backRight.getState( ));
   }
 
