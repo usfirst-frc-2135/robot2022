@@ -45,7 +45,8 @@ public class Constants
     public static final int    kRRSteer8CANID         = 8;
 
     public static final double kWheelDiaMeters        = Units.inchesToMeters(4.0); // 4in (39.37 in/meter)
-    public static final double kEncoderMetersPerCount = (kWheelDiaMeters * Math.PI) / (Falcon500.kEncoderCPR) / 6.75;
+    public static final double kGearRatio             = 6.75;
+    public static final double kEncoderMetersPerCount = (kWheelDiaMeters * Math.PI) / (Falcon500.kEncoderCPR) / kGearRatio;
 
   }
 }
