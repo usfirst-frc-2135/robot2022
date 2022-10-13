@@ -35,14 +35,14 @@ public class Constants
   public static final class DTConsts
   {
     public static final int    kLFDrive1CANID         = 1;
-    public static final int    kLFSteer2CANID         = 2;
+    public static final int    kLFTurn2CANID          = 2;
     public static final int    kRFDrive3CANID         = 3;
-    public static final int    kRFSteer4CANID         = 4;
+    public static final int    kRFTurn4CANID          = 4;
 
     public static final int    kLRDrive5CANID         = 5;
-    public static final int    kLRSteer6CANID         = 6;
+    public static final int    kLRTurn6CANID          = 6;
     public static final int    kRRDrive7CANID         = 7;
-    public static final int    kRRSteer8CANID         = 8;
+    public static final int    kRRTurn8CANID          = 8;
 
     public static final double kWheelDiaMeters        = Units.inchesToMeters(4.0); // 4in (39.37 in/meter)
     public static final double kGearRatio             = 6.75;
