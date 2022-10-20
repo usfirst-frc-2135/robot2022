@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -12,7 +14,6 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
-import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 
 public class SwerveModule
 {
@@ -55,11 +56,11 @@ public class SwerveModule
    * @param turningEncoderChannelB
    *          DIO input for the turning encoder channel B
    */
-  public SwerveModule(int driveMotorChannel, int turningMotorChannel, int driveEncoderChannelA, int driveEncoderChannelB,
+  public SwerveModule(int driveMotorCANID, int turningMotorCANID, int driveEncoderChannelA, int driveEncoderChannelB,
       int turningEncoderChannelA, int turningEncoderChannelB)
   {
-    m_driveMotor = new PWMSparkMax(driveMotorChannel);
-    m_turningMotor = new PWMSparkMax(turningMotorChannel);
+    m_driveMotor = new WPI_TalonFX(driveMotorCANID);
+    m_turningMotor = new WPI_TalonFX(turningMotorCANID);
 
     m_driveEncoder = new Encoder(driveEncoderChannelA, driveEncoderChannelB);
     m_turningEncoder = new Encoder(turningEncoderChannelA, turningEncoderChannelB);
