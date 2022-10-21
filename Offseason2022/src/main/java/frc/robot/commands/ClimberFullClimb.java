@@ -3,6 +3,8 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -23,6 +25,8 @@ public class ClimberFullClimb extends SequentialCommandGroup
   private double m_climbL3Time         = CLConsts.kClimbL3Time;
   private double m_rotateRetractL4Time = CLConsts.kRotateRetractL4Time;
 
+  private Timer  m_timer               = new Timer( );
+
   public ClimberFullClimb(Climber climber, XboxController gamePad, Button button)
   {
     setName("ClimberFullClimb");
@@ -32,6 +36,11 @@ public class ClimberFullClimb extends SequentialCommandGroup
     SmartDashboard.putNumber("CL_rotateRetractL3Time", m_rotateRetractL3Time);
     SmartDashboard.putNumber("CL_climbL3Time", m_climbL3Time);
     SmartDashboard.putNumber("CL_rotateRetractL4Time", m_rotateRetractL4Time);
+
+    m_timer.reset( );
+    DataLogManager.log("Climb Timer Start: " + m_timer.get( ));
+
+    m_timer.start( );
 
     addCommands(
         // Add Commands here:
@@ -72,6 +81,8 @@ public class ClimberFullClimb extends SequentialCommandGroup
         new Climber7ClimbToL4(climber)
         // @formatter:on 
     );
+    m_timer.stop( );
+    DataLogManager.log("Climb Timer End: " + m_timer.get( ));
   }
 
   @Override
