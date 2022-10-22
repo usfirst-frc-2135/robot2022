@@ -50,13 +50,13 @@ public class Drivetrain extends SubsystemBase
   private final Translation2d         m_backRightLocation  = new Translation2d(-0.381, -0.381);
 
   private final SwerveModule          m_frontLeft          =
-      new SwerveModule(DTConsts.kLFDrive1CANID, DTConsts.kLFTurn2CANID, 0, 1, 2, 3);
+      new SwerveModule(DTConsts.kLFDrive1CANID, DTConsts.kLFTurn2CANID, DTConsts.kLFCANCoderCANID);
   private final SwerveModule          m_frontRight         =
-      new SwerveModule(DTConsts.kRFDrive3CANID, DTConsts.kRFTurn4CANID, 4, 5, 6, 7);
+      new SwerveModule(DTConsts.kRFDrive3CANID, DTConsts.kRFTurn4CANID, DTConsts.kRFCANCoderCANID);
   private final SwerveModule          m_backLeft           =
-      new SwerveModule(DTConsts.kLRDrive5CANID, DTConsts.kLRTurn6CANID, 8, 9, 10, 11);
+      new SwerveModule(DTConsts.kLRDrive5CANID, DTConsts.kLRTurn6CANID, DTConsts.kLRCANCoderCANID);
   private final SwerveModule          m_backRight          =
-      new SwerveModule(DTConsts.kRRDrive7CANID, DTConsts.kRRTurn8CANID, 12, 13, 14, 15);
+      new SwerveModule(DTConsts.kRRDrive7CANID, DTConsts.kRRTurn8CANID, DTConsts.kRRCANCoderCANID);
 
   private final SwerveDriveKinematics m_kinematics         =
       new SwerveDriveKinematics(m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);

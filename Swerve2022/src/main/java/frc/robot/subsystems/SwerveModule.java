@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.sensors.CANCoder;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -12,7 +13,6 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.Encoder;
 import frc.robot.Constants.DTConsts;
 
 public class SwerveModule
@@ -26,7 +26,7 @@ public class SwerveModule
   private final WPI_TalonFX            m_driveMotor;
   private final WPI_TalonFX            m_turningMotor;
 
-  private final Encoder                m_turningEncoder;
+  private final CANCoder               m_turningCANCoder;
 
   // Gains are for example purposes only - must be determined for your own robot!
   private final PIDController          m_drivePIDController          = new PIDController(1, 0, 0);
@@ -46,22 +46,17 @@ public class SwerveModule
    *          PWM output for the drive motor.
    * @param turningMotorChannel
    *          PWM output for the turning motor.
-   * @param driveEncoderChannelA
-   *          DIO input for the drive encoder channel A
-   * @param driveEncoderChannelB
-   *          DIO input for the drive encoder channel B
    * @param turningEncoderChannelA
    *          DIO input for the turning encoder channel A
    * @param turningEncoderChannelB
    *          DIO input for the turning encoder channel B
    */
-  public SwerveModule(int driveMotorCANID, int turningMotorCANID, int driveEncoderChannelA, int driveEncoderChannelB,
-      int turningEncoderChannelA, int turningEncoderChannelB)
+  public SwerveModule(int driveMotorCANID, int turningMotorCANID, int addressCANID)
   {
     m_driveMotor = new WPI_TalonFX(driveMotorCANID);
     m_turningMotor = new WPI_TalonFX(turningMotorCANID);
 
-    m_turningEncoder = new Encoder(turningEncoderChannelA, turningEncoderChannelB);
+    m_turningCANCoder = new CANCoder(addressCANID);
 
     // Limit the PID Controller's input range between -pi and pi and set the input
     // to be continuous.
@@ -75,7 +70,8 @@ public class SwerveModule
    */
   public SwerveModuleState getState( )
   {
-    return new SwerveModuleState(getSpeedMPS(m_driveMotor), new Rotation2d(m_turningEncoder.get( )));
+    return new SwerveModuleState(getSpeedMPS(m_driveMotor), new Rotation2d(m_turningCANCoder.getAbsolutePosition( )));
+    //m_turningEncoder.get( )
   }
 
   /**
@@ -87,7 +83,7 @@ public class SwerveModule
   public void setDesiredState(SwerveModuleState desiredState)
   {
     // Optimize the reference state to avoid spinning further than 90 degrees
-    SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(m_turningEncoder.get( )));
+    SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(m_turningCANCoder.getAbsolutePosition( )));
 
     // Calculate the drive output from the drive PID controller.
     final double driveOutput = m_drivePIDController.calculate(getSpeedMPS(m_driveMotor), state.speedMetersPerSecond);
@@ -95,7 +91,8 @@ public class SwerveModule
     final double driveFeedforward = m_driveFeedforward.calculate(state.speedMetersPerSecond);
 
     // Calculate the turning motor output from the turning PID controller.
-    final double turnOutput = m_turningPIDController.calculate(m_turningEncoder.get( ), state.angle.getRadians( ));
+    final double turnOutput =
+        m_turningPIDController.calculate(m_turningCANCoder.getAbsolutePosition( ), state.angle.getRadians( ));
 
     final double turnFeedforward = m_turnFeedforward.calculate(m_turningPIDController.getSetpoint( ).velocity);
 
