@@ -13,6 +13,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 import frc.robot.Constants.DTConsts;
 
 public class SwerveModule
@@ -41,15 +42,6 @@ public class SwerveModule
 
   /**
    * Constructs a SwerveModule with a drive motor, turning motor, drive encoder and turning encoder.
-   *
-   * @param driveMotorChannel
-   *          PWM output for the drive motor.
-   * @param turningMotorChannel
-   *          PWM output for the turning motor.
-   * @param turningEncoderChannelA
-   *          DIO input for the turning encoder channel A
-   * @param turningEncoderChannelB
-   *          DIO input for the turning encoder channel B
    */
   public SwerveModule(int driveMotorCANID, int turningMotorCANID, int addressCANID)
   {
@@ -70,7 +62,7 @@ public class SwerveModule
    */
   public SwerveModuleState getState( )
   {
-    return new SwerveModuleState(getSpeedMPS(m_driveMotor), new Rotation2d(m_turningCANCoder.getAbsolutePosition( )));
+    return new SwerveModuleState(getSpeedMPS(m_driveMotor), new Rotation2d(degToRad(m_turningCANCoder)));
     //m_turningEncoder.get( )
   }
 
@@ -83,7 +75,7 @@ public class SwerveModule
   public void setDesiredState(SwerveModuleState desiredState)
   {
     // Optimize the reference state to avoid spinning further than 90 degrees
-    SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(m_turningCANCoder.getAbsolutePosition( )));
+    SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(degToRad(m_turningCANCoder)));
 
     // Calculate the drive output from the drive PID controller.
     final double driveOutput = m_drivePIDController.calculate(getSpeedMPS(m_driveMotor), state.speedMetersPerSecond);
@@ -91,8 +83,7 @@ public class SwerveModule
     final double driveFeedforward = m_driveFeedforward.calculate(state.speedMetersPerSecond);
 
     // Calculate the turning motor output from the turning PID controller.
-    final double turnOutput =
-        m_turningPIDController.calculate(m_turningCANCoder.getAbsolutePosition( ), state.angle.getRadians( ));
+    final double turnOutput = m_turningPIDController.calculate(degToRad(m_turningCANCoder), state.angle.getRadians( ));
 
     final double turnFeedforward = m_turnFeedforward.calculate(m_turningPIDController.getSetpoint( ).velocity);
 
@@ -118,5 +109,10 @@ public class SwerveModule
   private double nativeUnitsToMPS(double nativeUnitsVelocity)
   {
     return nativeUnitsVelocity * DTConsts.kEncoderMetersPerCount * 10;
+  }
+
+  private double degToRad(CANCoder encoder)
+  {
+    return Units.degreesToRadians(encoder.getAbsolutePosition( ));
   }
 }

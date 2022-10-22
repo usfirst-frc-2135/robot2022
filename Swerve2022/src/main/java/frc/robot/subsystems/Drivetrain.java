@@ -12,9 +12,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
-import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DTConsts;
 
@@ -23,14 +21,6 @@ import frc.robot.Constants.DTConsts;
  */
 public class Drivetrain extends SubsystemBase
 {
-  private WPI_TalonFX                 driveLF1;
-  private WPI_TalonFX                 steerLF2;
-  private WPI_TalonFX                 driveLR3;
-  private WPI_TalonFX                 steerLR4;
-  private WPI_TalonFX                 driveRF5;
-  private WPI_TalonFX                 steerRF6;
-  private WPI_TalonFX                 driveRR7;
-  private WPI_TalonFX                 steerRR8;
   private WPI_Pigeon2                 m_pigeonIMU;
 
   private final XboxController        m_controller         = new XboxController(0);
@@ -68,16 +58,6 @@ public class Drivetrain extends SubsystemBase
   */
   public Drivetrain( )
   {
-    driveLF1 = new WPI_TalonFX(1);
-    steerLF2 = new WPI_TalonFX(2);
-    driveLR3 = new WPI_TalonFX(3);
-    steerLR4 = new WPI_TalonFX(4);
-
-    driveRF5 = new WPI_TalonFX(5);
-    steerRF6 = new WPI_TalonFX(6);
-    driveRR7 = new WPI_TalonFX(7);
-    steerRR8 = new WPI_TalonFX(8);
-
     m_pigeonIMU = new WPI_Pigeon2(0);
 
     m_pigeonIMU.reset( );
