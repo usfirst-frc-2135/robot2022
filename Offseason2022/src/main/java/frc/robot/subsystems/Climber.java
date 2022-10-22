@@ -577,6 +577,6 @@ public class Climber extends SubsystemBase
   public void timerPrint( )
   {
     timer.stop( );
-    DataLogManager.log("Climb Time: " + timer.get( ));
+    DataLogManager.log("Climb Time: " + String.format("%.3f", timer.get( )) + " seconds");
   }
 }
