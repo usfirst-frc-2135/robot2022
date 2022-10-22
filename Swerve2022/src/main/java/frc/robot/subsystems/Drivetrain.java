@@ -23,7 +23,6 @@ public class Drivetrain extends SubsystemBase
 {
   private WPI_Pigeon2                 m_pigeonIMU;
 
-  private final XboxController        m_controller         = new XboxController(0);
   private final Drivetrain            m_swerve             = new Drivetrain( );
 
   // Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.

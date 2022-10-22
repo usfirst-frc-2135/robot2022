@@ -63,7 +63,6 @@ public class SwerveModule
   public SwerveModuleState getState( )
   {
     return new SwerveModuleState(getSpeedMPS(m_driveMotor), new Rotation2d(degToRad(m_turningCANCoder)));
-    //m_turningEncoder.get( )
   }
 
   /**
