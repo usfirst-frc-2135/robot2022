@@ -330,7 +330,7 @@ public class Shooter extends SubsystemBase
 
   public void setReverseEnd( )
   {
-    m_motorSH11.configPeakOutputForward(0.0);
+    m_motorSH11.configPeakOutputReverse(0.0);
     setShooterMode(SHMode.SHOOTER_STOP);
   }
 }
