@@ -14,6 +14,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DTConsts;
 
@@ -144,25 +145,5 @@ public class Drivetrain extends SubsystemBase
     final var rot = -m_rotLimiter.calculate(MathUtil.applyDeadband(driverPad.getRightX( ), 0.02)) * Drivetrain.kMaxAngularSpeed;
 
     m_swerve.drive(xSpeed, ySpeed, rot, fieldRelative);
-  }
-
-  public double getDistanceMeters(WPI_TalonFX driveMotor)
-  {
-    return nativeUnitsToMeters(driveMotor.getSelectedSensorPosition( ));
-  }
-
-  private double getVelocityMPS(WPI_TalonFX driveMotor)
-  {
-    return nativeUnitsToMPS(driveMotor.getSelectedSensorVelocity( ));
-  }
-
-  private double nativeUnitsToMeters(double nativeUnits)
-  {
-    return nativeUnits * DTConsts.kEncoderMetersPerCount;
-  }
-
-  private double nativeUnitsToMPS(double nativeUnitsVelocity)
-  {
-    return nativeUnitsVelocity * DTConsts.kEncoderMetersPerCount * 10;
   }
 }

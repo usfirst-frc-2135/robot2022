@@ -13,7 +13,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.motorcontrol.MotorController;
+import frc.robot.Constants.DTConsts;
 
 public class SwerveModule
 {
@@ -23,10 +23,9 @@ public class SwerveModule
   private static final double          kModuleMaxAngularVelocity     = Drivetrain.kMaxAngularSpeed;
   private static final double          kModuleMaxAngularAcceleration = 2 * Math.PI;   // radians per second squared
 
-  private final MotorController        m_driveMotor;
-  private final MotorController        m_turningMotor;
+  private final WPI_TalonFX            m_driveMotor;
+  private final WPI_TalonFX            m_turningMotor;
 
-  private final Encoder                m_driveEncoder;
   private final Encoder                m_turningEncoder;
 
   // Gains are for example purposes only - must be determined for your own robot!
@@ -62,16 +61,7 @@ public class SwerveModule
     m_driveMotor = new WPI_TalonFX(driveMotorCANID);
     m_turningMotor = new WPI_TalonFX(turningMotorCANID);
 
-    m_driveEncoder = new Encoder(driveEncoderChannelA, driveEncoderChannelB);
     m_turningEncoder = new Encoder(turningEncoderChannelA, turningEncoderChannelB);
-
-    // Set the distance per pulse for the drive encoder. We can simply use the distance
-    // traveled for one rotation of the wheel divided by the encoder resolution.
-    m_driveEncoder.setDistancePerPulse(2 * Math.PI * kWheelRadius / kEncoderResolution);
-
-    // Set the distance (in this case, angle) per pulse for the turning encoder. This is
-    // the the angle through an entire rotation (2 * pi) divided by the encoder resolution.
-    m_turningEncoder.setDistancePerPulse(2 * Math.PI / kEncoderResolution);
 
     // Limit the PID Controller's input range between -pi and pi and set the input
     // to be continuous.
@@ -85,7 +75,7 @@ public class SwerveModule
    */
   public SwerveModuleState getState( )
   {
-    return new SwerveModuleState(m_driveEncoder.getRate( ), new Rotation2d(m_turningEncoder.get( )));
+    return new SwerveModuleState(getSpeedMPS(m_driveMotor), new Rotation2d(m_turningEncoder.get( )));
   }
 
   /**
@@ -100,7 +90,7 @@ public class SwerveModule
     SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(m_turningEncoder.get( )));
 
     // Calculate the drive output from the drive PID controller.
-    final double driveOutput = m_drivePIDController.calculate(m_driveEncoder.getRate( ), state.speedMetersPerSecond);
+    final double driveOutput = m_drivePIDController.calculate(getSpeedMPS(m_driveMotor), state.speedMetersPerSecond);
 
     final double driveFeedforward = m_driveFeedforward.calculate(state.speedMetersPerSecond);
 
@@ -111,5 +101,25 @@ public class SwerveModule
 
     m_driveMotor.setVoltage(driveOutput + driveFeedforward);
     m_turningMotor.setVoltage(turnOutput + turnFeedforward);
+  }
+
+  public double getDistanceMeters(WPI_TalonFX driveMotor)
+  {
+    return nativeUnitsToMeters(driveMotor.getSelectedSensorPosition( ));
+  }
+
+  private double getSpeedMPS(WPI_TalonFX driveMotor)
+  {
+    return nativeUnitsToMPS(driveMotor.getSelectedSensorVelocity( ));
+  }
+
+  private double nativeUnitsToMeters(double nativeUnits)
+  {
+    return nativeUnits * DTConsts.kEncoderMetersPerCount;
+  }
+
+  private double nativeUnitsToMPS(double nativeUnitsVelocity)
+  {
+    return nativeUnitsVelocity * DTConsts.kEncoderMetersPerCount * 10;
   }
 }
