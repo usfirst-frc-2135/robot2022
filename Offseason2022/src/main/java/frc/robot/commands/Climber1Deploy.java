@@ -4,6 +4,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants.CLConsts.CLHeight;
@@ -32,6 +33,7 @@ public class Climber1Deploy extends SequentialCommandGroup
         // Add Commands here:
 
         // @formatter:off
+        new PrintCommand("Climber --- Deploy climber, reset all other subsystems ---"),
         new DriveSlowMode(drivetrain, true), 
         new IntakeDeploy(intake, false), 
         new IntakeRun(intake, INMode.INTAKE_STOP),

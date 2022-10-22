@@ -247,7 +247,7 @@ public class Climber extends SubsystemBase
 
     m_curInches = countsToInches((int) curCounts);
     m_targetInches = m_curInches;
-    DataLogManager.log(getSubsystem( ) + ": Init Target Inches: " + m_targetInches);
+    DataLogManager.log(getSubsystem() + ": Init Target Inches: " + String.format("%.1f", m_targetInches));
   }
 
   // Dump all Talon faults
@@ -480,13 +480,15 @@ public class Climber extends SubsystemBase
       // Height constraint check/soft limit for max and min height before raising
       if (m_targetInches < m_climberMinHeight)
       {
-        DataLogManager.log("Target " + m_targetInches + " inches is limited by " + m_climberMinHeight + " inches");
+        DataLogManager.log("Target " + String.format("%.1f", m_targetInches) + " inches is limited by "
+            + String.format("%.1f", m_climberMinHeight) + " inches");
         m_targetInches = m_climberMinHeight;
       }
 
       if (m_targetInches > m_climberMaxHeight)
       {
-        DataLogManager.log("Target " + m_targetInches + " inches is limited by " + m_climberMaxHeight + " inches");
+        DataLogManager.log("Target " + String.format("%.1f", m_targetInches) + " inches is limited by "
+            + String.format("%.1f", m_climberMaxHeight) + " inches");
         m_targetInches = m_climberMaxHeight;
       }
 
@@ -498,7 +500,8 @@ public class Climber extends SubsystemBase
       m_motorCL14.set(ControlMode.MotionMagic, inchesToCounts(m_targetInches));
       m_motorCL15.set(ControlMode.MotionMagic, inchesToCounts(m_targetInches));
 
-      DataLogManager.log("Climber moving: " + m_curInches + " -> " + m_targetInches + " inches  |  counts "
+      DataLogManager.log("Climber moving: " + String.format("%.1f", m_curInches) + " -> "
+          + String.format("%.1f", m_targetInches) + " inches  |  counts "
           + inchesToCounts(m_curInches) + " -> " + inchesToCounts(m_targetInches));
     }
     else
@@ -524,7 +527,8 @@ public class Climber extends SubsystemBase
       if (++m_withinTolerance >= 5)
       {
         isFinished = true;
-        DataLogManager.log("Climber move finished - Time: " + m_safetyTimer.get( ) + "  |  Cur inches: " + m_curInches);
+        DataLogManager.log("Climber move finished - Time: " + String.format("%.3f", m_safetyTimer.get())
+            + "  |  Cur inches: " + String.format("%.1f", m_curInches));
       }
     }
     else
