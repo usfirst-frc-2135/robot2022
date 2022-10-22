@@ -918,10 +918,10 @@ public class Drivetrain extends SubsystemBase
         Trajectory.State curState = trajStates.get(i);
         DataLogManager.log(getSubsystem( )
             // @formatter:off
-            + ": DTR state time: " + String.format("%.3f", curState.timeSeconds)                      //
-            + " Vel: "             + String.format("%.2f", curState.velocityMetersPerSecond)                      //
-            + " Accel: "           + String.format("%.2f", curState.accelerationMetersPerSecondSq)              //
-            + " Rotation: "        + String.format("%.1f", curState.poseMeters.getRotation( ).getDegrees( )) //
+            + ": DTR state time: " + String.format("%.3f", curState.timeSeconds)
+            + " Vel: "             + String.format("%.2f", curState.velocityMetersPerSecond)
+            + " Accel: "           + String.format("%.2f", curState.accelerationMetersPerSecondSq)
+            + " Rotation: "        + String.format("%.1f", curState.poseMeters.getRotation( ).getDegrees( ))
         // @formatter:on
         );
       }
