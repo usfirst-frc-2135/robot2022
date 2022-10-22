@@ -3,7 +3,6 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
 
@@ -14,7 +13,6 @@ public class ClimberSetGatehook extends CommandBase
 {
   private final Climber m_climber;
   private boolean       m_closeHook;
-  private Timer         m_timer;
 
   public ClimberSetGatehook(Climber climber, boolean closeHook)
   {
@@ -28,7 +26,7 @@ public class ClimberSetGatehook extends CommandBase
   @Override
   public void initialize( )
   {
-    m_climber.setGateHook(m_closeHook, m_timer);
+    m_climber.setGateHook(m_closeHook);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -95,7 +95,6 @@ public class RobotContainer
   public final LED              m_led                 = new LED( );
   public final Pneumatics       m_pneumatics          = new Pneumatics( );
   public final Power            m_power               = new Power( );
-  private final Timer           m_timer               = new Timer( );
 
   // Joysticks
   private final XboxController  m_driver              = new XboxController(0);
@@ -358,7 +357,7 @@ public class RobotContainer
     operLeftBumper.whenPressed(new IntakingAction(m_intake, m_floorConveyor, m_towerConveyor), true);
     operLeftBumper.whenReleased(new IntakingStop(m_intake, m_floorConveyor, m_towerConveyor), true);
     operRightBumper.whenPressed(new ScoringPrime(m_shooter, m_vision), true);
-    operBack.whenPressed(new ClimberFullClimb(m_climber, m_operator, XboxController.Button.kY, m_timer), true);
+    operBack.whenPressed(new ClimberFullClimb(m_climber, m_operator, XboxController.Button.kY), true);
     operStart.toggleWhenPressed(new ClimberRun(m_climber, m_operator), true);
 
     // Operator - POV buttons
