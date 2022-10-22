@@ -99,6 +99,8 @@ public class Climber extends SubsystemBase
 
   private Timer                           m_safetyTimer         = new Timer( ); // Safety timer for use in climber
   private double                          m_safetyTimeout;                // Seconds that the timer ran before stopping
+  private int                             m_callTimer           = 0;
+  private Timer                           m_timer               = new Timer( );
 
   /**
    *
@@ -239,7 +241,7 @@ public class Climber extends SubsystemBase
 
     DataLogManager.log(getSubsystem( ) + ": subsystem initialized!");
 
-    setGateHook(false);
+    setGateHook(false, m_timer);
     setClimberStopped( );
 
     if (m_validCL14)
@@ -381,7 +383,7 @@ public class Climber extends SubsystemBase
       m_motorCL15.set(ControlMode.PercentOutput, 0.0);
   }
 
-  public void setGateHook(boolean hookClosed)
+  public void setGateHook(boolean hookClosed, Timer timer)
   {
     if (hookClosed != m_gateHook.get( ))
     {
@@ -389,6 +391,13 @@ public class Climber extends SubsystemBase
       SmartDashboard.putBoolean("CL_hookClosed", hookClosed);
 
       m_gateHook.set(hookClosed);
+      m_callTimer++;
+      if (m_callTimer == 8)
+      {
+        timer.stop( );
+        DataLogManager.log("Climb Time: " + timer.get( ));
+      }
+
     }
   }
 
