@@ -3,6 +3,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.CLConsts;
@@ -28,10 +29,15 @@ public class ClimberL3ToL4 extends SequentialCommandGroup
         // Add Commands here:
 
         // @formatter:off
+        new PrintCommand("Climber --- Extend and rotate toward Traversal rung ---"),
         new Climber3RotateToL3(climber),
         new WaitCommand(m_rotateExtendL3Time),
+
+        new PrintCommand("Climber --- Pull gatehook into Traversal rung ---"),
         new Climber5RotateIntoL3(climber),
         new WaitCommand(m_rotateRetractL4Time),
+
+        new PrintCommand("Climber --- Pull robot up to Traversal rung ---"),
         new Climber7ClimbToL4(climber)
         // @formatter:on
     );
