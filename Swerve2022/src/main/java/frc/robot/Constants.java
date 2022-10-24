@@ -44,6 +44,11 @@ public class Constants
     public static final int    kRRDrive7CANID         = 7;
     public static final int    kRRTurn8CANID          = 8;
 
+    public static final int    kLFCANCoderCANID       = 1;
+    public static final int    kRFCANCoderCANID       = 2;
+    public static final int    kLRCANCoderCANID       = 3;
+    public static final int    kRRCANCoderCANID       = 4;
+
     public static final double kWheelDiaMeters        = Units.inchesToMeters(4.0); // 4in (39.37 in/meter)
     public static final double kGearRatio             = 6.75;
     public static final double kEncoderMetersPerCount = (kWheelDiaMeters * Math.PI) / (Falcon500.kEncoderCPR) / kGearRatio;
