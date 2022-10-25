@@ -99,6 +99,7 @@ public class Climber extends SubsystemBase
 
   private Timer                           m_safetyTimer         = new Timer( ); // Safety timer for use in climber
   private double                          m_safetyTimeout;                // Seconds that the timer ran before stopping
+  private Timer                           timer                 = new Timer( );
 
   /**
    *
@@ -569,5 +570,17 @@ public class Climber extends SubsystemBase
       PhoenixUtil.checkError(m_motorCL15.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 255, CANTIMEOUT),
           "CL15 SetStatusFramePeriod: Status_2");
     }
+  }
+
+  public void timerStart( )
+  {
+    timer.reset( );
+    timer.start( );
+  }
+
+  public void timerPrint( )
+  {
+    timer.stop( );
+    DataLogManager.log("Climb Time: " + String.format("%.3f", timer.get( )) + " seconds");
   }
 }
