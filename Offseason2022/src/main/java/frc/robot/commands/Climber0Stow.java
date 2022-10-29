@@ -4,6 +4,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
@@ -33,6 +34,7 @@ public class Climber0Stow extends SequentialCommandGroup
         // Add Commands here:
 
         // @formatter:off
+        new PrintCommand("Climber --- Stow climber, reset all other subsystems ---"),
         new DriveSlowMode(drivetrain, false), 
         new IntakeDeploy(intake, false), 
         new IntakeRun(intake, INMode.INTAKE_STOP),
@@ -43,6 +45,8 @@ public class Climber0Stow extends SequentialCommandGroup
             new WaitUntilCommand(climber::moveClimberDistanceIsFinished),
             new ClimberMoveToHeight(climber, CLHeight.HEIGHT_STOW)
         ),
+
+        new PrintCommand("Climber --- Relax climber to rest position ---"),
         new WaitCommand(1.5), 
         new ParallelDeadlineGroup(
             new WaitUntilCommand(climber::moveClimberDistanceIsFinished),
