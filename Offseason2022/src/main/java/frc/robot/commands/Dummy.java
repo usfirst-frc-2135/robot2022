@@ -16,6 +16,7 @@ public class Dummy extends CommandBase
   public Dummy(int statusCode)
   {
     m_statusCode = statusCode;
+
     setName("Dummy");
   }
 
@@ -23,7 +24,7 @@ public class Dummy extends CommandBase
   @Override
   public void initialize( )
   {
-    DataLogManager.log(getSubsystem( ) + " status code - " + m_statusCode);
+    DataLogManager.log(getName( ) + " status code - " + m_statusCode);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

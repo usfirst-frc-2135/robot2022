@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.crypto.Data;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.InvertType;
@@ -18,6 +20,7 @@ import com.ctre.phoenix.motorcontrol.TalonFXSimCollection;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.BasePigeonSimCollection;
 import com.ctre.phoenix.sensors.PigeonIMU;
+import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -36,7 +39,6 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -45,13 +47,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DTConsts;
 import frc.robot.Constants.Falcon500;
 import frc.robot.Constants.LEDConsts.LEDColor;
-import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.frc2135.PhoenixUtil;
 
-/**
- *
- */
 /**
  *
  */
@@ -139,6 +137,8 @@ public class Drivetrain extends SubsystemBase
   private boolean                           m_isQuickTurn         = false; // Quickturn mode active in curvature drive
   private boolean                           m_driveSlowMode       = false; // Slow drive mode active when climbing
   private double                            m_limelightDistance;
+  private double                            m_offsetLeft;
+  private double                            m_offsetRight;
 
   private int                               m_periodicInterval    = 0;
 
@@ -178,7 +178,6 @@ public class Drivetrain extends SubsystemBase
     setSubsystem("Drivetrain");
     addChild("DiffDrive", m_diffDrive);
 
-    m_diffDrive.setSafetyEnabled(true);
     m_diffDrive.setExpiration(0.250);
     m_diffDrive.setMaxOutput(1.0);
 
@@ -232,7 +231,10 @@ public class Drivetrain extends SubsystemBase
       SmartDashboard.putNumber("HL_resetCountR4", ++m_resetCountR4);
 
     if (RobotState.isDisabled( ))
+    {
       resetGyro( );
+      resetEncoders( );
+    }
   }
 
   @Override
@@ -270,9 +272,7 @@ public class Drivetrain extends SubsystemBase
 
     driveStopMotors( );
 
-    resetGyro( );
     resetOdometry(new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
-    m_driveSim.setPose(getPose( ));
   }
 
   public void faultDump( )
@@ -301,6 +301,7 @@ public class Drivetrain extends SubsystemBase
     SmartDashboard.putNumber("HL_resetCountR4", m_resetCountR4);
 
     SmartDashboard.putNumber("DT_stopTolerance", m_stopTolerance);
+    SmartDashboard.putBoolean("DT_throttleZeroed", m_throttleZeroed);
 
     // Put tunable items to dashboard
     SmartDashboard.putNumber("DTL_turnConstant", m_turnConstant);
@@ -339,12 +340,16 @@ public class Drivetrain extends SubsystemBase
 
     motor.set(ControlMode.PercentOutput, 0.0);
     PhoenixUtil.getInstance( ).checkTalonError(motor, "set");
-    motor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, PIDINDEX, CANTIMEOUT);
+    motor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
     PhoenixUtil.getInstance( ).checkTalonError(motor, "configSelectedFeedbackSensor");
     motor.setSensorPhase(false);
     PhoenixUtil.getInstance( ).checkTalonError(motor, "setSensorPhase");
-    motor.setSelectedSensorPosition(0, PIDINDEX, CANTIMEOUT);
+    motor.setSelectedSensorPosition(0.0);
     PhoenixUtil.getInstance( ).checkTalonError(motor, "setSelectedSensorPosition");
+    motor.configVelocityMeasurementWindow(8);
+    PhoenixUtil.getInstance( ).checkTalonError(motor, "configVelocityMeasurementWindow");
+    motor.configVelocityMeasurementPeriod(SensorVelocityMeasPeriod.Period_10Ms);
+    PhoenixUtil.getInstance( ).checkTalonError(motor, "configVelocityMeasurementPeriod");
 
     motor.configOpenloopRamp(m_openLoopRamp, CANTIMEOUT);
     PhoenixUtil.getInstance( ).checkTalonError(motor, "configOpenloopRamp");
@@ -406,6 +411,8 @@ public class Drivetrain extends SubsystemBase
 
   private void updateDashboardValues( )
   {
+    SmartDashboard.putBoolean("DT_throttleZeroed", m_throttleZeroed);
+
     SmartDashboard.putNumber("DT_distanceLeft", m_distanceLeft);
     SmartDashboard.putNumber("DT_distanceRight", m_distanceRight);
     SmartDashboard.putNumber("DT_wheelSpeedLeft", m_wheelSpeeds.leftMetersPerSecond);
@@ -448,9 +455,13 @@ public class Drivetrain extends SubsystemBase
   public void resetEncoders( )
   {
     if (m_validL1)
-      m_driveL1.setSelectedSensorPosition(0);
+    {
+      m_offsetLeft = -nativeUnitsToMeters(m_driveL1.getSelectedSensorPosition( ));
+    }
     if (m_validR3)
-      m_driveR3.setSelectedSensorPosition(0);
+    {
+      m_offsetRight = -nativeUnitsToMeters(m_driveR3.getSelectedSensorPosition( ));
+    }
   }
 
   // Helper methods to convert between meters and native units
@@ -476,18 +487,14 @@ public class Drivetrain extends SubsystemBase
 
   private double getDistanceMetersLeft( )
   {
-    if (m_validL1)
-      return nativeUnitsToMeters(m_driveL1.getSelectedSensorPosition(PIDINDEX));
 
-    return 0;
+    return (m_validL1) ? (m_offsetLeft + nativeUnitsToMeters(m_driveL1.getSelectedSensorPosition(PIDINDEX))) : 0;
+
   }
 
   private double getDistanceMetersRight( )
   {
-    if (m_validR3)
-      return nativeUnitsToMeters(m_driveR3.getSelectedSensorPosition(PIDINDEX));
-
-    return 0;
+    return (m_validR3) ? (m_offsetRight + nativeUnitsToMeters(m_driveR3.getSelectedSensorPosition(PIDINDEX))) : 0;
   }
 
   private DifferentialDriveWheelSpeeds getWheelSpeedsMPS( )
@@ -551,10 +558,10 @@ public class Drivetrain extends SubsystemBase
     resetEncoders( );
     resetGyro( );
     m_driveSim.setPose(pose);
-    m_odometry.resetPosition(pose, Rotation2d.fromDegrees(0.0));
+    m_odometry.resetPosition(pose, pose.getRotation( ));
   }
 
-  private Pose2d getPose( )
+  public Pose2d getPose( )
   {
     return m_odometry.getPoseMeters( );
   }
@@ -662,26 +669,23 @@ public class Drivetrain extends SubsystemBase
   ///////////////////////////////////////////////////////////////////////////////
   //
   // Teleop driving mode
-  // TODO (remove this later): previously named moveWithJoysticks
   //
   public void driveWithJoysticksInit( )
   {
     setBrakeMode(true);
-    m_driveL1.configOpenloopRamp(m_openLoopRamp);
-    m_driveR3.configOpenloopRamp(m_openLoopRamp);
+    if (m_validL1)
+      m_driveL1.configOpenloopRamp(m_openLoopRamp);
+    if (m_validR3)
+      m_driveR3.configOpenloopRamp(m_openLoopRamp);
   }
 
-  public void driveWithJoysticksExecute(XboxController driverPad)
+  public void driveWithJoysticksExecute(double speed, double rotation)
   {
-    double xValue;
-
-    xValue = (Robot.isReal( )) ? driverPad.getRightX( ) : driverPad.getLeftTriggerAxis( );
-    double yValue = driverPad.getLeftY( );
     double xOutput = 0.0;
     double yOutput = 0.0;
 
     // If joysticks report a very small value, then stick has been centered
-    if (Math.abs(yValue) < 0.05 && Math.abs(xValue) < 0.05)
+    if (Math.abs(speed) < 0.1 && Math.abs(rotation) < 0.1)
       m_throttleZeroed = true;
 
     // If throttle and steering not centered, use zero outputs until they do
@@ -689,18 +693,18 @@ public class Drivetrain extends SubsystemBase
     {
       if (m_isQuickTurn)
       {
-        xOutput = m_driveQTScaling * (xValue * Math.abs(xValue));
-        yOutput = m_driveQTScaling * (yValue * Math.abs(yValue));
+        xOutput = m_driveQTScaling * (rotation * Math.abs(rotation));
+        yOutput = m_driveQTScaling * (speed * Math.abs(speed));
       }
       else if (m_driveSlowMode)
       {
-        xOutput = m_driveCLScaling * (xValue * Math.abs(xValue));
-        yOutput = m_driveCLScaling * (yValue * Math.abs(yValue));
+        xOutput = m_driveCLScaling * (rotation * Math.abs(rotation));
+        yOutput = m_driveCLScaling * (speed * Math.abs(speed));
       }
       else
       {
-        xOutput = m_driveXScaling * (xValue * Math.abs(xValue));
-        yOutput = m_driveYScaling * (yValue * Math.abs(yValue));
+        xOutput = m_driveXScaling * (rotation * Math.abs(rotation));
+        yOutput = m_driveYScaling * (speed * Math.abs(speed));
       }
     }
 
@@ -711,14 +715,15 @@ public class Drivetrain extends SubsystemBase
   public void driveWithJoysticksEnd( )
   {
     setBrakeMode(false);
-    m_driveL1.configOpenloopRamp(0.0);
-    m_driveR3.configOpenloopRamp(0.0);
+    if (m_validL1)
+      m_driveL1.configOpenloopRamp(0.0);
+    if (m_validR3)
+      m_driveR3.configOpenloopRamp(0.0);
   }
 
   ///////////////////////////////////////////////////////////////////////////////
   //
   // Limelight driving mode
-  // TODO (remove this later): previously named moveWithLimelight
   //
   public void driveWithLimelightInit(boolean m_endAtTarget)
   {
@@ -745,8 +750,14 @@ public class Drivetrain extends SubsystemBase
     m_turnPid = new PIDController(m_turnPidKp, m_turnPidKi, m_turnPidKd);
     m_throttlePid = new PIDController(m_throttlePidKp, m_throttlePidKi, m_throttlePidKd);
 
+    // TODO: Add this to eliminate robot lurch
+    // if (m_validL1)
+    // m_driveL1.configOpenloopRamp(m_openLoopRamp);
+    // if (m_validR3)
+    // m_driveR3.configOpenloopRamp(m_openLoopRamp);
+
     RobotContainer rc = RobotContainer.getInstance( );
-    rc.m_vision.m_yfilter.reset( );
+    rc.m_vision.m_tyfilter.reset( );
     rc.m_vision.syncStateFromDashboard( );
   }
 
@@ -759,7 +770,7 @@ public class Drivetrain extends SubsystemBase
 
     if (!tv)
     {
-      velocityArcadeDrive(0, 0);
+      velocityArcadeDrive(0.0, 0.0);
       if (m_limelightDebug >= 1)
         DataLogManager.log(getSubsystem( ) + ": DTL TV-FALSE - SIT STILL");
       return;
@@ -842,10 +853,14 @@ public class Drivetrain extends SubsystemBase
     if (m_validL1 || m_validR3)
       velocityArcadeDrive(0.0, 0.0);
 
+    // TODO: return settings back when command ends
+    // if (m_validL1)
+    // m_driveL1.configOpenloopRamp(0.0);
+    // if (m_validR3)
+    // m_driveR3.configOpenloopRamp(0.0);
+
     RobotContainer.getInstance( ).m_led.setLLColor(LEDColor.LEDCOLOR_OFF);
   }
-
-  // TODO (remove this later): Previously called LimelightSanityCheck
 
   public boolean isLimelightValid(double horizAngleRange, double distRange)
   {
@@ -877,9 +892,8 @@ public class Drivetrain extends SubsystemBase
   ///////////////////////////////////////////////////////////////////////////////
   //
   // Autonomous mode - Ramsete path follower
-  // TODO (remove this later): previously called RamseteFollower
   //
-  public void driveWithPathFollowerInit(Trajectory trajectory, boolean resetOdometry)
+  public void driveWithPathFollowerInit(Trajectory trajectory, boolean useInitialPose)
   {
     m_stopTolerance = SmartDashboard.getNumber("DT_stopTolerance", m_stopTolerance);
     m_ramseteB = SmartDashboard.getNumber("DTR_ramseteB", m_ramseteB);
@@ -903,12 +917,12 @@ public class Drivetrain extends SubsystemBase
       {
         Trajectory.State curState = trajStates.get(i);
         DataLogManager.log(getSubsystem( )
-            // formmater:off
-            + ": DTR state time: " + String.format("%.3f", curState.timeSeconds)                      //
-            + " Vel: " + String.format("%.2f", curState.velocityMetersPerSecond)                      //
-            + " Accel: " + String.format("%.2f", curState.accelerationMetersPerSecondSq)              //
-            + " Rotation: " + String.format("%.1f", curState.poseMeters.getRotation( ).getDegrees( )) //
-        // formatter:on
+            // @formatter:off
+            + ": DTR state time: " + String.format("%.3f", curState.timeSeconds)
+            + " Vel: "             + String.format("%.2f", curState.velocityMetersPerSecond)
+            + " Accel: "           + String.format("%.2f", curState.accelerationMetersPerSecondSq)
+            + " Rotation: "        + String.format("%.1f", curState.poseMeters.getRotation( ).getDegrees( ))
+        // @formatter:on
         );
       }
 
@@ -916,7 +930,7 @@ public class Drivetrain extends SubsystemBase
     m_trajTimer.start( );
 
     // This initializes the odometry (where we are)
-    if (resetOdometry)
+    if (useInitialPose)
       resetOdometry(m_trajectory.getInitialPose( ));
 
     m_field.setRobotPose(getPose( ));
@@ -1007,7 +1021,7 @@ public class Drivetrain extends SubsystemBase
 
     if (m_trajTimer.get( ) >= 15.0)
     {
-      DataLogManager.log(getName( ) + ": path follower timeout!");
+      DataLogManager.log(getSubsystem( ) + ": path follower timeout!");
       return true;
     }
 

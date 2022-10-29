@@ -20,15 +20,16 @@ import frc.robot.subsystems.Drivetrain;
 public class AutoDrivePath extends CommandBase
 {
   private final Drivetrain m_drivetrain;
-  private final boolean    m_resetOdometry;
+  private final boolean    m_useInitialPose;
 
   private String           m_trajectoryJSON;
   private Trajectory       m_trajectory;
 
-  public AutoDrivePath(Drivetrain drivetrain, String pathName, boolean resetOdometry)
+  public AutoDrivePath(Drivetrain drivetrain, String pathName, boolean useInitialPose)
   {
     m_drivetrain = drivetrain;
-    m_resetOdometry = resetOdometry;
+    m_useInitialPose = useInitialPose;
+
     setName("AutoDrivePath");
     addRequirements(m_drivetrain);
 
@@ -37,15 +38,15 @@ public class AutoDrivePath extends CommandBase
 
     try
     {
-      DataLogManager.log(getName( ) + ": Trajectory pathname is: " + m_trajectoryJSON);
+      DataLogManager.log(String.format("%s: TrajPath %s", getName( ), m_trajectoryJSON));
       Path trajectoryPath = Filesystem.getDeployDirectory( ).toPath( ).resolve(m_trajectoryJSON);
       m_trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-      DataLogManager.log(getName( ) + ": Num states " + m_trajectory.getStates( ).size( ) + " Total time "
-          + m_trajectory.getTotalTimeSeconds( ));
+      DataLogManager.log(String.format("%s: Num states %2d Total time %.3f secs", getName( ), m_trajectory.getStates( ).size( ),
+          m_trajectory.getTotalTimeSeconds( )));
     }
     catch (IOException ex)
     {
-      DataLogManager.log(getName( ) + ": Unable to open trajectory: " + m_trajectoryJSON);
+      DataLogManager.log(String.format("%s: Unable to open %s", getName( ), m_trajectoryJSON));
       DriverStation.reportError("Unable to open trajectory: " + m_trajectoryJSON, ex.getStackTrace( ));
     }
 
@@ -55,8 +56,8 @@ public class AutoDrivePath extends CommandBase
   @Override
   public void initialize( )
   {
-    DataLogManager.log(getName( ) + ": Running " + m_trajectoryJSON);
-    m_drivetrain.driveWithPathFollowerInit(m_trajectory, m_resetOdometry);
+    DataLogManager.log(String.format("%s: Running", getName( ), m_trajectoryJSON));
+    m_drivetrain.driveWithPathFollowerInit(m_trajectory, m_useInitialPose);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

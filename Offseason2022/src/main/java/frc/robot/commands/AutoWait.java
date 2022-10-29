@@ -6,17 +6,18 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.AUTOConstants.AutoTimer;
 
 /**
  *
  */
 public class AutoWait extends CommandBase
 {
-  private int    m_timerNum;
-  private double m_waitTime;
-  private Timer  m_timer;
+  private AutoTimer m_timerNum;
+  private Timer     m_timer = new Timer( );
+  private double    m_waitTime;
 
-  public AutoWait(int timerNum)
+  public AutoWait(AutoTimer timerNum)
   {
     m_timerNum = timerNum;
   }
@@ -25,10 +26,10 @@ public class AutoWait extends CommandBase
   @Override
   public void initialize( )
   {
-    if (m_timerNum == 1)
+    if (m_timerNum == AutoTimer.TIMER1)
       m_waitTime = SmartDashboard.getNumber("AUTO_WaitTime1", 0.0);
 
-    if (m_timerNum == 2)
+    if (m_timerNum == AutoTimer.TIMER2)
       m_waitTime = SmartDashboard.getNumber("AUTO_WaitTime2", 0.0);
 
     m_timer.reset( );
@@ -40,7 +41,8 @@ public class AutoWait extends CommandBase
   public void execute( )
   {}
 
-  public boolean IsFinished( )
+  @Override
+  public boolean isFinished( )
   {
     return m_timer.hasElapsed(m_waitTime);
   }

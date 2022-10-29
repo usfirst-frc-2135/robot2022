@@ -19,6 +19,8 @@ public class ShooterRun extends CommandBase
   {
     m_shooter = shooter;
     m_mode = mode;
+
+    setName("ShooterRun");
     addRequirements(m_shooter);
   }
 
@@ -43,7 +45,7 @@ public class ShooterRun extends CommandBase
   @Override
   public boolean isFinished( )
   {
-    return false;
+    return true;
   }
 
   @Override
