@@ -75,7 +75,7 @@ public class Vision extends SubsystemBase
       m_targetVertAngle = SmartDashboard.getNumber("VI_OVERRIDE_TY", 0.0);
       m_targetArea = SmartDashboard.getNumber("VI_OVERRIDE_TA", 0.0);
       m_targetSkew = SmartDashboard.getNumber("VI_OVERRIDE_TS", 0.0);
-      m_targetValid = SmartDashboard.getNumber("VI_OVERRIDE_TV", 0.0) > 0.5;
+      m_targetValid = (SmartDashboard.getNumber("VI_OVERRIDE_TV", 0.0) > 0.5);
     }
     else
     {

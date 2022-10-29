@@ -6,6 +6,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -38,6 +39,7 @@ public class ClimberFullClimb extends SequentialCommandGroup
         // Add Commands here:
 
         // @formatter:off
+        new InstantCommand(climber::timerStart, climber),
         new PrintCommand("Climber --- Pull up to Mid rung and engage gate hook ---"),
         new Climber2ClimbToL2(climber),
         new ParallelRaceGroup(
@@ -82,7 +84,8 @@ public class ClimberFullClimb extends SequentialCommandGroup
         ),
 
         new PrintCommand("Climber --- Pull robot up to Traversal rung ---"),
-        new Climber7ClimbToL4(climber)
+        new Climber7ClimbToL4(climber),
+        new InstantCommand(climber::timerPrint, climber)
         // @formatter:on 
     );
   }
