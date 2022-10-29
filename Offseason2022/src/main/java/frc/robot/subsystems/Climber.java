@@ -99,7 +99,7 @@ public class Climber extends SubsystemBase
 
   private Timer                           m_safetyTimer         = new Timer( ); // Safety timer for use in climber
   private double                          m_safetyTimeout;                // Seconds that the timer ran before stopping
-  private Timer                           timer                 = new Timer( );
+  private Timer                           m_timer               = new Timer( );
 
   /**
    *
@@ -248,7 +248,7 @@ public class Climber extends SubsystemBase
 
     m_curInches = countsToInches((int) curCounts);
     m_targetInches = m_curInches;
-    DataLogManager.log(getSubsystem() + ": Init Target Inches: " + String.format("%.1f", m_targetInches));
+    DataLogManager.log(getSubsystem( ) + ": Init Target Inches: " + String.format("%.1f", m_targetInches));
   }
 
   // Dump all Talon faults
@@ -501,9 +501,8 @@ public class Climber extends SubsystemBase
       m_motorCL14.set(ControlMode.MotionMagic, inchesToCounts(m_targetInches));
       m_motorCL15.set(ControlMode.MotionMagic, inchesToCounts(m_targetInches));
 
-      DataLogManager.log("Climber moving: " + String.format("%.1f", m_curInches) + " -> "
-          + String.format("%.1f", m_targetInches) + " inches  |  counts "
-          + inchesToCounts(m_curInches) + " -> " + inchesToCounts(m_targetInches));
+      DataLogManager.log("Climber moving: " + String.format("%.1f", m_curInches) + " -> " + String.format("%.1f", m_targetInches)
+          + " inches  |  counts " + inchesToCounts(m_curInches) + " -> " + inchesToCounts(m_targetInches));
     }
     else
     {
@@ -528,8 +527,8 @@ public class Climber extends SubsystemBase
       if (++m_withinTolerance >= 5)
       {
         isFinished = true;
-        DataLogManager.log("Climber move finished - Time: " + String.format("%.3f", m_safetyTimer.get())
-            + "  |  Cur inches: " + String.format("%.1f", m_curInches));
+        DataLogManager.log("Climber move finished - Time: " + String.format("%.3f", m_safetyTimer.get( )) + "  |  Cur inches: "
+            + String.format("%.1f", m_curInches));
       }
     }
     else
@@ -574,13 +573,13 @@ public class Climber extends SubsystemBase
 
   public void timerStart( )
   {
-    timer.reset( );
-    timer.start( );
+    m_timer.reset( );
+    m_timer.start( );
   }
 
   public void timerPrint( )
   {
-    timer.stop( );
-    DataLogManager.log("Climb Time: " + String.format("%.3f", timer.get( )) + " seconds");
+    m_timer.stop( );
+    DataLogManager.log("Climb Time: " + String.format("%.3f", m_timer.get( )) + " seconds");
   }
 }
