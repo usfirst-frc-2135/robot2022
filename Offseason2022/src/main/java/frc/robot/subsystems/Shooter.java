@@ -281,31 +281,39 @@ public class Shooter extends SubsystemBase
     }
 
     // Select the shooter RPM from the requested mode
-    switch (mode)
+
+    if (mode == SHMode.SHOOTER_STOP)
     {
-      case SHOOTER_REVERSE :
-        m_flywheelTargetRPM = SHConsts.kFlywheelReverseRPM;
-        break;
-      case SHOOTER_STOP :
-        m_flywheelTargetRPM = 0.0;
-        break;
-      case SHOOTER_PRIME :
-        m_flywheelTargetRPM = m_flywheelPrimeRPM;
-        break;
-      case SHOOTER_LOWERHUB :
-        m_flywheelTargetRPM = m_flywheelLowerTargetRPM;
-        break;
-      case SHOOTER_UPPERHUB :
-        m_flywheelTargetRPM = m_flywheelUpperTargetRPM;
-        break;
-      default :
-        DataLogManager.log(getSubsystem( ) + ": invalid shooter mode requested " + mode);
-        break;
+      if (m_validSH11)
+        m_motorSH11.set(ControlMode.PercentOutput, 0.0);
+    }
+    else
+    {
+      switch (mode)
+      {
+        case SHOOTER_REVERSE :
+          m_flywheelTargetRPM = SHConsts.kFlywheelReverseRPM;
+          break;
+        case SHOOTER_PRIME :
+          m_flywheelTargetRPM = m_flywheelPrimeRPM;
+          break;
+        case SHOOTER_LOWERHUB :
+          m_flywheelTargetRPM = m_flywheelLowerTargetRPM;
+          break;
+        case SHOOTER_UPPERHUB :
+          m_flywheelTargetRPM = m_flywheelUpperTargetRPM;
+          break;
+        default :
+          DataLogManager.log(getSubsystem( ) + ": invalid shooter mode requested " + mode);
+          break;
+      }
+
+      if (m_validSH11)
+        m_motorSH11.set(ControlMode.Velocity, flywheelRPMToNative(m_flywheelTargetRPM));
     }
 
     DataLogManager.log(getSubsystem( ) + ": target speed is " + m_flywheelTargetRPM);
-    if (m_validSH11)
-      m_motorSH11.set(ControlMode.Velocity, flywheelRPMToNative(m_flywheelTargetRPM));
+
   }
 
   public boolean isAtDesiredSpeed( )
