@@ -28,7 +28,6 @@ public class SwerveModule
   private final WPI_TalonFX            m_turningMotor;
 
   private final CANCoder               m_turningCANCoder;
-  private final String                 kcanbusstring                 = DTConsts.kcanbusstring;
 
   // Gains are for example purposes only - must be determined for your own robot!
   private final PIDController          m_drivePIDController          = new PIDController(1, 0, 0);
@@ -46,10 +45,10 @@ public class SwerveModule
    */
   public SwerveModule(int driveMotorCANID, int turningMotorCANID, int addressCANID)
   {
-    m_driveMotor = new WPI_TalonFX(driveMotorCANID, kcanbusstring);
-    m_turningMotor = new WPI_TalonFX(turningMotorCANID, kcanbusstring);
+    m_driveMotor = new WPI_TalonFX(driveMotorCANID, DTConsts.kCANBusString);
+    m_turningMotor = new WPI_TalonFX(turningMotorCANID, DTConsts.kCANBusString);
 
-    m_turningCANCoder = new CANCoder(addressCANID, kcanbusstring);
+    m_turningCANCoder = new CANCoder(addressCANID, DTConsts.kCANBusString);
 
     // Limit the PID Controller's input range between -pi and pi and set the input
     // to be continuous.

@@ -38,8 +38,6 @@ public class Drivetrain extends SubsystemBase
   private final Translation2d         m_backLeftLocation   = new Translation2d(-0.381, 0.381);
   private final Translation2d         m_backRightLocation  = new Translation2d(-0.381, -0.381);
 
-  private final String                kcanbusstring        = DTConsts.kcanbusstring;
-
   private final SwerveModule          m_frontLeft          =
       new SwerveModule(DTConsts.kLFDrive1CANID, DTConsts.kLFTurn2CANID, DTConsts.kLFCANCoderCANID);
   private final SwerveModule          m_frontRight         =
@@ -59,7 +57,7 @@ public class Drivetrain extends SubsystemBase
   */
   public Drivetrain( )
   {
-    m_pigeonIMU = new WPI_Pigeon2(0, kcanbusstring);
+    m_pigeonIMU = new WPI_Pigeon2(0, DTConsts.kCANBusString);
 
     m_pigeonIMU.reset( );
   }
