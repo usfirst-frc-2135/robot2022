@@ -758,6 +758,7 @@ public class Drivetrain extends SubsystemBase
 
     RobotContainer rc = RobotContainer.getInstance( );
     rc.m_vision.m_tyfilter.reset( );
+    rc.m_vision.m_tvfilter.reset( );
     rc.m_vision.syncStateFromDashboard( );
   }
 
@@ -917,7 +918,7 @@ public class Drivetrain extends SubsystemBase
       {
         Trajectory.State curState = trajStates.get(i);
         DataLogManager.log(getSubsystem( )
-            // @formatter:off
+        // @formatter:off
             + ": DTR state time: " + String.format("%.3f", curState.timeSeconds)
             + " Vel: "             + String.format("%.2f", curState.velocityMetersPerSecond)
             + " Accel: "           + String.format("%.2f", curState.accelerationMetersPerSecondSq)
