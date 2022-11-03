@@ -7,7 +7,6 @@ import edu.wpi.first.hal.HALUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -18,9 +17,12 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.CLConsts.CLHeight;
+import frc.robot.Constants.FCConsts.FCMode;
+import frc.robot.Constants.INConsts.INMode;
 import frc.robot.Constants.LEDConsts.LEDColor;
 import frc.robot.Constants.SHConsts.SHMode;
 import frc.robot.Constants.SIMLLConsts;
+import frc.robot.Constants.TCConsts.TCMode;
 import frc.robot.Constants.VIConsts.VIRequests;
 import frc.robot.commands.Auto1Ball1OppRight;
 import frc.robot.commands.Auto1Ball2OppLeft;
@@ -30,10 +32,18 @@ import frc.robot.commands.Auto3BallRight;
 import frc.robot.commands.AutoDrive;
 import frc.robot.commands.AutoDriveShoot;
 import frc.robot.commands.AutoPathSequence;
+import frc.robot.commands.AutoShoot;
 import frc.robot.commands.AutoShootDriveShoot;
+import frc.robot.commands.AutoShootLowHub;
 import frc.robot.commands.AutoStop;
 import frc.robot.commands.Climber0Stow;
 import frc.robot.commands.Climber1Deploy;
+import frc.robot.commands.Climber2ClimbToL2;
+import frc.robot.commands.Climber3RotateToL3;
+import frc.robot.commands.Climber5RotateIntoL3;
+import frc.robot.commands.Climber6ClimbToL3;
+import frc.robot.commands.Climber7ClimbToL4;
+import frc.robot.commands.Climber8SettleToL4;
 import frc.robot.commands.ClimberCalibrate;
 import frc.robot.commands.ClimberFullClimb;
 import frc.robot.commands.ClimberL2ToL3;
@@ -42,26 +52,32 @@ import frc.robot.commands.ClimberMoveToHeight;
 import frc.robot.commands.ClimberRun;
 import frc.robot.commands.ClimberSetGatehook;
 import frc.robot.commands.ClimberTimerOverride;
+import frc.robot.commands.DriveLimelight;
 import frc.robot.commands.DriveLimelightShoot;
 import frc.robot.commands.DriveLimelightStop;
 import frc.robot.commands.DriveMotorTest;
 import frc.robot.commands.DriveQuickturn;
 import frc.robot.commands.DriveResetSensors;
+import frc.robot.commands.DriveSlowMode;
 import frc.robot.commands.DriveTeleop;
 import frc.robot.commands.Dummy;
 import frc.robot.commands.ExhaustingAction;
 import frc.robot.commands.ExhaustingStop;
+import frc.robot.commands.FloorConveyorRun;
 import frc.robot.commands.IntakeDeploy;
+import frc.robot.commands.IntakeRun;
 import frc.robot.commands.IntakingAction;
 import frc.robot.commands.IntakingStop;
 import frc.robot.commands.LEDSet;
 import frc.robot.commands.RobotInitialize;
 import frc.robot.commands.ScoringActionLowerHub;
+import frc.robot.commands.ScoringActionUpperHub;
 import frc.robot.commands.ScoringPrime;
 import frc.robot.commands.ScoringStop;
 import frc.robot.commands.ShooterReverse;
 import frc.robot.commands.ShooterRun;
 import frc.robot.commands.SimulateLimelight;
+import frc.robot.commands.TowerConveyorRun;
 import frc.robot.commands.VisionOn;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
@@ -156,81 +172,80 @@ public class RobotContainer
     SmartDashboard.putData("AutoDriveShoot",
         new AutoDriveShoot(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
     SmartDashboard.putData("AutoPathSequence", new AutoPathSequence(m_drivetrain));
-    // SmartDashboard.putData("AutoShoot",
-    //     new AutoShoot(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
-    // SmartDashboard.putData("AutoShootDriveShoot",
-    //     new AutoShootDriveShoot(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
-    // SmartDashboard.putData("AutoShootLowHub",
-    //     new AutoShootLowHub(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
-    // SmartDashboard.putData("AutoStop", new AutoStop(m_drivetrain));
+    SmartDashboard.putData("AutoShoot",
+        new AutoShoot(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
+    SmartDashboard.putData("AutoShootDriveShoot",
+        new AutoShootDriveShoot(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
+    SmartDashboard.putData("AutoShootLowHub",
+        new AutoShootLowHub(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
+    SmartDashboard.putData("AutoStop", new AutoStop(m_drivetrain));
 
     SmartDashboard.putData("Climber0Stow",
         new Climber0Stow(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_drivetrain));
     SmartDashboard.putData("Climber1Deploy",
         new Climber1Deploy(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_drivetrain));
-    // SmartDashboard.putData("Climber2ClimbToL2", new Climber2ClimbToL2(m_climber));
-    // SmartDashboard.putData("Climber3RotateToL3", new Climber3RotateToL3(m_climber));
-    // SmartDashboard.putData("Climber5RotateIntoL3", new Climber5RotateIntoL3(m_climber));
-    // SmartDashboard.putData("Climber6ClimbToL3", new Climber6ClimbToL3(m_climber));
-    // SmartDashboard.putData("Climber7ClimbToL4", new Climber7ClimbToL4(m_climber));
-    // SmartDashboard.putData("Climber8SettleToL4", new Climber8SettleToL4(m_climber));
-    // SmartDashboard.putData("ClimberCalibrate", new ClimberCalibrate(m_climber));
-    // SmartDashboard.putData("ClimberFullClimb", new ClimberFullClimb(m_climber, m_operator, XboxController.Button.kY));
-    // SmartDashboard.putData("ClimberL2ToL3", new ClimberL2ToL3(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter));
-    // SmartDashboard.putData("ClimberL3ToL4", new ClimberL3ToL4(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter));
-    // SmartDashboard.putData("ClimberRun", new ClimberRun(m_climber, m_operator));
+    SmartDashboard.putData("Climber2ClimbToL2", new Climber2ClimbToL2(m_climber));
+    SmartDashboard.putData("Climber3RotateToL3", new Climber3RotateToL3(m_climber));
+    SmartDashboard.putData("Climber5RotateIntoL3", new Climber5RotateIntoL3(m_climber));
+    SmartDashboard.putData("Climber6ClimbToL3", new Climber6ClimbToL3(m_climber));
+    SmartDashboard.putData("Climber7ClimbToL4", new Climber7ClimbToL4(m_climber));
+    SmartDashboard.putData("Climber8SettleToL4", new Climber8SettleToL4(m_climber));
+    SmartDashboard.putData("ClimberCalibrate", new ClimberCalibrate(m_climber));
+    SmartDashboard.putData("ClimberFullClimb", new ClimberFullClimb(m_climber, m_operator, XboxController.Button.kY));
+    SmartDashboard.putData("ClimberL2ToL3", new ClimberL2ToL3(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter));
+    SmartDashboard.putData("ClimberL3ToL4", new ClimberL3ToL4(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter));
+    SmartDashboard.putData("ClimberRun", new ClimberRun(m_climber, m_operator));
     SmartDashboard.putData("ClimberSetGatehook", new ClimberSetGatehook(m_climber, true));
-    // SmartDashboard.putData("ClimberTimerOverride", new ClimberTimerOverride(m_climber, m_operator, XboxController.Button.kY));
-    // SmartDashboard.putData("DriveLimelight", new DriveLimelight(m_drivetrain, m_vision, false));
-    // SmartDashboard.putData("DriveLimelightStop",
-    //     new DriveLimelightStop(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
-    // SmartDashboard.putData("DriveLimelightShoot",
-    //     new DriveLimelightShoot(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
+    SmartDashboard.putData("ClimberTimerOverride", new ClimberTimerOverride(m_climber, m_operator, XboxController.Button.kY));
+    SmartDashboard.putData("DriveLimelight", new DriveLimelight(m_drivetrain, m_vision, false));
+    SmartDashboard.putData("DriveLimelightStop",
+        new DriveLimelightStop(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
+    SmartDashboard.putData("DriveLimelightShoot",
+        new DriveLimelightShoot(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
     SmartDashboard.putData("DriveMotorTest", new DriveMotorTest(m_drivetrain, true));
-    // SmartDashboard.putData("DriveQuickTurn", new DriveQuickturn(m_drivetrain));
+    SmartDashboard.putData("DriveQuickTurn", new DriveQuickturn(m_drivetrain));
     SmartDashboard.putData("DriveResetSensors", new DriveResetSensors(m_drivetrain));
-    // SmartDashboard.putData("DriveSlowMode", new DriveSlowMode(m_drivetrain, false));
+    SmartDashboard.putData("DriveSlowMode", new DriveSlowMode(m_drivetrain, false));
 
-    // SmartDashboard.putData("ExhaustingAction", new ExhaustingAction(m_intake, m_floorConveyor, m_towerConveyor));
-    // SmartDashboard.putData("ExhaustingStop", new ExhaustingStop(m_intake, m_floorConveyor, m_towerConveyor));
+    SmartDashboard.putData("ExhaustingAction", new ExhaustingAction(m_intake, m_floorConveyor, m_towerConveyor));
+    SmartDashboard.putData("ExhaustingStop", new ExhaustingStop(m_intake, m_floorConveyor, m_towerConveyor));
 
-    // SmartDashboard.putData("Fconveyor-STOP", new FloorConveyorRun(m_floorConveyor, FCMode.FCONVEYOR_STOP));
-    // SmartDashboard.putData("Fconveyor-ACQUIRE", new FloorConveyorRun(m_floorConveyor, FCMode.FCONVEYOR_ACQUIRE));
-    // SmartDashboard.putData("Fconveyor-EXPEL", new FloorConveyorRun(m_floorConveyor, FCMode.FCONVEYOR_EXPEL));
-    // SmartDashboard.putData("Fconveyor-EXPELFAST", new FloorConveyorRun(m_floorConveyor, FCMode.FCONVEYOR_EXPEL_FAST));
+    SmartDashboard.putData("Fconveyor-STOP", new FloorConveyorRun(m_floorConveyor, FCMode.FCONVEYOR_STOP));
+    SmartDashboard.putData("Fconveyor-ACQUIRE", new FloorConveyorRun(m_floorConveyor, FCMode.FCONVEYOR_ACQUIRE));
+    SmartDashboard.putData("Fconveyor-EXPEL", new FloorConveyorRun(m_floorConveyor, FCMode.FCONVEYOR_EXPEL));
+    SmartDashboard.putData("Fconveyor-EXPELFAST", new FloorConveyorRun(m_floorConveyor, FCMode.FCONVEYOR_EXPEL_FAST));
 
     SmartDashboard.putData("IntakeDeploy", new IntakeDeploy(m_intake, false));
     SmartDashboard.putData("IntakeStow", new IntakeDeploy(m_intake, false));
-    // SmartDashboard.putData("isLimelightValid", new )
 
-    // SmartDashboard.putData("Intake-STOP", new IntakeRun(m_intake, INMode.INTAKE_STOP));
-    // SmartDashboard.putData("Intake-ACQUIRE", new IntakeRun(m_intake, INMode.INTAKE_ACQUIRE));
-    // SmartDashboard.putData("Intake-EXPEL", new IntakeRun(m_intake, INMode.INTAKE_EXPEL));
-    // SmartDashboard.putData("IntakingAction", new IntakingAction(m_intake, m_floorConveyor, m_towerConveyor));
-    // SmartDashboard.putData("IntakingStop", new IntakingStop(m_intake, m_floorConveyor, m_towerConveyor));
+    SmartDashboard.putData("Intake-STOP", new IntakeRun(m_intake, INMode.INTAKE_STOP));
+    SmartDashboard.putData("Intake-ACQUIRE", new IntakeRun(m_intake, INMode.INTAKE_ACQUIRE));
+    SmartDashboard.putData("Intake-EXPEL", new IntakeRun(m_intake, INMode.INTAKE_EXPEL));
+    SmartDashboard.putData("IntakingAction", new IntakingAction(m_intake, m_floorConveyor, m_towerConveyor));
+    SmartDashboard.putData("IntakingStop", new IntakingStop(m_intake, m_floorConveyor, m_towerConveyor));
 
     SmartDashboard.putData("LEDSet", new LEDSet(m_led, LEDColor.LEDCOLOR_OFF));
     SmartDashboard.putData("RobotInitialize", new RobotInitialize( ));
 
-    // SmartDashboard.putData("ScoringActionUpperHub",
-    //     new ScoringActionUpperHub(m_intake, m_floorConveyor, m_towerConveyor, m_shooter, 2.0));
-    // SmartDashboard.putData("ScoringActionLowerHub",
-    //     new ScoringActionLowerHub(m_intake, m_floorConveyor, m_towerConveyor, m_shooter, 2.0));
-    // SmartDashboard.putData("ScoringPrime", new ScoringPrime(m_shooter, m_vision));
-    // SmartDashboard.putData("ScoringStop", new ScoringStop(m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
+    SmartDashboard.putData("ScoringActionUpperHub",
+        new ScoringActionUpperHub(m_intake, m_floorConveyor, m_towerConveyor, m_shooter, 2.0));
+    SmartDashboard.putData("ScoringActionLowerHub",
+        new ScoringActionLowerHub(m_intake, m_floorConveyor, m_towerConveyor, m_shooter, 2.0));
+    SmartDashboard.putData("ScoringPrime", new ScoringPrime(m_shooter, m_vision));
+    SmartDashboard.putData("ScoringStop", new ScoringStop(m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
 
     SmartDashboard.putData("Shooter-OFF", new ShooterRun(m_shooter, SHMode.SHOOTER_STOP));
-    // SmartDashboard.putData("Shooter-PRIME", new ShooterRun(m_shooter, SHMode.SHOOTER_PRIME));
-    // SmartDashboard.putData("Shooter-LOW", new ShooterRun(m_shooter, SHMode.SHOOTER_LOWERHUB));
+    SmartDashboard.putData("Shooter-PRIME", new ShooterRun(m_shooter, SHMode.SHOOTER_PRIME));
+    SmartDashboard.putData("Shooter-LOW", new ShooterRun(m_shooter, SHMode.SHOOTER_LOWERHUB));
     SmartDashboard.putData("Shooter-HIGH", new ShooterRun(m_shooter, SHMode.SHOOTER_UPPERHUB));
-    // SmartDashboard.putData("Shooter-REV", new ShooterRun(m_shooter, SHMode.SHOOTER_REVERSE));
-    // SmartDashboard.putData("ShooterReverse", new ShooterReverse(m_shooter));
+    SmartDashboard.putData("Shooter-REV", new ShooterRun(m_shooter, SHMode.SHOOTER_REVERSE));
+    SmartDashboard.putData("ShooterReverse", new ShooterReverse(m_shooter));
 
-    // SmartDashboard.putData("Tconveyor-STOP", new TowerConveyorRun(m_towerConveyor, TCMode.TCONVEYOR_STOP));
-    // SmartDashboard.putData("Tconveyor-ACQUIRE", new TowerConveyorRun(m_towerConveyor, TCMode.TCONVEYOR_ACQUIRE));
-    // SmartDashboard.putData("Tconveyor-ACQUIRESLOW", new TowerConveyorRun(m_towerConveyor, TCMode.TCONVEYOR_ACQUIRE_SLOW));
-    // SmartDashboard.putData("Tconveyor-EXPEL", new TowerConveyorRun(m_towerConveyor, TCMode.TCONVEYOR_EXPEL));
-    // SmartDashboard.putData("Tconveyor-EXPELFAST", new TowerConveyorRun(m_towerConveyor, TCMode.TCONVEYOR_EXPEL_FAST));
+    SmartDashboard.putData("Tconveyor-STOP", new TowerConveyorRun(m_towerConveyor, TCMode.TCONVEYOR_STOP));
+    SmartDashboard.putData("Tconveyor-ACQUIRE", new TowerConveyorRun(m_towerConveyor, TCMode.TCONVEYOR_ACQUIRE));
+    SmartDashboard.putData("Tconveyor-ACQUIRESLOW", new TowerConveyorRun(m_towerConveyor, TCMode.TCONVEYOR_ACQUIRE_SLOW));
+    SmartDashboard.putData("Tconveyor-EXPEL", new TowerConveyorRun(m_towerConveyor, TCMode.TCONVEYOR_EXPEL));
+    SmartDashboard.putData("Tconveyor-EXPELFAST", new TowerConveyorRun(m_towerConveyor, TCMode.TCONVEYOR_EXPEL_FAST));
 
     SmartDashboard.putData("Dummy", new Dummy(2135));
 
