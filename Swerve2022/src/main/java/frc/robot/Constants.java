@@ -76,6 +76,23 @@ public class Constants
     public static final double kOpenLoopRamp          = 0.5;           // CTRE: full speed in 0.5 sec
     public static final double kClosedLoopRamp        = 0.0;           // CTRE: 0 is disabled
     public static final double kStopTolerance         = 0.05;          // Target position tolerance (< 5cm)
+
+    // Limelight driving controls
+    public static final double kTurnConstant          = 0.0;
+    public static final double kTurnPidKp             = 0.005;
+    public static final double kTurnPidKi             = 0.0;
+    public static final double kTurnPidKd             = 0.0;
+    public static final double kTurnMax               = 0.4;
+    public static final double kThrottlePidKp         = 0.011;
+    public static final double kThrottlePidKi         = 0.0;
+    public static final double kThrottlePidKd         = 0.0;
+    public static final double kThrottleMax           = 0.2;
+    public static final double kThrottleShape         = 10.0;
+
+    public static final double kTargetAngle           = 0.0;           // Optimal shooting angle
+    public static final double kSetPointDistance      = 60.0;          // Optimal shooting distance
+    public static final double kAngleThreshold        = 3.5;           // Degrees tolerance around optimal
+    public static final double kDistThreshold         = 6.0;           // Inches tolerance around optimal
   }
 
   public static final class INConsts
