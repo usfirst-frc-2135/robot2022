@@ -107,8 +107,8 @@ public class RobotContainer
     SmartDashboard.putData("IntakingStop", new IntakingStop( ));
     SmartDashboard.putData("RobotInitialize", new RobotInitialize( ));
     SmartDashboard.putData("ShooterAimToggle", new ShooterAimToggle( ));
-    SmartDashboard.putData("ShooterReverse", new ShooterReverse( ));
-    SmartDashboard.putData("SimulateLimelight", new SimulateLimelight( ));
+    SmartDashboard.putData("ShooterReverse", new ShooterReverse(m_shooter));
+    //SmartDashboard.putData("SimulateLimelight", new SimulateLimelight( ));
     SmartDashboard.putData("Dummy", new Dummy( ));
   }
 
