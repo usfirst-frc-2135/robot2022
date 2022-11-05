@@ -6,6 +6,11 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.sensors.CANCoderConfiguration;
+import com.ctre.phoenix.sensors.AbsoluteSensorRange;
+import com.ctre.phoenix.sensors.SensorInitializationStrategy;
+import com.ctre.phoenix.sensors.SensorTimeBase;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Axis;
@@ -16,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
+import frc.robot.Constants.DTConsts;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -184,4 +190,15 @@ public class RobotContainer
     // The selected command will be run in autonomous
     return m_chooser.getSelected( );
   }
+
+  public static CANCoderConfiguration swerveCancoderConfig( )
+  {
+    CANCoderConfiguration config = new CANCoderConfiguration( );
+    config.absoluteSensorRange = AbsoluteSensorRange.Signed_PlusMinus180;
+    config.sensorDirection = DTConsts.canCoderInvert;
+    config.initializationStrategy = SensorInitializationStrategy.BootToAbsolutePosition;
+    config.sensorTimeBase = SensorTimeBase.PerSecond;
+    return config;
+  }
+
 }

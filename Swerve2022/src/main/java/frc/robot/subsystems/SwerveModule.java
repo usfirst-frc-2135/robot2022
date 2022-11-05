@@ -14,6 +14,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.DTConsts;
 
 public class SwerveModule
@@ -93,6 +94,12 @@ public class SwerveModule
   public double getDistanceMeters(WPI_TalonFX driveMotor)
   {
     return nativeUnitsToMeters(driveMotor.getSelectedSensorPosition( ));
+  }
+
+  public void resetEncoders( )
+  {
+    m_turningMotor.configFactoryDefault( );
+    m_turningCANCoder.configAllSettings(RobotContainer.swerveCancoderConfig( ));
   }
 
   private double getSpeedMPS(WPI_TalonFX driveMotor)
