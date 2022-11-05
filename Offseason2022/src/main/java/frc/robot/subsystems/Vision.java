@@ -17,6 +17,7 @@ public class Vision extends SubsystemBase
 {
   // Objects
   public MedianFilter  m_tyfilter    = new MedianFilter(5); // median filter y values to remove outliers (5 sample)
+  public MedianFilter  m_tvfilter    = new MedianFilter(5); // median filter v values to remove outliers (5 sample)
 
   // Declare module variables
   private double       m_distance1   = VIConsts.kLLDistance1;   // x position in inches for first reference point
@@ -83,7 +84,7 @@ public class Vision extends SubsystemBase
       m_targetVertAngle = m_tyfilter.calculate(m_table.getEntry("ty").getDouble(0.0));
       m_targetArea = m_table.getEntry("ta").getDouble(0.0);
       m_targetSkew = m_table.getEntry("ts").getDouble(0.0);
-      m_targetValid = m_table.getEntry("tv").getDouble(0.0) > 0.5;
+      m_targetValid = m_tvfilter.calculate(m_table.getEntry("tv").getDouble(0.0)) > 0.5;
     }
 
     m_distLL = calculateDist(m_targetVertAngle);

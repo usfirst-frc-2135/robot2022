@@ -2,36 +2,57 @@
 // ROBOTBUILDER TYPE: Command.
 
 package frc.robot.commands;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Drivetrain;
 
 /**
  *
  */
 public class DriveMotorTest extends CommandBase
 {
-    public DriveMotorTest()
-    {
-        // m_subsystem = subsystem;
-        // addRequirements(m_subsystem);
-    }
+  private final Drivetrain    m_drivetrain;
+  private final boolean       m_left;
 
-    // Called when the command is initially scheduled.
-    @Override public void initialize() {}
+  private static final double m_voltsToRun = 3.0;
 
-    // Called every time the scheduler runs while the command is scheduled.
-    @Override public void execute() {}
+  public DriveMotorTest(Drivetrain drivetrain, boolean left)
+  {
+    m_drivetrain = drivetrain;
+    m_left = left;
 
-    // Called once the command ends or is interrupted.
-    @Override public void end(boolean interrupted) {}
+    setName("DriveMotorTest");
+    addRequirements(m_drivetrain);
+  }
 
-    // Returns true when the command should end.
-    @Override public boolean isFinished()
-    {
-        return false;
-    }
+  // Called when the command is initially scheduled.
+  @Override
+  public void initialize( )
+  {}
 
-    @Override public boolean runsWhenDisabled()
-    {
-        return false;
-    }
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute( )
+  {
+    //TODO: ADD BACK IN
+    //m_drivetrain.tankDriveVolts(m_left ? m_voltsToRun : 0.0, m_left ? 0.0 : m_voltsToRun);
+  }
+
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted)
+  {}
+
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished( )
+  {
+    return false;
+  }
+
+  @Override
+  public boolean runsWhenDisabled( )
+  {
+    return false;
+  }
 }
