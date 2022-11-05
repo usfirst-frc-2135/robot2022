@@ -57,7 +57,7 @@ public class Drivetrain extends SubsystemBase
   */
   public Drivetrain( )
   {
-    m_pigeonIMU = new WPI_Pigeon2(0);
+    m_pigeonIMU = new WPI_Pigeon2(0, DTConsts.kCANBusString);
 
     m_pigeonIMU.reset( );
   }

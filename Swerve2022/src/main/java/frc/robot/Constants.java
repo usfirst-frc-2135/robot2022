@@ -34,6 +34,8 @@ public class Constants
 
   public static final class DTConsts
   {
+    public static final String kCANBusString          = "canivore";
+
     public static final int    kLFDrive1CANID         = 1;
     public static final int    kLFTurn2CANID          = 2;
     public static final int    kRFDrive3CANID         = 3;
