@@ -101,10 +101,10 @@ public class RobotContainer
     SmartDashboard.putData("DriveLimelight", new DriveLimelight(m_drivetrain, m_vision, false));
     SmartDashboard.putData("DriveMotorTest", new DriveMotorTest(m_drivetrain, true));
     SmartDashboard.putData("DriveResetSensors", new DriveResetSensors(m_drivetrain));
-    SmartDashboard.putData("ExhaustingAction", new ExhaustingAction( ));
-    SmartDashboard.putData("ExhaustingStop", new ExhaustingStop( ));
-    SmartDashboard.putData("IntakingAction", new IntakingAction( ));
-    SmartDashboard.putData("IntakingStop", new IntakingStop( ));
+    SmartDashboard.putData("ExhaustingAction", new ExhaustingAction(m_intake, m_floorConveyor, m_towerConveyor));
+    SmartDashboard.putData("ExhaustingStop", new ExhaustingStop(m_intake, m_floorConveyor, m_towerConveyor));
+    SmartDashboard.putData("IntakingAction", new IntakingAction(m_intake, m_floorConveyor, m_towerConveyor));
+    SmartDashboard.putData("IntakingStop", new IntakingStop(m_intake, m_floorConveyor, m_towerConveyor));
     SmartDashboard.putData("RobotInitialize", new RobotInitialize( ));
     SmartDashboard.putData("ShooterAimToggle", new ShooterAimToggle( ));
     SmartDashboard.putData("ShooterReverse", new ShooterReverse(m_shooter));

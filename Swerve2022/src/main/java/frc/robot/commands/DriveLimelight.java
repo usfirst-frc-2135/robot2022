@@ -40,7 +40,7 @@ public class DriveLimelight extends CommandBase
   @Override
   public void execute( )
   {
-    // m_drivetrain.driveWithLimelightExecute( );
+    m_drivetrain.driveWithLimelightExecute( );
   }
 
   // Called once the command ends or is interrupted.
@@ -60,5 +60,4 @@ public class DriveLimelight extends CommandBase
   {
     return false;
   }
-
 }
