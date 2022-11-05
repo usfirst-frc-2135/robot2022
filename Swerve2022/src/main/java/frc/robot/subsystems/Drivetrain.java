@@ -21,9 +21,7 @@ import frc.robot.Constants.DTConsts;
  */
 public class Drivetrain extends SubsystemBase
 {
-  private WPI_Pigeon2                 m_pigeonIMU;
-
-  private final Drivetrain            m_swerve             = new Drivetrain( );
+  private final WPI_Pigeon2           m_pigeonIMU          = new WPI_Pigeon2(0, DTConsts.kCANBusString);
 
   // Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
   private final SlewRateLimiter       m_xspeedLimiter      = new SlewRateLimiter(3);
@@ -57,8 +55,6 @@ public class Drivetrain extends SubsystemBase
   */
   public Drivetrain( )
   {
-    m_pigeonIMU = new WPI_Pigeon2(0, DTConsts.kCANBusString);
-
     m_pigeonIMU.reset( );
   }
 
@@ -66,7 +62,7 @@ public class Drivetrain extends SubsystemBase
   public void periodic( )
   {
     // This method will be called once per scheduler run
-    m_swerve.updateOdometry( );
+    updateOdometry( );
   }
 
   @Override
@@ -123,6 +119,6 @@ public class Drivetrain extends SubsystemBase
     // to the right by default.
     final var rot = -m_rotLimiter.calculate(MathUtil.applyDeadband(driverPad.getRightX( ), 0.02)) * Drivetrain.kMaxAngularSpeed;
 
-    m_swerve.drive(xSpeed, ySpeed, rot, fieldRelative);
+    drive(xSpeed, ySpeed, rot, fieldRelative);
   }
 }
