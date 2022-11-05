@@ -2,36 +2,53 @@
 // ROBOTBUILDER TYPE: Command.
 
 package frc.robot.commands;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Drivetrain;
 
 /**
  *
  */
 public class DriveResetSensors extends CommandBase
 {
-    public DriveResetSensors()
-    {
-        // m_subsystem = subsystem;
-        // addRequirements(m_subsystem);
-    }
+  private final Drivetrain m_drivetrain;
 
-    // Called when the command is initially scheduled.
-    @Override public void initialize() {}
+  public DriveResetSensors(Drivetrain drivetrain)
+  {
+    m_drivetrain = drivetrain;
 
-    // Called every time the scheduler runs while the command is scheduled.
-    @Override public void execute() {}
+    setName("ResetDriveSensors");
+  }
 
-    // Called once the command ends or is interrupted.
-    @Override public void end(boolean interrupted) {}
+  // Called when the command is initially scheduled.
+  @Override
+  public void initialize( )
+  {
+    //TODO: replace with updated ones
+    //m_drivetrain.resetEncoders( );
+    //m_drivetrain.resetGyro( );
+  }
 
-    // Returns true when the command should end.
-    @Override public boolean isFinished()
-    {
-        return false;
-    }
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute( )
+  {}
 
-    @Override public boolean runsWhenDisabled()
-    {
-        return false;
-    }
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted)
+  {}
+
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished( )
+  {
+    return true;
+  }
+
+  @Override
+  public boolean runsWhenDisabled( )
+  {
+    return true;
+  }
 }
