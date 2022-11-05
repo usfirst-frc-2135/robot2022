@@ -102,8 +102,6 @@ public class Drivetrain extends SubsystemBase
     setSubsystem("Drivetrain");
     //addChild("DiffDrive", m_diffDrive);    
 
-    m_pigeonIMU = new WPI_Pigeon2(0, DTConsts.kCANBusString);
-
     m_pigeonIMU.reset( );
   }
 
