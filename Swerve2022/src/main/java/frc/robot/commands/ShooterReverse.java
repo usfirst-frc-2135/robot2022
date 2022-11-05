@@ -2,36 +2,56 @@
 // ROBOTBUILDER TYPE: Command.
 
 package frc.robot.commands;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Shooter;
 
 /**
  *
  */
 public class ShooterReverse extends CommandBase
 {
-    public ShooterReverse()
-    {
-        // m_subsystem = subsystem;
-        // addRequirements(m_subsystem);
-    }
+  private final Shooter m_shooter;
 
-    // Called when the command is initially scheduled.
-    @Override public void initialize() {}
+  public ShooterReverse(Shooter shooter)
+  {
+    m_shooter = shooter;
 
-    // Called every time the scheduler runs while the command is scheduled.
-    @Override public void execute() {}
+    setName("ShooterReverse");
+    addRequirements(m_shooter);
+  }
 
-    // Called once the command ends or is interrupted.
-    @Override public void end(boolean interrupted) {}
+  // Called when the command is initially scheduled.
+  @Override
+  public void initialize( )
+  {
+    m_shooter.setReverseInit( );
+  }
 
-    // Returns true when the command should end.
-    @Override public boolean isFinished()
-    {
-        return false;
-    }
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute( )
+  {
+    m_shooter.setReverseExecute( );
+  }
 
-    @Override public boolean runsWhenDisabled()
-    {
-        return false;
-    }
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted)
+  {
+    m_shooter.setReverseEnd( );
+  }
+
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished( )
+  {
+    return false;
+  }
+
+  @Override
+  public boolean runsWhenDisabled( )
+  {
+    return false;
+  }
 }
