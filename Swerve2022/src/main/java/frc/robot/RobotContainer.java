@@ -98,17 +98,17 @@ public class RobotContainer
     SmartDashboard.putData("ClimberMoveToHeight", new ClimberMoveToHeight(m_climber));
     SmartDashboard.putData("ClimberSetGatehook", new ClimberSetGatehook( ));
     SmartDashboard.putData("ClimberTimerOverride", new ClimberTimerOverride( ));
-    SmartDashboard.putData("DriveLimelight", new DriveLimelight( ));
-    SmartDashboard.putData("DriveMotorTest", new DriveMotorTest( ));
-    SmartDashboard.putData("DriveResetSensors", new DriveResetSensors( ));
+    SmartDashboard.putData("DriveLimelight", new DriveLimelight(m_drivetrain, m_vision, false));
+    SmartDashboard.putData("DriveMotorTest", new DriveMotorTest(m_drivetrain, true));
+    SmartDashboard.putData("DriveResetSensors", new DriveResetSensors(m_drivetrain));
     SmartDashboard.putData("ExhaustingAction", new ExhaustingAction( ));
     SmartDashboard.putData("ExhaustingStop", new ExhaustingStop( ));
     SmartDashboard.putData("IntakingAction", new IntakingAction( ));
     SmartDashboard.putData("IntakingStop", new IntakingStop( ));
     SmartDashboard.putData("RobotInitialize", new RobotInitialize( ));
     SmartDashboard.putData("ShooterAimToggle", new ShooterAimToggle( ));
-    SmartDashboard.putData("ShooterReverse", new ShooterReverse( ));
-    SmartDashboard.putData("SimulateLimelight", new SimulateLimelight( ));
+    SmartDashboard.putData("ShooterReverse", new ShooterReverse(m_shooter));
+    //SmartDashboard.putData("SimulateLimelight", new SimulateLimelight( ));
     SmartDashboard.putData("Dummy", new Dummy( ));
   }
 
@@ -150,10 +150,12 @@ public class RobotContainer
   private void initDefaultCommands( )
   {
     // Configure default commands for these subsystems
-    // m_drivetrain.setDefaultCommand(new DriveTeleop(m_drivetrain, m_driver, XboxController.Axis.kLeftY.value, XboxController.Axis.kRightX.value));
-    m_drivetrain.setDefaultCommand(new DriveTeleop(m_drivetrain, m_driver));
-  }
+    m_drivetrain.setDefaultCommand(
+        new DriveTeleop(m_drivetrain, m_driver, XboxController.Axis.kLeftY.value, XboxController.Axis.kRightX.value));
 
+    //TODO: remove maybe
+    //m_climber.setDefaultCommand(new ClimberMoveToHeight(m_climber, CLHeight.HEIGHT_NOCHANGE));
+  }
   // Configure autonomous sendable chooser
 
   private void initAutonomousChooser( )
