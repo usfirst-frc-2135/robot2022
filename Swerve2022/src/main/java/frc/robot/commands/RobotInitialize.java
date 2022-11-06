@@ -26,8 +26,6 @@ public class RobotInitialize extends CommandBase
     robotContainer.m_floorConveyor.initialize( );
     robotContainer.m_towerConveyor.initialize( );
     robotContainer.m_shooter.initialize( );
-    //TODO: add later??
-    //robotContainer.m_climber.initialize( );
     robotContainer.m_pneumatics.initialize( );
     robotContainer.m_power.initialize( );
     robotContainer.m_led.initialize( );
