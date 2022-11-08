@@ -39,7 +39,6 @@ public class RobotContainer
   public final FloorConveyor    m_floorConveyor  = new FloorConveyor( );
   public final TowerConveyor    m_towerConveyor  = new TowerConveyor( );
   public final Shooter          m_shooter        = new Shooter( );
-  public final Climber          m_climber        = new Climber( );
   public final Vision           m_vision         = new Vision( );
   public final LED              m_led            = new LED( );
   public final Pneumatics       m_pneumatics     = new Pneumatics( );
@@ -89,28 +88,13 @@ public class RobotContainer
     SmartDashboard.putData("AutoShoot", new AutoShoot( ));
     SmartDashboard.putData("AutoShootDriveShoot", new AutoShootDriveShoot( ));
     SmartDashboard.putData("AutoStop", new AutoStop(m_drivetrain));
-    SmartDashboard.putData("Climber0Stow", new Climber0Stow( ));
-    SmartDashboard.putData("Climber1Deploy", new Climber1Deploy( ));
-    SmartDashboard.putData("Climber2ClimbToL2", new Climber2ClimbToL2( ));
-    SmartDashboard.putData("Climber3RotateToL3", new Climber3RotateToL3( ));
-    SmartDashboard.putData("Climber5RotateIntoL3", new Climber5RotateIntoL3( ));
-    SmartDashboard.putData("Climber6ClimbToL3", new Climber6ClimbToL3( ));
-    SmartDashboard.putData("Climber7ClimbToL4", new Climber7ClimbToL4( ));
-    SmartDashboard.putData("Climber8SettleToL4", new Climber8SettleToL4( ));
-    SmartDashboard.putData("ClimberCalibrate", new ClimberCalibrate(m_climber));
-    SmartDashboard.putData("ClimberFullClimb", new ClimberFullClimb( ));
-    SmartDashboard.putData("ClimberL2ToL3", new ClimberL2ToL3( ));
-    SmartDashboard.putData("ClimberL3ToL4", new ClimberL3ToL4( ));
-    SmartDashboard.putData("ClimberMoveToHeight", new ClimberMoveToHeight(m_climber));
-    SmartDashboard.putData("ClimberSetGatehook", new ClimberSetGatehook( ));
-    SmartDashboard.putData("ClimberTimerOverride", new ClimberTimerOverride( ));
     SmartDashboard.putData("DriveLimelight", new DriveLimelight(m_drivetrain, m_vision, false));
     SmartDashboard.putData("DriveMotorTest", new DriveMotorTest(m_drivetrain, true));
     SmartDashboard.putData("DriveResetSensors", new DriveResetSensors(m_drivetrain));
-    SmartDashboard.putData("ExhaustingAction", new ExhaustingAction( ));
-    SmartDashboard.putData("ExhaustingStop", new ExhaustingStop( ));
-    SmartDashboard.putData("IntakingAction", new IntakingAction( ));
-    SmartDashboard.putData("IntakingStop", new IntakingStop( ));
+    SmartDashboard.putData("ExhaustingAction", new ExhaustingAction(m_intake, m_floorConveyor, m_towerConveyor));
+    SmartDashboard.putData("ExhaustingStop", new ExhaustingStop(m_intake, m_floorConveyor, m_towerConveyor));
+    SmartDashboard.putData("IntakingAction", new IntakingAction(m_intake, m_floorConveyor, m_towerConveyor));
+    SmartDashboard.putData("IntakingStop", new IntakingStop(m_intake, m_floorConveyor, m_towerConveyor));
     SmartDashboard.putData("RobotInitialize", new RobotInitialize( ));
     SmartDashboard.putData("ShooterAimToggle", new ShooterAimToggle( ));
     SmartDashboard.putData("ShooterReverse", new ShooterReverse(m_shooter));
@@ -159,10 +143,8 @@ public class RobotContainer
     m_drivetrain.setDefaultCommand(
         new DriveTeleop(m_drivetrain, m_driver, XboxController.Axis.kLeftY.value, XboxController.Axis.kRightX.value));
 
-    //TODO: remove maybe
-    //m_climber.setDefaultCommand(new ClimberMoveToHeight(m_climber, CLHeight.HEIGHT_NOCHANGE));
+    // Configure autonomous sendable chooser
   }
-  // Configure autonomous sendable chooser
 
   private void initAutonomousChooser( )
   {

@@ -2,33 +2,37 @@
 // ROBOTBUILDER TYPE: SequentialCommandGroup.
 
 package frc.robot.commands;
+
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants.SHConsts.SHMode;
+import frc.robot.Constants.VIConsts.VIRequests;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Vision;
 
 /**
  *
  */
 public class ScoringPrime extends SequentialCommandGroup
 {
-    public ScoringPrime(double waitTime, Shooter shooter)
-    {
-        addCommands(
-            // Add Commands here:
-            // Also add parallel commands using the
-            //
-            // addCommands(
-            //      new command1(argsN, subsystem),
-            //      parallel(
-            //          new command2(argsN, subsystem),
-            //          new command3(argsN, subsystem)
-            //      )
-            //  );
+  public ScoringPrime(Shooter shooter, Vision vision)
+  {
+    setName("ScoringPrime");
 
-        );
-    }
+    addCommands(
+        // Add Commands here:
 
-    @Override public boolean runsWhenDisabled()
-    {
-        return false;
-    }
+        // @formatter:off
+        new PrintCommand("ScoringPrime"), 
+        new VisionOn(vision, VIRequests.VISION_ON),
+        new ShooterRun(shooter, SHMode.SHOOTER_PRIME)
+        // @formatter:on
+    );
+  }
+
+  @Override
+  public boolean runsWhenDisabled( )
+  {
+    return false;
+  }
 }

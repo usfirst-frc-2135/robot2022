@@ -25,10 +25,10 @@ public class SwerveModule
   private static final double          kModuleMaxAngularVelocity     = Drivetrain.kMaxAngularSpeed;
   private static final double          kModuleMaxAngularAcceleration = 2 * Math.PI;   // radians per second squared
 
-  private final WPI_TalonFX            m_driveMotor;
-  private final WPI_TalonFX            m_turningMotor;
+  public final WPI_TalonFX             m_driveMotor;
+  public final WPI_TalonFX             m_turningMotor;
 
-  private final CANCoder               m_turningCANCoder;
+  public final CANCoder                m_turningCANCoder;
 
   // Gains are for example purposes only - must be determined for your own robot!
   private final PIDController          m_drivePIDController          = new PIDController(1, 0, 0);
