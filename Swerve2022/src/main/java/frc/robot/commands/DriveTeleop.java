@@ -45,6 +45,7 @@ public class DriveTeleop extends CommandBase
 
     //TODO: replace with updated method
     //m_drivetrain.driveWithJoysticksExecute(speed, rotation);
+    m_drivetrain.driveWithJoystick(m_driverPad, true);
   }
 
   // Called once the command ends or is interrupted.
