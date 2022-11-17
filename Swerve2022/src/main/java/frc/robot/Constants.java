@@ -57,7 +57,6 @@ public class Constants
     public static final double kWheelDiaMeters        = Units.inchesToMeters(4.0); // 4in (39.37 in/meter)
     public static final double kGearRatio             = 6.75;
     public static final double kEncoderMetersPerCount = (kWheelDiaMeters * Math.PI) / (Falcon500.kEncoderCPR) / kGearRatio;
-    public static final double kTrackWidthMeters      = 0.6477;        // Measured track width
 
     // Joystick tuning
     public static final double kDriveXScaling         = 1.0;           // 1.0 is no scaling
