@@ -6,8 +6,8 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.sensors.CANCoderConfiguration;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
+import com.ctre.phoenix.sensors.CANCoderConfiguration;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import com.ctre.phoenix.sensors.SensorTimeBase;
 
@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
@@ -99,7 +100,7 @@ public class RobotContainer
     SmartDashboard.putData("ShooterAimToggle", new ShooterAimToggle( ));
     SmartDashboard.putData("ShooterReverse", new ShooterReverse(m_shooter));
     //SmartDashboard.putData("SimulateLimelight", new SimulateLimelight( ));
-    SmartDashboard.putData("Dummy", new Dummy( ));
+    //SmartDashboard.putData("Dummy", new Dummy( ));
   }
 
   // Create a trigger object that monitors a joystick axis
@@ -131,8 +132,100 @@ public class RobotContainer
    */
   private void configureButtonBindings( )
   {
-    // Create some buttons
+    ///////////////////////////////////////////////////////
+    // Driver Controller Assignments
+    final JoystickButton driverA = new JoystickButton(m_driver, XboxController.Button.kA.value);
+    final JoystickButton driverB = new JoystickButton(m_driver, XboxController.Button.kB.value);
+    final JoystickButton driverX = new JoystickButton(m_driver, XboxController.Button.kX.value);
+    final JoystickButton driverY = new JoystickButton(m_driver, XboxController.Button.kY.value);
+    final JoystickButton driverLeftBumper = new JoystickButton(m_driver, XboxController.Button.kLeftBumper.value);
+    final JoystickButton driverRightBumper = new JoystickButton(m_driver, XboxController.Button.kRightBumper.value);
+    final JoystickButton driverBack = new JoystickButton(m_driver, XboxController.Button.kBack.value);
+    final JoystickButton driverStart = new JoystickButton(m_driver, XboxController.Button.kStart.value);
+    final POVButton driverUp = new POVButton(m_driver, 0);
+    final POVButton driverRight = new POVButton(m_driver, 90);
+    final POVButton driverDown = new POVButton(m_driver, 180);
+    final POVButton driverLeft = new POVButton(m_driver, 270);
+    // @formatter:off
+    // Xbox enums { leftX = 0, leftY = 1, leftTrigger = 2, rightTrigger = 3, rightX = 4, rightY = 5}
+    final AxisTrigger driverLeftTrigger = new AxisTrigger(m_driver, XboxController.Axis.kLeftTrigger);
+    final AxisTrigger driverRightTrigger = new AxisTrigger(m_driver, XboxController.Axis.kRightTrigger);
+    // Xbox on MacOS { leftX = 0, leftY = 1, rightX = 2, rightY = 3, leftTrigger = 5, rightTrigger = 4}
+    // final AxisTrigger driverLeftTrigger = new AxisTrigger(m_driver, XboxController.Axis.kRightX);
+    // final AxisTrigger driverRightTrigger = new AxisTrigger(m_driver, XboxController.Axis.kRightY);
+    // @formatter:on
 
+    // Driver - A, B, X, Y
+    driverA.whileHeld(new DriveQuickturn(m_drivetrain), true);
+    driverB.whenPressed(new Dummy(XboxController.Button.kB.value), true);
+    driverX.whenPressed(new Dummy(XboxController.Button.kX.value), true);
+    driverY.whenPressed(new Dummy(XboxController.Button.kY.value), true);
+
+    // Driver - Bumpers, start, back
+    driverLeftBumper.whenPressed(new IntakingAction(m_intake, m_floorConveyor, m_towerConveyor), true);
+    driverLeftBumper.whenReleased(new IntakingStop(m_intake, m_floorConveyor, m_towerConveyor), true);
+    driverRightBumper.whenPressed(new ScoringActionLowerHub(m_intake, m_floorConveyor, m_towerConveyor, m_shooter, 10.0), true);
+    driverRightBumper.whenReleased(new ScoringStop(m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision), true);
+    driverBack.whenPressed(new Dummy(XboxController.Button.kBack.value), true);
+    driverStart.whenPressed(new VisionOn(m_vision, VIRequests.VISION_TOGGLE), true);
+
+    // Driver - POV buttons
+    driverUp.whenPressed(new Dummy(0), true);
+    driverRight.whenPressed(new Dummy(90), true);
+    driverDown.whenPressed(new Dummy(180), true);
+    driverLeft.whenPressed(new Dummy(270), true);
+
+    // Driver - Triggers
+    driverLeftTrigger.whenActive(new Dummy(256));
+    driverRightTrigger
+        .whenActive(new DriveLimelightShoot(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
+    driverRightTrigger
+        .whenInactive(new DriveLimelightStop(m_drivetrain, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
+
+    ///////////////////////////////////////////////////////
+    // Operator Controller Assignments
+    final JoystickButton operA = new JoystickButton(m_operator, XboxController.Button.kA.value);
+    final JoystickButton operB = new JoystickButton(m_operator, XboxController.Button.kB.value);
+    final JoystickButton operX = new JoystickButton(m_operator, XboxController.Button.kX.value);
+    final JoystickButton operY = new JoystickButton(m_operator, XboxController.Button.kY.value);
+    final JoystickButton operLeftBumper = new JoystickButton(m_operator, XboxController.Button.kLeftBumper.value);
+    final JoystickButton operRightBumper = new JoystickButton(m_operator, XboxController.Button.kRightBumper.value);
+    final JoystickButton operBack = new JoystickButton(m_operator, XboxController.Button.kBack.value);
+    final JoystickButton operStart = new JoystickButton(m_operator, XboxController.Button.kStart.value);
+    final POVButton operUp = new POVButton(m_operator, 0);
+    final POVButton operRight = new POVButton(m_operator, 90);
+    final POVButton operDown = new POVButton(m_operator, 180);
+    final POVButton operLeft = new POVButton(m_operator, 270);
+    // Xbox enums { leftX = 0, leftY = 1, leftTrigger = 2, rightTrigger = 3, rightX = 4, rightY = 5}
+    final AxisTrigger operLeftTrigger = new AxisTrigger(m_operator, XboxController.Axis.kLeftTrigger);
+    final AxisTrigger operRightTrigger = new AxisTrigger(m_operator, XboxController.Axis.kRightTrigger);
+    // Xbox on MacOS { leftX = 0, leftY = 1, rightX = 2, rightY = 3, leftTrigger = 5, rightTrigger = 4}
+    // final AxisTrigger operLeftTrigger = new AxisTrigger(m_operator, XboxController.Axis.rightX);
+    // final AxisTrigger operRightTrigger = new AxisTrigger(m_operator, XboxController.Axis.rightY);
+
+    // Operator - A, B, X, Y
+    operA.whenPressed(new IntakeDeploy(m_intake, false), true);
+    operB.whenPressed(new ExhaustingAction(m_intake, m_floorConveyor, m_towerConveyor), true);
+    operB.whenReleased(new ExhaustingStop(m_intake, m_floorConveyor, m_towerConveyor), true);
+    operX.whenPressed(new ScoringStop(m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision), true);
+    //operY.whenPressed(new ClimberTimerOverride(m_climber, m_operator, XboxController.Button.kY), true);
+
+    // Operator - Bumpers, start, back
+    operLeftBumper.whenPressed(new IntakingAction(m_intake, m_floorConveyor, m_towerConveyor), true);
+    operLeftBumper.whenReleased(new IntakingStop(m_intake, m_floorConveyor, m_towerConveyor), true);
+    operRightBumper.whenPressed(new ScoringPrime(m_shooter, m_vision), true);
+    //operBack.whenPressed(new ClimberFullClimb(m_climber, m_operator, XboxController.Button.kY), true);
+    //operStart.toggleWhenPressed(new ClimberRun(m_climber, m_operator), true);
+
+    // Operator - POV buttons
+    // operUp.whenPressed(new Climber1Deploy(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_drivetrain), true);
+    // operRight.whenPressed(new ClimberL3ToL4(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter), true);
+    // operDown.whenPressed(new Climber0Stow(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_drivetrain), true);
+    // operLeft.whenPressed(new ClimberL2ToL3(m_climber, m_intake, m_floorConveyor, m_towerConveyor, m_shooter), true);
+
+    // Operator Left/Right Trigger
+    //operLeftTrigger.whenActive(new ClimberCalibrate(m_climber), true);
+    operRightTrigger.whileActiveContinuous(new ShooterReverse(m_shooter), true);
   }
 
   // Configure the button bindings
