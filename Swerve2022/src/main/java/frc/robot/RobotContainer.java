@@ -27,7 +27,6 @@ public class RobotContainer
   private static RobotContainer m_robotContainer = new RobotContainer( );
 
   // The robot's subsystems
-  public final Drivetrain       m_drivetrain     = new Drivetrain( );
   public final Swerve           m_swerve         = new Swerve( );
   public final Intake           m_intake         = new Intake( );
   public final FloorConveyor    m_floorConveyor  = new FloorConveyor( );
@@ -82,9 +81,9 @@ public class RobotContainer
     SmartDashboard.putData("AutoShoot", new AutoShoot( ));
     SmartDashboard.putData("AutoShootDriveShoot", new AutoShootDriveShoot( ));
     SmartDashboard.putData("AutoStop", new AutoStop(m_swerve));
-    SmartDashboard.putData("DriveLimelight", new DriveLimelight(m_drivetrain, m_vision, false));
-    SmartDashboard.putData("DriveMotorTest", new DriveMotorTest(m_drivetrain, true));
-    SmartDashboard.putData("DriveResetSensors", new DriveResetSensors(m_drivetrain));
+    SmartDashboard.putData("DriveLimelight", new DriveLimelight(m_swerve, m_vision, false));
+    SmartDashboard.putData("DriveMotorTest", new DriveMotorTest(m_swerve, true));
+    SmartDashboard.putData("DriveResetSensors", new DriveResetSensors(m_swerve));
     SmartDashboard.putData("ExhaustingAction", new ExhaustingAction(m_intake, m_floorConveyor, m_towerConveyor));
     SmartDashboard.putData("ExhaustingStop", new ExhaustingStop(m_intake, m_floorConveyor, m_towerConveyor));
     SmartDashboard.putData("IntakingAction", new IntakingAction(m_intake, m_floorConveyor, m_towerConveyor));
@@ -134,8 +133,8 @@ public class RobotContainer
   private void initDefaultCommands( )
   {
     // Configure default commands for these subsystems
-    m_drivetrain.setDefaultCommand(
-        new DriveTeleop(m_drivetrain, m_driver, XboxController.Axis.kLeftY.value, XboxController.Axis.kRightX.value));
+    m_swerve.setDefaultCommand(
+        new DriveTeleop(m_swerve, m_driver, XboxController.Axis.kLeftY.value, XboxController.Axis.kRightX.value));
 
     // Configure autonomous sendable chooser
   }

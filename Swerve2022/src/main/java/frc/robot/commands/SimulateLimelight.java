@@ -39,10 +39,10 @@ public class SimulateLimelight extends CommandBase
   MechanismLigament2d  m_mechLigament         =
       m_mechRoot.append(new MechanismLigament2d("Target", 0.1, 0.0, 16, new Color8Bit(Color.kGreen)));
 
-  public SimulateLimelight(Swerve drivetrain, Translation2d goalTranslation, double goalHeightMeters,
+  public SimulateLimelight(Swerve swerve, Translation2d goalTranslation, double goalHeightMeters,
       Translation2d cameraTranslationOffset, Rotation2d cameraYawOffset, double cameraHeightMeters, double cameraPitchRadians)
   {
-    m_swerve = drivetrain;
+    m_swerve = swerve;
     m_goalTranslation = goalTranslation;
     m_goalHeightMeters = goalHeightMeters;
     m_cameraTranslationOffset = cameraTranslationOffset;

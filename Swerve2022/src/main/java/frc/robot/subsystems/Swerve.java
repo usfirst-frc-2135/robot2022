@@ -1,3 +1,6 @@
+
+// ROBOTBUILDER TYPE: Subsystem.
+
 package frc.robot.subsystems;
 
 import java.util.ArrayList;
@@ -5,6 +8,7 @@ import java.util.ArrayList;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -14,9 +18,11 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.team1678.frc2022.Constants;
+import frc.robot.team1678.frc2022.Constants.SwerveConstants;
 import frc.robot.team1678.frc2022.drivers.Pigeon;
 import frc.robot.team1678.frc2022.drivers.SwerveModule;
 import frc.robot.team1678.frc2022.logger.LogStorage;
@@ -26,37 +32,41 @@ import frc.robot.team254.lib.util.TimeDelayedBoolean;
 public class Swerve extends SubsystemBase
 {
 
-  private static Swerve        mInstance;
+  private static Swerve         mInstance;
 
-  public PeriodicIO            mPeriodicIO         = new PeriodicIO( );
+  public PeriodicIO             mPeriodicIO         = new PeriodicIO( );
 
   // status variable for being enabled
-  public boolean               mIsEnabled          = false;
+  public boolean                mIsEnabled          = false;
 
   // logger
-  LogStorage<PeriodicIO>       mStorage            = null;
+  LogStorage<PeriodicIO>        mStorage            = null;
 
   // wants vision aim during auto
-  public boolean               mWantsAutoVisionAim = false;
+  public boolean                mWantsAutoVisionAim = false;
 
-  public SwerveDriveOdometry   swerveOdometry;
-  public SwerveModule[ ]       mSwerveMods;
+  public SwerveDriveOdometry    swerveOdometry;
+  public SwerveModule[ ]        mSwerveMods;
 
-  public Pigeon                mPigeon             = Pigeon.getInstance( );
+  public Pigeon                 mPigeon             = Pigeon.getInstance( );
 
   // chassis velocity status
-  ChassisSpeeds                chassisVelocity     = new ChassisSpeeds( );
+  ChassisSpeeds                 chassisVelocity     = new ChassisSpeeds( );
 
-  public boolean               isSnapping;
-  private double               mLimelightVisionAlignGoal;
-  private double               mGoalTrackVisionAlignGoal;
-  private double               mVisionAlignAdjustment;
+  public boolean                isSnapping;
+  private double                mLimelightVisionAlignGoal;
+  private double                mGoalTrackVisionAlignGoal;
+  private double                mVisionAlignAdjustment;
 
-  public ProfiledPIDController snapPIDController;
-  public PIDController         visionPIDController;
+  public ProfiledPIDController  snapPIDController;
+  public PIDController          visionPIDController;
 
   // Private boolean to lock Swerve wheels
-  private boolean              mLocked             = false;
+  private boolean               mLocked             = false;
+
+  private final SlewRateLimiter m_xspeedLimiter     = new SlewRateLimiter(3);
+  private final SlewRateLimiter m_yspeedLimiter     = new SlewRateLimiter(3);
+  private final SlewRateLimiter m_rotLimiter        = new SlewRateLimiter(3);
 
   // Getter
   public boolean getLocked( )
@@ -81,6 +91,9 @@ public class Swerve extends SubsystemBase
 
   public Swerve( )
   {
+    setName("Swerve");
+    setSubsystem("Swerve");
+
     swerveOdometry = new SwerveDriveOdometry(Constants.SwerveConstants.swerveKinematics, mPigeon.getYaw( ).getWPIRotation2d( ));
 
     snapPIDController = new ProfiledPIDController(Constants.SnapConstants.kP, Constants.SnapConstants.kI,
@@ -102,6 +115,327 @@ public class Swerve extends SubsystemBase
         new SwerveModule(3, Constants.SwerveConstants.Mod3.SwerveModuleConstants( ))
     };
   }
+
+  @Override
+  public void periodic( )
+  {
+    // This method will be called once per scheduler run
+    updateOdometry( );
+    updateDashboardValues( );
+  }
+
+  @Override
+  public void simulationPeriodic( )
+  {
+    // This method will be called once per scheduler run when in simulation
+  }
+
+  // Put methods for controlling this subsystem here. Call these from Commands.
+
+  public void initialize( )
+  {
+
+  }
+
+  public void faultDump( )
+  {
+
+  }
+
+  private void initSmartDashboard( )
+  {
+
+  }
+
+  ///////////////////////////////////////////////////////////////////////////////
+  //
+  // Periodic helper methods
+  //
+  /** Updates the field relative position of the robot. */
+  public void updateOdometry( )
+  {
+    // m_odometry.update(m_pigeonIMU.getRotation2d( ), m_frontLeft.getState( ),
+    // m_frontRight.getState( ), m_backLeft.getState( ),
+    // m_backRight.getState( ));
+  }
+
+  private void updateDashboardValues( )
+  {
+    // SmartDashboard.putNumber("SW_FLDrive",
+    // m_frontLeft.m_driveMotor.getMotorOutputPercent( ));
+    // SmartDashboard.putNumber("SW_FRDrive",
+    // m_frontRight.m_driveMotor.getMotorOutputPercent( ));
+    // SmartDashboard.putNumber("SW_BLDrive",
+    // m_backLeft.m_driveMotor.getMotorOutputPercent( ));
+    // SmartDashboard.putNumber("SW_BRDrive",
+    // m_backRight.m_driveMotor.getMotorOutputPercent( ));
+
+    // SmartDashboard.putNumber("SW_FLTurn",
+    // m_frontLeft.m_turningMotor.getMotorOutputPercent( ));
+    // SmartDashboard.putNumber("SW_FRTurn",
+    // m_frontRight.m_turningMotor.getMotorOutputPercent( ));
+    // SmartDashboard.putNumber("SW_BLTurn",
+    // m_backLeft.m_turningMotor.getMotorOutputPercent( ));
+    // SmartDashboard.putNumber("SW_BRTurn",
+    // m_backRight.m_turningMotor.getMotorOutputPercent( ));
+
+    // SmartDashboard.putNumber("SW_FLCANCoder",
+    // m_frontLeft.m_turningCANCoder.getPosition( ));
+    // SmartDashboard.putNumber("SW_FRCANCoder",
+    // m_frontRight.m_turningCANCoder.getPosition( ));
+    // SmartDashboard.putNumber("SW_BLCANCoder",
+    // m_backLeft.m_turningCANCoder.getPosition( ));
+    // SmartDashboard.putNumber("SW_BRCANCoder",
+    // m_backRight.m_turningCANCoder.getPosition( ));
+
+    // SmartDashboard.putNumber("SW_Heading", m_pigeonIMU.getAngle( ));
+  }
+
+  ///////////////////////////////////////////////////////////////////////////////
+  //
+  // Teleop driving mode
+  //
+
+  /**
+   * Method to drive the robot using joystick info.
+   *
+   * @param xSpeed
+   *          Speed of the robot in the x direction (forward).
+   * @param ySpeed
+   *          Speed of the robot in the y direction (sideways).
+   * @param rot
+   *          Angular rate of the robot.
+   * @param fieldRelative
+   *          Whether the provided x and y speeds are relative to the
+   *          field.
+   */
+  @SuppressWarnings("ParameterName")
+  public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative)
+  {
+    // var swerveModuleStates = m_kinematics.toSwerveModuleStates(
+    //     fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_pigeonIMU.getRotation2d( ))
+    //         : new ChassisSpeeds(xSpeed, ySpeed, rot));
+    // SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
+    // m_frontLeft.setDesiredState(swerveModuleStates[0]);
+    // m_frontRight.setDesiredState(swerveModuleStates[1]);
+    // m_backLeft.setDesiredState(swerveModuleStates[2]);
+    // m_backRight.setDesiredState(swerveModuleStates[3]);
+  }
+
+  public void driveWithJoystick(XboxController driverPad, boolean fieldRelative)
+  {
+    // Get x speed. Invert this because Xbox controllers return negative values when pushing forward.
+    final var xSpeed = -m_xspeedLimiter.calculate(MathUtil.applyDeadband(driverPad.getLeftY( ), 0.02)) * SwerveConstants.maxSpeed;
+
+    // Get y speed or sideways/strafe speed. Invert this because a positive value is needed when
+    // pulling left. Xbox controllers return positive values when pulling right by default.
+    final var ySpeed = -m_yspeedLimiter.calculate(MathUtil.applyDeadband(driverPad.getLeftX( ), 0.02)) * SwerveConstants.maxSpeed;
+
+    // Get rate of angular rotation. Invert this because a positive value is needed when pulling to
+    // the left (CCW is positive in mathematics). Xbox controllers return positive values when pulling
+    // to the right by default.
+    final var rot =
+        -m_rotLimiter.calculate(MathUtil.applyDeadband(driverPad.getRightX( ), 0.02)) * SwerveConstants.maxAngularVelocity;
+
+    drive(xSpeed, ySpeed, rot, fieldRelative);
+  }
+
+  ///////////////////////////////////////////////////////////////////////////////
+  //
+  // Limelight driving mode
+  //
+  public void driveWithLimelightInit(boolean m_endAtTarget)
+  {
+    // get pid values from dashboard
+
+    // m_turnConstant = SmartDashboard.getNumber("DTL_turnConstant",
+    // m_turnConstant);
+    // m_turnPidKp = SmartDashboard.getNumber("DTL_turnPidKp", m_turnPidKp);
+    // m_turnPidKi = SmartDashboard.getNumber("DTL_turnPidKi", m_turnPidKi);
+    // m_turnPidKd = SmartDashboard.getNumber("DTL_turnPidKd", m_turnPidKd);
+    // m_turnMax = SmartDashboard.getNumber("DTL_turnMax", m_turnMax);
+
+    // m_throttlePidKp = SmartDashboard.getNumber("DTL_throttlePidKp",
+    // m_throttlePidKp);
+    // m_throttlePidKi = SmartDashboard.getNumber("DTL_throttlePidKi",
+    // m_throttlePidKi);
+    // m_throttlePidKd = SmartDashboard.getNumber("DTL_throttlePidKd",
+    // m_throttlePidKd);
+    // m_throttleMax = SmartDashboard.getNumber("DTL_throttleMax", m_throttleMax);
+    // m_throttleShape = SmartDashboard.getNumber("DTL_throttleShape",
+    // m_throttleShape);
+
+    // m_targetAngle = SmartDashboard.getNumber("DTL_targetAngle", m_targetAngle);
+    // m_setPointDistance = SmartDashboard.getNumber("DTL_setPointDistance",
+    // m_setPointDistance);
+    // m_angleThreshold = SmartDashboard.getNumber("DTL_angleThreshold",
+    // m_angleThreshold);
+    // m_distThreshold = SmartDashboard.getNumber("DTL_distThreshold",
+    // m_distThreshold);
+
+    // // load in Pid constants to controller
+    // m_turnPid = new PIDController(m_turnPidKp, m_turnPidKi, m_turnPidKd);
+    // m_throttlePid = new PIDController(m_throttlePidKp, m_throttlePidKi,
+    // m_throttlePidKd);
+
+    // // TODO: Add this to eliminate robot lurch
+    // // if (m_validL1)
+    // // m_driveL1.configOpenloopRamp(m_openLoopRamp);
+    // // if (m_validR3)
+    // // m_driveR3.configOpenloopRamp(m_openLoopRamp);
+
+    // RobotContainer rc = RobotContainer.getInstance( );
+    // rc.m_vision.m_tyfilter.reset( );
+    // rc.m_vision.m_tvfilter.reset( );
+    // rc.m_vision.syncStateFromDashboard( );
+  }
+
+  public void driveWithLimelightExecute( )
+  {
+    // RobotContainer rc = RobotContainer.getInstance( );
+    // boolean tv = rc.m_vision.getTargetValid( );
+    // double tx = rc.m_vision.getHorizOffsetDeg( );
+    // double ty = rc.m_vision.getVertOffsetDeg( );
+
+    // if (!tv)
+    // {
+    // //TODO: add back in
+    // //velocityArcadeDrive(0.0, 0.0);
+    // if (m_limelightDebug >= 1)
+    // DataLogManager.log(getSubsystem( ) + ": DTL TV-FALSE - SIT STILL");
+    // return;
+    // }
+
+    // // get turn value - just horizontal offset from target
+    // double turnOutput = -m_turnPid.calculate(tx, m_targetAngle);
+
+    // if (turnOutput > 0)
+    // turnOutput = turnOutput + m_turnConstant;
+    // else if (turnOutput < 0)
+    // turnOutput = turnOutput - m_turnConstant;
+
+    // // get throttle value
+    // m_limelightDistance = rc.m_vision.getDistLimelight( );
+
+    // double throttleDistance = m_throttlePid.calculate(m_limelightDistance,
+    // m_setPointDistance);
+    // double throttleOutput = throttleDistance * Math.pow(Math.cos(turnOutput *
+    // Math.PI / 180), m_throttleShape);
+
+    // // put turn and throttle outputs on the dashboard
+    // SmartDashboard.putNumber("DTL_turnOutput", turnOutput);
+    // SmartDashboard.putNumber("DTL_throttleOutput", throttleOutput);
+    // SmartDashboard.putNumber("DTL_limeLightDist", m_limelightDistance);
+
+    // // cap max turn and throttle output
+    // turnOutput = MathUtil.clamp(turnOutput, -m_turnMax, m_turnMax);
+    // throttleOutput = MathUtil.clamp(throttleOutput, -m_throttleMax,
+    // m_throttleMax);
+
+    // // put turn and throttle outputs on the dashboard
+    // SmartDashboard.putNumber("DTL_turnClamped", turnOutput);
+    // SmartDashboard.putNumber("DTL_throttleClamped", throttleOutput);
+
+    // //TODO: add back in
+    // // if (m_validL1 || m_validR3)
+    // // velocityArcadeDrive(throttleOutput, turnOutput);
+
+    // if (m_limelightDebug >= 1)
+    // DataLogManager.log(getSubsystem( )
+    //   // @formatter:off
+    //           + ": DTL tv: " + tv 
+    //           + " tx: "      + String.format("%.1f", tx)
+    //           + " ty: "      + String.format("%.1f", ty)
+    //           + " lldist: "  + String.format("%.1f", m_limelightDistance)
+    //           + " distErr: " + String.format("%.1f", Math.abs(m_setPointDistance - m_limelightDistance))
+    //           //TODO: add back in
+    //           //+ " stopped: " + driveIsStopped( )
+    //           + " trnOut: "  + String.format("%.2f", turnOutput)
+    //           + " thrOut: "  + String.format("%.2f", throttleOutput)
+    //       // @formatter:on
+    // );
+  }
+
+  public boolean driveWithLimelightIsFinished( )
+  {
+    // RobotContainer rc = RobotContainer.getInstance( );
+    // boolean tv = rc.m_vision.getTargetValid( );
+    // double tx = rc.m_vision.getHorizOffsetDeg( );
+
+    // if (tv)
+    // {
+    // if (Math.abs(tx) <= m_angleThreshold)
+    // rc.m_led.setLLColor(LEDColor.LEDCOLOR_GREEN);
+    // else
+    // {
+    // if (tx < -m_angleThreshold)
+    // rc.m_led.setLLColor(LEDColor.LEDCOLOR_RED);
+    // else if (tx > m_angleThreshold)
+    // rc.m_led.setLLColor(LEDColor.LEDCOLOR_BLUE);
+    // }
+    // }
+    // else
+    // rc.m_led.setLLColor(LEDColor.LEDCOLOR_YELLOW);
+
+    // return (tv //
+    // && ((Math.abs(tx)) <= m_angleThreshold) //
+    // && (Math.abs(m_setPointDistance - m_limelightDistance) <= m_distThreshold)//
+    // //TODO: add back in
+    // //&& driveIsStopped( )
+    // );
+    return true;
+  }
+
+  public void driveWithLimelightEnd( )
+  {
+    // TODO: add back in
+    // if (m_validL1 || m_validR3)
+    // velocityArcadeDrive(0.0, 0.0);
+
+    // TODO: return settings back when command ends
+    // if (m_validL1)
+    // m_driveL1.configOpenloopRamp(0.0);
+    // if (m_validR3)
+    // m_driveR3.configOpenloopRamp(0.0);
+
+    // RobotContainer.getInstance( ).m_led.setLLColor(LEDColor.LEDCOLOR_OFF);
+  }
+
+  public boolean isLimelightValid(double horizAngleRange, double distRange)
+  {
+    // // check whether target is valid
+    // // check whether the limelight tx and ty is within a certain tolerance
+    // // check whether distance is within a certain tolerance
+    // RobotContainer rc = RobotContainer.getInstance( );
+    // boolean tv = rc.m_vision.getTargetValid( );
+    // double tx = rc.m_vision.getHorizOffsetDeg( );
+    // double ty = rc.m_vision.getVertOffsetDeg( );
+    // m_limelightDistance = rc.m_vision.getDistLimelight( );
+
+    // boolean sanityCheck =
+    // tv && (Math.abs(tx) <= horizAngleRange) && (Math.abs(m_setPointDistance -
+    // m_limelightDistance) <= distRange);
+    // // && (fabs(ty) <= vertAngleRange)
+
+    // DataLogManager.log(getSubsystem( ) //
+    // + ": DTL tv: " + tv //
+    // + " tx: " + tx //
+    // + " ty: " + ty //
+    // + " lldist: " + m_limelightDistance //
+    // + " distErr: " + Math.abs(m_setPointDistance - m_limelightDistance) //
+    // + " sanityCheck: " + ((sanityCheck) ? "PASSED" : "FAILED") //
+    // );
+
+    // return sanityCheck;
+    return true;
+  }
+
+  ///////////////////////////////////////////////////////////////////////////////
+  //
+  // Autonomous mode - Ramsete path follower
+  //
+
+  // TODO: finish for autos
 
   public void setWantAutoVisionAim(boolean aim)
   {

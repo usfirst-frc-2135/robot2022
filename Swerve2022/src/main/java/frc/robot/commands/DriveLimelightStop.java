@@ -18,7 +18,7 @@ import frc.robot.subsystems.Vision;
  */
 public class DriveLimelightStop extends SequentialCommandGroup
 {
-  public DriveLimelightStop(Swerve drivetrain, Intake intake, FloorConveyor fConv, TowerConveyor tConv, Shooter shooter,
+  public DriveLimelightStop(Swerve swerve, Intake intake, FloorConveyor fConv, TowerConveyor tConv, Shooter shooter,
       Vision vision)
   {
     setName("DriveLimelightStop");
@@ -30,7 +30,7 @@ public class DriveLimelightStop extends SequentialCommandGroup
         new PrintCommand("Limelight drive stop"), 
         new ParallelDeadlineGroup(
             new ScoringStop(intake, fConv, tConv, shooter, vision), 
-            new AutoStop(drivetrain)
+            new AutoStop(swerve)
         )
         // @formatter:off
     );

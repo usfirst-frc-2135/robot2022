@@ -53,7 +53,7 @@ public class Constants
     public static final int    kLRCANCoderCANID       = 3;
     public static final int    kRRCANCoderCANID       = 4;
 
-    // Drivetrain specs
+    // Swerve specs
     public static final double kWheelDiaMeters        = Units.inchesToMeters(4.0); // 4in (39.37 in/meter)
     public static final double kGearRatio             = 6.75;
     public static final double kEncoderMetersPerCount = (kWheelDiaMeters * Math.PI) / (Falcon500.kEncoderCPR) / kGearRatio;

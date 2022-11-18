@@ -5,7 +5,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.VIConsts;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Vision;
 
 /**
@@ -13,13 +13,13 @@ import frc.robot.subsystems.Vision;
  */
 public class DriveLimelight extends CommandBase
 {
-  private final Drivetrain m_swerve;
-  private final Vision     m_vision;
-  private final boolean    m_endAtTarget;
+  private final Swerve  m_swerve;
+  private final Vision  m_vision;
+  private final boolean m_endAtTarget;
 
-  public DriveLimelight(Drivetrain drivetrain, Vision vision, boolean endAtTarget)
+  public DriveLimelight(Swerve swerve, Vision vision, boolean endAtTarget)
   {
-    m_swerve = drivetrain;
+    m_swerve = swerve;
     m_vision = vision;
     m_endAtTarget = endAtTarget;
 
