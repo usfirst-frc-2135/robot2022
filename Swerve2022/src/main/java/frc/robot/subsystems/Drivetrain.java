@@ -28,70 +28,91 @@ import frc.robot.Constants.LEDConsts.LEDColor;
  */
 public class Drivetrain extends SubsystemBase
 {
-  // private final WPI_Pigeon2           m_pigeonIMU          = new WPI_Pigeon2(0, DTConsts.kCANBusString);
+  // private final WPI_Pigeon2 m_pigeonIMU = new WPI_Pigeon2(0,
+  // DTConsts.kCANBusString);
 
   // Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
-  private final SlewRateLimiter       m_xspeedLimiter      = new SlewRateLimiter(3);
-  private final SlewRateLimiter       m_yspeedLimiter      = new SlewRateLimiter(3);
-  private final SlewRateLimiter       m_rotLimiter         = new SlewRateLimiter(3);
+  private final SlewRateLimiter m_xspeedLimiter  = new SlewRateLimiter(3);
+  private final SlewRateLimiter m_yspeedLimiter  = new SlewRateLimiter(3);
+  private final SlewRateLimiter m_rotLimiter     = new SlewRateLimiter(3);
 
-  public static final double          kMaxSpeed            = 3.0;             // 3 meters per second
-  public static final double          kMaxAngularSpeed     = Math.PI;         // 1/2 rotation per second
+  public static final double    kMaxSpeed        = 3.0; // 3 meters per second
+  public static final double    kMaxAngularSpeed = Math.PI; // 1/2 rotation per second
 
-  // private final Translation2d         m_frontLeftLocation  = new Translation2d(0.427, 0.427);
-  // private final Translation2d         m_frontRightLocation = new Translation2d(0.427, -0.427);
-  // private final Translation2d         m_backLeftLocation   = new Translation2d(-0.427, 0.427);
-  // private final Translation2d         m_backRightLocation  = new Translation2d(-0.427, -0.427);
+  // private final Translation2d m_frontLeftLocation = new Translation2d(0.427,
+  // 0.427);
+  // private final Translation2d m_frontRightLocation = new Translation2d(0.427,
+  // -0.427);
+  // private final Translation2d m_backLeftLocation = new Translation2d(-0.427,
+  // 0.427);
+  // private final Translation2d m_backRightLocation = new Translation2d(-0.427,
+  // -0.427);
 
-  // private final SwerveModule          m_frontLeft          =
-  //     new SwerveModule(DTConsts.kLFDrive1CANID, DTConsts.kLFTurn2CANID, DTConsts.kLFCANCoderCANID);
-  // private final SwerveModule          m_frontRight         =
-  //     new SwerveModule(DTConsts.kRFDrive3CANID, DTConsts.kRFTurn4CANID, DTConsts.kRFCANCoderCANID);
-  // private final SwerveModule          m_backLeft           =
-  //     new SwerveModule(DTConsts.kLRDrive5CANID, DTConsts.kLRTurn6CANID, DTConsts.kLRCANCoderCANID);
-  // private final SwerveModule          m_backRight          =
-  //     new SwerveModule(DTConsts.kRRDrive7CANID, DTConsts.kRRTurn8CANID, DTConsts.kRRCANCoderCANID);
+  // private final SwerveModule m_frontLeft =
+  // new SwerveModule(DTConsts.kLFDrive1CANID, DTConsts.kLFTurn2CANID,
+  // DTConsts.kLFCANCoderCANID);
+  // private final SwerveModule m_frontRight =
+  // new SwerveModule(DTConsts.kRFDrive3CANID, DTConsts.kRFTurn4CANID,
+  // DTConsts.kRFCANCoderCANID);
+  // private final SwerveModule m_backLeft =
+  // new SwerveModule(DTConsts.kLRDrive5CANID, DTConsts.kLRTurn6CANID,
+  // DTConsts.kLRCANCoderCANID);
+  // private final SwerveModule m_backRight =
+  // new SwerveModule(DTConsts.kRRDrive7CANID, DTConsts.kRRTurn8CANID,
+  // DTConsts.kRRCANCoderCANID);
 
-  // private final SwerveDriveKinematics m_kinematics         =
-  //     new SwerveDriveKinematics(m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
+  // private final SwerveDriveKinematics m_kinematics =
+  // new SwerveDriveKinematics(m_frontLeftLocation, m_frontRightLocation,
+  // m_backLeftLocation, m_backRightLocation);
 
-  // private final SwerveDriveOdometry   m_odometry           = new SwerveDriveOdometry(m_kinematics, m_pigeonIMU.getRotation2d( ));
+  // private final SwerveDriveOdometry m_odometry = new
+  // SwerveDriveOdometry(m_kinematics, m_pigeonIMU.getRotation2d( ));
 
   // // Limelight drive
-  // private double                      m_turnConstant       = DTConsts.kTurnConstant;
-  // private double                      m_turnPidKp          = DTConsts.kTurnPidKp;
-  // private double                      m_turnPidKi          = DTConsts.kTurnPidKi;
-  // private double                      m_turnPidKd          = DTConsts.kTurnPidKd;
-  // private double                      m_turnMax            = DTConsts.kTurnMax;
-  // private double                      m_throttlePidKp      = DTConsts.kThrottlePidKp;
-  // private double                      m_throttlePidKi      = DTConsts.kThrottlePidKi;
-  // private double                      m_throttlePidKd      = DTConsts.kThrottlePidKd;
-  // private double                      m_throttleMax        = DTConsts.kThrottleMax;
-  // private double                      m_throttleShape      = DTConsts.kThrottleShape;
+  // private double m_turnConstant = DTConsts.kTurnConstant;
+  // private double m_turnPidKp = DTConsts.kTurnPidKp;
+  // private double m_turnPidKi = DTConsts.kTurnPidKi;
+  // private double m_turnPidKd = DTConsts.kTurnPidKd;
+  // private double m_turnMax = DTConsts.kTurnMax;
+  // private double m_throttlePidKp = DTConsts.kThrottlePidKp;
+  // private double m_throttlePidKi = DTConsts.kThrottlePidKi;
+  // private double m_throttlePidKd = DTConsts.kThrottlePidKd;
+  // private double m_throttleMax = DTConsts.kThrottleMax;
+  // private double m_throttleShape = DTConsts.kThrottleShape;
 
-  // private double                      m_targetAngle        = DTConsts.kTargetAngle;      // Optimal shooting angle
-  // private double                      m_setPointDistance   = DTConsts.kSetPointDistance; // Optimal shooting distance
-  // private double                      m_angleThreshold     = DTConsts.kAngleThreshold;   // Tolerance around optimal
-  // private double                      m_distThreshold      = DTConsts.kDistThreshold;    // Tolerance around optimal
+  // private double m_targetAngle = DTConsts.kTargetAngle; // Optimal shooting
+  // angle
+  // private double m_setPointDistance = DTConsts.kSetPointDistance; // Optimal
+  // shooting distance
+  // private double m_angleThreshold = DTConsts.kAngleThreshold; // Tolerance
+  // around optimal
+  // private double m_distThreshold = DTConsts.kDistThreshold; // Tolerance around
+  // optimal
 
   // // DriveWithLimelight pid controller objects
-  // private PIDController               m_turnPid            = new PIDController(0.0, 0.0, 0.0);
-  // private PIDController               m_throttlePid        = new PIDController(0.0, 0.0, 0.0);
+  // private PIDController m_turnPid = new PIDController(0.0, 0.0, 0.0);
+  // private PIDController m_throttlePid = new PIDController(0.0, 0.0, 0.0);
 
-  // private int                         m_driveDebug         = 0;    // Debug flag to disable extra drive logging calls
-  // private int                         m_limelightDebug     = 0;    // Debug flag to disable extra limelight logging calls
-  // private int                         m_ramseteDebug       = 0;    // Debug flag to disable extra ramsete logging calls
+  // private int m_driveDebug = 0; // Debug flag to disable extra drive logging
+  // calls
+  // private int m_limelightDebug = 0; // Debug flag to disable extra limelight
+  // logging calls
+  // private int m_ramseteDebug = 0; // Debug flag to disable extra ramsete
+  // logging calls
 
-  // private boolean                     m_throttleZeroed     = false; // Throttle joystick zeroed safety check
-  // private boolean                     m_isQuickTurn        = false; // Quickturn mode active in curvature drive
-  // private boolean                     m_driveSlowMode      = false; // Slow drive mode active when climbing
-  // private double                      m_limelightDistance;
-  // private double                      m_offsetLeft;
-  // private double                      m_offsetRight;
+  // private boolean m_throttleZeroed = false; // Throttle joystick zeroed safety
+  // check
+  // private boolean m_isQuickTurn = false; // Quickturn mode active in curvature
+  // drive
+  // private boolean m_driveSlowMode = false; // Slow drive mode active when
+  // climbing
+  // private double m_limelightDistance;
+  // private double m_offsetLeft;
+  // private double m_offsetRight;
 
   // // Odometry and telemetry
-  // private double                      m_distanceLeft;              // Left wheel distance in meters
-  // private double                      m_distanceRight;             // Right wheel distance in meters
+  // private double m_distanceLeft; // Left wheel distance in meters
+  // private double m_distanceRight; // Right wheel distance in meters
 
   /**
   *
@@ -100,7 +121,7 @@ public class Drivetrain extends SubsystemBase
   {
     setName("Drivetrain");
     setSubsystem("Drivetrain");
-    //addChild("DiffDrive", m_diffDrive);    
+    // addChild("DiffDrive", m_diffDrive);
 
     // m_pigeonIMU.reset( );
   }
@@ -153,26 +174,39 @@ public class Drivetrain extends SubsystemBase
   /** Updates the field relative position of the robot. */
   public void updateOdometry( )
   {
-    // m_odometry.update(m_pigeonIMU.getRotation2d( ), m_frontLeft.getState( ), m_frontRight.getState( ), m_backLeft.getState( ),
-    //     m_backRight.getState( ));
+    // m_odometry.update(m_pigeonIMU.getRotation2d( ), m_frontLeft.getState( ),
+    // m_frontRight.getState( ), m_backLeft.getState( ),
+    // m_backRight.getState( ));
   }
 
   private void updateDashboardValues( )
   {
-    // SmartDashboard.putNumber("SW_FLDrive", m_frontLeft.m_driveMotor.getMotorOutputPercent( ));
-    // SmartDashboard.putNumber("SW_FRDrive", m_frontRight.m_driveMotor.getMotorOutputPercent( ));
-    // SmartDashboard.putNumber("SW_BLDrive", m_backLeft.m_driveMotor.getMotorOutputPercent( ));
-    // SmartDashboard.putNumber("SW_BRDrive", m_backRight.m_driveMotor.getMotorOutputPercent( ));
+    // SmartDashboard.putNumber("SW_FLDrive",
+    // m_frontLeft.m_driveMotor.getMotorOutputPercent( ));
+    // SmartDashboard.putNumber("SW_FRDrive",
+    // m_frontRight.m_driveMotor.getMotorOutputPercent( ));
+    // SmartDashboard.putNumber("SW_BLDrive",
+    // m_backLeft.m_driveMotor.getMotorOutputPercent( ));
+    // SmartDashboard.putNumber("SW_BRDrive",
+    // m_backRight.m_driveMotor.getMotorOutputPercent( ));
 
-    // SmartDashboard.putNumber("SW_FLTurn", m_frontLeft.m_turningMotor.getMotorOutputPercent( ));
-    // SmartDashboard.putNumber("SW_FRTurn", m_frontRight.m_turningMotor.getMotorOutputPercent( ));
-    // SmartDashboard.putNumber("SW_BLTurn", m_backLeft.m_turningMotor.getMotorOutputPercent( ));
-    // SmartDashboard.putNumber("SW_BRTurn", m_backRight.m_turningMotor.getMotorOutputPercent( ));
+    // SmartDashboard.putNumber("SW_FLTurn",
+    // m_frontLeft.m_turningMotor.getMotorOutputPercent( ));
+    // SmartDashboard.putNumber("SW_FRTurn",
+    // m_frontRight.m_turningMotor.getMotorOutputPercent( ));
+    // SmartDashboard.putNumber("SW_BLTurn",
+    // m_backLeft.m_turningMotor.getMotorOutputPercent( ));
+    // SmartDashboard.putNumber("SW_BRTurn",
+    // m_backRight.m_turningMotor.getMotorOutputPercent( ));
 
-    // SmartDashboard.putNumber("SW_FLCANCoder", m_frontLeft.m_turningCANCoder.getPosition( ));
-    // SmartDashboard.putNumber("SW_FRCANCoder", m_frontRight.m_turningCANCoder.getPosition( ));
-    // SmartDashboard.putNumber("SW_BLCANCoder", m_backLeft.m_turningCANCoder.getPosition( ));
-    // SmartDashboard.putNumber("SW_BRCANCoder", m_backRight.m_turningCANCoder.getPosition( ));
+    // SmartDashboard.putNumber("SW_FLCANCoder",
+    // m_frontLeft.m_turningCANCoder.getPosition( ));
+    // SmartDashboard.putNumber("SW_FRCANCoder",
+    // m_frontRight.m_turningCANCoder.getPosition( ));
+    // SmartDashboard.putNumber("SW_BLCANCoder",
+    // m_backLeft.m_turningCANCoder.getPosition( ));
+    // SmartDashboard.putNumber("SW_BRCANCoder",
+    // m_backRight.m_turningCANCoder.getPosition( ));
 
     // SmartDashboard.putNumber("SW_Heading", m_pigeonIMU.getAngle( ));
   }
@@ -257,10 +291,10 @@ public class Drivetrain extends SubsystemBase
 
   public Pose2d getPose( )
   {
-    //TODO: if needed, change
+    // TODO: if needed, change
     // return m_odometry.getPoseMeters( );
 
-    return new Pose2d(); 
+    return new Pose2d( );
   }
 
   ///////////////////////////////////////////////////////////////////////////////
@@ -336,14 +370,16 @@ public class Drivetrain extends SubsystemBase
    * @param rot
    *          Angular rate of the robot.
    * @param fieldRelative
-   *          Whether the provided x and y speeds are relative to the field.
+   *          Whether the provided x and y speeds are relative to the
+   *          field.
    */
   @SuppressWarnings("ParameterName")
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative)
   {
     // var swerveModuleStates = m_kinematics.toSwerveModuleStates(
-    //     fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_pigeonIMU.getRotation2d( ))
-    //         : new ChassisSpeeds(xSpeed, ySpeed, rot));
+    // fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot,
+    // m_pigeonIMU.getRotation2d( ))
+    // : new ChassisSpeeds(xSpeed, ySpeed, rot));
     // SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
     // m_frontLeft.setDesiredState(swerveModuleStates[0]);
     // m_frontRight.setDesiredState(swerveModuleStates[1]);
@@ -353,15 +389,20 @@ public class Drivetrain extends SubsystemBase
 
   public void driveWithJoystick(XboxController driverPad, boolean fieldRelative)
   {
-    // Get x speed. Invert this because Xbox controllers return negative values when pushing forward.
+    // Get x speed. Invert this because Xbox controllers return negative values when
+    // pushing forward.
     final var xSpeed = -m_xspeedLimiter.calculate(MathUtil.applyDeadband(driverPad.getLeftY( ), 0.02)) * Drivetrain.kMaxSpeed;
 
-    // Get y speed or sideways/strafe speed. Invert this because a positive value is needed when
-    // pulling left. Xbox controllers return positive values when pulling right by default.
+    // Get y speed or sideways/strafe speed. Invert this because a positive value is
+    // needed when
+    // pulling left. Xbox controllers return positive values when pulling right by
+    // default.
     final var ySpeed = -m_yspeedLimiter.calculate(MathUtil.applyDeadband(driverPad.getLeftX( ), 0.02)) * Drivetrain.kMaxSpeed;
 
-    // Get rate of angular rotation. Invert this because a positive value is needed when pulling to
-    // the left (CCW is positive in mathematics). Xbox controllers return positive values when pulling
+    // Get rate of angular rotation. Invert this because a positive value is needed
+    // when pulling to
+    // the left (CCW is positive in mathematics). Xbox controllers return positive
+    // values when pulling
     // to the right by default.
     final var rot = -m_rotLimiter.calculate(MathUtil.applyDeadband(driverPad.getRightX( ), 0.02)) * Drivetrain.kMaxAngularSpeed;
 
@@ -376,26 +417,35 @@ public class Drivetrain extends SubsystemBase
   {
     // get pid values from dashboard
 
-    // m_turnConstant = SmartDashboard.getNumber("DTL_turnConstant", m_turnConstant);
+    // m_turnConstant = SmartDashboard.getNumber("DTL_turnConstant",
+    // m_turnConstant);
     // m_turnPidKp = SmartDashboard.getNumber("DTL_turnPidKp", m_turnPidKp);
     // m_turnPidKi = SmartDashboard.getNumber("DTL_turnPidKi", m_turnPidKi);
     // m_turnPidKd = SmartDashboard.getNumber("DTL_turnPidKd", m_turnPidKd);
     // m_turnMax = SmartDashboard.getNumber("DTL_turnMax", m_turnMax);
 
-    // m_throttlePidKp = SmartDashboard.getNumber("DTL_throttlePidKp", m_throttlePidKp);
-    // m_throttlePidKi = SmartDashboard.getNumber("DTL_throttlePidKi", m_throttlePidKi);
-    // m_throttlePidKd = SmartDashboard.getNumber("DTL_throttlePidKd", m_throttlePidKd);
+    // m_throttlePidKp = SmartDashboard.getNumber("DTL_throttlePidKp",
+    // m_throttlePidKp);
+    // m_throttlePidKi = SmartDashboard.getNumber("DTL_throttlePidKi",
+    // m_throttlePidKi);
+    // m_throttlePidKd = SmartDashboard.getNumber("DTL_throttlePidKd",
+    // m_throttlePidKd);
     // m_throttleMax = SmartDashboard.getNumber("DTL_throttleMax", m_throttleMax);
-    // m_throttleShape = SmartDashboard.getNumber("DTL_throttleShape", m_throttleShape);
+    // m_throttleShape = SmartDashboard.getNumber("DTL_throttleShape",
+    // m_throttleShape);
 
     // m_targetAngle = SmartDashboard.getNumber("DTL_targetAngle", m_targetAngle);
-    // m_setPointDistance = SmartDashboard.getNumber("DTL_setPointDistance", m_setPointDistance);
-    // m_angleThreshold = SmartDashboard.getNumber("DTL_angleThreshold", m_angleThreshold);
-    // m_distThreshold = SmartDashboard.getNumber("DTL_distThreshold", m_distThreshold);
+    // m_setPointDistance = SmartDashboard.getNumber("DTL_setPointDistance",
+    // m_setPointDistance);
+    // m_angleThreshold = SmartDashboard.getNumber("DTL_angleThreshold",
+    // m_angleThreshold);
+    // m_distThreshold = SmartDashboard.getNumber("DTL_distThreshold",
+    // m_distThreshold);
 
     // // load in Pid constants to controller
     // m_turnPid = new PIDController(m_turnPidKp, m_turnPidKi, m_turnPidKd);
-    // m_throttlePid = new PIDController(m_throttlePidKp, m_throttlePidKi, m_throttlePidKd);
+    // m_throttlePid = new PIDController(m_throttlePidKp, m_throttlePidKi,
+    // m_throttlePidKd);
 
     // // TODO: Add this to eliminate robot lurch
     // // if (m_validL1)
@@ -418,26 +468,28 @@ public class Drivetrain extends SubsystemBase
 
     // if (!tv)
     // {
-    //   //TODO: add back in
-    //   //velocityArcadeDrive(0.0, 0.0);
-    //   if (m_limelightDebug >= 1)
-    //     DataLogManager.log(getSubsystem( ) + ": DTL TV-FALSE - SIT STILL");
-    //   return;
+    // //TODO: add back in
+    // //velocityArcadeDrive(0.0, 0.0);
+    // if (m_limelightDebug >= 1)
+    // DataLogManager.log(getSubsystem( ) + ": DTL TV-FALSE - SIT STILL");
+    // return;
     // }
 
     // // get turn value - just horizontal offset from target
     // double turnOutput = -m_turnPid.calculate(tx, m_targetAngle);
 
     // if (turnOutput > 0)
-    //   turnOutput = turnOutput + m_turnConstant;
+    // turnOutput = turnOutput + m_turnConstant;
     // else if (turnOutput < 0)
-    //   turnOutput = turnOutput - m_turnConstant;
+    // turnOutput = turnOutput - m_turnConstant;
 
     // // get throttle value
     // m_limelightDistance = rc.m_vision.getDistLimelight( );
 
-    // double throttleDistance = m_throttlePid.calculate(m_limelightDistance, m_setPointDistance);
-    // double throttleOutput = throttleDistance * Math.pow(Math.cos(turnOutput * Math.PI / 180), m_throttleShape);
+    // double throttleDistance = m_throttlePid.calculate(m_limelightDistance,
+    // m_setPointDistance);
+    // double throttleOutput = throttleDistance * Math.pow(Math.cos(turnOutput *
+    // Math.PI / 180), m_throttleShape);
 
     // // put turn and throttle outputs on the dashboard
     // SmartDashboard.putNumber("DTL_turnOutput", turnOutput);
@@ -446,7 +498,8 @@ public class Drivetrain extends SubsystemBase
 
     // // cap max turn and throttle output
     // turnOutput = MathUtil.clamp(turnOutput, -m_turnMax, m_turnMax);
-    // throttleOutput = MathUtil.clamp(throttleOutput, -m_throttleMax, m_throttleMax);
+    // throttleOutput = MathUtil.clamp(throttleOutput, -m_throttleMax,
+    // m_throttleMax);
 
     // // put turn and throttle outputs on the dashboard
     // SmartDashboard.putNumber("DTL_turnClamped", turnOutput);
@@ -454,10 +507,10 @@ public class Drivetrain extends SubsystemBase
 
     // //TODO: add back in
     // // if (m_validL1 || m_validR3)
-    // //   velocityArcadeDrive(throttleOutput, turnOutput);
+    // // velocityArcadeDrive(throttleOutput, turnOutput);
 
     // if (m_limelightDebug >= 1)
-    //   DataLogManager.log(getSubsystem( )
+    // DataLogManager.log(getSubsystem( )
     //   // @formatter:off
     //           + ": DTL tv: " + tv 
     //           + " tx: "      + String.format("%.1f", tx)
@@ -469,7 +522,7 @@ public class Drivetrain extends SubsystemBase
     //           + " trnOut: "  + String.format("%.2f", turnOutput)
     //           + " thrOut: "  + String.format("%.2f", throttleOutput)
     //       // @formatter:on
-    //   );
+    // );
   }
 
   public boolean driveWithLimelightIsFinished( )
@@ -480,33 +533,33 @@ public class Drivetrain extends SubsystemBase
 
     // if (tv)
     // {
-    //   if (Math.abs(tx) <= m_angleThreshold)
-    //     rc.m_led.setLLColor(LEDColor.LEDCOLOR_GREEN);
-    //   else
-    //   {
-    //     if (tx < -m_angleThreshold)
-    //       rc.m_led.setLLColor(LEDColor.LEDCOLOR_RED);
-    //     else if (tx > m_angleThreshold)
-    //       rc.m_led.setLLColor(LEDColor.LEDCOLOR_BLUE);
-    //   }
+    // if (Math.abs(tx) <= m_angleThreshold)
+    // rc.m_led.setLLColor(LEDColor.LEDCOLOR_GREEN);
+    // else
+    // {
+    // if (tx < -m_angleThreshold)
+    // rc.m_led.setLLColor(LEDColor.LEDCOLOR_RED);
+    // else if (tx > m_angleThreshold)
+    // rc.m_led.setLLColor(LEDColor.LEDCOLOR_BLUE);
+    // }
     // }
     // else
-    //   rc.m_led.setLLColor(LEDColor.LEDCOLOR_YELLOW);
+    // rc.m_led.setLLColor(LEDColor.LEDCOLOR_YELLOW);
 
     // return (tv //
-    //     && ((Math.abs(tx)) <= m_angleThreshold) //
-    //     && (Math.abs(m_setPointDistance - m_limelightDistance) <= m_distThreshold)//
+    // && ((Math.abs(tx)) <= m_angleThreshold) //
+    // && (Math.abs(m_setPointDistance - m_limelightDistance) <= m_distThreshold)//
     // //TODO: add back in
     // //&& driveIsStopped( )
     // );
-  return true;
+    return true;
   }
 
   public void driveWithLimelightEnd( )
   {
-    //TODO: add back in
+    // TODO: add back in
     // if (m_validL1 || m_validR3)
-    //   velocityArcadeDrive(0.0, 0.0);
+    // velocityArcadeDrive(0.0, 0.0);
 
     // TODO: return settings back when command ends
     // if (m_validL1)
@@ -529,16 +582,17 @@ public class Drivetrain extends SubsystemBase
     // m_limelightDistance = rc.m_vision.getDistLimelight( );
 
     // boolean sanityCheck =
-    //     tv && (Math.abs(tx) <= horizAngleRange) && (Math.abs(m_setPointDistance - m_limelightDistance) <= distRange);
+    // tv && (Math.abs(tx) <= horizAngleRange) && (Math.abs(m_setPointDistance -
+    // m_limelightDistance) <= distRange);
     // // && (fabs(ty) <= vertAngleRange)
 
-    // DataLogManager.log(getSubsystem( )              //
-    //     + ": DTL tv: " + tv                         //
-    //     + " tx: " + tx                              //
-    //     + " ty: " + ty                              //
-    //     + " lldist: " + m_limelightDistance         //
-    //     + " distErr: " + Math.abs(m_setPointDistance - m_limelightDistance) //
-    //     + " sanityCheck: " + ((sanityCheck) ? "PASSED" : "FAILED")          //
+    // DataLogManager.log(getSubsystem( ) //
+    // + ": DTL tv: " + tv //
+    // + " tx: " + tx //
+    // + " ty: " + ty //
+    // + " lldist: " + m_limelightDistance //
+    // + " distErr: " + Math.abs(m_setPointDistance - m_limelightDistance) //
+    // + " sanityCheck: " + ((sanityCheck) ? "PASSED" : "FAILED") //
     // );
 
     // return sanityCheck;
@@ -550,6 +604,6 @@ public class Drivetrain extends SubsystemBase
   // Autonomous mode - Ramsete path follower
   //
 
-  //TODO: finish for autos
+  // TODO: finish for autos
 
 }

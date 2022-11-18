@@ -1,8 +1,5 @@
 package frc.robot.team1678.frc2022.logger;
 
-import frc.robot.team1678.frc2022.loops.Loop;
-import frc.robot.team1678.frc2022.loops.ILooper;
-
 import java.util.ArrayList;
 import java.util.TimeZone;
 import java.io.File;
@@ -155,20 +152,4 @@ public class LoggingSystem {
         }
     }
 
-    public void registerLoops(ILooper looper) {
-        looper.register(new Loop() {
-            @Override
-            public void onStart(double timestamp) {
-            }
-            @Override 
-            public void onLoop(double timestamp) {
-                if (log == true) {
-                Log();
-                }
-            }
-            @Override 
-            public void onStop(double timestamp) {
-            }
-        });
-    }
 }

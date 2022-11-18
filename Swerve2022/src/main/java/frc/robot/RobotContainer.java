@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
@@ -29,6 +28,7 @@ public class RobotContainer
 
   // The robot's subsystems
   public final Drivetrain       m_drivetrain     = new Drivetrain( );
+  public final Swerve           m_swerve         = new Swerve( );
   public final Intake           m_intake         = new Intake( );
   public final FloorConveyor    m_floorConveyor  = new FloorConveyor( );
   public final TowerConveyor    m_towerConveyor  = new TowerConveyor( );
@@ -81,7 +81,7 @@ public class RobotContainer
     SmartDashboard.putData("AutoPathSequence", new AutoPathSequence( ));
     SmartDashboard.putData("AutoShoot", new AutoShoot( ));
     SmartDashboard.putData("AutoShootDriveShoot", new AutoShootDriveShoot( ));
-    SmartDashboard.putData("AutoStop", new AutoStop(m_drivetrain));
+    SmartDashboard.putData("AutoStop", new AutoStop(m_swerve));
     SmartDashboard.putData("DriveLimelight", new DriveLimelight(m_drivetrain, m_vision, false));
     SmartDashboard.putData("DriveMotorTest", new DriveMotorTest(m_drivetrain, true));
     SmartDashboard.putData("DriveResetSensors", new DriveResetSensors(m_drivetrain));
@@ -92,7 +92,7 @@ public class RobotContainer
     SmartDashboard.putData("RobotInitialize", new RobotInitialize( ));
     SmartDashboard.putData("ShooterAimToggle", new ShooterAimToggle( ));
     SmartDashboard.putData("ShooterReverse", new ShooterReverse(m_shooter));
-    //SmartDashboard.putData("SimulateLimelight", new SimulateLimelight( ));
+    // SmartDashboard.putData("SimulateLimelight", new SimulateLimelight( ));
     SmartDashboard.putData("Dummy", new Dummy( ));
   }
 
@@ -142,7 +142,7 @@ public class RobotContainer
 
   private void initAutonomousChooser( )
   {
-    m_chooser.addOption("AutoStop", new AutoStop(m_drivetrain));
+    m_chooser.addOption("AutoStop", new AutoStop(m_swerve));
     m_chooser.setDefaultOption("Autonomous Command", new AutonomousCommand( ));
 
     SmartDashboard.putData("Auto Mode", m_chooser);

@@ -12,28 +12,28 @@ import frc.robot.subsystems.Drivetrain;
  */
 public class DriveTeleop extends CommandBase
 {
-  private final Drivetrain     m_drivetrain;
+  private final Drivetrain     m_swerve;
   private final XboxController m_driverPad;
   private final int            m_speedAxis;
   private final int            m_rotationAxis;
 
   public DriveTeleop(Drivetrain drivetrain, XboxController driverPad, int speedAxis, int rotationAxis)
   {
-    m_drivetrain = drivetrain;
+    m_swerve = drivetrain;
     m_driverPad = driverPad;
     m_speedAxis = speedAxis;
     m_rotationAxis = rotationAxis;
 
     setName("DriveTeleop");
-    addRequirements(m_drivetrain);
+    addRequirements(m_swerve);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize( )
   {
-    //TODO: replace with updated method
-    //m_drivetrain.driveWithJoysticksInit( );
+    // TODO: replace with updated method
+    // m_swerve.driveWithJoysticksInit( );
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -43,17 +43,17 @@ public class DriveTeleop extends CommandBase
     double rotation = m_driverPad.getRawAxis(m_rotationAxis);
     double speed = m_driverPad.getRawAxis(m_speedAxis);
 
-    //TODO: replace with updated method
-    //m_drivetrain.driveWithJoysticksExecute(speed, rotation);
-    m_drivetrain.driveWithJoystick(m_driverPad, true);
+    // TODO: replace with updated method
+    // m_swerve.driveWithJoysticksExecute(speed, rotation);
+    m_swerve.driveWithJoystick(m_driverPad, true);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted)
   {
-    //TODO: replace with updated method
-    //m_drivetrain.driveWithJoysticksEnd( );
+    // TODO: replace with updated method
+    // m_swerve.driveWithJoysticksEnd( );
   }
 
   // Returns true when the command should end.
