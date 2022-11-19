@@ -241,6 +241,64 @@ public class Constants
     public static final double kCameraLensBackTilt = Units.degreesToRadians(40.0);  // Camera backward tilt from normal
   }
 
+  public static final class AUTOConstants
+  {
+    public static final String  kOneBallLimelight_path1    = "fenderToOffTarmac";
+    public static final String  kOneBallLimelight_path2    = "shootingPosToOffTarmac";
+
+    public static final String  kDrive_path                = "startToOffTarmac";
+
+    public static final String  kDriveShoot_path1          = "startToShootingPos";
+    public static final String  kDriveShoot_path2          = "shootingPosToOffTarmac";
+
+    public static final String  kShootDriveShoot_path1     = "startToShootingPos";
+    public static final String  kShootDriveShoot_path2     = "shootingPosToBall";
+    public static final String  kShootDriveShoot_path3     = "ballToShootingPos";
+    public static final String  kShootDriveShoot_path4     = "shootingPosToOffTarmac";
+
+    public static final String  k3BallLeft_path1           = "startToShootingPos";
+    public static final String  k3BallLeft_path2           = "shootingPosToBall";
+    public static final String  k3BallLeft_path3           = "ballToShootingPos";
+    public static final String  k3BallLeft_path4           = "shootingPosToLeftBall";
+    public static final String  k3BallLeft_path5           = "leftBallToLeftShootingPos";
+
+    public static final String  k3BallRight_path1          = "startToShootingPos";
+    public static final String  k3BallRight_path2          = "shootingPosToBall";
+    public static final String  k3BallRight_path3          = "ballToShootingPos";
+    public static final String  k3BallRight_path4          = "shootingPosToRightBall";
+    public static final String  k3BallRight_path5          = "rightBallToRightShootingPos";
+    public static final String  k3BallRight_path6          = "shootingPosToOffTarmac";
+
+    public static final String  k1BallLimelight_path1      = "fenderToOffTarmac";
+    public static final String  k1BallLimelight_path2      = "shootingPosToOffTarmac";
+
+    public static final String  k1Ball2OppLeft_path1       = "startToShootingPos";
+    public static final String  k1Ball2OppLeft_path2       = "shootingPosToLeftOppBall1";
+    public static final String  k1Ball2OppLeft_path3       = "leftOppBall1ToBall2";
+    public static final String  k1Ball2OppLeft_path4       = "leftOppBall2ToShootingPos";
+
+    public static final String  k1Ball1OppRight_path1      = "rightstarttoSP";
+    public static final String  k1Ball1OppRight_path2      = "rightSPtoball";
+
+    public static final boolean k_ShootOppBall             = true;
+
+    public static final double  k_WaitTime1                = 0.0; // First wait timer - time to wait
+    public static final double  k_WaitTime2                = 0.0; // Second wait timer - time to wait
+
+    public static final String  path1                      = "forward39";
+    public static final String  path2                      = "backward39";
+    public static final String  path3                      = "rightAngleTurn";
+    public static final String  kDriveLimelightShoot_path1 = "forward39";
+    public static final String  kDriveLimelightShoot_path2 = "backward39";
+    public static final String  kShoot_path                = "startToShootingPos";
+
+    public enum AutoTimer
+    {
+      TIMER1,     // Select first auto wait timer for use
+      TIMER2      // Select second auto wait timer for use
+    };
+  }
+
   ///// 1678 Constants /////
   // toggle constants between comp bot and practice bot ("epsilon")
   public static final boolean isComp                  = true;

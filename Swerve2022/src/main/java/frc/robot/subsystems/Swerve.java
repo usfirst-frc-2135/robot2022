@@ -3,8 +3,6 @@
 
 package frc.robot.subsystems;
 
-import java.util.ArrayList;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -16,8 +14,8 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -407,6 +405,30 @@ public class Swerve extends SubsystemBase
 
     // return sanityCheck;
     return true;
+  }
+
+  ///////////////////////////////////////////////////////////////////////////////
+  //
+  // Autonomous mode - Ramsete path follower
+  //
+  public void driveWithPathFollowerInit(Trajectory trajectory, boolean useInitialPose)
+  {
+
+  }
+
+  public void driveWithPathFollowerExecute( )
+  {
+
+  }
+
+  public boolean driveWithPathFollowerIsFinished( )
+  {
+    return true;
+  }
+
+  public void driveWithPathFollowerEnd( )
+  {
+
   }
 
   ///////////////////////////////////////////////////////////////////////////////
