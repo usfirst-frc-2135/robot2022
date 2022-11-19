@@ -100,9 +100,6 @@ public class Swerve extends SubsystemBase
 
     zeroGyro( );
 
-    resetOdometry(new Pose2d( ));
-    resetAnglesToAbsolute( );
-
     mSwerveMods = new SwerveModule[ ]
     {
         new SwerveModule(0, Constants.SwerveConstants.Mod0.SwerveModuleConstants( )),
@@ -110,6 +107,10 @@ public class Swerve extends SubsystemBase
         new SwerveModule(2, Constants.SwerveConstants.Mod2.SwerveModuleConstants( )),
         new SwerveModule(3, Constants.SwerveConstants.Mod3.SwerveModuleConstants( ))
     };
+
+    resetOdometry(new Pose2d( ));
+    resetAnglesToAbsolute( );
+
   }
 
   @Override
