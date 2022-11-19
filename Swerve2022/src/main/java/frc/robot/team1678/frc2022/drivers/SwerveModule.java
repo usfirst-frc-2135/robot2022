@@ -14,7 +14,7 @@ import frc.robot.lib.math.Conversions;
 import frc.robot.lib.util.CTREConfigs;
 import frc.robot.lib.util.CTREModuleState;
 import frc.robot.lib.util.SwerveModuleConstants;
-import frc.robot.team1678.frc2022.Constants;
+import frc.robot.Constants;
 import frc.robot.team254.lib.drivers.TalonFXFactory;
 
 public class SwerveModule

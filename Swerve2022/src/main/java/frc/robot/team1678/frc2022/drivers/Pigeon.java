@@ -2,7 +2,7 @@ package frc.robot.team1678.frc2022.drivers;
 
 import com.ctre.phoenix.sensors.Pigeon2;
 
-import frc.robot.team1678.frc2022.Constants;
+import frc.robot.Constants;
 import frc.robot.team1678.frc2022.Ports;
 import frc.robot.team254.lib.geometry.Rotation2d;
 
