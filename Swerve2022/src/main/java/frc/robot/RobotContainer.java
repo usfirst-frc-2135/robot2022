@@ -112,7 +112,7 @@ public class RobotContainer
     public boolean get( )
     {
       // This returns whether the trigger is active
-      return (m_gamepad.getRawAxis(m_axis.value) > 0.5);
+      return (m_gamepad.getRawAxis(m_axis.value) > 0.25);
     }
   }
 

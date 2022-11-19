@@ -25,8 +25,6 @@ import frc.robot.Constants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.team1678.frc2022.drivers.Pigeon;
 import frc.robot.team1678.frc2022.drivers.SwerveModule;
-import frc.robot.team1678.frc2022.logger.LogStorage;
-import frc.robot.team1678.frc2022.logger.LoggingSystem;
 import frc.robot.team254.lib.util.TimeDelayedBoolean;
 
 public class Swerve extends SubsystemBase
@@ -38,9 +36,6 @@ public class Swerve extends SubsystemBase
 
   // status variable for being enabled
   public boolean                mIsEnabled          = false;
-
-  // logger
-  LogStorage<PeriodicIO>        mStorage            = null;
 
   // wants vision aim during auto
   public boolean                mWantsAutoVisionAim = false;
@@ -651,7 +646,7 @@ public class Swerve extends SubsystemBase
     mPeriodicIO.vision_align_target_angle = Math.toDegrees(mLimelightVisionAlignGoal);
     mPeriodicIO.swerve_heading = MathUtil.inputModulus(mPigeon.getYaw( ).getDegrees( ), 0, 360);
 
-    SendLog( );
+    // SendLog( );
   }
 
   public static class PeriodicIO
@@ -677,65 +672,65 @@ public class Swerve extends SubsystemBase
 
   }
 
-  //logger
-  // @Override
-  public void registerLogger(LoggingSystem LS)
-  {
-    SetupLog( );
-    LS.register(mStorage, "SWERVE_LOGS.csv");
-  }
+  // //logger
+  // // @Override
+  // public void registerLogger(LoggingSystem LS)
+  // {
+  //   SetupLog( );
+  //   LS.register(mStorage, "SWERVE_LOGS.csv");
+  // }
 
-  public void SetupLog( )
-  {
-    mStorage = new LogStorage<PeriodicIO>( );
+  // public void SetupLog( )
+  // {
+  //   mStorage = new LogStorage<PeriodicIO>( );
 
-    ArrayList<String> headers = new ArrayList<String>( );
-    headers.add("timestamp");
-    headers.add("is_enabled");
-    headers.add("odometry_pose_x");
-    headers.add("odometry_pose_y");
-    headers.add("odometry_pose_rot");
-    headers.add("pigeon_heading");
-    headers.add("robot_pitch");
-    headers.add("robot_roll");
-    headers.add("snap_target");
-    headers.add("vision_align_target_angle");
-    headers.add("swerve_heading");
-    for (SwerveModule module : this.mSwerveMods)
-    {
-      headers.add(module.moduleNumber + "_angle");
-      headers.add(module.moduleNumber + "_desired_angle");
-      headers.add(module.moduleNumber + "_velocity");
-      headers.add(module.moduleNumber + "_cancoder");
-    }
+  //   ArrayList<String> headers = new ArrayList<String>( );
+  //   headers.add("timestamp");
+  //   headers.add("is_enabled");
+  //   headers.add("odometry_pose_x");
+  //   headers.add("odometry_pose_y");
+  //   headers.add("odometry_pose_rot");
+  //   headers.add("pigeon_heading");
+  //   headers.add("robot_pitch");
+  //   headers.add("robot_roll");
+  //   headers.add("snap_target");
+  //   headers.add("vision_align_target_angle");
+  //   headers.add("swerve_heading");
+  //   for (SwerveModule module : this.mSwerveMods)
+  //   {
+  //     headers.add(module.moduleNumber + "_angle");
+  //     headers.add(module.moduleNumber + "_desired_angle");
+  //     headers.add(module.moduleNumber + "_velocity");
+  //     headers.add(module.moduleNumber + "_cancoder");
+  //   }
 
-    mStorage.setHeaders(headers);
-  }
+  //   mStorage.setHeaders(headers);
+  // }
 
-  public void SendLog( )
-  {
-    ArrayList<Number> items = new ArrayList<Number>( );
-    items.add(Timer.getFPGATimestamp( ));
-    items.add(mIsEnabled ? 1.0 : 0.0);
-    items.add(mPeriodicIO.odometry_pose_x);
-    items.add(mPeriodicIO.odometry_pose_y);
-    items.add(mPeriodicIO.odometry_pose_rot);
-    items.add(mPeriodicIO.pigeon_heading);
-    items.add(mPeriodicIO.robot_pitch);
-    items.add(mPeriodicIO.robot_roll);
-    items.add(mPeriodicIO.snap_target);
-    items.add(mPeriodicIO.vision_align_target_angle);
-    items.add(mPeriodicIO.swerve_heading);
-    for (SwerveModule module : this.mSwerveMods)
-    {
-      items.add(module.getState( ).angle.getDegrees( ));
-      items.add(module.getTargetAngle( ));
-      items.add(module.getState( ).speedMetersPerSecond);
-      items.add(MathUtil.inputModulus(module.getCanCoder( ).getDegrees( ) - module.angleOffset, 0, 360));
-    }
+  // public void SendLog( )
+  // {
+  //   ArrayList<Number> items = new ArrayList<Number>( );
+  //   items.add(Timer.getFPGATimestamp( ));
+  //   items.add(mIsEnabled ? 1.0 : 0.0);
+  //   items.add(mPeriodicIO.odometry_pose_x);
+  //   items.add(mPeriodicIO.odometry_pose_y);
+  //   items.add(mPeriodicIO.odometry_pose_rot);
+  //   items.add(mPeriodicIO.pigeon_heading);
+  //   items.add(mPeriodicIO.robot_pitch);
+  //   items.add(mPeriodicIO.robot_roll);
+  //   items.add(mPeriodicIO.snap_target);
+  //   items.add(mPeriodicIO.vision_align_target_angle);
+  //   items.add(mPeriodicIO.swerve_heading);
+  //   for (SwerveModule module : this.mSwerveMods)
+  //   {
+  //     items.add(module.getState( ).angle.getDegrees( ));
+  //     items.add(module.getTargetAngle( ));
+  //     items.add(module.getState( ).speedMetersPerSecond);
+  //     items.add(MathUtil.inputModulus(module.getCanCoder( ).getDegrees( ) - module.angleOffset, 0, 360));
+  //   }
 
-    // send data to logging storage
-    mStorage.addData(items);
-  }
+  //   // send data to logging storage
+  //   mStorage.addData(items);
+  // }
 
 }
