@@ -79,7 +79,7 @@ public class RobotContainer
   private static RobotContainer m_robotContainer = new RobotContainer( );
 
   // The robot's subsystems
-  public final Swerve           m_swerve         = new Swerve( );
+  public final Swerve           m_swerve         = Swerve.getInstance( );
   public final Intake           m_intake         = new Intake( );
   public final FloorConveyor    m_floorConveyor  = new FloorConveyor( );
   public final TowerConveyor    m_towerConveyor  = new TowerConveyor( );

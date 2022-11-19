@@ -24,9 +24,7 @@ public class DriveResetSensors extends CommandBase
   @Override
   public void initialize( )
   {
-    //TODO: replace with updated ones
-    //m_swerve.resetEncoders( );
-    //m_swerve.resetGyro( );
+    m_swerve.zeroGyro(0.0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

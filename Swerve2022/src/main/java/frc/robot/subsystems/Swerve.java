@@ -100,6 +100,9 @@ public class Swerve extends SubsystemBase
 
     zeroGyro( );
 
+    resetOdometry(new Pose2d( ));
+    resetAnglesToAbsolute( );
+
     mSwerveMods = new SwerveModule[ ]
     {
         new SwerveModule(0, Constants.SwerveConstants.Mod0.SwerveModuleConstants( )),
@@ -113,8 +116,9 @@ public class Swerve extends SubsystemBase
   public void periodic( )
   {
     // This method will be called once per scheduler run
-    readPeriodicInputs( );
     updateSwerveOdometry( );
+    readPeriodicInputs( );
+    updateSmartDashboard( );
   }
 
   @Override
@@ -144,6 +148,17 @@ public class Swerve extends SubsystemBase
   //
   // Periodic helper methods
   //
+  private void updateSmartDashboard( )
+  {
+    SmartDashboard.putNumber("0 - Speed", mInstance.mSwerveMods[0].getState( ).speedMetersPerSecond);
+    SmartDashboard.putNumber("0 - Angle", mInstance.mSwerveMods[0].getState( ).angle.getDegrees( ));
+    SmartDashboard.putNumber("1 - Speed", mInstance.mSwerveMods[1].getState( ).speedMetersPerSecond);
+    SmartDashboard.putNumber("1 - Angle", mInstance.mSwerveMods[1].getState( ).angle.getDegrees( ));
+    SmartDashboard.putNumber("2 - Speed", mInstance.mSwerveMods[2].getState( ).speedMetersPerSecond);
+    SmartDashboard.putNumber("2 - Angle", mInstance.mSwerveMods[2].getState( ).angle.getDegrees( ));
+    SmartDashboard.putNumber("3 - Speed", mInstance.mSwerveMods[3].getState( ).speedMetersPerSecond);
+    SmartDashboard.putNumber("3 - Angle", mInstance.mSwerveMods[3].getState( ).angle.getDegrees( ));
+  }
 
   ///////////////////////////////////////////////////////////////////////////////
   //

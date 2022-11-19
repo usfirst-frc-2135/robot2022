@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.lib.util.CTREConfigs;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -26,13 +27,15 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  */
 public class Robot extends TimedRobot
 {
-  private Command        m_autonomousCommand;
-  private RobotContainer m_robotContainer;
+  private Command           m_autonomousCommand;
+  private RobotContainer    m_robotContainer;
 
-  private boolean        m_faultsCleared = false;
-  private double         m_waitTime1     = 0.0;
-  private double         m_waitTime2     = 0.0;
-  private boolean        m_shootOppBall  = false;
+  private boolean           m_faultsCleared = false;
+  private double            m_waitTime1     = 0.0;
+  private double            m_waitTime2     = 0.0;
+  private boolean           m_shootOppBall  = false;
+
+  public static CTREConfigs ctreConfigs;
 
   /**
    * This function is run when the robot is first started up and should be used for any initialization
@@ -66,6 +69,8 @@ public class Robot extends TimedRobot
     PortForwarder.add(5803, "limelight.local", 5803);
     PortForwarder.add(5804, "limelight.local", 5804);
     PortForwarder.add(5805, "limelight.local", 5805);
+
+    ctreConfigs = new CTREConfigs( );
   }
 
   /**
