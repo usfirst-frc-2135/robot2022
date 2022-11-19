@@ -199,30 +199,12 @@ public class Swerve extends SubsystemBase
   /**
    * Method to drive the robot using joystick info.
    *
-   * @param xSpeed
-   *          Speed of the robot in the x direction (forward).
-   * @param ySpeed
-   *          Speed of the robot in the y direction (sideways).
-   * @param rot
-   *          Angular rate of the robot.
+   * @param driverPad
+   *          XboxController used by driver.
    * @param fieldRelative
-   *          Whether the provided x and y speeds are relative to the
-   *          field.
+   *          Whether the provided x and y speeds are relative to the field.
    */
-  @SuppressWarnings("ParameterName")
-  public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative)
-  {
-    // var swerveModuleStates = m_kinematics.toSwerveModuleStates(
-    //     fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_pigeonIMU.getRotation2d( ))
-    //         : new ChassisSpeeds(xSpeed, ySpeed, rot));
-    // SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
-    // m_frontLeft.setDesiredState(swerveModuleStates[0]);
-    // m_frontRight.setDesiredState(swerveModuleStates[1]);
-    // m_backLeft.setDesiredState(swerveModuleStates[2]);
-    // m_backRight.setDesiredState(swerveModuleStates[3]);
-  }
-
-  public void driveWithJoystick(XboxController driverPad, boolean fieldRelative)
+  public void driveWithGamepad(XboxController driverPad, boolean fieldRelative)
   {
     // Get x speed. Invert this because Xbox controllers return negative values when pushing forward.
     final var xSpeed = -m_xspeedLimiter.calculate(MathUtil.applyDeadband(driverPad.getLeftY( ), 0.02)) * SwerveConstants.maxSpeed;
@@ -237,7 +219,9 @@ public class Swerve extends SubsystemBase
     final var rot =
         -m_rotLimiter.calculate(MathUtil.applyDeadband(driverPad.getRightX( ), 0.02)) * SwerveConstants.maxAngularVelocity;
 
-    drive(xSpeed, ySpeed, rot, fieldRelative);
+    Translation2d swerveTranslation = new Translation2d(xSpeed, ySpeed);
+
+    drive(swerveTranslation, rot, fieldRelative, true);
   }
 
   ///////////////////////////////////////////////////////////////////////////////

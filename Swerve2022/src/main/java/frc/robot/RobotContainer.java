@@ -38,8 +38,8 @@ public class RobotContainer
   public final Power            m_power          = new Power( );
 
   // Joysticks
-  private final XboxController  m_driver         = new XboxController(0);
-  private final XboxController  m_operator       = new XboxController(1);
+  private final XboxController  m_driverPad      = new XboxController(0);
+  private final XboxController  m_operatorPad    = new XboxController(1);
 
   // A chooser for autonomous commands
   SendableChooser<Command>      m_chooser        = new SendableChooser<>( );
@@ -133,8 +133,7 @@ public class RobotContainer
   private void initDefaultCommands( )
   {
     // Configure default commands for these subsystems
-    m_swerve.setDefaultCommand(
-        new DriveTeleop(m_swerve, m_driver, XboxController.Axis.kLeftY.value, XboxController.Axis.kRightX.value));
+    m_swerve.setDefaultCommand(new DriveTeleop(m_swerve, m_driverPad));
 
     // Configure autonomous sendable chooser
   }
@@ -149,12 +148,12 @@ public class RobotContainer
 
   public XboxController getDriver( )
   {
-    return m_driver;
+    return m_driverPad;
   }
 
   public XboxController getOperator( )
   {
-    return m_operator;
+    return m_operatorPad;
   }
 
   /**
