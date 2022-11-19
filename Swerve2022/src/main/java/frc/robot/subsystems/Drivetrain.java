@@ -38,10 +38,10 @@ public class Drivetrain extends SubsystemBase
   public static final double          kMaxSpeed            = 3.0;             // 3 meters per second
   public static final double          kMaxAngularSpeed     = Math.PI;         // 1/2 rotation per second
 
-  private final Translation2d         m_frontLeftLocation  = new Translation2d(0.381, 0.381);
-  private final Translation2d         m_frontRightLocation = new Translation2d(0.381, -0.381);
-  private final Translation2d         m_backLeftLocation   = new Translation2d(-0.381, 0.381);
-  private final Translation2d         m_backRightLocation  = new Translation2d(-0.381, -0.381);
+  private final Translation2d         m_frontLeftLocation  = new Translation2d(0.427, 0.427);
+  private final Translation2d         m_frontRightLocation = new Translation2d(0.427, -0.427);
+  private final Translation2d         m_backLeftLocation   = new Translation2d(-0.427, 0.427);
+  private final Translation2d         m_backRightLocation  = new Translation2d(-0.427, -0.427);
 
   private final SwerveModule          m_frontLeft          =
       new SwerveModule(DTConsts.kLFDrive1CANID, DTConsts.kLFTurn2CANID, DTConsts.kLFCANCoderCANID);
@@ -110,6 +110,7 @@ public class Drivetrain extends SubsystemBase
   {
     // This method will be called once per scheduler run
     updateOdometry( );
+    updateDashboardValues( );
   }
 
   @Override
@@ -158,7 +159,22 @@ public class Drivetrain extends SubsystemBase
 
   private void updateDashboardValues( )
   {
+    SmartDashboard.putNumber("SW_FLDrive", m_frontLeft.m_driveMotor.getMotorOutputPercent( ));
+    SmartDashboard.putNumber("SW_FRDrive", m_frontRight.m_driveMotor.getMotorOutputPercent( ));
+    SmartDashboard.putNumber("SW_BLDrive", m_backLeft.m_driveMotor.getMotorOutputPercent( ));
+    SmartDashboard.putNumber("SW_BRDrive", m_backRight.m_driveMotor.getMotorOutputPercent( ));
 
+    SmartDashboard.putNumber("SW_FLTurn", m_frontLeft.m_turningMotor.getMotorOutputPercent( ));
+    SmartDashboard.putNumber("SW_FRTurn", m_frontRight.m_turningMotor.getMotorOutputPercent( ));
+    SmartDashboard.putNumber("SW_BLTurn", m_backLeft.m_turningMotor.getMotorOutputPercent( ));
+    SmartDashboard.putNumber("SW_BRTurn", m_backRight.m_turningMotor.getMotorOutputPercent( ));
+
+    SmartDashboard.putNumber("SW_FLCANCoder", m_frontLeft.m_turningCANCoder.getPosition( ));
+    SmartDashboard.putNumber("SW_FRCANCoder", m_frontRight.m_turningCANCoder.getPosition( ));
+    SmartDashboard.putNumber("SW_BLCANCoder", m_backLeft.m_turningCANCoder.getPosition( ));
+    SmartDashboard.putNumber("SW_BRCANCoder", m_backRight.m_turningCANCoder.getPosition( ));
+
+    SmartDashboard.putNumber("SW_Heading", m_pigeonIMU.getAngle( ));
   }
 
   ///////////////////////////////////////////////////////////////////////////////
