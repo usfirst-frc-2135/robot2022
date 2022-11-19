@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.FCConsts;
 import frc.robot.Constants.FCConsts.FCMode;
+import frc.robot.Constants.Ports;
 import frc.robot.team2135.PhoenixUtil;
 
 /**
@@ -26,7 +27,7 @@ public class FloorConveyor extends SubsystemBase
   private static final int                CANTIMEOUT            = 30;  // CAN timeout in msec
 
   // Devices and simulation objects
-  private WPI_TalonFX                     m_motorFC8            = new WPI_TalonFX(FCConsts.kFC8CANID);
+  private WPI_TalonFX                     m_motorFC8            = new WPI_TalonFX(Ports.kCANID_FloorConv);
 
   private SupplyCurrentLimitConfiguration m_supplyCurrentLimits = new SupplyCurrentLimitConfiguration(true, 45.0, 45.0, 0.001);
   private StatorCurrentLimitConfiguration m_statorCurrentLimits = new StatorCurrentLimitConfiguration(true, 80.0, 80.0, 0.001);

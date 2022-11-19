@@ -20,6 +20,39 @@ import frc.robot.lib.util.SwerveModuleConstants;
  */
 public class Constants
 {
+  public static final class Ports
+  {
+    public static final String kCANivoreName     = "canivore1";
+
+    public static final int    kCANID_DriveLF    = 1;
+    public static final int    kCANID_TurnLF     = 2;
+    public static final int    kCANID_CANCoderLF = 3;
+
+    public static final int    kCANID_DriveRF    = 4;
+    public static final int    kCANID_TurnRF     = 5;
+    public static final int    kCANID_CANCoderRF = 6;
+
+    public static final int    kCANID_DriveLR    = 7;
+    public static final int    kCANID_TurnLR     = 8;
+    public static final int    kCANID_CANCoderLR = 9;
+
+    public static final int    kCANID_DriveRR    = 10;
+    public static final int    kCANID_TurnRR     = 11;
+    public static final int    kCANID_CANCoderRR = 12;
+
+    public static final int    kCANID_Pigeon2    = 13;
+
+    public static final int    kCANID_FloorConv  = 16;
+    public static final int    kCANID_TowerConv  = 17;
+    public static final int    kCANID_Shooter    = 18;
+
+    // Digital I/Os
+    public static final int    kDIO_CargoDetect  = 2;
+
+    // PWM outputs
+    public static final int    kPWM_Intake       = 1;
+  }
+
   public static final class Falcon500
   {
     public static int          kMaxRPM               = 6380;             // free speed for Falcon 500 motor
@@ -40,25 +73,6 @@ public class Constants
 
   public static final class SWConsts
   {
-    public static final String kCANBusString          = "canivore1";
-
-    public static final int    kLFDrive1CANID         = 1;
-    public static final int    kLFTurn2CANID          = 2;
-    public static final int    kRFDrive3CANID         = 3;
-    public static final int    kRFTurn4CANID          = 4;
-
-    public static final int    kLRDrive5CANID         = 5;
-    public static final int    kLRTurn6CANID          = 6;
-    public static final int    kRRDrive7CANID         = 7;
-    public static final int    kRRTurn8CANID          = 8;
-
-    public static final int    kLFCANCoderCANID       = 1;
-    public static final int    kRFCANCoderCANID       = 2;
-    public static final int    kLRCANCoderCANID       = 3;
-    public static final int    kRRCANCoderCANID       = 4;
-
-    public static final int    kPigeonCANID           = 0;
-
     // Swerve specs
     public static final double kWheelDiaMeters        = Units.inchesToMeters(4.0); // 4in (39.37 in/meter)
     public static final double kGearRatio             = 6.75;
@@ -103,7 +117,6 @@ public class Constants
   public static final class INConsts
   {
     // public static final int kIN8CANID = 6;
-    public static final int    kINPWM1         = 1;
     public static final int    kArmSolenoid    = 0;
 
     public static final double kINAcquireSpeed = 0.6;
@@ -119,8 +132,6 @@ public class Constants
 
   public static final class FCConsts
   {
-    public static final int    kFC8CANID           = 8;
-
     public static final double kFCAcquireSpeed     = 1.0;
     public static final double kFCAcquireSpeedSlow = 0.2;
     public static final double kFCExpelSpeedFast   = -1.0;
@@ -136,9 +147,6 @@ public class Constants
 
   public static final class TCConsts
   {
-    public static final int    kTC9CANID           = 9;
-    public static final int    kCargoDIO           = 2;
-
     public static final double kTCAcquireSpeed     = 1.0;
     public static final double kTCAcquireSpeedSlow = 0.2;
     public static final double kTCExpelSpeed       = -0.2;
@@ -156,8 +164,6 @@ public class Constants
 
   public static final class SHConsts
   {
-    public static final int                      kSH11CANID               = 11;
-
     public static final double                   kFlywheelGearRatio       = (18.0 / 12.0);
     public static final double                   kFlywheelCPR             = Falcon500.kEncoderCPR * kFlywheelGearRatio;
 
@@ -397,7 +403,7 @@ public class Constants
 
       public static SwerveModuleConstants SwerveModuleConstants( )
       {
-        return new SwerveModuleConstants(SWConsts.kLFDrive1CANID, SWConsts.kLFTurn2CANID, SWConsts.kLFCANCoderCANID,
+        return new SwerveModuleConstants(Ports.kCANID_DriveLF, Ports.kCANID_TurnLF, Ports.kCANID_CANCoderLF,
             isComp ? compAngleOffset : epsilonAngleOffset);
       }
     }
@@ -410,7 +416,7 @@ public class Constants
 
       public static SwerveModuleConstants SwerveModuleConstants( )
       {
-        return new SwerveModuleConstants(SWConsts.kRFDrive3CANID, SWConsts.kRFTurn4CANID, SWConsts.kRFCANCoderCANID,
+        return new SwerveModuleConstants(Ports.kCANID_DriveRF, Ports.kCANID_TurnRF, Ports.kCANID_CANCoderRF,
             isComp ? compAngleOffset : epsilonAngleOffset);
       }
     }
@@ -423,7 +429,7 @@ public class Constants
 
       public static SwerveModuleConstants SwerveModuleConstants( )
       {
-        return new SwerveModuleConstants(SWConsts.kLRDrive5CANID, SWConsts.kLRTurn6CANID, SWConsts.kLRCANCoderCANID,
+        return new SwerveModuleConstants(Ports.kCANID_DriveLR, Ports.kCANID_TurnLR, Ports.kCANID_CANCoderLR,
             isComp ? compAngleOffset : epsilonAngleOffset);
       }
     }
@@ -436,7 +442,7 @@ public class Constants
 
       public static SwerveModuleConstants SwerveModuleConstants( )
       {
-        return new SwerveModuleConstants(SWConsts.kRRDrive7CANID, SWConsts.kRRTurn8CANID, SWConsts.kRRCANCoderCANID,
+        return new SwerveModuleConstants(Ports.kCANID_DriveRR, Ports.kCANID_TurnRR, Ports.kCANID_CANCoderRR,
             isComp ? compAngleOffset : epsilonAngleOffset);
       }
     }

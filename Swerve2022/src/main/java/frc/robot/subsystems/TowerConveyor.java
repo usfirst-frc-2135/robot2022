@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.Ports;
 import frc.robot.Constants.TCConsts;
 import frc.robot.Constants.TCConsts.TCMode;
 import frc.robot.team2135.PhoenixUtil;
@@ -26,8 +27,8 @@ public class TowerConveyor extends SubsystemBase
   private static final int                CANTIMEOUT            = 30;  // CAN timeout in msec
 
   // Devices and simulation objects
-  private final WPI_TalonFX               m_motorTC9            = new WPI_TalonFX(TCConsts.kTC9CANID);
-  private final DigitalInput              m_cargoLimit          = new DigitalInput(TCConsts.kCargoDIO);
+  private final WPI_TalonFX               m_motorTC9            = new WPI_TalonFX(Ports.kCANID_TowerConv);
+  private final DigitalInput              m_cargoLimit          = new DigitalInput(Ports.kDIO_CargoDetect);
 
   private SupplyCurrentLimitConfiguration m_supplyCurrentLimits = new SupplyCurrentLimitConfiguration(true, 45.0, 45.0, 0.001);
   private StatorCurrentLimitConfiguration m_statorCurrentLimits = new StatorCurrentLimitConfiguration(true, 80.0, 80.0, 0.001);

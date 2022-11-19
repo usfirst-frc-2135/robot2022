@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.INConsts;
 import frc.robot.Constants.INConsts.INMode;
+import frc.robot.Constants.Ports;
 
 /**
  *
@@ -22,7 +23,7 @@ public class Intake extends SubsystemBase
 
   // Devices and simulation objects (intake was moved from CAN bus to PWM1)
   // private WPI_TalonFX m_motorIN6 = new WPI_TalonFX(INConsts.kIN6CANID);
-  private final PWMTalonFX m_motorIN6     = new PWMTalonFX(INConsts.kINPWM1);
+  private final PWMTalonFX m_motorIN6     = new PWMTalonFX(Ports.kPWM_Intake);
   private final Solenoid   m_arm          = new Solenoid(0, PneumaticsModuleType.CTREPCM, INConsts.kArmSolenoid);
 
   // @formatter:off

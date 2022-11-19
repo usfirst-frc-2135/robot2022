@@ -22,10 +22,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.Falcon500;
 import frc.robot.Constants.LEDConsts.LEDColor;
+import frc.robot.Constants.Ports;
 import frc.robot.Constants.SHConsts;
 import frc.robot.Constants.SHConsts.SHMode;
-import frc.robot.team2135.PhoenixUtil;
 import frc.robot.RobotContainer;
+import frc.robot.team2135.PhoenixUtil;
 
 /**
  *
@@ -38,7 +39,7 @@ public class Shooter extends SubsystemBase
   private static final int                SLOTINDEX                 = 0;   // Use first PID slot
 
   // Devices and simulation objects
-  private final WPI_TalonFX               m_motorSH11               = new WPI_TalonFX(SHConsts.kSH11CANID);
+  private final WPI_TalonFX               m_motorSH11               = new WPI_TalonFX(Ports.kCANID_Shooter);
 
   private final TalonFXSimCollection      m_motorSim                = new TalonFXSimCollection(m_motorSH11);
   private final FlywheelSim               m_flywheelSim             =

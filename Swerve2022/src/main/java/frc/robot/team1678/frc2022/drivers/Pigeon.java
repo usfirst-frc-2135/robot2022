@@ -3,7 +3,7 @@ package frc.robot.team1678.frc2022.drivers;
 import com.ctre.phoenix.sensors.Pigeon2;
 
 import frc.robot.Constants;
-import frc.robot.Constants.SWConsts;
+import frc.robot.Constants.Ports;
 import frc.robot.team254.lib.geometry.Rotation2d;
 
 public class Pigeon
@@ -15,7 +15,7 @@ public class Pigeon
   {
     if (mInstance == null)
     {
-      mInstance = new Pigeon(SWConsts.kPigeonCANID);
+      mInstance = new Pigeon(Ports.kCANID_Pigeon2);
     }
     return mInstance;
   }
