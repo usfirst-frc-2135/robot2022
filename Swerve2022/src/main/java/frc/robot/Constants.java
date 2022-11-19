@@ -39,7 +39,7 @@ public class Constants
     public static final double kStatorTriggerTime    = 0.001; // Default time duration of trigger that will causing limiting
   }
 
-  public static final class DTConsts
+  public static final class SWConsts
   {
     public static final String kCANBusString          = "canivore1";
 
@@ -57,6 +57,8 @@ public class Constants
     public static final int    kRFCANCoderCANID       = 2;
     public static final int    kLRCANCoderCANID       = 3;
     public static final int    kRRCANCoderCANID       = 4;
+
+    public static final int    kPigeonCANID           = 0;
 
     // Swerve specs
     public static final double kWheelDiaMeters        = Units.inchesToMeters(4.0); // 4in (39.37 in/meter)
@@ -338,7 +340,7 @@ public class Constants
 
       public static SwerveModuleConstants SwerveModuleConstants( )
       {
-        return new SwerveModuleConstants(Ports.FL_DRIVE, Ports.FL_ROTATION, Ports.FL_CANCODER,
+        return new SwerveModuleConstants(SWConsts.kLFDrive1CANID, SWConsts.kLFTurn2CANID, SWConsts.kLFCANCoderCANID,
             isComp ? compAngleOffset : epsilonAngleOffset);
       }
     }
@@ -351,7 +353,7 @@ public class Constants
 
       public static SwerveModuleConstants SwerveModuleConstants( )
       {
-        return new SwerveModuleConstants(Ports.FR_DRIVE, Ports.FR_ROTATION, Ports.FR_CANCODER,
+        return new SwerveModuleConstants(SWConsts.kRFDrive3CANID, SWConsts.kRFTurn4CANID, SWConsts.kRFCANCoderCANID,
             isComp ? compAngleOffset : epsilonAngleOffset);
       }
     }
@@ -364,7 +366,7 @@ public class Constants
 
       public static SwerveModuleConstants SwerveModuleConstants( )
       {
-        return new SwerveModuleConstants(Ports.BL_DRIVE, Ports.BL_ROTATION, Ports.BL_CANCODER,
+        return new SwerveModuleConstants(SWConsts.kLRDrive5CANID, SWConsts.kLRTurn6CANID, SWConsts.kLRCANCoderCANID,
             isComp ? compAngleOffset : epsilonAngleOffset);
       }
     }
@@ -377,7 +379,7 @@ public class Constants
 
       public static SwerveModuleConstants SwerveModuleConstants( )
       {
-        return new SwerveModuleConstants(Ports.BR_DRIVE, Ports.BR_ROTATION, Ports.BR_CANCODER,
+        return new SwerveModuleConstants(SWConsts.kRRDrive7CANID, SWConsts.kRRTurn8CANID, SWConsts.kRRCANCoderCANID,
             isComp ? compAngleOffset : epsilonAngleOffset);
       }
     }
