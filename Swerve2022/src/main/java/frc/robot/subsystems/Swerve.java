@@ -151,14 +151,26 @@ public class Swerve extends SubsystemBase
   //
   private void updateSmartDashboard( )
   {
-    SmartDashboard.putNumber("0 - Speed", mInstance.mSwerveMods[0].getState( ).speedMetersPerSecond);
-    SmartDashboard.putNumber("0 - Angle", mInstance.mSwerveMods[0].getState( ).angle.getDegrees( ));
-    SmartDashboard.putNumber("1 - Speed", mInstance.mSwerveMods[1].getState( ).speedMetersPerSecond);
-    SmartDashboard.putNumber("1 - Angle", mInstance.mSwerveMods[1].getState( ).angle.getDegrees( ));
-    SmartDashboard.putNumber("2 - Speed", mInstance.mSwerveMods[2].getState( ).speedMetersPerSecond);
-    SmartDashboard.putNumber("2 - Angle", mInstance.mSwerveMods[2].getState( ).angle.getDegrees( ));
-    SmartDashboard.putNumber("3 - Speed", mInstance.mSwerveMods[3].getState( ).speedMetersPerSecond);
-    SmartDashboard.putNumber("3 - Angle", mInstance.mSwerveMods[3].getState( ).angle.getDegrees( ));
+    SmartDashboard.putNumber("SWMod: 0 - Speed", mInstance.mSwerveMods[0].getState( ).speedMetersPerSecond);
+    SmartDashboard.putNumber("SWMod: 0 - Angle", mInstance.mSwerveMods[0].getState( ).angle.getDegrees( ));
+    SmartDashboard.putNumber("SWMod: 1 - Speed", mInstance.mSwerveMods[1].getState( ).speedMetersPerSecond);
+    SmartDashboard.putNumber("SWMod: 1 - Angle", mInstance.mSwerveMods[1].getState( ).angle.getDegrees( ));
+    SmartDashboard.putNumber("SWMod: 2 - Speed", mInstance.mSwerveMods[2].getState( ).speedMetersPerSecond);
+    SmartDashboard.putNumber("SWMod: 2 - Angle", mInstance.mSwerveMods[2].getState( ).angle.getDegrees( ));
+    SmartDashboard.putNumber("SWMod: 3 - Speed", mInstance.mSwerveMods[3].getState( ).speedMetersPerSecond);
+    SmartDashboard.putNumber("SWMod: 3 - Angle", mInstance.mSwerveMods[3].getState( ).angle.getDegrees( ));
+
+    SmartDashboard.putNumber("SW: pose_x", mPeriodicIO.odometry_pose_x);
+    SmartDashboard.putNumber("SW: pose_y", mPeriodicIO.odometry_pose_y);
+    SmartDashboard.putNumber("SW: pose_rot", mPeriodicIO.odometry_pose_rot);
+
+    SmartDashboard.putNumber("SW: pigeon-hdg", mPeriodicIO.pigeon_heading);
+    SmartDashboard.putNumber("SW: pitch", mPeriodicIO.robot_pitch);
+    SmartDashboard.putNumber("SW: roll", mPeriodicIO.robot_roll);
+
+    SmartDashboard.putNumber("SW: snap", mPeriodicIO.snap_target);
+    SmartDashboard.putNumber("SW: vision", mPeriodicIO.vision_align_target_angle);
+    SmartDashboard.putNumber("SW: swerve-hdg", mPeriodicIO.swerve_heading);
   }
 
   ///////////////////////////////////////////////////////////////////////////////

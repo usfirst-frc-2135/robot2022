@@ -42,6 +42,7 @@ public class Constants
 
     public static final int    kCANID_Pigeon2    = 13;
 
+    public static final int    kCANID_Intake     = 15;
     public static final int    kCANID_FloorConv  = 16;
     public static final int    kCANID_TowerConv  = 17;
     public static final int    kCANID_Shooter    = 18;
