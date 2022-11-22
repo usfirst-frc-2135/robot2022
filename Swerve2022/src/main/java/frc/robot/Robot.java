@@ -3,9 +3,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.hal.FRCNetComm.tInstances;
-import edu.wpi.first.hal.FRCNetComm.tResourceType;
-import edu.wpi.first.hal.HAL;
 import edu.wpi.first.util.net.PortForwarder;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -33,7 +30,6 @@ public class Robot extends TimedRobot
   private boolean           m_faultsCleared = false;
   private double            m_waitTime1     = 0.0;
   private double            m_waitTime2     = 0.0;
-  private boolean           m_shootOppBall  = false;
 
   public static CTREConfigs ctreConfigs;
 
@@ -51,7 +47,7 @@ public class Robot extends TimedRobot
     // Instantiate our RobotContainer. This will perform all our button bindings, and put our autonomous
     // chooser on the dashboard.
     m_robotContainer = RobotContainer.getInstance( );
-    HAL.report(tResourceType.kResourceType_Framework, tInstances.kFramework_RobotBuilder);
+    ctreConfigs = new CTREConfigs( );
 
     LiveWindow.disableAllTelemetry( );
 
@@ -61,7 +57,6 @@ public class Robot extends TimedRobot
 
     SmartDashboard.putNumber("AUTO_WaitTime1", m_waitTime1);
     SmartDashboard.putNumber("AUTO_WaitTime2", m_waitTime2);
-    SmartDashboard.putBoolean("AUTO_ShootOppBall", m_shootOppBall);
 
     PortForwarder.add(5800, "limelight.local", 5800);
     PortForwarder.add(5801, "limelight.local", 5801);
@@ -69,8 +64,6 @@ public class Robot extends TimedRobot
     PortForwarder.add(5803, "limelight.local", 5803);
     PortForwarder.add(5804, "limelight.local", 5804);
     PortForwarder.add(5805, "limelight.local", 5805);
-
-    ctreConfigs = new CTREConfigs( );
   }
 
   /**

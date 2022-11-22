@@ -79,7 +79,7 @@ public class RobotContainer
   private static RobotContainer m_robotContainer = new RobotContainer( );
 
   // The robot's subsystems
-  public final Swerve           m_swerve         = Swerve.getInstance( );
+  public final Swerve           m_swerve         = new Swerve( );
   public final Intake           m_intake         = new Intake( );
   public final FloorConveyor    m_floorConveyor  = new FloorConveyor( );
   public final TowerConveyor    m_towerConveyor  = new TowerConveyor( );
@@ -120,19 +120,7 @@ public class RobotContainer
     // Smartdashboard Subsystems
 
     // SmartDashboard Buttons
-    // SmartDashboard.putData("Auto1Ball1OppRight",
-    //     new Auto1Ball1OppRight(m_swerve, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
-    // SmartDashboard.putData("Auto1Ball2OppLeft",
-    //     new Auto1Ball2OppLeft(m_swerve, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
-    // SmartDashboard.putData("Auto1BallLimelight",
-    //     new Auto1BallLimelight(m_swerve, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
-    // SmartDashboard.putData("Auto3BallLeft",
-    //     new Auto3BallLeft(m_swerve, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
-    // SmartDashboard.putData("Auto3BallRight",
-    //     new Auto3BallRight(m_swerve, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
     SmartDashboard.putData("AutoDrive", new AutoDrive(m_swerve, m_intake));
-    // SmartDashboard.putData("AutoDriveLimelightShoot",
-    //     new AutoDriveLimelightShoot(m_swerve, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
     // SmartDashboard.putData("AutoDrivePath", new AutoDrivePath(m_swerve, "simCurvePath", true));
     SmartDashboard.putData("AutoDriveShoot",
         new AutoDriveShoot(m_swerve, m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision));
@@ -227,18 +215,21 @@ public class RobotContainer
   {
     ///////////////////////////////////////////////////////
     // Driver Controller Assignments
-    final JoystickButton driverA = new JoystickButton(m_driverPad, XboxController.Button.kA.value);
-    final JoystickButton driverB = new JoystickButton(m_driverPad, XboxController.Button.kB.value);
-    final JoystickButton driverX = new JoystickButton(m_driverPad, XboxController.Button.kX.value);
-    final JoystickButton driverY = new JoystickButton(m_driverPad, XboxController.Button.kY.value);
+    // final JoystickButton driverA = new JoystickButton(m_driverPad, XboxController.Button.kA.value);
+    // final JoystickButton driverB = new JoystickButton(m_driverPad, XboxController.Button.kB.value);
+    // final JoystickButton driverX = new JoystickButton(m_driverPad, XboxController.Button.kX.value);
+    // final JoystickButton driverY = new JoystickButton(m_driverPad, XboxController.Button.kY.value);
+    //
     final JoystickButton driverLeftBumper = new JoystickButton(m_driverPad, XboxController.Button.kLeftBumper.value);
     final JoystickButton driverRightBumper = new JoystickButton(m_driverPad, XboxController.Button.kRightBumper.value);
-    final JoystickButton driverBack = new JoystickButton(m_driverPad, XboxController.Button.kBack.value);
+    // final JoystickButton driverBack = new JoystickButton(m_driverPad, XboxController.Button.kBack.value);
     final JoystickButton driverStart = new JoystickButton(m_driverPad, XboxController.Button.kStart.value);
-    final POVButton driverUp = new POVButton(m_driverPad, 0);
-    final POVButton driverRight = new POVButton(m_driverPad, 90);
-    final POVButton driverDown = new POVButton(m_driverPad, 180);
-    final POVButton driverLeft = new POVButton(m_driverPad, 270);
+    //
+    // final POVButton driverUp = new POVButton(m_driverPad, 0);
+    // final POVButton driverRight = new POVButton(m_driverPad, 90);
+    // final POVButton driverDown = new POVButton(m_driverPad, 180);
+    // final POVButton driverLeft = new POVButton(m_driverPad, 270);
+    //
     // @formatter:off
     // Xbox enums { leftX = 0, leftY = 1, leftTrigger = 2, rightTrigger = 3, rightX = 4, rightY = 5}
     final AxisTrigger driverLeftTrigger = new AxisTrigger(m_driverPad, XboxController.Axis.kLeftTrigger);
@@ -249,24 +240,25 @@ public class RobotContainer
     // @formatter:on
 
     // Driver - A, B, X, Y
-    driverB.whenPressed(new Dummy(XboxController.Button.kB.value), true);
-    driverX.whenPressed(new Dummy(XboxController.Button.kX.value), true);
-    driverY.whenPressed(new Dummy(XboxController.Button.kY.value), true);
-
+    // driverA.whenPressed(new Dummy(XboxController.Button.kA.value), true);
+    // driverB.whenPressed(new Dummy(XboxController.Button.kB.value), true);
+    // driverX.whenPressed(new Dummy(XboxController.Button.kX.value), true);
+    // driverY.whenPressed(new Dummy(XboxController.Button.kY.value), true);
+    //
     // Driver - Bumpers, start, back
     driverLeftBumper.whenPressed(new IntakingAction(m_intake, m_floorConveyor, m_towerConveyor), true);
     driverLeftBumper.whenReleased(new IntakingStop(m_intake, m_floorConveyor, m_towerConveyor), true);
     driverRightBumper.whenPressed(new ScoringActionLowerHub(m_intake, m_floorConveyor, m_towerConveyor, m_shooter, 10.0), true);
     driverRightBumper.whenReleased(new ScoringStop(m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision), true);
-    driverBack.whenPressed(new Dummy(XboxController.Button.kBack.value), true);
+    // driverBack.whenPressed(new Dummy(XboxController.Button.kBack.value), true);
     driverStart.whenPressed(new VisionOn(m_vision, VIRequests.VISION_TOGGLE), true);
-
+    //
     // Driver - POV buttons
-    driverUp.whenPressed(new Dummy(0), true);
-    driverRight.whenPressed(new Dummy(90), true);
-    driverDown.whenPressed(new Dummy(180), true);
-    driverLeft.whenPressed(new Dummy(270), true);
-
+    // driverUp.whenPressed(new Dummy(0), true);
+    // driverRight.whenPressed(new Dummy(90), true);
+    // driverDown.whenPressed(new Dummy(180), true);
+    // driverLeft.whenPressed(new Dummy(270), true);
+    //
     // Driver - Triggers
     driverLeftTrigger.whenActive(new Dummy(256));
     driverRightTrigger
@@ -279,17 +271,20 @@ public class RobotContainer
     final JoystickButton operA = new JoystickButton(m_operatorPad, XboxController.Button.kA.value);
     final JoystickButton operB = new JoystickButton(m_operatorPad, XboxController.Button.kB.value);
     final JoystickButton operX = new JoystickButton(m_operatorPad, XboxController.Button.kX.value);
-    final JoystickButton operY = new JoystickButton(m_operatorPad, XboxController.Button.kY.value);
+    // final JoystickButton operY = new JoystickButton(m_operatorPad, XboxController.Button.kY.value);
+    //
     final JoystickButton operLeftBumper = new JoystickButton(m_operatorPad, XboxController.Button.kLeftBumper.value);
     final JoystickButton operRightBumper = new JoystickButton(m_operatorPad, XboxController.Button.kRightBumper.value);
-    final JoystickButton operBack = new JoystickButton(m_operatorPad, XboxController.Button.kBack.value);
-    final JoystickButton operStart = new JoystickButton(m_operatorPad, XboxController.Button.kStart.value);
-    final POVButton operUp = new POVButton(m_operatorPad, 0);
-    final POVButton operRight = new POVButton(m_operatorPad, 90);
-    final POVButton operDown = new POVButton(m_operatorPad, 180);
-    final POVButton operLeft = new POVButton(m_operatorPad, 270);
+    // final JoystickButton operBack = new JoystickButton(m_operatorPad, XboxController.Button.kBack.value);
+    // final JoystickButton operStart = new JoystickButton(m_operatorPad, XboxController.Button.kStart.value);
+    //
+    // final POVButton operUp = new POVButton(m_operatorPad, 0);
+    // final POVButton operRight = new POVButton(m_operatorPad, 90);
+    // final POVButton operDown = new POVButton(m_operatorPad, 180);
+    // final POVButton operLeft = new POVButton(m_operatorPad, 270);
+    //
     // Xbox enums { leftX = 0, leftY = 1, leftTrigger = 2, rightTrigger = 3, rightX = 4, rightY = 5}
-    final AxisTrigger operLeftTrigger = new AxisTrigger(m_operatorPad, XboxController.Axis.kLeftTrigger);
+    // final AxisTrigger operLeftTrigger = new AxisTrigger(m_operatorPad, XboxController.Axis.kLeftTrigger);
     final AxisTrigger operRightTrigger = new AxisTrigger(m_operatorPad, XboxController.Axis.kRightTrigger);
     // Xbox on MacOS { leftX = 0, leftY = 1, rightX = 2, rightY = 3, leftTrigger = 5, rightTrigger = 4}
     // final AxisTrigger operLeftTrigger = new AxisTrigger(m_operatorPad, XboxController.Axis.rightX);
@@ -300,15 +295,23 @@ public class RobotContainer
     operB.whenPressed(new ExhaustingAction(m_intake, m_floorConveyor, m_towerConveyor), true);
     operB.whenReleased(new ExhaustingStop(m_intake, m_floorConveyor, m_towerConveyor), true);
     operX.whenPressed(new ScoringStop(m_intake, m_floorConveyor, m_towerConveyor, m_shooter, m_vision), true);
-
+    // operY.whenPressed(new Dummy(XboxController.Button.kY.value), true);
+    //
     // Operator - Bumpers, start, back
     operLeftBumper.whenPressed(new IntakingAction(m_intake, m_floorConveyor, m_towerConveyor), true);
     operLeftBumper.whenReleased(new IntakingStop(m_intake, m_floorConveyor, m_towerConveyor), true);
     operRightBumper.whenPressed(new ScoringPrime(m_shooter, m_vision), true);
-
+    // operBack.whenPressed(new Dummy(XboxController.Button.kBack.value), true);
+    // operStart.whenPressed(new Dummy(XboxController.Button.kStart.value), true);
+    //
     // Operator - POV buttons
-
+    // operUp.whenPressed(new Dummy(0), true);
+    // operRight.whenPressed(new Dummy(90), true);
+    // operDown.whenPressed(new Dummy(180), true);
+    // operLeft.whenPressed(new Dummy(270), true);
+    //
     // Operator Left/Right Trigger
+    // operLeftTrigger.whenActive(new Dummy(256));
     operRightTrigger.whileActiveContinuous(new ShooterReverse(m_shooter), true);
   }
 
@@ -318,8 +321,6 @@ public class RobotContainer
   {
     // Configure default commands for these subsystems
     m_swerve.setDefaultCommand(new DriveTeleop(m_swerve, m_driverPad));
-
-    // Configure autonomous sendable chooser
   }
 
   private void initAutonomousChooser( )

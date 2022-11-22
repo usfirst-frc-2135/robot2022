@@ -3,23 +3,10 @@ package frc.robot.team1678.frc2022.drivers;
 import com.ctre.phoenix.sensors.Pigeon2;
 
 import frc.robot.Constants;
-import frc.robot.Constants.Ports;
 import frc.robot.team254.lib.geometry.Rotation2d;
 
 public class Pigeon
 {
-
-  private static Pigeon mInstance;
-
-  public static Pigeon getInstance( )
-  {
-    if (mInstance == null)
-    {
-      mInstance = new Pigeon(Ports.kCANID_Pigeon2);
-    }
-    return mInstance;
-  }
-
   // Actual pigeon object
   private final Pigeon2 mGyro;
 
@@ -28,7 +15,7 @@ public class Pigeon
   private Rotation2d    yawAdjustmentAngle  = Rotation2d.identity( );
   private Rotation2d    rollAdjustmentAngle = Rotation2d.identity( );
 
-  private Pigeon(int port)
+  public Pigeon(int port)
   {
     mGyro = new Pigeon2(port, "canivore1");
     mGyro.configFactoryDefault( );

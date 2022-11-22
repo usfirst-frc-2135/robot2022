@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.Ports;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.team1678.frc2022.drivers.Pigeon;
 import frc.robot.team1678.frc2022.drivers.SwerveModule;
@@ -27,9 +28,6 @@ import frc.robot.team254.lib.util.TimeDelayedBoolean;
 
 public class Swerve extends SubsystemBase
 {
-
-  private static Swerve         mInstance;
-
   public PeriodicIO             mPeriodicIO         = new PeriodicIO( );
 
   // status variable for being enabled
@@ -41,7 +39,7 @@ public class Swerve extends SubsystemBase
   public SwerveDriveOdometry    swerveOdometry;
   public SwerveModule[ ]        mSwerveMods;
 
-  public Pigeon                 mPigeon             = Pigeon.getInstance( );
+  public Pigeon                 mPigeon             = new Pigeon(Ports.kCANID_Pigeon2);
 
   // chassis velocity status
   ChassisSpeeds                 chassisVelocity     = new ChassisSpeeds( );
@@ -73,15 +71,6 @@ public class Swerve extends SubsystemBase
     mLocked = lock;
   }
 
-  public static Swerve getInstance( )
-  {
-    if (mInstance == null)
-    {
-      mInstance = new Swerve( );
-    }
-    return mInstance;
-  }
-
   public Swerve( )
   {
     setName("Swerve");
@@ -111,6 +100,7 @@ public class Swerve extends SubsystemBase
     resetOdometry(new Pose2d( ));
     resetAnglesToAbsolute( );
 
+    initSmartDashboard( );
   }
 
   @Override
@@ -151,14 +141,14 @@ public class Swerve extends SubsystemBase
   //
   private void updateSmartDashboard( )
   {
-    SmartDashboard.putNumber("SWMod: 0 - Speed", mInstance.mSwerveMods[0].getState( ).speedMetersPerSecond);
-    SmartDashboard.putNumber("SWMod: 0 - Angle", mInstance.mSwerveMods[0].getState( ).angle.getDegrees( ));
-    SmartDashboard.putNumber("SWMod: 1 - Speed", mInstance.mSwerveMods[1].getState( ).speedMetersPerSecond);
-    SmartDashboard.putNumber("SWMod: 1 - Angle", mInstance.mSwerveMods[1].getState( ).angle.getDegrees( ));
-    SmartDashboard.putNumber("SWMod: 2 - Speed", mInstance.mSwerveMods[2].getState( ).speedMetersPerSecond);
-    SmartDashboard.putNumber("SWMod: 2 - Angle", mInstance.mSwerveMods[2].getState( ).angle.getDegrees( ));
-    SmartDashboard.putNumber("SWMod: 3 - Speed", mInstance.mSwerveMods[3].getState( ).speedMetersPerSecond);
-    SmartDashboard.putNumber("SWMod: 3 - Angle", mInstance.mSwerveMods[3].getState( ).angle.getDegrees( ));
+    SmartDashboard.putNumber("SWMod: 0 - Speed", mSwerveMods[0].getState( ).speedMetersPerSecond);
+    SmartDashboard.putNumber("SWMod: 0 - Angle", mSwerveMods[0].getState( ).angle.getDegrees( ));
+    SmartDashboard.putNumber("SWMod: 1 - Speed", mSwerveMods[1].getState( ).speedMetersPerSecond);
+    SmartDashboard.putNumber("SWMod: 1 - Angle", mSwerveMods[1].getState( ).angle.getDegrees( ));
+    SmartDashboard.putNumber("SWMod: 2 - Speed", mSwerveMods[2].getState( ).speedMetersPerSecond);
+    SmartDashboard.putNumber("SWMod: 2 - Angle", mSwerveMods[2].getState( ).angle.getDegrees( ));
+    SmartDashboard.putNumber("SWMod: 3 - Speed", mSwerveMods[3].getState( ).speedMetersPerSecond);
+    SmartDashboard.putNumber("SWMod: 3 - Angle", mSwerveMods[3].getState( ).angle.getDegrees( ));
 
     SmartDashboard.putNumber("SW: pose_x", mPeriodicIO.odometry_pose_x);
     SmartDashboard.putNumber("SW: pose_y", mPeriodicIO.odometry_pose_y);
@@ -244,12 +234,6 @@ public class Swerve extends SubsystemBase
     // m_throttlePid = new PIDController(m_throttlePidKp, m_throttlePidKi,
     // m_throttlePidKd);
 
-    // // TODO: Add this to eliminate robot lurch
-    // // if (m_validL1)
-    // // m_driveL1.configOpenloopRamp(m_openLoopRamp);
-    // // if (m_validR3)
-    // // m_driveR3.configOpenloopRamp(m_openLoopRamp);
-
     // RobotContainer rc = RobotContainer.getInstance( );
     // rc.m_vision.m_tyfilter.reset( );
     // rc.m_vision.m_tvfilter.reset( );
@@ -265,28 +249,26 @@ public class Swerve extends SubsystemBase
 
     // if (!tv)
     // {
-    // //TODO: add back in
-    // //velocityArcadeDrive(0.0, 0.0);
-    // if (m_limelightDebug >= 1)
-    // DataLogManager.log(getSubsystem( ) + ": DTL TV-FALSE - SIT STILL");
-    // return;
+    //   // TODO: add back in
+    //   // velocityArcadeDrive(0.0, 0.0);
+    //   if (m_limelightDebug >= 1)
+    //     DataLogManager.log(getSubsystem( ) + ": DTL TV-FALSE - SIT STILL");
+    //   return;
     // }
 
     // // get turn value - just horizontal offset from target
     // double turnOutput = -m_turnPid.calculate(tx, m_targetAngle);
 
     // if (turnOutput > 0)
-    // turnOutput = turnOutput + m_turnConstant;
+    //   turnOutput = turnOutput + m_turnConstant;
     // else if (turnOutput < 0)
-    // turnOutput = turnOutput - m_turnConstant;
+    //   turnOutput = turnOutput - m_turnConstant;
 
     // // get throttle value
     // m_limelightDistance = rc.m_vision.getDistLimelight( );
 
-    // double throttleDistance = m_throttlePid.calculate(m_limelightDistance,
-    // m_setPointDistance);
-    // double throttleOutput = throttleDistance * Math.pow(Math.cos(turnOutput *
-    // Math.PI / 180), m_throttleShape);
+    // double throttleDistance = m_throttlePid.calculate(m_limelightDistance, m_setPointDistance);
+    // double throttleOutput = throttleDistance * Math.pow(Math.cos(turnOutput * Math.PI / 180), m_throttleShape);
 
     // // put turn and throttle outputs on the dashboard
     // SmartDashboard.putNumber("DTL_turnOutput", turnOutput);
@@ -295,8 +277,7 @@ public class Swerve extends SubsystemBase
 
     // // cap max turn and throttle output
     // turnOutput = MathUtil.clamp(turnOutput, -m_turnMax, m_turnMax);
-    // throttleOutput = MathUtil.clamp(throttleOutput, -m_throttleMax,
-    // m_throttleMax);
+    // throttleOutput = MathUtil.clamp(throttleOutput, -m_throttleMax, m_throttleMax);
 
     // // put turn and throttle outputs on the dashboard
     // SmartDashboard.putNumber("DTL_turnClamped", turnOutput);
@@ -304,22 +285,21 @@ public class Swerve extends SubsystemBase
 
     // //TODO: add back in
     // // if (m_validL1 || m_validR3)
-    // // velocityArcadeDrive(throttleOutput, turnOutput);
+    // //   velocityArcadeDrive(throttleOutput, turnOutput);
 
     // if (m_limelightDebug >= 1)
-    // DataLogManager.log(getSubsystem( )
-    //   // @formatter:off
-    //           + ": DTL tv: " + tv 
-    //           + " tx: "      + String.format("%.1f", tx)
-    //           + " ty: "      + String.format("%.1f", ty)
-    //           + " lldist: "  + String.format("%.1f", m_limelightDistance)
-    //           + " distErr: " + String.format("%.1f", Math.abs(m_setPointDistance - m_limelightDistance))
-    //           //TODO: add back in
-    //           //+ " stopped: " + driveIsStopped( )
-    //           + " trnOut: "  + String.format("%.2f", turnOutput)
-    //           + " thrOut: "  + String.format("%.2f", throttleOutput)
-    //       // @formatter:on
-    // );
+    //   DataLogManager.log(getSubsystem( )
+    //     // @formatter:off
+    //     + ": DTL tv: " + tv 
+    //     + " tx: "      + String.format("%.1f", tx)
+    //     + " ty: "      + String.format("%.1f", ty)
+    //     + " lldist: "  + String.format("%.1f", m_limelightDistance)
+    //     + " distErr: " + String.format("%.1f", Math.abs(m_setPointDistance - m_limelightDistance))
+    //     + " stopped: " + driveIsStopped( )
+    //     + " trnOut: "  + String.format("%.2f", turnOutput)
+    //     + " thrOut: "  + String.format("%.2f", throttleOutput)
+    //     // @formatter:on
+    //   );
   }
 
   public boolean driveWithLimelightIsFinished( )
@@ -330,24 +310,23 @@ public class Swerve extends SubsystemBase
 
     // if (tv)
     // {
-    // if (Math.abs(tx) <= m_angleThreshold)
-    // rc.m_led.setLLColor(LEDColor.LEDCOLOR_GREEN);
-    // else
-    // {
-    // if (tx < -m_angleThreshold)
-    // rc.m_led.setLLColor(LEDColor.LEDCOLOR_RED);
-    // else if (tx > m_angleThreshold)
-    // rc.m_led.setLLColor(LEDColor.LEDCOLOR_BLUE);
+    //   if (Math.abs(tx) <= m_angleThreshold)
+    //     rc.m_led.setLLColor(LEDColor.LEDCOLOR_GREEN);
+    //   else
+    //   {
+    //     if (tx < -m_angleThreshold)
+    //       rc.m_led.setLLColor(LEDColor.LEDCOLOR_RED);
+    //     else if (tx > m_angleThreshold)
+    //       rc.m_led.setLLColor(LEDColor.LEDCOLOR_BLUE);
+    //   }
     // }
-    // }
     // else
-    // rc.m_led.setLLColor(LEDColor.LEDCOLOR_YELLOW);
+    //   rc.m_led.setLLColor(LEDColor.LEDCOLOR_YELLOW);
 
-    // return (tv //
-    // && ((Math.abs(tx)) <= m_angleThreshold) //
-    // && (Math.abs(m_setPointDistance - m_limelightDistance) <= m_distThreshold)//
-    // //TODO: add back in
-    // //&& driveIsStopped( )
+    // return (tv  && ((Math.abs(tx)) <= m_angleThreshold) 
+    //    && (Math.abs(m_setPointDistance - m_limelightDistance) <= m_distThreshold)
+    //    //TODO: add back in
+    //    //&& driveIsStopped( )
     // );
     return true;
   }
@@ -356,13 +335,7 @@ public class Swerve extends SubsystemBase
   {
     // TODO: add back in
     // if (m_validL1 || m_validR3)
-    // velocityArcadeDrive(0.0, 0.0);
-
-    // TODO: return settings back when command ends
-    // if (m_validL1)
-    // m_driveL1.configOpenloopRamp(0.0);
-    // if (m_validR3)
-    // m_driveR3.configOpenloopRamp(0.0);
+    //   velocityArcadeDrive(0.0, 0.0);
 
     // RobotContainer.getInstance( ).m_led.setLLColor(LEDColor.LEDCOLOR_OFF);
   }
@@ -379,17 +352,17 @@ public class Swerve extends SubsystemBase
     // m_limelightDistance = rc.m_vision.getDistLimelight( );
 
     // boolean sanityCheck =
-    // tv && (Math.abs(tx) <= horizAngleRange) && (Math.abs(m_setPointDistance -
-    // m_limelightDistance) <= distRange);
-    // // && (fabs(ty) <= vertAngleRange)
+    // tv && (Math.abs(tx) <= horizAngleRange) 
+    //    && (Math.abs(m_setPointDistance - m_limelightDistance) <= distRange);
+    //    && (fabs(ty) <= vertAngleRange)
 
-    // DataLogManager.log(getSubsystem( ) //
-    // + ": DTL tv: " + tv //
-    // + " tx: " + tx //
-    // + " ty: " + ty //
-    // + " lldist: " + m_limelightDistance //
-    // + " distErr: " + Math.abs(m_setPointDistance - m_limelightDistance) //
-    // + " sanityCheck: " + ((sanityCheck) ? "PASSED" : "FAILED") //
+    // DataLogManager.log(getSubsystem( ) 
+    //   + ": DTL tv: " + tv //
+    //   + " tx: " + tx //
+    //   + " ty: " + ty //
+    //   + " lldist: " + m_limelightDistance //
+    //   + " distErr: " + Math.abs(m_setPointDistance - m_limelightDistance) //
+    //   + " sanityCheck: " + ((sanityCheck) ? "PASSED" : "FAILED") //
     // );
 
     // return sanityCheck;
@@ -628,8 +601,8 @@ public class Swerve extends SubsystemBase
   {
     swerveOdometry.update(mPigeon.getYaw( ).getWPIRotation2d( ), getStates( ));
 
-    chassisVelocity = Constants.SwerveConstants.swerveKinematics.toChassisSpeeds(mInstance.mSwerveMods[0].getState( ),
-        mInstance.mSwerveMods[1].getState( ), mInstance.mSwerveMods[2].getState( ), mInstance.mSwerveMods[3].getState( ));
+    chassisVelocity = Constants.SwerveConstants.swerveKinematics.toChassisSpeeds(mSwerveMods[0].getState( ),
+        mSwerveMods[1].getState( ), mSwerveMods[2].getState( ), mSwerveMods[3].getState( ));
   }
 
   // @Override
