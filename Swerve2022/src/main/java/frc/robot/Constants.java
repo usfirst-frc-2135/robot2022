@@ -1,9 +1,13 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.sensors.SensorVelocityMeasPeriod;
 
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import frc.robot.lib.util.SwerveModuleConstants;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -16,6 +20,47 @@ import edu.wpi.first.math.util.Units;
  */
 public class Constants
 {
+  /* Control Board */
+  public static final int    kDriverPadPort    = 0;
+  public static final int    kOperatorPadPort  = 1;
+
+  public static final double kStickDeadband    = 0.15;
+  public static final double kTriggerThreshold = 0.25;
+
+  public static final class Ports
+  {
+    public static final String kCANivoreName     = "canivore1";
+
+    public static final int    kCANID_DriveLF    = 1;
+    public static final int    kCANID_TurnLF     = 2;
+    public static final int    kCANID_CANCoderLF = 3;
+
+    public static final int    kCANID_DriveRF    = 4;
+    public static final int    kCANID_TurnRF     = 5;
+    public static final int    kCANID_CANCoderRF = 6;
+
+    public static final int    kCANID_DriveLR    = 7;
+    public static final int    kCANID_TurnLR     = 8;
+    public static final int    kCANID_CANCoderLR = 9;
+
+    public static final int    kCANID_DriveRR    = 10;
+    public static final int    kCANID_TurnRR     = 11;
+    public static final int    kCANID_CANCoderRR = 12;
+
+    public static final int    kCANID_Pigeon2    = 13;
+
+    public static final int    kCANID_Intake     = 15;
+    public static final int    kCANID_FloorConv  = 16;
+    public static final int    kCANID_TowerConv  = 17;
+    public static final int    kCANID_Shooter    = 18;
+
+    // Digital I/Os
+    public static final int    kDIO_CargoDetect  = 2;
+
+    // PWM outputs
+    public static final int    kPWM_Intake       = 1;
+  }
+
   public static final class Falcon500
   {
     public static int          kMaxRPM               = 6380;             // free speed for Falcon 500 motor
@@ -34,30 +79,12 @@ public class Constants
     public static final double kStatorTriggerTime    = 0.001; // Default time duration of trigger that will causing limiting
   }
 
-  public static final class DTConsts
+  public static final class SWConsts
   {
-    public static final String kCANBusString          = "canivore1";
-
-    public static final int    kLFDrive1CANID         = 1;
-    public static final int    kLFTurn2CANID          = 2;
-    public static final int    kRFDrive3CANID         = 3;
-    public static final int    kRFTurn4CANID          = 4;
-
-    public static final int    kLRDrive5CANID         = 5;
-    public static final int    kLRTurn6CANID          = 6;
-    public static final int    kRRDrive7CANID         = 7;
-    public static final int    kRRTurn8CANID          = 8;
-
-    public static final int    kLFCANCoderCANID       = 1;
-    public static final int    kRFCANCoderCANID       = 2;
-    public static final int    kLRCANCoderCANID       = 3;
-    public static final int    kRRCANCoderCANID       = 4;
-
-    // Drivetrain specs
+    // Swerve specs
     public static final double kWheelDiaMeters        = Units.inchesToMeters(4.0); // 4in (39.37 in/meter)
     public static final double kGearRatio             = 6.75;
     public static final double kEncoderMetersPerCount = (kWheelDiaMeters * Math.PI) / (Falcon500.kEncoderCPR) / kGearRatio;
-    public static final double kTrackWidthMeters      = 0.6477;        // Measured track width
 
     // Joystick tuning
     public static final double kDriveXScaling         = 1.0;           // 1.0 is no scaling
@@ -98,7 +125,6 @@ public class Constants
   public static final class INConsts
   {
     // public static final int kIN8CANID = 6;
-    public static final int    kINPWM1         = 1;
     public static final int    kArmSolenoid    = 0;
 
     public static final double kINAcquireSpeed = 0.6;
@@ -114,8 +140,6 @@ public class Constants
 
   public static final class FCConsts
   {
-    public static final int    kFC8CANID           = 8;
-
     public static final double kFCAcquireSpeed     = 1.0;
     public static final double kFCAcquireSpeedSlow = 0.2;
     public static final double kFCExpelSpeedFast   = -1.0;
@@ -131,9 +155,6 @@ public class Constants
 
   public static final class TCConsts
   {
-    public static final int    kTC9CANID           = 9;
-    public static final int    kCargoDIO           = 2;
-
     public static final double kTCAcquireSpeed     = 1.0;
     public static final double kTCAcquireSpeedSlow = 0.2;
     public static final double kTCExpelSpeed       = -0.2;
@@ -151,8 +172,6 @@ public class Constants
 
   public static final class SHConsts
   {
-    public static final int                      kSH11CANID               = 11;
-
     public static final double                   kFlywheelGearRatio       = (18.0 / 12.0);
     public static final double                   kFlywheelCPR             = Falcon500.kEncoderCPR * kFlywheelGearRatio;
 
@@ -236,4 +255,237 @@ public class Constants
     public static final double kCameraLensBackTilt = Units.degreesToRadians(40.0);  // Camera backward tilt from normal
   }
 
+  public static final class AUTOConstants
+  {
+    public static final String  kOneBallLimelight_path1    = "fenderToOffTarmac";
+    public static final String  kOneBallLimelight_path2    = "shootingPosToOffTarmac";
+
+    public static final String  kDrive_path                = "startToOffTarmac";
+
+    public static final String  kDriveShoot_path1          = "startToShootingPos";
+    public static final String  kDriveShoot_path2          = "shootingPosToOffTarmac";
+
+    public static final String  kShootDriveShoot_path1     = "startToShootingPos";
+    public static final String  kShootDriveShoot_path2     = "shootingPosToBall";
+    public static final String  kShootDriveShoot_path3     = "ballToShootingPos";
+    public static final String  kShootDriveShoot_path4     = "shootingPosToOffTarmac";
+
+    public static final String  k3BallLeft_path1           = "startToShootingPos";
+    public static final String  k3BallLeft_path2           = "shootingPosToBall";
+    public static final String  k3BallLeft_path3           = "ballToShootingPos";
+    public static final String  k3BallLeft_path4           = "shootingPosToLeftBall";
+    public static final String  k3BallLeft_path5           = "leftBallToLeftShootingPos";
+
+    public static final String  k3BallRight_path1          = "startToShootingPos";
+    public static final String  k3BallRight_path2          = "shootingPosToBall";
+    public static final String  k3BallRight_path3          = "ballToShootingPos";
+    public static final String  k3BallRight_path4          = "shootingPosToRightBall";
+    public static final String  k3BallRight_path5          = "rightBallToRightShootingPos";
+    public static final String  k3BallRight_path6          = "shootingPosToOffTarmac";
+
+    public static final String  k1BallLimelight_path1      = "fenderToOffTarmac";
+    public static final String  k1BallLimelight_path2      = "shootingPosToOffTarmac";
+
+    public static final String  k1Ball2OppLeft_path1       = "startToShootingPos";
+    public static final String  k1Ball2OppLeft_path2       = "shootingPosToLeftOppBall1";
+    public static final String  k1Ball2OppLeft_path3       = "leftOppBall1ToBall2";
+    public static final String  k1Ball2OppLeft_path4       = "leftOppBall2ToShootingPos";
+
+    public static final String  k1Ball1OppRight_path1      = "rightstarttoSP";
+    public static final String  k1Ball1OppRight_path2      = "rightSPtoball";
+
+    public static final boolean k_ShootOppBall             = true;
+
+    public static final double  k_WaitTime1                = 0.0; // First wait timer - time to wait
+    public static final double  k_WaitTime2                = 0.0; // Second wait timer - time to wait
+
+    public static final String  path1                      = "forward39";
+    public static final String  path2                      = "backward39";
+    public static final String  path3                      = "rightAngleTurn";
+    public static final String  kDriveLimelightShoot_path1 = "forward39";
+    public static final String  kDriveLimelightShoot_path2 = "backward39";
+    public static final String  kShoot_path                = "startToShootingPos";
+
+    public enum AutoTimer
+    {
+      TIMER1,     // Select first auto wait timer for use
+      TIMER2      // Select second auto wait timer for use
+    };
+  }
+
+  ///// 1678 Constants /////
+  // toggle constants between comp bot and practice bot ("epsilon")
+  public static final boolean isComp = true;
+
+  public static final class SwerveConstants
+  {
+    public static final boolean                                      invertGyro                  = false; // Always ensure Gyro is CCW+ CW-
+
+    /* Swerve Constants - 0.427 m (x, y) */
+    public static final double                                       trackWidth                  = Units.inchesToMeters(23.77);
+    public static final double                                       wheelBase                   = Units.inchesToMeters(23.77);
+
+    public static final double                                       wheelDiameter               = Units.inchesToMeters(4.0);
+    public static final double                                       wheelCircumference          = wheelDiameter * Math.PI;
+
+    public static final double                                       openLoopRamp                = 0.25;
+    public static final double                                       closedLoopRamp              = 0.0;
+
+    public static final double                                       driveGearRatio              = 6.75;
+    public static final double                                       angleGearRatio              = 21.43;
+
+    public static final edu.wpi.first.math.geometry.Translation2d[ ] swerveModuleLocations       =
+    {
+        new edu.wpi.first.math.geometry.Translation2d(wheelBase / 2.0, trackWidth / 2.0),
+        new edu.wpi.first.math.geometry.Translation2d(wheelBase / 2.0, -trackWidth / 2.0),
+        new edu.wpi.first.math.geometry.Translation2d(-wheelBase / 2.0, trackWidth / 2.0),
+        new edu.wpi.first.math.geometry.Translation2d(-wheelBase / 2.0, -trackWidth / 2.0)
+    };
+
+    public static final SwerveDriveKinematics                        swerveKinematics            =
+        new SwerveDriveKinematics(swerveModuleLocations);
+
+    /* Swerve Current Limiting */
+    public static final int                                          angleContinuousCurrentLimit = 25;
+    public static final int                                          anglePeakCurrentLimit       = 40;
+    public static final double                                       anglePeakCurrentDuration    = 0.1;
+    public static final boolean                                      angleEnableCurrentLimit     = true;
+
+    public static final int                                          driveContinuousCurrentLimit = 35;
+    public static final int                                          drivePeakCurrentLimit       = 60;
+    public static final double                                       drivePeakCurrentDuration    = 0.1;
+    public static final boolean                                      driveEnableCurrentLimit     = true;
+
+    /* Angle Motor PID Values */
+    public static final double                                       angleKP                     = 0.3;
+    public static final double                                       angleKI                     = 0.0;
+    public static final double                                       angleKD                     = 0.0;
+    public static final double                                       angleKF                     = 0.0;
+
+    /* Drive Motor PID Values */
+    public static final double                                       driveKP                     = 0.05;
+    public static final double                                       driveKI                     = 0.0;
+    public static final double                                       driveKD                     = 0.0;
+    public static final double                                       driveKF                     = 0.0;
+
+    /* Drive Motor Characterization Values */
+    public static final double                                       driveKS                     = (0.32 / 12);
+    public static final double                                       driveKV                     = (1.51 / 12);
+    public static final double                                       driveKA                     = (0.27 / 12);
+
+    /* Swerve Profiling Values */
+    public static final double                                       maxSpeed                    = 4.5; // meters per second
+    public static final double                                       maxAngularVelocity          = 10.0;
+
+    /* Neutral Modes */
+    public static final NeutralMode                                  angleNeutralMode            = NeutralMode.Coast;
+    public static final NeutralMode                                  driveNeutralMode            = NeutralMode.Brake;
+
+    /* Motor Inverts */
+    public static final boolean                                      driveMotorInvert            = false;
+    public static final boolean                                      angleMotorInvert            = true;
+
+    /* Angle Encoder Invert */
+    public static final boolean                                      canCoderInvert              = false;
+
+    /* Controller Invert */
+    public static final boolean                                      invertYAxis                 = false;
+    public static final boolean                                      invertRAxis                 = false;
+    public static final boolean                                      invertXAxis                 = false;
+
+    /*** MODULE SPECIFIC CONSTANTS ***/
+
+    /* Front Left Module - Module 0 */
+    public static final class Mod0
+    {
+      public static final double epsilonAngleOffset = 239.06;
+      public static final double compAngleOffset    = 15.996;
+
+      public static SwerveModuleConstants SwerveModuleConstants( )
+      {
+        return new SwerveModuleConstants(Ports.kCANID_DriveLF, Ports.kCANID_TurnLF, Ports.kCANID_CANCoderLF,
+            isComp ? compAngleOffset : epsilonAngleOffset);
+      }
+    }
+
+    /* Front Right Module - Module 1 */
+    public static final class Mod1
+    {
+      public static final double epsilonAngleOffset = 339.96;
+      public static final double compAngleOffset    = 239.590;
+
+      public static SwerveModuleConstants SwerveModuleConstants( )
+      {
+        return new SwerveModuleConstants(Ports.kCANID_DriveRF, Ports.kCANID_TurnRF, Ports.kCANID_CANCoderRF,
+            isComp ? compAngleOffset : epsilonAngleOffset);
+      }
+    }
+
+    /* Back Left Module - Module 2 */
+    public static final class Mod2
+    {
+      public static final double epsilonAngleOffset = 317.20;
+      public static final double compAngleOffset    = 181.934;
+
+      public static SwerveModuleConstants SwerveModuleConstants( )
+      {
+        return new SwerveModuleConstants(Ports.kCANID_DriveLR, Ports.kCANID_TurnLR, Ports.kCANID_CANCoderLR,
+            isComp ? compAngleOffset : epsilonAngleOffset);
+      }
+    }
+
+    /* Back Right Module - Module 3 */
+    public static final class Mod3
+    {
+      public static final double epsilonAngleOffset = 311.22;
+      public static final double compAngleOffset    = 7.910;
+
+      public static SwerveModuleConstants SwerveModuleConstants( )
+      {
+        return new SwerveModuleConstants(Ports.kCANID_DriveRR, Ports.kCANID_TurnRR, Ports.kCANID_CANCoderRR,
+            isComp ? compAngleOffset : epsilonAngleOffset);
+      }
+    }
+  }
+
+  public static final class SnapConstants
+  {
+    public static final double                       kP                                      = 5.0;
+    public static final double                       kI                                      = 0;
+    public static final double                       kD                                      = 0.0;
+    public static final double                       kTimeout                                = 0.25;
+    public static final double                       kEpsilon                                = 1.0;
+
+    // Constraints for the profiled angle controller
+    public static final double                       kMaxAngularSpeedRadiansPerSecond        = 2.0 * Math.PI;
+    public static final double                       kMaxAngularSpeedRadiansPerSecondSquared =
+        Math.pow(kMaxAngularSpeedRadiansPerSecond, 2);
+
+    public static final TrapezoidProfile.Constraints kThetaControllerConstraints             =
+        new TrapezoidProfile.Constraints(kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
+  }
+
+  public static final class VisionAlignConstants
+  {
+    public static final double                       kP                                      = 6.37;
+    public static final double                       kI                                      = 0.0;
+    public static final double                       kD                                      = 0.10;
+    public static final double                       kTimeout                                = 0.25;
+    public static final double                       kEpsilon                                = 5.0;
+
+    // Constraints for the profiled angle controller
+    public static final double                       kMaxAngularSpeedRadiansPerSecond        = 2.0 * Math.PI;
+    public static final double                       kMaxAngularSpeedRadiansPerSecondSquared = 10.0 * Math.PI;
+
+    public static final TrapezoidProfile.Constraints kThetaControllerConstraints             =
+        new TrapezoidProfile.Constraints(kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
+  }
+
+  /*** SUBSYSTEM CONSTANTS ***/
+
+  // Timeout constants
+  public static final int kLongCANTimeoutMs = 100;
+  public static final int kCANTimeoutMs     = 10;
+
+  ///// 1678 Constants /////
 }
