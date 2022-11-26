@@ -6,7 +6,6 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -16,48 +15,42 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.Ports;
-import frc.robot.Constants.SwerveConstants;
 import frc.robot.team1678.frc2022.drivers.Pigeon;
 import frc.robot.team1678.frc2022.drivers.SwerveModule;
 import frc.robot.team254.lib.util.TimeDelayedBoolean;
 
 public class Swerve extends SubsystemBase
 {
-  public PeriodicIO             mPeriodicIO         = new PeriodicIO( );
+  public PeriodicIO            mPeriodicIO         = new PeriodicIO( );
 
   // status variable for being enabled
-  public boolean                mIsEnabled          = false;
+  public boolean               mIsEnabled          = false;
 
   // wants vision aim during auto
-  public boolean                mWantsAutoVisionAim = false;
+  public boolean               mWantsAutoVisionAim = false;
 
-  public SwerveDriveOdometry    swerveOdometry;
-  public SwerveModule[ ]        mSwerveMods;
+  public SwerveDriveOdometry   swerveOdometry;
+  public SwerveModule[ ]       mSwerveMods;
 
-  public Pigeon                 mPigeon             = new Pigeon(Ports.kCANID_Pigeon2);
+  public Pigeon                mPigeon             = new Pigeon(Ports.kCANID_Pigeon2);
 
   // chassis velocity status
-  ChassisSpeeds                 chassisVelocity     = new ChassisSpeeds( );
+  ChassisSpeeds                chassisVelocity     = new ChassisSpeeds( );
 
-  public boolean                isSnapping;
-  private double                mLimelightVisionAlignGoal;
-  private double                mGoalTrackVisionAlignGoal;
-  private double                mVisionAlignAdjustment;
+  public boolean               isSnapping;
+  private double               mLimelightVisionAlignGoal;
+  private double               mGoalTrackVisionAlignGoal;
+  private double               mVisionAlignAdjustment;
 
-  public ProfiledPIDController  snapPIDController;
-  public PIDController          visionPIDController;
+  public ProfiledPIDController snapPIDController;
+  public PIDController         visionPIDController;
 
   // Private boolean to lock Swerve wheels
-  private boolean               mLocked             = false;
-
-  private final SlewRateLimiter m_xspeedLimiter     = new SlewRateLimiter(3);
-  private final SlewRateLimiter m_yspeedLimiter     = new SlewRateLimiter(3);
-  private final SlewRateLimiter m_rotLimiter        = new SlewRateLimiter(3);
+  private boolean              mLocked             = false;
 
   // Getter
   public boolean getLocked( )
@@ -167,34 +160,6 @@ public class Swerve extends SubsystemBase
   //
   // Teleop driving mode
   //
-
-  /**
-   * Method to drive the robot using joystick info.
-   *
-   * @param driverPad
-   *          XboxController used by driver.
-   * @param fieldRelative
-   *          Whether the provided x and y speeds are relative to the field.
-   */
-  public void driveWithGamepad(XboxController driverPad, boolean fieldRelative)
-  {
-    // Get x speed. Invert this because Xbox controllers return negative values when pushing forward.
-    final var xSpeed = -m_xspeedLimiter.calculate(MathUtil.applyDeadband(driverPad.getLeftY( ), 0.02)) * SwerveConstants.maxSpeed;
-
-    // Get y speed or sideways/strafe speed. Invert this because a positive value is needed when
-    // pulling left. Xbox controllers return positive values when pulling right by default.
-    final var ySpeed = -m_yspeedLimiter.calculate(MathUtil.applyDeadband(driverPad.getLeftX( ), 0.02)) * SwerveConstants.maxSpeed;
-
-    // Get rate of angular rotation. Invert this because a positive value is needed when pulling to
-    // the left (CCW is positive in mathematics). Xbox controllers return positive values when pulling
-    // to the right by default.
-    final var rot =
-        -m_rotLimiter.calculate(MathUtil.applyDeadband(driverPad.getRightX( ), 0.02)) * SwerveConstants.maxAngularVelocity;
-
-    Translation2d swerveTranslation = new Translation2d(xSpeed, ySpeed);
-
-    drive(swerveTranslation, rot, fieldRelative, true);
-  }
 
   ///////////////////////////////////////////////////////////////////////////////
   //
@@ -436,6 +401,7 @@ public class Swerve extends SubsystemBase
         maybeStopSnap(true);
       }
     }
+
     SwerveModuleState[ ] swerveModuleStates = null;
     if (mLocked)
     {
@@ -453,6 +419,7 @@ public class Swerve extends SubsystemBase
                   mPigeon.getYaw( ).getWPIRotation2d( ))
               : new ChassisSpeeds(translation.getX( ), translation.getY( ), rotation));
     }
+
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.SwerveConstants.maxSpeed);
 
     for (SwerveModule mod : mSwerveMods)

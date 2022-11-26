@@ -67,6 +67,7 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.TowerConveyor;
 import frc.robot.subsystems.Vision;
+import frc.robot.team1678.frc2022.controlboard.ControlBoard;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -78,7 +79,12 @@ public class RobotContainer
 {
   private static RobotContainer m_robotContainer = new RobotContainer( );
 
+  // Joysticks
+  private final XboxController  m_driverPad      = new XboxController(Constants.kDriverPadPort);
+  private final XboxController  m_operatorPad    = new XboxController(Constants.kOperatorPadPort);
+
   // The robot's subsystems
+  public final ControlBoard     m_controlBoard   = new ControlBoard(m_driverPad, m_operatorPad);
   public final Swerve           m_swerve         = new Swerve( );
   public final Intake           m_intake         = new Intake( );
   public final FloorConveyor    m_floorConveyor  = new FloorConveyor( );
@@ -88,10 +94,6 @@ public class RobotContainer
   public final LED              m_led            = new LED( );
   public final Pneumatics       m_pneumatics     = new Pneumatics( );
   public final Power            m_power          = new Power( );
-
-  // Joysticks
-  private final XboxController  m_driverPad      = new XboxController(0);
-  private final XboxController  m_operatorPad    = new XboxController(1);
 
   // A chooser for autonomous commands
   SendableChooser<Command>      m_chooser        = new SendableChooser<>( );
@@ -201,7 +203,7 @@ public class RobotContainer
     public boolean get( )
     {
       // This returns whether the trigger is active
-      return (m_gamepad.getRawAxis(m_axis.value) > 0.25);
+      return (m_gamepad.getRawAxis(m_axis.value) > Constants.kTriggerThreshold);
     }
   }
 

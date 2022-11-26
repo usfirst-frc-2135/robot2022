@@ -20,6 +20,13 @@ import frc.robot.lib.util.SwerveModuleConstants;
  */
 public class Constants
 {
+  /* Control Board */
+  public static final int    kDriverPadPort    = 0;
+  public static final int    kOperatorPadPort  = 1;
+
+  public static final double kStickDeadband    = 0.15;
+  public static final double kTriggerThreshold = 0.25;
+
   public static final class Ports
   {
     public static final String kCANivoreName     = "canivore1";
@@ -308,15 +315,7 @@ public class Constants
 
   ///// 1678 Constants /////
   // toggle constants between comp bot and practice bot ("epsilon")
-  public static final boolean isComp                  = true;
-
-  /* Control Board */
-  public static final double  kTriggerThreshold       = 0.2;
-
-  public static final int     kDriveControllerPort    = 0;
-  public static final int     kOperatorControllerPort = 1;
-
-  public static final double  stickDeadband           = 0.15;
+  public static final boolean isComp = true;
 
   public static final class SwerveConstants
   {
@@ -400,7 +399,7 @@ public class Constants
     public static final class Mod0
     {
       public static final double epsilonAngleOffset = 239.06;
-      public static final double compAngleOffset    = 68.37;
+      public static final double compAngleOffset    = 15.996;
 
       public static SwerveModuleConstants SwerveModuleConstants( )
       {
@@ -413,7 +412,7 @@ public class Constants
     public static final class Mod1
     {
       public static final double epsilonAngleOffset = 339.96;
-      public static final double compAngleOffset    = 312.53;
+      public static final double compAngleOffset    = 239.590;
 
       public static SwerveModuleConstants SwerveModuleConstants( )
       {
@@ -426,7 +425,7 @@ public class Constants
     public static final class Mod2
     {
       public static final double epsilonAngleOffset = 317.20;
-      public static final double compAngleOffset    = 357.97;
+      public static final double compAngleOffset    = 181.934;
 
       public static SwerveModuleConstants SwerveModuleConstants( )
       {
@@ -439,7 +438,7 @@ public class Constants
     public static final class Mod3
     {
       public static final double epsilonAngleOffset = 311.22;
-      public static final double compAngleOffset    = 295.2;
+      public static final double compAngleOffset    = 7.910;
 
       public static SwerveModuleConstants SwerveModuleConstants( )
       {
