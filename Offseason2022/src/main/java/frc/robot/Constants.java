@@ -262,9 +262,9 @@ public class Constants
     }
 
     public static final double kLLDistance1   = 48;    // distance from bumper in inches for first reference point
-    public static final double kLLVertOffset1 = 0.42;  // LL y reading in degrees for first reference point
+    public static final double kLLVertOffset1 = 3.53;  // LL y reading in degrees for first reference point
     public static final double kLLDistance2   = 60;    // distance from bumper in inches for second reference point
-    public static final double kLLVertOffset2 = -4.85; // LL y reading in degrees for second reference point
+    public static final double kLLVertOffset2 = -1.06; // LL y reading in degrees for second reference point
   }
 
   public static final class LEDConsts
