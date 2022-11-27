@@ -31,21 +31,21 @@ public class Constants
   {
     public static final String kCANivoreName     = "canivore1";
 
-    public static final int    kCANID_DriveLF    = 1;
-    public static final int    kCANID_TurnLF     = 2;
-    public static final int    kCANID_CANCoderLF = 3;
+    public static final int    kCANID_DriveLF    = 10;
+    public static final int    kCANID_TurnLF     = 11;
+    public static final int    kCANID_CANCoderLF = 12;
 
-    public static final int    kCANID_DriveRF    = 4;
-    public static final int    kCANID_TurnRF     = 5;
-    public static final int    kCANID_CANCoderRF = 6;
+    public static final int    kCANID_DriveRF    = 7;
+    public static final int    kCANID_TurnRF     = 8;
+    public static final int    kCANID_CANCoderRF = 9;
 
-    public static final int    kCANID_DriveLR    = 7;
-    public static final int    kCANID_TurnLR     = 8;
-    public static final int    kCANID_CANCoderLR = 9;
+    public static final int    kCANID_DriveLR    = 4;
+    public static final int    kCANID_TurnLR     = 5;
+    public static final int    kCANID_CANCoderLR = 6;
 
-    public static final int    kCANID_DriveRR    = 10;
-    public static final int    kCANID_TurnRR     = 11;
-    public static final int    kCANID_CANCoderRR = 12;
+    public static final int    kCANID_DriveRR    = 1;
+    public static final int    kCANID_TurnRR     = 2;
+    public static final int    kCANID_CANCoderRR = 3;
 
     public static final int    kCANID_Pigeon2    = 13;
 
@@ -399,7 +399,7 @@ public class Constants
     public static final class Mod0
     {
       public static final double epsilonAngleOffset = 239.06;
-      public static final double compAngleOffset    = 15.996;
+      public static final double compAngleOffset    = 187.646;
 
       public static SwerveModuleConstants SwerveModuleConstants( )
       {
@@ -412,7 +412,7 @@ public class Constants
     public static final class Mod1
     {
       public static final double epsilonAngleOffset = 339.96;
-      public static final double compAngleOffset    = 239.590;
+      public static final double compAngleOffset    = 2.461;
 
       public static SwerveModuleConstants SwerveModuleConstants( )
       {
@@ -425,7 +425,7 @@ public class Constants
     public static final class Mod2
     {
       public static final double epsilonAngleOffset = 317.20;
-      public static final double compAngleOffset    = 181.934;
+      public static final double compAngleOffset    = 60.029;
 
       public static SwerveModuleConstants SwerveModuleConstants( )
       {
@@ -438,7 +438,7 @@ public class Constants
     public static final class Mod3
     {
       public static final double epsilonAngleOffset = 311.22;
-      public static final double compAngleOffset    = 7.910;
+      public static final double compAngleOffset    = 195.117;
 
       public static SwerveModuleConstants SwerveModuleConstants( )
       {
