@@ -315,9 +315,14 @@ public class Constants
     };
   }
 
-  ///// 1678 Constants /////
-  // toggle constants between comp bot and practice bot ("epsilon")
-  public static final boolean isComp = true;
+  //// 1678 Constants ///////////////////////////////////////////////////////////
+
+  // toggle constants between comp bot and practice bot (named "epsilon")
+  public static final boolean isComp            = true;
+
+  // Timeout constants
+  public static final int     kLongCANTimeoutMs = 100;
+  public static final int     kCANTimeoutMs     = 10;
 
   public static final class SwerveConstants
   {
@@ -485,9 +490,5 @@ public class Constants
 
   /*** SUBSYSTEM CONSTANTS ***/
 
-  // Timeout constants
-  public static final int kLongCANTimeoutMs = 100;
-  public static final int kCANTimeoutMs     = 10;
-
-  ///// 1678 Constants /////
+  //// 1678 Constants ///////////////////////////////////////////////////////////
 }
