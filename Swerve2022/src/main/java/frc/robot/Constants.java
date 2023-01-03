@@ -59,6 +59,9 @@ public class Constants
 
     // PWM outputs
     public static final int    kPWM_Intake       = 1;
+
+    // Solenoid assignments
+    public static final int    kPCM_IntakeArm    = 0;
   }
 
   public static final class Falcon500
@@ -124,9 +127,6 @@ public class Constants
 
   public static final class INConsts
   {
-    // public static final int kIN8CANID = 6;
-    public static final int    kArmSolenoid    = 0;
-
     public static final double kINAcquireSpeed = 0.6;
     public static final double kINExpelSpeed   = -0.6;
 
