@@ -214,7 +214,9 @@ public class Constants
 
     public enum VIRequests
     {
-      VISION_OFF, VISION_ON, VISION_TOGGLE
+      VISION_OFF,   // Disable limelight LED and enable secondary camera mode
+      VISION_ON,    // Enable limelight LED and disable secondary camera mode
+      VISION_TOGGLE // Toggle modes
     }
 
     public static final double kLLDistance1   = 48;    // distance from bumper in inches for first reference point
