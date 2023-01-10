@@ -59,6 +59,9 @@ public class Constants
 
     // PWM outputs
     public static final int    kPWM_Intake       = 1;
+
+    // Solenoid assignments
+    public static final int    kPCM_IntakeArm    = 0;
   }
 
   public static final class Falcon500
@@ -124,9 +127,6 @@ public class Constants
 
   public static final class INConsts
   {
-    // public static final int kIN8CANID = 6;
-    public static final int    kArmSolenoid    = 0;
-
     public static final double kINAcquireSpeed = 0.6;
     public static final double kINExpelSpeed   = -0.6;
 
@@ -214,7 +214,9 @@ public class Constants
 
     public enum VIRequests
     {
-      VISION_OFF, VISION_ON, VISION_TOGGLE
+      VISION_OFF,   // Disable limelight LED and enable secondary camera mode
+      VISION_ON,    // Enable limelight LED and disable secondary camera mode
+      VISION_TOGGLE // Toggle modes
     }
 
     public static final double kLLDistance1   = 48;    // distance from bumper in inches for first reference point
@@ -313,9 +315,14 @@ public class Constants
     };
   }
 
-  ///// 1678 Constants /////
-  // toggle constants between comp bot and practice bot ("epsilon")
-  public static final boolean isComp = true;
+  //// 1678 Constants ///////////////////////////////////////////////////////////
+
+  // toggle constants between comp bot and practice bot (named "epsilon")
+  public static final boolean isComp            = true;
+
+  // Timeout constants
+  public static final int     kLongCANTimeoutMs = 100;
+  public static final int     kCANTimeoutMs     = 10;
 
   public static final class SwerveConstants
   {
@@ -483,9 +490,5 @@ public class Constants
 
   /*** SUBSYSTEM CONSTANTS ***/
 
-  // Timeout constants
-  public static final int kLongCANTimeoutMs = 100;
-  public static final int kCANTimeoutMs     = 10;
-
-  ///// 1678 Constants /////
+  //// 1678 Constants ///////////////////////////////////////////////////////////
 }
